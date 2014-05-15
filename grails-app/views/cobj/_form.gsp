@@ -97,7 +97,7 @@
 		<g:message code="cobj.comments.label" default="Comments" />
 		
 	</label>
-	<g:textArea name="comments" cols="40" rows="5" maxlength="255" value="${cobjInstance?.comments}"/>
+	<g:textArea name="comments" cols="40" rows="5" maxlength="200" value="${cobjInstance?.comments}"/>
 
 </div>
 

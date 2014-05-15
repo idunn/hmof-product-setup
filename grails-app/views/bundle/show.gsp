@@ -50,6 +50,17 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${bundleInstance?.commerceObjects}">
+				<li class="fieldcontain">
+					<span id="commerceObjects-label" class="property-label"><g:message code="bundle.commerceObjects.label" default="Commerce Objects" /></span>
+					
+						<g:each in="${bundleInstance.commerceObjects}" var="c">
+						<span class="property-value" aria-labelledby="commerceObjects-label"><g:link controller="cobj" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${bundleInstance?.program}">
 				<li class="fieldcontain">
 					<span id="program-label" class="property-label"><g:message code="bundle.program.label" default="Program" /></span>

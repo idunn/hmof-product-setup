@@ -23,7 +23,7 @@ class SecureProgram {
 	static belongsTo = Bundle
 	//static belongsTo = [bundle:Bundle]
 	//static hasMany = [commerceObjects:Cobj, bundles:Bundle]
-	static hasMany = [commerceObjects:Cobj]
+	//static hasMany = [commerceObjects:Cobj]
 
 	static constraints = {
 

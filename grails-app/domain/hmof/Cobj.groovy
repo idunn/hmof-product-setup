@@ -16,7 +16,8 @@ class Cobj {
 
 
 	//static belongsTo = [secureProgram:SecureProgram]
-	static belongsTo = SecureProgram
+	//static belongsTo = SecureProgram
+	static belongsTo = Bundle
 
 	static constraints = {
 

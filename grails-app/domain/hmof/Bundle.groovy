@@ -7,7 +7,7 @@ class Bundle {
 	String duration
 
 	static belongsTo = [program:Program]
-	static hasMany = [secureProgram:SecureProgram]
+	static hasMany = [secureProgram:SecureProgram, commerceObjects:Cobj]	
 
 	static constraints = {
 

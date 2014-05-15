@@ -149,17 +149,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${secureProgramInstance?.commerceObjects}">
-				<li class="fieldcontain">
-					<span id="commerceObjects-label" class="property-label"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></span>
-					
-						<g:each in="${secureProgramInstance.commerceObjects}" var="c">
-						<span class="property-value" aria-labelledby="commerceObjects-label"><g:link controller="cobj" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
 			</ol>
 			<g:form url="[resource:secureProgramInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
