@@ -50,6 +50,17 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 		runtime 'mysql:mysql-connector-java:5.1.27'
 		// runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
+
+		compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+		compile "org.seleniumhq.selenium:selenium-support:2.37.0"
+		compile "org.gebish:geb-spock:0.9.2"
+		compile "org.seleniumhq.selenium:selenium-firefox-driver:2.37.1"
+		compile "org.seleniumhq.selenium:selenium-chrome-driver:2.37.1"
+		compile "org.seleniumhq.selenium:selenium-ie-driver:2.37.0"
+		compile "org.seleniumhq.selenium:selenium-remote-driver:2.37.0"
+		compile"com.github.detro.ghostdriver:phantomjsdriver:1.0.1", {
+			transitive = false
+		}
 	}
 
 	plugins {
@@ -59,6 +70,10 @@ grails.project.dependency.resolution = {
 		// plugins for the compile step
 		compile ":scaffolding:2.0.2"
 		compile ':cache:1.1.1'
+		compile ":geb:0.9.2"
+		compile(":spock:0.7") {
+			exclude "spock-grails-support"
+		}
 
 		// plugins needed at runtime but not for compilation
 		runtime ":hibernate:3.6.10.9" // or ":hibernate4:4.3.4"
