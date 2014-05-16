@@ -28,7 +28,7 @@ class Cobj {
 		teacherUrl (blank: false, nullable:true)
 		studentLabel (blank: false, nullable:true)
 		studentUrl (blank: false, nullable:true)
-		objectType (inList: ['DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Other'], nullable:true)
+		objectType (inList: ['DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Tab', 'Other'], nullable:true)
 		objectReorderNumber ( validator: {return it > 0 &&  (String.valueOf(it).length()) < 3 }, blank: false, nullable:true)
 		gradeLevel (inList: [6 ,7 , 8, 9, 10, 11, 12] , nullable:true)
 		comments (maxSize:200, nullable:true, widget: 'textarea')

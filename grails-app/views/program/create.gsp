@@ -27,7 +27,7 @@
 			</g:hasErrors>
 			<g:form url="[resource:programInstance, action:'save']" >
 				<fieldset class="form">
-					<g:render template="form"/>
+					<g:render template="formBasic"/>
 				</fieldset>
 				<fieldset class="buttons">
 					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

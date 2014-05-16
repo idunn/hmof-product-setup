@@ -9,8 +9,8 @@ class Program {
 
 	static constraints = {
 
-		name (matches: /[A-Za-z0-9]+/, nullable:true)
-		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:true)
+		name (matches: /[A-Za-z0-9]+/, nullable:false, unique:true, blank:false)
+		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
 	}
 
 	String toString(){
