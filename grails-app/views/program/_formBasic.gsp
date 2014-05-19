@@ -7,7 +7,7 @@
 		<g:message code="program.name.label" default="Name" />
 		
 	</label>
-	<g:textField name="name" pattern="${programInstance.constraints.name.matches}" value="${programInstance?.name}"/>
+	<g:textField name="name" pattern="${programInstance.constraints.name.matches}" placeholder="Enter a Program Name" value="${programInstance?.name}"/>
 
 </div>
 
