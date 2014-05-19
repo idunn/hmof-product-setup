@@ -16,7 +16,7 @@
 	<label for="title"> <g:message code="bundle.title.label"
 			default="Title" /> <span class="required-indicator">*</span>
 	</label>
-	<g:textField name="title" required="" value="${bundleInstance?.title}" />
+	<g:textField name="title" required="" size="50" value="${bundleInstance?.title}" />
 
 </div>
 
