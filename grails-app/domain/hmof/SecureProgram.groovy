@@ -24,6 +24,9 @@ class SecureProgram {
 	//static belongsTo = [bundle:Bundle]
 	//static hasMany = [commerceObjects:Cobj, bundles:Bundle]
 	//static hasMany = [commerceObjects:Cobj]
+	
+	Date dateCreated
+	Date lastUpdated  
 
 	static constraints = {
 

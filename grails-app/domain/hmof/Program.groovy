@@ -4,6 +4,9 @@ class Program {
 
 	String name
 	String discipline
+	Date dateCreated
+	Date lastUpdated
+  
 
 	static hasMany = [bundles:Bundle]
 

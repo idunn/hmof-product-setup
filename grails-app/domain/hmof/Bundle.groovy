@@ -5,6 +5,9 @@ class Bundle {
 	String isbn
 	String title
 	String duration
+	Date dateCreated
+	Date lastUpdated
+  
 
 	static belongsTo = [program:Program]
 	static hasMany = [secureProgram:SecureProgram, commerceObjects:Cobj]	
