@@ -7,7 +7,7 @@
 		<g:message code="secureProgram.productName.label" default="Product Name" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="productName" required="" value="${secureProgramInstance?.productName}"/>
+	<g:textField name="productName" size="60" required="" value="${secureProgramInstance?.productName}"/>
 
 </div>
 
@@ -16,7 +16,7 @@
 		<g:message code="secureProgram.registrationIsbn.label" default="Registration Isbn" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="registrationIsbn" required="" value="${secureProgramInstance?.registrationIsbn}"/>
+	<g:textField name="registrationIsbn" size="13" required="" value="${secureProgramInstance?.registrationIsbn}"/>
 
 </div>
 
@@ -25,7 +25,7 @@
 		<g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="onlineIsbn" required="" value="${secureProgramInstance?.onlineIsbn}"/>
+	<g:textField name="onlineIsbn" size="13" required="" value="${secureProgramInstance?.onlineIsbn}"/>
 
 </div>
 
@@ -52,13 +52,13 @@
 		<g:message code="secureProgram.pathToResource.label" default="Path To Resource" />
 		
 	</label>
-	<g:textField name="pathToResource" value="${secureProgramInstance?.pathToResource}"/>
+	<g:textField name="pathToResource" size="60" value="${secureProgramInstance?.pathToResource}"/>
 
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'pathToCoverImage', 'error')} ">
 	<label for="pathToCoverImage">
-		<g:message code="secureProgram.pathToCoverImage.label" default="Path To Cover Image" />
+		<g:message code="secureProgram.pathToCoverImage.label" size="60" default="Path To Cover Image" />
 		
 	</label>
 	<g:textField name="pathToCoverImage" value="${secureProgramInstance?.pathToCoverImage}"/>

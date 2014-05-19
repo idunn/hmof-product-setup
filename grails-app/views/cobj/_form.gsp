@@ -7,7 +7,7 @@
 		<g:message code="cobj.objectName.label" default="Object Name" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="objectName" required="" value="${cobjInstance?.objectName}"/>
+	<g:textField name="objectName" size="60" required="" value="${cobjInstance?.objectName}"/>
 
 </div>
 
@@ -16,7 +16,7 @@
 		<g:message code="cobj.isbn.label" default="Isbn" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="isbn" required="" value="${cobjInstance?.isbn}"/>
+	<g:textField name="isbn" size="13" required="" value="${cobjInstance?.isbn}"/>
 
 </div>
 
@@ -25,7 +25,7 @@
 		<g:message code="cobj.pathToCoverImage.label" default="Path To Cover Image" />
 		
 	</label>
-	<g:textField name="pathToCoverImage" value="${cobjInstance?.pathToCoverImage}"/>
+	<g:textField name="pathToCoverImage" size="60" value="${cobjInstance?.pathToCoverImage}"/>
 
 </div>
 
@@ -43,7 +43,7 @@
 		<g:message code="cobj.teacherUrl.label" default="Teacher Url" />
 		
 	</label>
-	<g:textField name="teacherUrl" value="${cobjInstance?.teacherUrl}"/>
+	<g:textField name="teacherUrl" size="60" value="${cobjInstance?.teacherUrl}"/>
 
 </div>
 
@@ -61,7 +61,7 @@
 		<g:message code="cobj.studentUrl.label" default="Student Url" />
 		
 	</label>
-	<g:textField name="studentUrl" value="${cobjInstance?.studentUrl}"/>
+	<g:textField name="studentUrl" size="60" value="${cobjInstance?.studentUrl}"/>
 
 </div>
 
@@ -79,7 +79,7 @@
 		<g:message code="cobj.objectReorderNumber.label" default="Object Reorder Number" />
 		
 	</label>
-	<g:field name="objectReorderNumber" type="number" value="${cobjInstance.objectReorderNumber}"/>
+	<g:field name="objectReorderNumber" size="2" type="number" value="${cobjInstance.objectReorderNumber}"/>
 
 </div>
 
