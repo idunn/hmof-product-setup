@@ -1,16 +1,24 @@
 package hmof
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * ProgramController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
 @Transactional(readOnly = true)
 class ProgramController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Program.list(params), model:[programInstanceCount: Program.count()]
+    }
+
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Program.list(params), model:[programInstanceCount: Program.count()]
     }
@@ -38,7 +46,7 @@ class ProgramController {
         programInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
                 redirect programInstance
             }
@@ -65,7 +73,7 @@ class ProgramController {
         programInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Program.label', default: 'Program'), programInstance.id])
                 redirect programInstance
             }
@@ -84,7 +92,7 @@ class ProgramController {
         programInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Program.label', default: 'Program'), programInstance.id])
                 redirect action:"index", method:"GET"
             }
@@ -94,7 +102,7 @@ class ProgramController {
 
     protected void notFound() {
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'programInstance.label', default: 'Program'), params.id])
                 redirect action: "index", method: "GET"
             }
