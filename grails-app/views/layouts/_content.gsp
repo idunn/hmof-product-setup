@@ -1,10 +1,11 @@
 <div id="Content" class="container">
 	<!-- Main menu in one row (e.g., controller entry points -->
+	<!-- id want to display certain controllers -->
 	<g:if test="${!layout_nomainmenu}">
-		<g:render template="/_menu/menubar"/>
+		<g:render template="/_menu/menubarbasic"/>
 	</g:if>
 	
-	<!-- Secondary menu in one row (e.g., actions for current controller) -->
+	<!-- Secondary menu in one row (e.g., actions for current controller)
 	<g:if test="${!layout_nosecondarymenu}">
 		<g:render template="/_menu/submenubar"/>														
 	</g:if>

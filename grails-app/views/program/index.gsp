@@ -24,6 +24,8 @@
 				<g:sortableColumn property="dateCreated" title="${message(code: 'program.dateCreated.label', default: 'Date Created')}" />
 			
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'program.lastUpdated.label', default: 'Last Updated')}" />
+				
+				<g:sortableColumn property="name" title="${message(code: 'program.name.label', default: 'Action')}" />
 			
 			</tr>
 		</thead>
@@ -38,6 +40,8 @@
 				<td><g:formatDate date="${programInstance.dateCreated}" /></td>
 			
 				<td><g:formatDate date="${programInstance.lastUpdated}" /></td>
+				
+				<td><g:link action="show" id="${programInstance.id}">${'show'}</g:link></td>
 			
 			</tr>
 		</g:each>

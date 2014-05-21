@@ -19,7 +19,7 @@ class UrlMappings {
 		 * WARN: No domain/controller should be named "api" or "mobile" or "web"!
 		 */
         "/"	{
-			controller	= 'home'
+			controller	= 'program'
 			action		= { 'index' }
             view		= { 'index' }
         }

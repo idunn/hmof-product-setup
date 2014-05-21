@@ -47,7 +47,7 @@
 				<p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
 			</div>
 		</div>
-		<h4>Disclaimer</h4>
+		<%--<h4>Disclaimer</h4>
 		<p>This Web site may contain other proprietary notices and copyright information, the terms of which must be observed and followed. 
 		Information on this Web site may contain technical inaccuracies or typographical errors. 
 		Information may be changed or updated without notice. 
@@ -58,6 +58,6 @@
 		apparatus, product, or process disclosed.
 		</p>
 	
-		<p class="pull-right"><a href="#">Back to top</a></p>
+		--%><p class="pull-right"><a href="#">Back to top</a></p>
 	</div>
 </footer>
