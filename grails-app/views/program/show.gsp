@@ -42,30 +42,47 @@
 							code="program.bundles.label" default="Bundles" /></td>
 
 					<td valign="top" style="text-align: left;" class="value">
-						<!--  <ul> --> <!-- Added new table -->
+						<!-- Add new Template --> 
+						<g:render template="addBundle" /> 
+						<!-- Added new table -->
 						<table class="table table-bordered margin-top-medium">
+							<thead>
+								<tr>
+									<th>										
+										${'List'} 
+									</th>
+									<th>
+										${'View'}
+									</th>
+									<th>
+										${'Edit'}
+									</th>
+								</tr>
+							</thead>
 							<tbody>
 								<g:each in="${programInstance.bundles}" status="i" var="b">
-									<!--  <li> -->
+
 									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 										<td><g:link controller="bundle" action="show"
 												id="${b.id}">
 												${b?.encodeAsHTML()}
 											</g:link></td>
+										<td><g:link controller="bundle" action="show"
+												id="${b.id}">
+												${"View"}
+											</g:link></td>
 										<td><g:link controller="bundle" action="edit"
 												id="${b.id}">
 												${"Edit"}
 											</g:link></td>
-										<!-- </li> -->
 									</tr>
 								</g:each>
-								<!--</ul> -->
+
 							</tbody>
 						</table>
 					</td>
 
 				</tr>
-
 				<tr class="prop">
 					<td valign="top" class="name"><g:message
 							code="program.dateCreated.label" default="Date Created" /></td>
@@ -83,7 +100,6 @@
 							date="${programInstance?.lastUpdated}" /></td>
 
 				</tr>
-
 			</tbody>
 		</table>
 	</section>
