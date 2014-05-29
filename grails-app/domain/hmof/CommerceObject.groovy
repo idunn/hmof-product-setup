@@ -1,6 +1,6 @@
 package hmof
 
-class Cobj {
+class CommerceObject {
 
 	String objectName
 	String isbn

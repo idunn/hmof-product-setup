@@ -43,7 +43,7 @@
 				<td valign="top" style="text-align: left;" class="value">
 					<ul>
 					<g:each in="${bundleInstance.commerceObjects}" var="c">
-						<li><g:link controller="cobj" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
 				</td>

@@ -1,5 +1,5 @@
 import hmof.Bundle
-import hmof.Cobj
+import hmof.CommerceObject
 import hmof.Program
 import hmof.SecureProgram
 
@@ -20,12 +20,12 @@ class BootStrap {
 		def sp4 = new SecureProgram (productName:'Visual Math: Geometry, Grade 8', registrationIsbn:'054423882X',
 		onlineIsbn:'9780123456999', copyright:2016, securityWord:'equal').save(failOnError:true)
 
-		def cob1 = new Cobj (objectName:'Math Learning Objects 2015', isbn:'5551234567891', objectType:'DLO', objectReorderNumber:2, gradeLevel:7, pathToCoverImage:'/nsmedia/bc/image1.jpg').save(failOnError:true)
-		def cob2 = new Cobj (objectName:'Math calculator', isbn:'5551234567892', objectType:'DLO', objectReorderNumber:3, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image2.jpg').save(failOnError:true)
-		def cob3 = new Cobj (objectName:'Math Professional Development Site', isbn:'5551234567893', objectType:'Other', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image3.jpg').save(failOnError:true)
-		def cob4 = new Cobj (objectName:'Math Learning Objects 2 2015', isbn:'5551234567894', objectType:'DLO', objectReorderNumber:2, gradeLevel:7, pathToCoverImage:'/nsmedia/bc/image4.jpg').save(failOnError:true)
-		def cob5 = new Cobj (objectName:'Math Learning Objects 3 2015', isbn:'5551234567895', objectType:'DLO', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image5.jpg').save(failOnError:true)			
-		def cob7 = new Cobj (objectName:'Math Premium Tab 2015', isbn:'5551234567896', objectType:'DLO', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image5.jpg').save(failOnError:true)
+		def cob1 = new CommerceObject (objectName:'Math Learning Objects 2015', isbn:'5551234567891', objectType:'DLO', objectReorderNumber:2, gradeLevel:7, pathToCoverImage:'/nsmedia/bc/image1.jpg').save(failOnError:true)
+		def cob2 = new CommerceObject (objectName:'Math calculator', isbn:'5551234567892', objectType:'DLO', objectReorderNumber:3, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image2.jpg').save(failOnError:true)
+		def cob3 = new CommerceObject (objectName:'Math Professional Development Site', isbn:'5551234567893', objectType:'Other', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image3.jpg').save(failOnError:true)
+		def cob4 = new CommerceObject (objectName:'Math Learning Objects 2 2015', isbn:'5551234567894', objectType:'DLO', objectReorderNumber:2, gradeLevel:7, pathToCoverImage:'/nsmedia/bc/image4.jpg').save(failOnError:true)
+		def cob5 = new CommerceObject (objectName:'Math Learning Objects 3 2015', isbn:'5551234567895', objectType:'DLO', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image5.jpg').save(failOnError:true)			
+		def cob7 = new CommerceObject (objectName:'Math Premium Tab 2015', isbn:'5551234567896', objectType:'DLO', objectReorderNumber:2, gradeLevel:8, pathToCoverImage:'/nsmedia/bc/image5.jpg').save(failOnError:true)
 
 		def b1 = new Bundle(program:p1, isbn:'9780123456781', title:'Visual Math ete, Grade 7, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).addToCommerceObjects(cob1).save(failOnError:true)
 		def b2 = new Bundle(program:p1, isbn:'9780123456782', title:'Visual Math ete, Grade 7 Premium, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).addToCommerceObjects(cob1).addToCommerceObjects(cob7).save(failOnError:true)
@@ -37,7 +37,7 @@ class BootStrap {
 
 		def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year').save(failOnError:true)
 		
-		def cob6 = new Cobj (bundle:b1, objectName:'Math Learning Objects 4 2015', isbn:'5551234567897', objectType:'DLO', objectReorderNumber:4, gradeLevel:9, pathToCoverImage:'/nsmedia/bc/image7.jpg').save(failOnError:true)
+		def cob6 = new CommerceObject (bundle:b1, objectName:'Math Learning Objects 4 2015', isbn:'5551234567897', objectType:'DLO', objectReorderNumber:4, gradeLevel:9, pathToCoverImage:'/nsmedia/bc/image7.jpg').save(failOnError:true)
 
 		/*new Bundle(program:p2, isbn:"9780123456666",title:"test")
 		.addToCommerceObjects(cob1).save(failOnError:true)*/

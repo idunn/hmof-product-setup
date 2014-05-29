@@ -5,9 +5,9 @@ package hmof
 import grails.test.mixin.*
 import spock.lang.*
 
-@TestFor(CobjController)
-@Mock(Cobj)
-class CobjControllerSpec extends Specification {
+@TestFor(CommerceObjectController)
+@Mock(CommerceObject)
+class CommerceObjectControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
@@ -21,8 +21,8 @@ class CobjControllerSpec extends Specification {
             controller.index()
 
         then:"The model is correct"
-            !model.cobjInstanceList
-            model.cobjInstanceCount == 0
+            !model.commerceObjectInstanceList
+            model.commerceObjectInstanceCount == 0
     }
 
     void "Test the create action returns the correct model"() {
@@ -30,31 +30,31 @@ class CobjControllerSpec extends Specification {
             controller.create()
 
         then:"The model is correctly created"
-            model.cobjInstance!= null
+            model.commerceObjectInstance!= null
     }
 
     void "Test the save action correctly persists an instance"() {
 
         when:"The save action is executed with an invalid instance"
-            def cobj = new Cobj()
-            cobj.validate()
-            controller.save(cobj)
+            def commerceObject = new CommerceObject()
+            commerceObject.validate()
+            controller.save(commerceObject)
 
         then:"The create view is rendered again with the correct model"
-            model.cobjInstance!= null
+            model.commerceObjectInstance!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
             response.reset()
             populateValidParams(params)
-            cobj = new Cobj(params)
+            commerceObject = new CommerceObject(params)
 
-            controller.save(cobj)
+            controller.save(commerceObject)
 
         then:"A redirect is issued to the show action"
-            response.redirectedUrl == '/cobj/show/1'
+            response.redirectedUrl == '/commerceObject/show/1'
             controller.flash.message != null
-            Cobj.count() == 1
+            CommerceObject.count() == 1
     }
 
     void "Test that the show action returns the correct model"() {
@@ -66,11 +66,11 @@ class CobjControllerSpec extends Specification {
 
         when:"A domain instance is passed to the show action"
             populateValidParams(params)
-            def cobj = new Cobj(params)
-            controller.show(cobj)
+            def commerceObject = new CommerceObject(params)
+            controller.show(commerceObject)
 
         then:"A model is populated containing the domain instance"
-            model.cobjInstance == cobj
+            model.commerceObjectInstance == commerceObject
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -82,11 +82,11 @@ class CobjControllerSpec extends Specification {
 
         when:"A domain instance is passed to the edit action"
             populateValidParams(params)
-            def cobj = new Cobj(params)
-            controller.edit(cobj)
+            def commerceObject = new CommerceObject(params)
+            controller.edit(commerceObject)
 
         then:"A model is populated containing the domain instance"
-            model.cobjInstance == cobj
+            model.commerceObjectInstance == commerceObject
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -94,28 +94,28 @@ class CobjControllerSpec extends Specification {
             controller.update(null)
 
         then:"A 404 error is returned"
-            response.redirectedUrl == '/cobj/index'
+            response.redirectedUrl == '/commerceObject/index'
             flash.message != null
 
 
         when:"An invalid domain instance is passed to the update action"
             response.reset()
-            def cobj = new Cobj()
-            cobj.validate()
-            controller.update(cobj)
+            def commerceObject = new CommerceObject()
+            commerceObject.validate()
+            controller.update(commerceObject)
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.cobjInstance == cobj
+            model.commerceObjectInstance == commerceObject
 
         when:"A valid domain instance is passed to the update action"
             response.reset()
             populateValidParams(params)
-            cobj = new Cobj(params).save(flush: true)
-            controller.update(cobj)
+            commerceObject = new CommerceObject(params).save(flush: true)
+            controller.update(commerceObject)
 
         then:"A redirect is issues to the show action"
-            response.redirectedUrl == "/cobj/show/$cobj.id"
+            response.redirectedUrl == "/commerceObject/show/$commerceObject.id"
             flash.message != null
     }
 
@@ -124,23 +124,23 @@ class CobjControllerSpec extends Specification {
             controller.delete(null)
 
         then:"A 404 is returned"
-            response.redirectedUrl == '/cobj/index'
+            response.redirectedUrl == '/commerceObject/index'
             flash.message != null
 
         when:"A domain instance is created"
             response.reset()
             populateValidParams(params)
-            def cobj = new Cobj(params).save(flush: true)
+            def commerceObject = new CommerceObject(params).save(flush: true)
 
         then:"It exists"
-            Cobj.count() == 1
+            CommerceObject.count() == 1
 
         when:"The domain instance is passed to the delete action"
-            controller.delete(cobj)
+            controller.delete(commerceObject)
 
         then:"The instance is deleted"
-            Cobj.count() == 0
-            response.redirectedUrl == '/cobj/index'
+            CommerceObject.count() == 0
+            response.redirectedUrl == '/commerceObject/index'
             flash.message != null
     }
 }

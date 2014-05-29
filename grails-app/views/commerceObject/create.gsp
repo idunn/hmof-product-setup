@@ -1,20 +1,20 @@
-<%@ page import="hmof.Cobj" %>
+<%@ page import="hmof.CommerceObject" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'cobj.label', default: 'Cobj')}" />
+	<g:set var="entityName" value="${message(code: 'commerceObject.label', default: 'Cobj')}" />
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
 </head>
 
 <body>
 
-	<section id="create-cobj" class="first">
+	<section id="create-commerceObject" class="first">
 
-		<g:hasErrors bean="${cobjInstance}">
+		<g:hasErrors bean="${commerceObjectInstance}">
 		<div class="alert alert-danger">
-			<g:renderErrors bean="${cobjInstance}" as="list" />
+			<g:renderErrors bean="${commerceObjectInstance}" as="list" />
 		</div>
 		</g:hasErrors>
 

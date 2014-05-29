@@ -8,7 +8,7 @@
 			<li
 				class="controller${params.controller == c.logicalPropertyName ? " active" : ""}">
 				<g:if
-					test="${c.toString().contains('Bundle') || c.toString().contains('Secure') || c.toString().contains('Cobj') || c.toString().contains('Program') }">
+					test="${c.toString().contains('Bundle') || c.toString().contains('Secure') || c.toString().contains('Commerce') || c.toString().contains('Program') }">
 
 					<g:link controller="${c.logicalPropertyName}" action="index">
 						<g:message code="${c.logicalPropertyName}.label"

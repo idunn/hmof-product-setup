@@ -83,7 +83,7 @@
 			code="bundle.commerceObjects.label" default="Commerce Objects" /></label>
 	<div>
 		<g:select class="form-control" name="commerceObjects"
-			from="${hmof.Cobj.list()}" 
+			from="${hmof.CommerceObject.list()}" 
 			noSelection="['':'-None-']"
 			multiple="multiple" optionKey="id"
 			size="10" value="${bundleInstance?.commerceObjects*.id}"
