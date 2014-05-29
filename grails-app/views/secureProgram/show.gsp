@@ -45,9 +45,9 @@
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelLink.label" default="Label Link" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></td>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelLink")}</td>
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForOnlineResource")}</td>
 				
 			</tr>
 		
@@ -66,9 +66,30 @@
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knewtonProduct.label" default="Knewton Product" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.labelForTeacherAdditionalResource.label" default="Label For Teacher Additional Resource" /></td>
 				
-				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.knewtonProduct}" /></td>
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.pathToTeacherAdditionalResource.label" default="Path To Teacher Additional Resource" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource.label" default="Label For Student Additional Resource" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource.label" default="Path To Student Additional Resource" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource")}</td>
 				
 			</tr>
 		
@@ -104,6 +125,55 @@
 				<td valign="top" class="name"><g:message code="secureProgram.includeEplannerObject.label" default="Include Eplanner Object" /></td>
 				
 				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeEplannerObject}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knewtonProduct.label" default="Knewton Product" /></td>
+				
+				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.knewtonProduct}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph Id Dev" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdDev")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph Id QA" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdQA")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph Id Prod" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdProd")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphWarmUpTimeLimit.label" default="Knowledge Graph Warm Up Time Limit" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphWarmUpTimeLimit")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentTimeLimit.label" default="Knowledge Graph Enrichment Time Limit" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentTimeLimit")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment Cbi Time Limit" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentCbiTimeLimit")}</td>
 				
 			</tr>
 		

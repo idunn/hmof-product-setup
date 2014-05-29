@@ -25,7 +25,7 @@
 			
 				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
 			
-				<g:sortableColumn property="labelLink" title="${message(code: 'secureProgram.labelLink.label', default: 'Label Link')}" />
+				<g:sortableColumn property="labelForOnlineResource" title="${message(code: 'secureProgram.labelForOnlineResource.label', default: 'Label For Online Resource')}" />
 			
 				<g:sortableColumn property="pathToResource" title="${message(code: 'secureProgram.pathToResource.label', default: 'Path To Resource')}" />
 			
@@ -43,7 +43,7 @@
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
 			
-				<td>${fieldValue(bean: secureProgramInstance, field: "labelLink")}</td>
+				<td>${fieldValue(bean: secureProgramInstance, field: "labelForOnlineResource")}</td>
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "pathToResource")}</td>
 			
