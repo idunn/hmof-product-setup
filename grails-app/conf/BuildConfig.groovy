@@ -83,6 +83,7 @@ grails.project.dependency.resolution = {
 		
 		compile ":kickstart-with-bootstrap:1.1.0"
 		compile ":lesscss-resources:1.3.0.3"
+		compile ":console:1.3"
 		
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
