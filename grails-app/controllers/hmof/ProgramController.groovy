@@ -10,8 +10,22 @@ import grails.transaction.Transactional
  */
 @Transactional(readOnly = true)
 class ProgramController {
+	
+	// inject Service
+	def deploymentService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	
+	/**
+	 * action to deploy content
+	 * @return
+	 */
+	def deploy() {
+		
+		def deploymentDetails = deploymentService.promoteProgram(params)
+		if (deploymentDetails.size()==0) render "Nothing to Deploy"
+		else render deploymentDetails
+	}
 
 	def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
