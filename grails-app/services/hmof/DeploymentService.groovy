@@ -9,46 +9,42 @@ import grails.transaction.Transactional;
 class DeploymentService {
 
 	/**
-	 * require a program ID and a deployment environment date-stamp
+	 * require a program ID and a deployment environment
 	 * @return
 	 */
 	def promoteProgram(params) {
 
 		def bundleList = []
+		def targetEnvironment = 'devEnvironment'
 
-		def programId = params.id
-		def programToQuery = Program.where{id==programId}
-		log.info "Program to Query " +  programToQuery.get()
-		def deploymentEnvironmentDateStamp = programToQuery.lastDeployed.get()
-		log.info deploymentEnvironmentDateStamp
+		def programInstance = Program.where{ id==params.id }
+		log.info "Program to Deploy: " +  programInstance.get()
 
 
-		def allBundlesFromProgram = Bundle.where{program{id==programId}}
-		log.info "All bundles in the Program: " +  allBundlesFromProgram.isbn.list()
+		def allBundlesBelongingToProgram = Bundle.where{ program{ id==params.id } }
+		log.info "All bundles in the Program: " +  allBundlesBelongingToProgram.isbn.list()
 
-		// deployable bundles must have Secure Programs
-		def bundlesWithSecurePrograms = allBundlesFromProgram.where{secureProgram{}}
-		log.info "Bundles that have a SecureProgram: " + bundlesWithSecurePrograms.isbn.list()
+		/* Deployable bundles must have Secure Programs and meet datestamp requirements
+		 where the environment datestamp (eds) is null or eds is < Bundle instance ds*/
+		def bundlesWithSecurePrograms = allBundlesBelongingToProgram.where{
 
-		
-		
-		
-		// get bundle details
+			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
+
+		}
+
+		log.info "Bundles with SecurePrograms: " + bundlesWithSecurePrograms.isbn.list()
+
+
+		// get bundles that meet the criteria
 		bundlesWithSecurePrograms.list().each{
 
-			log.info "Bundle Title: " + it.title
-			bundleList<< it.title
-			log.info "Bundle ISBN: " + it.isbn
+			//bundleList<< it.title
 			bundleList<< it.isbn
-			log.info "Secure Program ISBN: " + it.secureProgram.registrationIsbn
-			bundleList<< it.secureProgram.registrationIsbn
-			log.info "Commerce Object Name: " + it.commerceObjects.objectName
-			bundleList<< it.commerceObjects.objectName
+			//bundleList<< it.secureProgram.registrationIsbn
+			//bundleList<< it.commerceObjects.objectName
 
 		}
 
 		return bundleList
-
-
 	}
 }
