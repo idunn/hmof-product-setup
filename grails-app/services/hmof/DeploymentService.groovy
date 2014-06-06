@@ -14,37 +14,32 @@ class DeploymentService {
 	 */
 	def promoteProgram(params) {
 
-		def bundleList = []
-		def targetEnvironment = 'devEnvironment'
+		//def programInstance = Program.where{ id==params.id }
+		//log.info "Program to Deploy: " +  programInstance.get()
 
-		def programInstance = Program.where{ id==params.id }
-		log.info "Program to Deploy: " +  programInstance.get()
+		//def allBundlesBelongingToProgram = Bundle.where{ program{ id==params.id } }
+		//log.info "All bundles in the Program: " +  allBundlesBelongingToProgram.isbn.list()
 
+		//def distinctSp = SecureProgram.where {}.projections { distinct 'id' }
 
-		def allBundlesBelongingToProgram = Bundle.where{ program{ id==params.id } }
-		log.info "All bundles in the Program: " +  allBundlesBelongingToProgram.isbn.list()
-
-		/* Deployable bundles must have Secure Programs and meet datestamp requirements
-		 where the environment datestamp (eds) is null or eds is < Bundle instance ds*/
-		def bundlesWithSecurePrograms = allBundlesBelongingToProgram.where{
-
+		// A deployable bundle has a SP and its datestamp for environments is null or < lastupdated
+		def deployableBundles = Bundle.where{
+			program{ id==params.id}
 			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
+		}
+
+		// A SP may be changed outside of a bundle the bundle is not marked for promotion but its SP is
+		def alldeployableSecureProgramsBelongingToProgram = Bundle.where{ program{ id==params.id }
+			secureProgram
+			{
+				// add date criteria here
+				// NOTE, this object is not currently being returned
+				// something similar could be done for Commerce Objects
+			}
 
 		}
 
-		log.info "Bundles with SecurePrograms: " + bundlesWithSecurePrograms.isbn.list()
+		def results = deployableBundles.list()
 
-
-		// get bundles that meet the criteria
-		bundlesWithSecurePrograms.list().each{
-
-			//bundleList<< it.title
-			bundleList<< it.isbn
-			//bundleList<< it.secureProgram.registrationIsbn
-			//bundleList<< it.commerceObjects.objectName
-
-		}
-
-		return bundleList
 	}
 }
