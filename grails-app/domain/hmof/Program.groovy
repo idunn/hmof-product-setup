@@ -6,6 +6,7 @@ class Program {
 	String discipline
 	Date dateCreated
 	Date lastUpdated
+	Date devEnvironment
   
 
 	static hasMany = [bundles:Bundle]
@@ -14,6 +15,9 @@ class Program {
 
 		name (matches: /[A-Za-z0-9]+/, nullable:false, unique:true, blank:false)
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
+		dateCreated ()
+		lastUpdated ()
+		devEnvironment (nullable:true)		
 	}
 
 	String toString(){
