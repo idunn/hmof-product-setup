@@ -30,6 +30,9 @@
 					<g:sortableColumn property="lastUpdated"
 						title="${message(code: 'program.lastUpdated.label', default: 'Last Updated')}" />
 
+					<g:sortableColumn property="devEnvironment"
+						title="${message(code: 'program.devEnvironment.label', default: 'Dev Environment')}" />
+
 					<th>
 						${'View'}
 					</th>
@@ -51,6 +54,8 @@
 						<td><g:formatDate date="${programInstance.dateCreated}" /></td>
 
 						<td><g:formatDate date="${programInstance.lastUpdated}" /></td>
+						
+						<td><g:formatDate date="${programInstance.devEnvironment}" /></td>
 
 						<td><g:link action="show" id="${programInstance.id}">
 								${'view'}

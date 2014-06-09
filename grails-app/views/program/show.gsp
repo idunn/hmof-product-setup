@@ -42,14 +42,12 @@
 							code="program.bundles.label" default="Bundles" /></td>
 
 					<td valign="top" style="text-align: left;" class="value">
-						<!-- Add new Template --> 
-						<g:render template="addBundle" /> 
-						<!-- Added new table -->
+						<!-- Add new Template --> <g:render template="addBundle" /> <!-- Added new table -->
 						<table class="table table-bordered margin-top-medium">
 							<thead>
 								<tr>
-									<th>										
-										${'List'} 
+									<th>
+										${'List'}
 									</th>
 									<th>
 										${'View'}
@@ -100,6 +98,16 @@
 							date="${programInstance?.lastUpdated}" /></td>
 
 				</tr>
+
+				<tr class="prop">
+					<td valign="top" class="name"><g:message
+							code="program.devEnvironment.label" default="Dev Environment" /></td>
+
+					<td valign="top" class="value"><g:formatDate
+							date="${programInstance?.devEnvironment}" /></td>
+
+				</tr>
+				
 			</tbody>
 		</table>
 	</section>

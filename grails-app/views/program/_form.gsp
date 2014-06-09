@@ -11,7 +11,8 @@
 		<g:textField class="form-control" name="name"
 			pattern="${programInstance.constraints.name.matches}" required=""
 			value="${programInstance?.name}" />
-		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'name', 'error')}
+		<span class="help-inline">
+			${hasErrors(bean: programInstance, field: 'name', 'error')}
 		</span>
 	</div>
 </div>
@@ -26,7 +27,22 @@
 			from="${programInstance.constraints.discipline.inList}" required=""
 			value="${programInstance?.discipline}"
 			valueMessagePrefix="program.discipline" />
-		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'discipline', 'error')}
+		<span class="help-inline">
+			${hasErrors(bean: programInstance, field: 'discipline', 'error')}
+		</span>
+	</div>
+</div>
+
+<div
+	class="${hasErrors(bean: programInstance, field: 'devEnvironment', 'error')} ">
+	<label for="devEnvironment" class="control-label"><g:message
+			code="program.devEnvironment.label" default="Dev Environment" /></label>
+	<div>
+		<bs:datePicker name="devEnvironment" precision="day"
+			value="${programInstance?.devEnvironment}" default="none"
+			noSelection="['': '']" />
+		<span class="help-inline">
+			${hasErrors(bean: programInstance, field: 'devEnvironment', 'error')}
 		</span>
 	</div>
 </div>
@@ -49,7 +65,8 @@
 				</g:link></li>
 		</ul>
 
-		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'bundles', 'error')}
+		<span class="help-inline">
+			${hasErrors(bean: programInstance, field: 'bundles', 'error')}
 		</span>
 	</div>
 </div>
