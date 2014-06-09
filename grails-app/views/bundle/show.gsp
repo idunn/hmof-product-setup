@@ -83,6 +83,14 @@
 				</td>
 				
 			</tr>
+			
+			<%--test promotion logic --%>
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="bundle.devEnvironment.label" default="Dev Environment Promotion Date" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.devEnvironment}" /></td>
+				
+			</tr>
 		
 		</tbody>
 	</table>

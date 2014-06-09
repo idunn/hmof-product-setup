@@ -10,8 +10,7 @@
 	<div>
 		<g:textField class="form-control" name="isbn" required=""
 			value="${bundleInstance?.isbn}" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'isbn', 'error')}
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'isbn', 'error')}
 		</span>
 	</div>
 </div>
@@ -24,8 +23,7 @@
 	<div>
 		<g:textField class="form-control" name="title" required=""
 			value="${bundleInstance?.title}" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'title', 'error')}
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'title', 'error')}
 		</span>
 	</div>
 </div>
@@ -39,8 +37,7 @@
 			from="${bundleInstance.constraints.duration.inList}"
 			value="${bundleInstance?.duration}"
 			valueMessagePrefix="bundle.duration" noSelection="['': '']" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'duration', 'error')}
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'duration', 'error')}
 		</span>
 	</div>
 </div>
@@ -51,13 +48,10 @@
 			code="bundle.secureProgram.label" default="Secure Program" /></label>
 	<div>
 		<g:select class="form-control" name="secureProgram"
-			from="${hmof.SecureProgram.list()}" 
-			noSelection="['':'-None-']"
-			multiple="multiple"
-			optionKey="id" size="10" value="${bundleInstance?.secureProgram*.id}"
-			class="many-to-many" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}
+			from="${hmof.SecureProgram.list()}" noSelection="['':'-None-']"
+			multiple="multiple" optionKey="id" size="10"
+			value="${bundleInstance?.secureProgram*.id}" class="many-to-many" />
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}
 		</span>
 	</div>
 </div>
@@ -71,8 +65,7 @@
 		<g:select class="form-control" id="program" name="program.id"
 			from="${hmof.Program.list()}" optionKey="id" required=""
 			value="${bundleInstance?.program?.id}" class="many-to-one" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'program', 'error')}
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'program', 'error')}
 		</span>
 	</div>
 </div>
@@ -83,14 +76,29 @@
 			code="bundle.commerceObjects.label" default="Commerce Objects" /></label>
 	<div>
 		<g:select class="form-control" name="commerceObjects"
-			from="${hmof.CommerceObject.list()}" 
-			noSelection="['':'-None-']"
-			multiple="multiple" optionKey="id"
-			size="10" value="${bundleInstance?.commerceObjects*.id}"
-			class="many-to-many" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'commerceObjects', 'error')}
+			from="${hmof.CommerceObject.list()}" noSelection="['':'-None-']"
+			multiple="multiple" optionKey="id" size="10"
+			value="${bundleInstance?.commerceObjects*.id}" class="many-to-many" />
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'commerceObjects', 'error')}
 		</span>
+	</div>
+</div>
+
+<%-- Test to edit deployment date logic --%>
+
+<div
+	class="${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')} ">
+	<label for="devEnvironment" class="control-label"><g:message
+			code="bundleInstance.devEnvironment.label" default="Dev Environment Promotion Date (Test)" /></label>
+	<div>
+		<g:textField class="form-control" name="devEnvironment" required=""
+			value="${bundleInstance?.devEnvironment}" />
+		<span class="help-inline">
+			${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')}
+		</span>
+
+
+
 	</div>
 </div>
 
