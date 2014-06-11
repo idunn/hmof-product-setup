@@ -185,6 +185,19 @@
 			</tr>
 		
 			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></td>
+				
+				<td valign="top" style="text-align: left;" class="value">
+					<ul>
+					<g:each in="${secureProgramInstance.commerceObjects}" var="c">
+						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+					</g:each>
+					</ul>
+				</td>
+				
+			</tr>
+		
+			<tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
 				
 				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>

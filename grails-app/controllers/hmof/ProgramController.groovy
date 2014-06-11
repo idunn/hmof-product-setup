@@ -22,9 +22,10 @@ class ProgramController {
 	 */
 	def deploy() {
 
-		def deploymentDetails = deploymentService.promoteProgram(params)
+		def (deploymentDetails, securePrograms) = deploymentService.promoteProgram(params)
 		// TODO require variable to identify individual SP and CO that have been updated and pass this to the view via the model
-		[deploymentDetailsList:deploymentDetails]
+						
+		[deploymentDetailsList:deploymentDetails, secureProgramsList:securePrograms]
 		
 		/*if (deploymentDetails.size()==0) render "Nothing to Deploy"
 		else

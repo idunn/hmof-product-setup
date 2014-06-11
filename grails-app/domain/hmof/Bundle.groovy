@@ -11,7 +11,8 @@ class Bundle {
   
 
 	static belongsTo = [program:Program]
-	static hasMany = [secureProgram:SecureProgram, commerceObjects:CommerceObject]	
+	//static hasMany = [secureProgram:SecureProgram, commerceObjects:CommerceObject]
+	static hasMany = [secureProgram:SecureProgram]
 
 	static constraints = {
 

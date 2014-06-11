@@ -21,14 +21,15 @@
 			
 				<g:sortableColumn property="title" title="${message(code: 'bundle.title.label', default: 'Title')}" />
 			
-				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />
+				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />				
 			
 				<g:sortableColumn property="dateCreated" title="${message(code: 'bundle.dateCreated.label', default: 'Date Created')}" />
 			
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'bundle.lastUpdated.label', default: 'Last Updated')}" />
-			
+				
+				<g:sortableColumn property="devEnvironment" title="${message(code: 'bundle.devEnvironment.label', default: 'Dev Environment')}" />
+				
 				<th><g:message code="bundle.program.label" default="Program" /></th>
-			
 			</tr>
 		</thead>
 		<tbody>
@@ -39,12 +40,14 @@
 			
 				<td>${fieldValue(bean: bundleInstance, field: "title")}</td>
 			
-				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>
+				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>				
 			
 				<td><g:formatDate date="${bundleInstance.dateCreated}" /></td>
 			
 				<td><g:formatDate date="${bundleInstance.lastUpdated}" /></td>
-			
+				
+				<td><g:formatDate date="${bundleInstance.devEnvironment}" /></td>
+				
 				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>
 			
 			</tr>

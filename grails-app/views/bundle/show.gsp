@@ -35,20 +35,7 @@
 				
 				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "duration")}</td>
 				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.commerceObjects.label" default="Commerce Objects" /></td>
-				
-				<td valign="top" style="text-align: left;" class="value">
-					<ul>
-					<g:each in="${bundleInstance.commerceObjects}" var="c">
-						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
-					</g:each>
-					</ul>
-				</td>
-				
-			</tr>
+			</tr>			
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="bundle.dateCreated.label" default="Date Created" /></td>
@@ -61,6 +48,13 @@
 				<td valign="top" class="name"><g:message code="bundle.lastUpdated.label" default="Last Updated" /></td>
 				
 				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.lastUpdated}" /></td>
+				
+			</tr>
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="bundle.devEnvironment.label" default="Dev Environment" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.devEnvironment}" /></td>
 				
 			</tr>
 		
@@ -81,14 +75,6 @@
 					</g:each>
 					</ul>
 				</td>
-				
-			</tr>
-			
-			<%--test promotion logic --%>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.devEnvironment.label" default="Dev Environment Promotion Date" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.devEnvironment}" /></td>
 				
 			</tr>
 		

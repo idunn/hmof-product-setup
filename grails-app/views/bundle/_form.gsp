@@ -42,17 +42,35 @@
 	</div>
 </div>
 
-<div
-	class="${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')} ">
-	<label for="secureProgram" class="control-label"><g:message
-			code="bundle.secureProgram.label" default="Secure Program" /></label>
+<%--<div
+	class="${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')} ">
+	<label for="devEnvironment" class="control-label"><g:message
+			code="bundle.devEnvironment.label" default="Dev Environment" /></label>
 	<div>
-		<g:select class="form-control" name="secureProgram"
-			from="${hmof.SecureProgram.list()}" noSelection="['':'-None-']"
-			multiple="multiple" optionKey="id" size="10"
-			value="${bundleInstance?.secureProgram*.id}" class="many-to-many" />
-		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}
+		<bs:datePicker name="devEnvironment" precision="day"
+			value="${bundleInstance?.devEnvironment}" default="none"
+			noSelection="['': '']" />
+		<span class="help-inline">
+			${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')}
 		</span>
+	</div>
+</div>
+
+--%>
+
+<%-- Test to edit deployment date logic --%>
+
+<div
+	class="${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')} ">
+	<label for="devEnvironment" class="control-label"><g:message
+			code="bundleInstance.devEnvironment.label"
+			default="Dev Environment Promotion Date (Test)" /></label>
+	<div>
+		<g:textField class="form-control" name="devEnvironment" required=""
+			value="${bundleInstance?.devEnvironment}" />
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')}
+		</span>
+
 	</div>
 </div>
 
@@ -70,37 +88,24 @@
 	</div>
 </div>
 
+<%--<div class="${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')} ">
+				<label for="secureProgram" class="control-label"><g:message code="bundle.secureProgram.label" default="Secure Program" /></label>
+				<div>
+					<g:select class="form-control" name="secureProgram" from="${hmof.SecureProgram.list()}" multiple="multiple" optionKey="id" size="5" value="${bundleInstance?.secureProgram*.id}" class="many-to-many"/>
+					<span class="help-inline">${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}</span>
+				</div>
+			</div> --%>
+
 <div
-	class="${hasErrors(bean: bundleInstance, field: 'commerceObjects', 'error')} ">
-	<label for="commerceObjects" class="control-label"><g:message
-			code="bundle.commerceObjects.label" default="Commerce Objects" /></label>
+	class="${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')} ">
+	<label for="secureProgram" class="control-label"><g:message
+			code="bundle.secureProgram.label" default="Secure Program" /></label>
 	<div>
-		<g:select class="form-control" name="commerceObjects"
-			from="${hmof.CommerceObject.list()}" noSelection="['':'-None-']"
+		<g:select class="form-control" name="secureProgram"
+			from="${hmof.SecureProgram.list()}" noSelection="['':'-None-']"
 			multiple="multiple" optionKey="id" size="10"
-			value="${bundleInstance?.commerceObjects*.id}" class="many-to-many" />
-		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'commerceObjects', 'error')}
+			value="${bundleInstance?.secureProgram*.id}" class="many-to-many" />
+		<span class="help-inline"> ${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}
 		</span>
 	</div>
 </div>
-
-<%-- Test to edit deployment date logic --%>
-
-<div
-	class="${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')} ">
-	<label for="devEnvironment" class="control-label"><g:message
-			code="bundleInstance.devEnvironment.label" default="Dev Environment Promotion Date (Test)" /></label>
-	<div>
-		<g:textField class="form-control" name="devEnvironment" required=""
-			value="${bundleInstance?.devEnvironment}" />
-		<span class="help-inline">
-			${hasErrors(bean: bundleInstance, field: 'devEnvironment', 'error')}
-		</span>
-
-
-
-	</div>
-</div>
-
-
-

@@ -2,6 +2,7 @@
 <% def year = new Date().getAt(Calendar.YEAR) %>
 
 
+
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'productName', 'error')} required">
 				<label for="productName" class="control-label"><g:message code="secureProgram.productName.label" default="Product Name" /><span class="required-indicator">*</span></label>
 				<div>
@@ -26,6 +27,14 @@
 				</div>
 			</div>
 
+			<%--<div class="${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error')} ">
+				<label for="copyright" class="control-label"><g:message code="secureProgram.copyright.label" default="Copyright" /></label>
+				<div>
+					<g:textField class="form-control" name="copyright" value="${secureProgramInstance?.copyright}"/>
+					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error')}</span>
+				</div>
+			</div>--%>
+			
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error')} ">
 				<label for="copyright" class="control-label"><g:message code="secureProgram.copyright.label" default="Copyright" /></label>
 				<div>
@@ -35,7 +44,8 @@
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error')}</span>
 				</div>
 			</div>
-
+			
+			
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'labelForOnlineResource', 'error')} ">
 				<label for="labelForOnlineResource" class="control-label"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></label>
 				<div>
@@ -193,6 +203,17 @@
 				<div>
 					<g:textArea class="form-control" name="comments" cols="40" rows="5" maxlength="255" value="${secureProgramInstance?.comments}"/>
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'comments', 'error')}</span>
+				</div>
+			</div>
+
+			<div class="${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error')} ">
+				<label for="commerceObjects" class="control-label"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></label>
+				<div>
+					<g:select class="form-control" name="commerceObjects" 
+					from="${hmof.CommerceObject.list()}" noSelection="['':'-None-']" 
+					multiple="multiple" optionKey="id" size="10" 
+					value="${secureProgramInstance?.commerceObjects*.id}" class="many-to-many"/>
+					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error')}</span>
 				</div>
 			</div>
 

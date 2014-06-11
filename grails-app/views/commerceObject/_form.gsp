@@ -77,7 +77,7 @@
 			<div class="${hasErrors(bean: commerceObjectInstance, field: 'gradeLevel', 'error')} ">
 				<label for="gradeLevel" class="control-label"><g:message code="commerceObject.gradeLevel.label" default="Grade Level" /></label>
 				<div>
-					<g:select class="form-control" name="gradeLevel" from="${commerceObjectInstance.constraints.gradeLevel.inList}" value="${fieldValue(bean: commerceObjectInstance, field: 'gradeLevel')}" valueMessagePrefix="commerceObject.gradeLevel" noSelection="['': '']"/>
+					<g:select class="form-control" name="gradeLevel" from="${commerceObjectInstance.constraints.gradeLevel.inList}" value="${commerceObjectInstance?.gradeLevel}" valueMessagePrefix="commerceObject.gradeLevel" noSelection="['': '']"/>
 					<span class="help-inline">${hasErrors(bean: commerceObjectInstance, field: 'gradeLevel', 'error')}</span>
 				</div>
 			</div>

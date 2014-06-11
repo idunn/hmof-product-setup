@@ -27,7 +27,8 @@ class DeploymentService {
 			program{ id==params.id}
 			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
 		}
-
+		
+		
 		// A SP may be changed outside of a bundle the bundle is not marked for promotion but its SP is
 		def alldeployableSecureProgramsBelongingToProgram = Bundle.where{ program{ id==params.id }
 			secureProgram
@@ -39,7 +40,7 @@ class DeploymentService {
 
 		}
 
-		def results = deployableBundles.list()
+		def (results, secureProgramList) = [deployableBundles.list(), alldeployableSecureProgramsBelongingToProgram.list()] 
 
 	}
 }

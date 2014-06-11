@@ -16,7 +16,8 @@ class CommerceObject {
 	Date dateCreated
 	Date lastUpdated 
 		
-	static belongsTo = Bundle
+	//static belongsTo = Bundle
+	static belongsTo = SecureProgram
 
 	static constraints = {
 

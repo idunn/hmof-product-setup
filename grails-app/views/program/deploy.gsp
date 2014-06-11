@@ -26,7 +26,7 @@
 
 				<th>
 					${'Commerce Objects'}
-				</th>
+				</th>				
 			</tr>
 		</thead>
 		<tbody>
@@ -42,12 +42,14 @@
 						${b.secureProgram.registrationIsbn}
 					</td>
 					<td>
-						${b.commerceObjects.objectName}
+						${b.secureProgram.commerceObjects.objectName}
 					</td>
 				</tr>
 			</g:each>
 
 		</tbody>
 	</table>
+	<h4>Secure Programs to promote:</h4>
+	<p>${secureProgramsList.secureProgram}</p>
 </body>
 </html>
