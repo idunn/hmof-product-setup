@@ -50,6 +50,6 @@
 		</tbody>
 	</table>
 	<h4>Secure Programs to promote:</h4>
-	<p>${secureProgramsList.secureProgram}</p>
+	<p>${secureProgramsList}</p>
 </body>
 </html>

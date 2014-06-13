@@ -27,20 +27,23 @@ class DeploymentService {
 			program{ id==params.id}
 			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
 		}
-		
-		
+
+
 		// A SP may be changed outside of a bundle the bundle is not marked for promotion but its SP is
 		def alldeployableSecureProgramsBelongingToProgram = Bundle.where{ program{ id==params.id }
 			secureProgram
 			{
-				// add date criteria here
-				// NOTE, this object is not currently being returned
+				// add date criteria here similar to Program				
 				// something similar could be done for Commerce Objects
 			}
 
 		}
+		// get unique deployable SP
+		Set uniqueSp = alldeployableSecureProgramsBelongingToProgram.list().secureProgram.id.flatten()
+		
+		def deployableSp = SecureProgram.where{id in uniqueSp}		
 
-		def (results, secureProgramList) = [deployableBundles.list(), alldeployableSecureProgramsBelongingToProgram.list()] 
+		def (results, secureProgramList) = [deployableBundles.list(), deployableSp.list()]
 
 	}
 }
