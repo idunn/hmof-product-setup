@@ -36,13 +36,35 @@
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
 				
 			</tr>
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
+				
+			</tr>
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.devEnvironment.label" default="Dev Environment" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "devEnvironment")}</td>
+				
+			</tr>
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.copyright.label" default="Copyright" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
 				
-			</tr>
+			</tr>		
+			
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></td>
@@ -195,21 +217,7 @@
 					</ul>
 				</td>
 				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
-				
-			</tr>
+			</tr>	
 		
 		</tbody>
 	</table>

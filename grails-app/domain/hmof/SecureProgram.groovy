@@ -1,5 +1,7 @@
 package hmof
 
+import java.util.Date;
+
 class SecureProgram {
 
 	String productName
@@ -9,6 +11,11 @@ class SecureProgram {
 	String labelForOnlineResource
 	String pathToResource
 	String pathToCoverImage
+	
+	// deployment dates
+	Date dateCreated
+	Date lastUpdated
+	Date devEnvironment
 	
 
 	String labelForTeacherAdditionalResource
@@ -36,16 +43,20 @@ class SecureProgram {
 
 	static belongsTo = Bundle
 	// new
-	static hasMany = [commerceObjects:CommerceObject]
-
-	Date dateCreated
-	Date lastUpdated
+	static hasMany = [commerceObjects:CommerceObject]	
 
 	static constraints = {
 
 		productName (blank: false)
 		registrationIsbn (blank: false, unique: true)
 		onlineIsbn (blank: false)
+		
+		dateCreated ()
+		lastUpdated ()
+		devEnvironment (nullable:true)
+		//TODO add additional promotion environments		
+		
+		
 		copyright (blank: false, nullable:true)
 		labelForOnlineResource (blank: false, nullable:true)
 		pathToResource (blank: false, nullable:true)

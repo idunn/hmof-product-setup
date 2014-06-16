@@ -23,11 +23,10 @@
 			
 				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" />
 			
-				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
-			
-				<g:sortableColumn property="labelForOnlineResource" title="${message(code: 'secureProgram.labelForOnlineResource.label', default: 'Label For Online Resource')}" />
-			
-				<g:sortableColumn property="pathToResource" title="${message(code: 'secureProgram.pathToResource.label', default: 'Path To Resource')}" />
+				<g:sortableColumn property="lastUpdated" title="${message(code: 'secureProgram.lastUpdated.label', default: 'Last Updated')}" />
+				
+				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.devEnvironment.label', default: 'Dev Environment')}" />
+						
 			
 			</tr>
 		</thead>
@@ -41,11 +40,9 @@
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
 			
-				<td>${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
-			
-				<td>${fieldValue(bean: secureProgramInstance, field: "labelForOnlineResource")}</td>
-			
-				<td>${fieldValue(bean: secureProgramInstance, field: "pathToResource")}</td>
+				<td><g:formatDate date="${secureProgramInstance.lastUpdated}" /></td>
+				
+				<td><g:formatDate date="${secureProgramInstance.devEnvironment}" /></td>	
 			
 			</tr>
 		</g:each>

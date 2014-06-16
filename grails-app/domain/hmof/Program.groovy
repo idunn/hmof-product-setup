@@ -7,6 +7,8 @@ class Program {
 	Date dateCreated
 	Date lastUpdated
 	Date devEnvironment
+	Date qaEnvironment
+	Date prodEnvironment
   
 
 	static hasMany = [bundles:Bundle]
@@ -17,7 +19,9 @@ class Program {
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
 		dateCreated ()
 		lastUpdated ()
-		devEnvironment (nullable:true)		
+		devEnvironment (nullable:true)
+		qaEnvironment (nullable:true)
+		prodEnvironment (nullable:true)
 	}
 
 	String toString(){

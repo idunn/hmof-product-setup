@@ -57,6 +57,13 @@
 				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.devEnvironment}" /></td>
 				
 			</tr>
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="bundle.qaEnvironment.label" default="QA Environment" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.qaEnvironment}" /></td>
+				
+			</tr>
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="bundle.program.label" default="Program" /></td>
