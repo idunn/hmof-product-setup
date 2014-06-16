@@ -10,7 +10,24 @@
 </head>
 <body>
 
+	<h4>Bundles to promote:</h4>
+	<p>
+		${bundlesList.isbn}
+	</p>
+
+	<h4>Secure Programs to promote:</h4>
+	<p>
+		${secureProgramsList}
+	</p>
+
+	<h4>Commerce Objects to promote:</h4>
+	<p>
+		${commerceObjectsList}
+	</p>
+
 	<!-- Added new table -->
+	
+	<%--<h4>Bundles to promote in Table View:</h4>
 	<table class="table table-bordered margin-top-medium">
 		<thead>
 			<tr>
@@ -21,22 +38,28 @@
 					${'Bundle ISBN'}
 				</th>
 				<th>
+					${'Bundle Duration'}
+				</th>
+				<th>
 					${'Secure Programs'}
 				</th>
 
 				<th>
 					${'Commerce Objects'}
-				</th>				
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${deploymentDetailsList}" status="i" var="b">
+			<g:each in="${bundlesList}" status="i" var="b">
 				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 					<td>
 						${b.isbn}
 					</td>
 					<td>
 						${b.title}
+					</td>
+					<td>
+						${b.duration}
 					</td>
 					<td>
 						${b.secureProgram.registrationIsbn}
@@ -49,7 +72,6 @@
 
 		</tbody>
 	</table>
-	<h4>Secure Programs to promote:</h4>
-	<p>${secureProgramsList}</p>
-</body>
+
+--%></body>
 </html>

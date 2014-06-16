@@ -22,16 +22,13 @@ class ProgramController {
 	 */
 	def deploy() {
 
-		def (deploymentDetails, securePrograms) = deploymentService.promoteProgram(params)
-		// TODO require variable to identify individual SP and CO that have been updated and pass this to the view via the model
-						
-		[deploymentDetailsList:deploymentDetails, secureProgramsList:securePrograms]
+		def (bundles, securePrograms, commerceObjects) = deploymentService.promoteProgram(params)
 		
-		/*if (deploymentDetails.size()==0) render "Nothing to Deploy"
+		if (bundles.size() + securePrograms.size() + commerceObjects.size()==0) render "Nothing to Deploy"
 		else
 		{
-			[deploymentDetailsList:deploymentDetails]
-		}*/
+			[bundlesList:bundles, secureProgramsList:securePrograms, commerceObjectsList:commerceObjects]
+		}
 	}
 
 	def index(Integer max) {

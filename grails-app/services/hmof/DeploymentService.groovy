@@ -10,40 +10,37 @@ class DeploymentService {
 
 	/**
 	 * require a program ID and a deployment environment
+	 * Returns all the Bundles, Secure Programs and Commerce Objects that meet the criteria
 	 * @return
 	 */
 	def promoteProgram(params) {
-
-		//def programInstance = Program.where{ id==params.id }
-		//log.info "Program to Deploy: " +  programInstance.get()
-
-		//def allBundlesBelongingToProgram = Bundle.where{ program{ id==params.id } }
-		//log.info "All bundles in the Program: " +  allBundlesBelongingToProgram.isbn.list()
-
-		//def distinctSp = SecureProgram.where {}.projections { distinct 'id' }
-
-		// A deployable bundle has a SP and its datestamp for environments is null or < lastupdated
+		
+		// A deployable bundle has a SP and its datestamp for the environment is null or < lastupdated
 		def deployableBundles = Bundle.where{
 			program{ id==params.id}
 			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
 		}
 
-
-		// A SP may be changed outside of a bundle the bundle is not marked for promotion but its SP is
-		def alldeployableSecureProgramsBelongingToProgram = Bundle.where{ program{ id==params.id }
-			secureProgram
-			{
-				// add date criteria here similar to Program				
-				// something similar could be done for Commerce Objects
-			}
-
+		// get all Bundles that belong to the Program being deployed that also have a SP
+		def allProgramBundles = Bundle.where{ program{ id==params.id }
+			secureProgram {}
 		}
-		// get unique deployable SP
-		Set uniqueSp = alldeployableSecureProgramsBelongingToProgram.list().secureProgram.id.flatten()
 		
-		def deployableSp = SecureProgram.where{id in uniqueSp}		
+		// get a unique listing of Secure Programs belonging to the Program being deployed
+		Set uniqueSp = allProgramBundles.list().secureProgram.id.flatten()
+		
+		// get a unique listing of Commerce Objects belonging to the Program being deployed
+		Set uniqueCo = allProgramBundles.list().secureProgram.commerceObjects.id.flatten()
+		
+		// deployment logic for SP where datestamp for the environment is null or < lastupdated
+		def deployableSp = SecureProgram.where{id in uniqueSp && devEnvironment == null || devEnvironment < lastUpdated }		
 
-		def (results, secureProgramList) = [deployableBundles.list(), deployableSp.list()]
+		// deployment logic for a Commerce Object where datestamp for the environment is null or < lastupdated
+		def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
+		 
+		
+		// return list of deployable bundles, deployable SP and deployable CO
+		def (bundleList, secureProgramList, commerceObjectList) = [deployableBundles.list(), deployableSp.list(), deployableCo.list()]
 
 	}
 }
