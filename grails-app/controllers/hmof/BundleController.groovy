@@ -10,8 +10,26 @@ import grails.transaction.Transactional
  */
 @Transactional(readOnly = true)
 class BundleController {
+	
+	// inject Service
+	def deploymentService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	
+	/**
+	 * action to deploy content
+	 * @return
+	 */
+	def deploy() {
+
+		def (bundle, securePrograms, commerceObjects) = deploymentService.promoteBundle(params)
+		
+		if (bundle.size() + securePrograms.size() + commerceObjects.size()==0) render "Nothing to Deploy"		
+		else
+		{
+			[bundleInstance:bundle, secureProgramsList:securePrograms, commerceObjectsList:commerceObjects]
+		}
+	}
 
 	def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
