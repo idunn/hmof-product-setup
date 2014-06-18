@@ -103,10 +103,10 @@ class DeploymentService {
 		def commerceObject = CommerceObject.where{id==params.id}
 
 		// SP and its datestamp for the environment is null or < lastupdated
-		def deployableCo = commerceObject.where{			
+		def deployableCo = commerceObject.where{
 			devEnvironment == null || devEnvironment < lastUpdated
-		}		
-		
+		}
+
 		// return Deployable CO as a detached criteria
 		def (commerceObjectInstance) = [deployableCo.list()]
 
@@ -135,21 +135,16 @@ class DeploymentService {
 		else if (deploymentEnv == "qa"){
 			println "qa"
 			deployableCommerceObject = commerceObject.where{
-				devEnvironment != null && devEnvironment >= lastUpdated
-				//&& qaEnvironment == null || < lastUpdated
+				devEnvironment != null && devEnvironment >= lastUpdated && qaEnvironment == null || qaEnvironment < lastUpdated
 			}
 		}
 		else if (deploymentEnv == "prod"){
 			println "prod"
-			devEnvironment != null && devEnvironment >= lastUpdated
-			//&& qaEnvironment != null && qaEnvironment >= lastUpdated
-			//&& prodEnvironment == null || < lastUpdated
+			devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
 
 		}
 
 		def result = deployableCommerceObject.list()
 
 	}
-
-
 }
