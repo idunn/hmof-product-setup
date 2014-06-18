@@ -70,7 +70,7 @@ class DeploymentService {
 	}
 
 	/**
-	 * Promote SP
+	 * Promote Individual Secure Program an its children
 	 * @param params
 	 * @return
 	 */
@@ -94,7 +94,7 @@ class DeploymentService {
 
 
 	/**
-	 * Promote CO
+	 * Promote Commerce Object
 	 * @param params
 	 * @return
 	 */
@@ -103,18 +103,22 @@ class DeploymentService {
 		def commerceObject = CommerceObject.where{id==params.id}
 
 		// SP and its datestamp for the environment is null or < lastupdated
-		def deployableCo = commerceObject.where{
-			// TODO add dev environment
+		def deployableCo = commerceObject.where{			
 			devEnvironment == null || devEnvironment < lastUpdated
-		}
-
-		// return Deployable CO
+		}		
+		
+		// return Deployable CO as a detached criteria
 		def (commerceObjectInstance) = [deployableCo.list()]
 
 	}
 
-
-	def promoteCommerceObjectTest(params) {
+	/**
+	 * TODO Plugin Security Plugin and pass in roles to this action	 
+	 * @param params
+	 * @param role
+	 * @return
+	 */
+	def promoteCommerceObjectTest(params, role) {
 
 		def deploymentEnv = "dev"
 		def commerceObject = CommerceObject.where{id==params.id}

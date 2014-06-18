@@ -22,16 +22,20 @@
 						title="${message(code: 'program.name.label', default: 'Name')}" />
 
 					<g:sortableColumn property="discipline"
-						title="${message(code: 'program.discipline.label', default: 'Discipline')}" />					
+						title="${message(code: 'program.discipline.label', default: 'Discipline')}" />
 
 					<g:sortableColumn property="lastUpdated"
 						title="${message(code: 'program.lastUpdated.label', default: 'Last Updated')}" />
 
 					<g:sortableColumn property="devEnvironment"
 						title="${message(code: 'program.devEnvironment.label', default: 'Dev Environment')}" />
-						
-						<g:sortableColumn property="qaEnvironment"
-						title="${message(code: 'program.devEnvironment.label', default: 'QA Environment')}" />
+
+					<g:sortableColumn property="qaEnvironment"
+						title="${message(code: 'program.qaEnvironment.label', default: 'QA Environment')}" />
+
+					<g:sortableColumn property="prodEnvironment"
+						title="${message(code: 'program.prodEnvironment.label', default: 'Prod Environment')}" />
+
 
 					<th>
 						${'View'}
@@ -49,13 +53,15 @@
 
 						<td>
 							${fieldValue(bean: programInstance, field: "discipline")}
-						</td>						
+						</td>
 
 						<td><g:formatDate date="${programInstance.lastUpdated}" /></td>
-						
+
 						<td><g:formatDate date="${programInstance.devEnvironment}" /></td>
-						
+
 						<td><g:formatDate date="${programInstance.qaEnvironment}" /></td>
+						
+						<td><g:formatDate date="${programInstance.prodEnvironment}" /></td>
 
 						<td><g:link action="show" id="${programInstance.id}">
 								${'view'}

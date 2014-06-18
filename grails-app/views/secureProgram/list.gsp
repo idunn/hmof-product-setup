@@ -26,6 +26,10 @@
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'secureProgram.lastUpdated.label', default: 'Last Updated')}" />
 				
 				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.devEnvironment.label', default: 'Dev Environment')}" />
+				
+				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.qaEnvironment.label', default: 'QA Environment')}" />
+				
+				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.prodEnvironment.label', default: 'Prod Environment')}" />
 						
 			
 			</tr>
@@ -42,7 +46,11 @@
 			
 				<td><g:formatDate date="${secureProgramInstance.lastUpdated}" /></td>
 				
-				<td><g:formatDate date="${secureProgramInstance.devEnvironment}" /></td>	
+				<td><g:formatDate date="${secureProgramInstance.devEnvironment}" /></td>
+				
+				<td><g:formatDate date="${secureProgramInstance.qaEnvironment}" /></td>
+				
+				<td><g:formatDate date="${secureProgramInstance.prodEnvironment}" /></td>	
 			
 			</tr>
 		</g:each>

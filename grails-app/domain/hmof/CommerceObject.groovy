@@ -9,6 +9,8 @@ class CommerceObject {
 	Date dateCreated
 	Date lastUpdated
 	Date devEnvironment
+	Date qaEnvironment
+	Date prodEnvironment
 	
 	String pathToCoverImage
 	String teacherLabel
@@ -31,6 +33,8 @@ class CommerceObject {
 		dateCreated ()
 		lastUpdated ()
 		devEnvironment (nullable:true)
+		qaEnvironment (nullable:true)
+		prodEnvironment (nullable:true)
 		//TODO add additional promotion environments
 		
 		pathToCoverImage (blank: false, nullable:true)

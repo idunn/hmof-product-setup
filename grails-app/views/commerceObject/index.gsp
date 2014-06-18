@@ -20,14 +20,14 @@
 				<g:sortableColumn property="objectName" title="${message(code: 'commerceObject.objectName.label', default: 'Object Name')}" />
 			
 				<g:sortableColumn property="isbn" title="${message(code: 'commerceObject.isbn.label', default: 'Isbn')}" />
+				
+				<g:sortableColumn property="lastUpdated" title="${message(code: 'commerceObject.lastUpdated.label', default: 'Last Updated')}" />
 			
-				<g:sortableColumn property="pathToCoverImage" title="${message(code: 'commerceObject.pathToCoverImage.label', default: 'Path To Cover Image')}" />
-			
-				<g:sortableColumn property="teacherLabel" title="${message(code: 'commerceObject.teacherLabel.label', default: 'Teacher Label')}" />
-			
-				<g:sortableColumn property="teacherUrl" title="${message(code: 'commerceObject.teacherUrl.label', default: 'Teacher Url')}" />
-			
-				<g:sortableColumn property="studentLabel" title="${message(code: 'commerceObject.studentLabel.label', default: 'Student Label')}" />
+				<g:sortableColumn property="devEnvironment" title="${message(code: 'commerceObject.devEnvironment.label', default: 'Dev Environment')}" />
+				
+				<g:sortableColumn property="qaEnvironment" title="${message(code: 'commerceObject.qaEnvironment.label', default: 'QA Environment')}" />
+				
+				<g:sortableColumn property="prodEnvironment" title="${message(code: 'commerceObject.prodEnvironment.label', default: 'Prod Environment')}" />
 			
 			</tr>
 		</thead>
@@ -39,13 +39,13 @@
 			
 				<td>${fieldValue(bean: commerceObjectInstance, field: "isbn")}</td>
 			
-				<td>${fieldValue(bean: commerceObjectInstance, field: "pathToCoverImage")}</td>
-			
-				<td>${fieldValue(bean: commerceObjectInstance, field: "teacherLabel")}</td>
-			
-				<td>${fieldValue(bean: commerceObjectInstance, field: "teacherUrl")}</td>
-			
-				<td>${fieldValue(bean: commerceObjectInstance, field: "studentLabel")}</td>
+				<td><g:formatDate date="${commerceObjectInstance.lastUpdated}" /></td>
+				
+				<td><g:formatDate date="${commerceObjectInstance.devEnvironment}" /></td>
+				
+				<td><g:formatDate date="${commerceObjectInstance.qaEnvironment}" /></td>
+				
+				<td><g:formatDate date="${commerceObjectInstance.prodEnvironment}" /></td>
 			
 			</tr>
 		</g:each>
