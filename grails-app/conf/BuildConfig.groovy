@@ -81,6 +81,7 @@ grails.project.dependency.resolution = {
 		runtime ":jquery:1.11.0.2"
 		runtime ":resources:1.2.7"
 		
+		compile ":spring-security-core:2.0-RC3"
 		compile ":kickstart-with-bootstrap:1.1.0"
 		compile ":lesscss-resources:1.3.0.3"
 		compile ":console:1.3"

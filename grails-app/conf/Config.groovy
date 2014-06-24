@@ -124,3 +124,21 @@ log4j = {
 			'grails.app.domain.hmof'
 
 }
+
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'hmof.security.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'hmof.security.UserRole'
+grails.plugin.springsecurity.authority.className = 'hmof.security.Role'
+
+grails.plugin.springsecurity.securityConfigType = "Annotation"
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	'/**':                            ['permitAll'],
+	'/index':                         ['permitAll'],
+	'/index.gsp':                     ['permitAll'],
+	'/**/js/**':                      ['permitAll'],
+	'/**/css/**':                     ['permitAll'],
+	'/**/images/**':                  ['permitAll'],
+	'/**/favicon.ico':                ['permitAll']
+]
+

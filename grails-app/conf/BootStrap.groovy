@@ -2,9 +2,12 @@ import hmof.Bundle
 import hmof.CommerceObject
 import hmof.Program
 import hmof.SecureProgram
+import hmof.security.Role
+import hmof.security.User
+import hmof.security.UserRole
 
 class BootStrap {
-
+	
 	def init = { servletContext ->
 
 		def p1 = new Program(name:'visualmath', discipline:'math').save()
@@ -39,6 +42,28 @@ class BootStrap {
 		registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017)).addToSecureProgram(sp4).save(failOnError:true)
 
 		def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year').save(failOnError:true)
+
+		//Security
+		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
+		def userRole = Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
+
+		def user1 = User.findByUsername('dev') ?: new User(username: 'dev', enabled: true, password: 'dev').save(failOnError: true)
+		if (!user1.authorities.contains(userRole)) {
+			UserRole.create user1, userRole, true
+		}
+
+		def user2 = User.findByUsername('admin') ?: new User(username: 'admin', enabled: true, password: 'admin').save(failOnError: true)
+		if (!user2.authorities.contains(userRole)) {
+			UserRole.create user2, userRole, true
+		}
+		if (!user2.authorities.contains(adminRole)) {
+			UserRole.create user2, adminRole, true
+		}
+
+		assert User.count() == 2
+		assert Role.count() == 2
+		assert UserRole.count() == 3
+
 
 	}
 	def destroy = {
