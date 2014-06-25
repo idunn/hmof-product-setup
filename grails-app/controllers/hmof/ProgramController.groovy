@@ -3,6 +3,7 @@ package hmof
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import grails.plugin.springsecurity.annotation.Secured
 
 /**
  * ProgramController
@@ -44,7 +45,8 @@ class ProgramController {
 	def show(Program programInstance) {
 		respond programInstance
 	}
-
+	
+	@Secured(['ROLE_ADMIN'])
 	def create() {
 		respond new Program(params)
 	}
