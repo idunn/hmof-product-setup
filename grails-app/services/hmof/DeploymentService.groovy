@@ -1,5 +1,5 @@
 package hmof
-import grails.transaction.Transactional;
+import grails.transaction.Transactional
 
 /**
  * DeploymentService
@@ -7,6 +7,9 @@ import grails.transaction.Transactional;
  */
 @Transactional
 class DeploymentService {
+
+	// inject Spring Security
+	def springSecurityService
 
 	/**
 	 * require a program ID and a deployment environment
@@ -94,11 +97,12 @@ class DeploymentService {
 
 
 	/**
+	 * TODO update this method
 	 * Promote Commerce Object
 	 * @param params
 	 * @return
 	 */
-	def promoteCommerceObject(params) {
+	def promoteCommerceObjectTest1(params) {
 
 		def commerceObject = CommerceObject.where{id==params.id}
 
@@ -118,33 +122,40 @@ class DeploymentService {
 	 * @param role
 	 * @return
 	 */
-	def promoteCommerceObjectTest(params, role) {
+	def promoteCommerceObject(params) {
+		
+		// Testing Spring Security
+		def user = springSecurityService.authentication
+		String userRole = user.authorities
 
-		def deploymentEnv = "dev"
+
 		def commerceObject = CommerceObject.where{id==params.id}
 		def deployableCommerceObject
 
-		if(deploymentEnv == "dev"){
-			println "dev"
+		if(userRole.contains('ROLE_DEV')){
+			println "dev User"
 
 			// SP and its datestamp for the environment is null or < lastupdated
 			deployableCommerceObject = commerceObject.where{
 				devEnvironment == null || devEnvironment < lastUpdated
 			}
 		}
-		else if (deploymentEnv == "qa"){
-			println "qa"
+		else if (userRole.contains('ROLE_QA')){
+			println "qa User"
 			deployableCommerceObject = commerceObject.where{
-				devEnvironment != null && devEnvironment >= lastUpdated && qaEnvironment == null || qaEnvironment < lastUpdated
+				// TODO separate environments from CommerceObject domain
+				devEnvironment !=null && qaEnvironment == null || qaEnvironment < lastUpdated
+				//devEnvironment !=null && devEnvironment >= lastUpdated && qaEnvironment == null || qaEnvironment < lastUpdated
 			}
 		}
-		else if (deploymentEnv == "prod"){
-			println "prod"
-			devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
-
+		else if (userRole.contains('ROLE_PROD')){
+			println "prod User"
+			deployableCommerceObject = commerceObject.where{
+				devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
+			}
 		}
 
-		def result = deployableCommerceObject.list()
+		def (commerceObjectInstance) = [deployableCommerceObject.list()]
 
 	}
 }

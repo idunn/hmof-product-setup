@@ -12,6 +12,7 @@ import grails.transaction.Transactional
 class CommerceObjectController {
 
 	def deploymentService
+	def gebService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -22,9 +23,15 @@ class CommerceObjectController {
 		if (commerceObject.size()==0) render "Nothing to Deploy"
 		else
 		{
-			[commerceObjectInstance:commerceObject]
+			// Pass to Geb - possibly return true
+			def deploymentJob = gebService.deployCommerceObject(commerceObject)		
+
+			render "Commerce Object deployed"
+			
+			// send detached criteria to view
+			//[commerceObjectInstance:commerceObject]
 		}
-	}	
+	}
 
 	def index(Integer max) {
 		params.max = Math.min(max ?: 10, 100)

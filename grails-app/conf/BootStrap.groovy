@@ -7,7 +7,7 @@ import hmof.security.User
 import hmof.security.UserRole
 
 class BootStrap {
-	
+
 	def init = { servletContext ->
 
 		def p1 = new Program(name:'visualmath', discipline:'math').save()
@@ -46,13 +46,16 @@ class BootStrap {
 		//Security
 		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
 		def userRole = Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
+		def devRole = Role.findByAuthority('ROLE_DEV') ?: new Role(authority: 'ROLE_DEV').save(failOnError: true)
+		def qaRole = Role.findByAuthority('ROLE_QA') ?: new Role(authority: 'ROLE_QA').save(failOnError: true)
+		def prodRole = Role.findByAuthority('ROLE_PROD') ?: new Role(authority: 'ROLE_PROD').save(failOnError: true)
 
-		def user1 = User.findByUsername('dev') ?: new User(username: 'dev', enabled: true, password: 'dev').save(failOnError: true)
+		def user1 = User.findByUsername('ivan') ?: new User(username: 'ivan', password: 'pass').save(failOnError: true)
 		if (!user1.authorities.contains(userRole)) {
 			UserRole.create user1, userRole, true
 		}
 
-		def user2 = User.findByUsername('admin') ?: new User(username: 'admin', enabled: true, password: 'admin').save(failOnError: true)
+		def user2 = User.findByUsername('admin') ?: new User(username: 'admin', password: 'admin').save(failOnError: true)
 		if (!user2.authorities.contains(userRole)) {
 			UserRole.create user2, userRole, true
 		}
@@ -60,9 +63,35 @@ class BootStrap {
 			UserRole.create user2, adminRole, true
 		}
 
-		assert User.count() == 2
-		assert Role.count() == 2
-		assert UserRole.count() == 3
+		def devUser = User.findByUsername('dev') ?: new User(username: 'dev', password: 'dev').save(failOnError: true)
+		if (!devUser.authorities.contains(userRole)) {
+			UserRole.create devUser, userRole, true
+		}
+		if (!devUser.authorities.contains(devRole)) {
+			UserRole.create devUser, devRole, true
+		}
+		
+		def qaUser = User.findByUsername('qa') ?: new User(username: 'qa', password: 'qa').save(failOnError: true)
+		if (!qaUser.authorities.contains(userRole)) {
+			UserRole.create qaUser, userRole, true
+		}
+		if (!qaUser.authorities.contains(qaRole)) {
+			UserRole.create qaUser, qaRole, true
+		}
+		
+		def prodUser = User.findByUsername('prod') ?: new User(username: 'prod', password: 'prod').save(failOnError: true)
+		if (!prodUser.authorities.contains(userRole)) {
+			UserRole.create prodUser, userRole, true
+		}
+		if (!prodUser.authorities.contains(prodRole)) {
+			UserRole.create prodUser, prodRole, true
+		}
+		
+		
+		
+		//assert User.count() == 2
+		//assert Role.count() == 2
+		//assert UserRole.count() == 3
 
 
 	}
