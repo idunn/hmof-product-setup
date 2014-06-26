@@ -25,8 +25,10 @@ class CommerceObjectController {
 		{
 			// Pass to Geb - possibly return true
 			def deploymentJob = gebService.deployCommerceObject(commerceObject)		
-
-			render "Commerce Object deployed"
+			
+			// pass control back to index
+			redirect(action: 'index')
+			//chain action: 'index'
 			
 			// send detached criteria to view
 			//[commerceObjectInstance:commerceObject]
