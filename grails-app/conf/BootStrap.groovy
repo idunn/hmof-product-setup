@@ -55,7 +55,7 @@ class BootStrap {
 			UserRole.create user1, userRole, true
 		}
 
-		def user2 = User.findByUsername('admin') ?: new User(username: 'admin', password: 'admin').save(failOnError: true)
+		def user2 = User.findByUsername('admin') ?: new User(username: 'admin', enabled:true, password: 'admin').save(failOnError: true)
 		if (!user2.authorities.contains(userRole)) {
 			UserRole.create user2, userRole, true
 		}
@@ -63,7 +63,7 @@ class BootStrap {
 			UserRole.create user2, adminRole, true
 		}
 
-		def devUser = User.findByUsername('dev') ?: new User(username: 'dev', password: 'dev').save(failOnError: true)
+		def devUser = User.findByUsername('dev') ?: new User(username: 'dev', enabled:true, password: 'dev').save(failOnError: true)
 		if (!devUser.authorities.contains(userRole)) {
 			UserRole.create devUser, userRole, true
 		}
