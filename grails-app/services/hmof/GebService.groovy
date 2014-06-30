@@ -5,7 +5,7 @@ import grails.transaction.Transactional
  * GebService
  * A service class encapsulates the core business logic of a Grails application
  */
-@Transactional(readOnly=false)
+@Transactional(readOnly = true)
 class GebService {
 	
 	// TODO understand transactional
@@ -14,7 +14,7 @@ class GebService {
 	// inject Spring Security
 	def springSecurityService
 	
-	@Transactional(readOnly=false)
+	@Transactional
 	def deployCommerceObject(commerceObjectToDeploy) {
 
 		def commerceObjectId =  commerceObjectToDeploy.id

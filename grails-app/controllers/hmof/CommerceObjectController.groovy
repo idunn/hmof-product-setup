@@ -16,6 +16,7 @@ class CommerceObjectController {
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+	@Transactional
 	def deploy() {
 
 		def (commerceObject) = deploymentService.promoteCommerceObject(params)
