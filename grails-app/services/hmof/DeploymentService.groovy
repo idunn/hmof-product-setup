@@ -39,7 +39,8 @@ class DeploymentService {
 		def deployableSp = SecureProgram.where{id in uniqueSp && devEnvironment == null || devEnvironment < lastUpdated }
 
 		// deployment logic for a Commerce Object where datestamp for the environment is null or < lastupdated
-		def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
+		//def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
+		def deployableCo = CommerceObject.where{id in uniqueCo}
 
 
 		// return list of deployable bundles, deployable SP and deployable CO
@@ -65,7 +66,9 @@ class DeploymentService {
 
 		// get a unique listing of Commerce Objects belonging to the Secure Program being deployed
 		Set uniqueCo = deployableSp.list().commerceObjects.id.flatten()
-		def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
+		// TODO
+		//def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
+		def deployableCo = CommerceObject.where{id in uniqueCo}
 
 		// return Deployable Bundle, SP and CO
 		def (bundleInstance, secureProgramList, commerceObjectList) = [deployableBundle.list(), deployableSp.list(), deployableCo.list()]
@@ -108,7 +111,7 @@ class DeploymentService {
 
 		// SP and its datestamp for the environment is null or < lastupdated
 		def deployableCo = commerceObject.where{
-			devEnvironment == null || devEnvironment < lastUpdated
+			//devEnvironment == null || devEnvironment < lastUpdated
 		}
 
 		// return Deployable CO as a detached criteria
@@ -137,21 +140,21 @@ class DeploymentService {
 
 			// SP and its datestamp for the environment is null or < lastupdated
 			deployableCommerceObject = commerceObject.where{
-				devEnvironment == null || devEnvironment < lastUpdated
+				//devEnvironment == null || devEnvironment < lastUpdated
 			}
 		}
 		else if (userRole.contains('ROLE_QA')){
 			println "qa User"
 			deployableCommerceObject = commerceObject.where{
 				// TODO separate environments from CommerceObject domain
-				devEnvironment !=null && qaEnvironment == null || qaEnvironment < lastUpdated
+				//devEnvironment !=null && qaEnvironment == null || qaEnvironment < lastUpdated
 				//devEnvironment !=null && devEnvironment >= lastUpdated && qaEnvironment == null || qaEnvironment < lastUpdated
 			}
 		}
 		else if (userRole.contains('ROLE_PROD')){
 			println "prod User"
 			deployableCommerceObject = commerceObject.where{
-				devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
+				//devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
 			}
 		}
 

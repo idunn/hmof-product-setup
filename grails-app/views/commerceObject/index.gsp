@@ -23,13 +23,13 @@
 				
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'commerceObject.lastUpdated.label', default: 'Last Updated')}" />
 			
-				<g:sortableColumn property="devEnvironment" title="${message(code: 'commerceObject.devEnvironment.label', default: 'Dev Environment')}" />
+				<%--<g:sortableColumn property="devEnvironment" title="${message(code: 'commerceObject.devEnvironment.label', default: 'Dev Environment')}" />
 				
 				<g:sortableColumn property="qaEnvironment" title="${message(code: 'commerceObject.qaEnvironment.label', default: 'QA Environment')}" />
 				
 				<g:sortableColumn property="prodEnvironment" title="${message(code: 'commerceObject.prodEnvironment.label', default: 'Prod Environment')}" />
 			
-			</tr>
+			--%></tr>
 		</thead>
 		<tbody>
 		<g:each in="${commerceObjectInstanceList}" status="i" var="commerceObjectInstance">
@@ -41,13 +41,13 @@
 			
 				<td><g:formatDate date="${commerceObjectInstance.lastUpdated}" /></td>
 				
-				<td><g:formatDate date="${commerceObjectInstance.devEnvironment}" /></td>
+				<%--<td><g:formatDate date="${commerceObjectInstance.environments.devEnvironment}" /></td>
 				
 				<td><g:formatDate date="${commerceObjectInstance.qaEnvironment}" /></td>
 				
 				<td><g:formatDate date="${commerceObjectInstance.prodEnvironment}" /></td>
 			
-			</tr>
+			--%></tr>
 		</g:each>
 		</tbody>
 	</table>

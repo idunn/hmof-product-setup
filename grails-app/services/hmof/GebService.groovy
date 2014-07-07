@@ -23,8 +23,9 @@ class GebService {
 
 		// Update database
 		def co = CommerceObject.get(commerceObjectId)
-		co.devEnvironment = new Date()		
-		co.save(flush: true)
+		//TODO
+		//co.devEnvironment = new Date()		
+		//co.save(flush: true)
 		
 		// if success return true
 		
