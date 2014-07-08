@@ -16,6 +16,7 @@
 	<table class="table table-bordered margin-top-medium">
 		<thead>
 			<tr>
+				<g:sortableColumn property="id" title="${message(code: 'commerceObject.id.label', default: 'ID #')}" />
 			
 				<g:sortableColumn property="objectName" title="${message(code: 'commerceObject.objectName.label', default: 'Object Name')}" />
 			
@@ -23,17 +24,16 @@
 			
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'commerceObject.lastUpdated.label', default: 'Last Updated')}" />
 				
-				<%--<g:sortableColumn property="devEnvironment" title="${message(code: 'commerceObject.devEnvironment.label', default: 'Dev Environment')}" />
-				
-				<g:sortableColumn property="qaEnvironment" title="${message(code: 'commerceObject.qaEnvironment.label', default: 'QA Environment')}" />
-				
-				<g:sortableColumn property="prodEnvironment" title="${message(code: 'commerceObject.prodEnvironment.label', default: 'Prod Environment')}" />
-			
-			--%></tr>
+			</tr>
 		</thead>
 		<tbody>		
 		<g:each in="${commerceObjectInstanceList}" status="i" var="commerceObjectInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+				
+				<td><label class="radio control-label">
+				<!--  Default the first one to selected -->
+				<input type="radio" name="listGroup" id="listGroup" value="${commerceObjectInstance?.id}" <g:if test='${i == 0}'>checked='checked'</g:if> />
+				<g:link action="show" id="${commerceObjectInstance.id}">${commerceObjectInstance?.id}</g:link></label></td>										
 			
 				<td><g:link action="show" id="${commerceObjectInstance.id}">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</g:link></td>
 			
@@ -41,13 +41,7 @@
 				
 				<td><g:formatDate date="${commerceObjectInstance.lastUpdated}" /></td>
 				
-				<%--<td><g:formatDate date="${commerceObjectInstance.devEnvironment}" /></td>
-				
-				<td><g:formatDate date="${commerceObjectInstance.qaEnvironment}" /></td>
-				
-				<td><g:formatDate date="${commerceObjectInstance.prodEnvironment}" /></td>
-			
-			--%></tr>
+			</tr>
 		</g:each>
 		</tbody>
 	</table>
