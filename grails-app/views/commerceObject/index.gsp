@@ -11,6 +11,13 @@
 
 <body>
 
+
+
+<%--This is not being rendered by the index action as that action redirects to list--%>
+
+
+
+
 <section id="index-commerceObject" class="first">
 
 	<table class="table table-bordered margin-top-medium">
