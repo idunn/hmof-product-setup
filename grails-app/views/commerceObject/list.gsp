@@ -28,9 +28,9 @@
 		</thead>
 		<tbody>		
 		<g:each in="${commerceObjectInstanceList}" status="i" var="commerceObjectInstance">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				
-				<td><label class="radio control-label">
+			<%--<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">--%>
+			<tr <g:if test='${i == 0}'>class="warning"</g:if>>
+			<td><label class="radio control-label">
 				<!--  Default the first one to selected -->
 				<input type="radio" name="listGroup" id="listGroup" value="${commerceObjectInstance?.id}" <g:if test='${i == 0}'>checked='checked'</g:if> />
 				<g:link action="show" id="${commerceObjectInstance.id}">${commerceObjectInstance?.id}</g:link></label></td>										

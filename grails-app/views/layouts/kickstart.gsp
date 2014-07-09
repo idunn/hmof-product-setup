@@ -20,10 +20,14 @@
 	<r:require modules="jquery"/> <%-- jQuery is required for Bootstrap! --%>
 	<r:require modules="bootstrap"/>
 	<r:require modules="bootstrap_utils"/>
+	
+	<!-- Define which resource modules should be used for all pages TODO Review-->
+    <r:require module="application"/>
 
 	<r:layoutResources />
 	<g:layoutHead />
-
+	
+	
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 	<!--[if lt IE 9]>
 		<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
