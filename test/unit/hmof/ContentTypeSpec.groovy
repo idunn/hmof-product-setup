@@ -1,4 +1,4 @@
-package hmof.deploy
+package hmof
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Program2)
-class Program2Spec extends Specification {
+@TestFor(ContentType)
+class ContentTypeSpec extends Specification {
 
     def setup() {
     }
