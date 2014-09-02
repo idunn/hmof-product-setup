@@ -1,38 +1,43 @@
 package hmof.deploy
-import hmof.security.*
+import hmof.security.User
+import hmof.ContentType
+
 /**
  * Job
  * A domain class describes the data object and it's mapping to the database
  */
 class Job {
-
-	/* Default (injected) attributes of GORM */
-	//	Long	id
-	//	Long	version
-
-	/* Automatic timestamping of GORM */
-	//	Date	dateCreated
-	//	Date	lastUpdated
-
-	static	belongsTo	= [user: User]	
-	static	hasOne	= Program2 // no back-reference
-	static	hasMany		= [promotions: JobPromotion]
+	
+	Date dateCreated	
+	Date lastUpdated	
 		
-	//	static	mappedBy	= []	// specifies which property should be used in a mapping
-
-
-
-	static	mapping = {
+	Long jobNumber
+	Long contentTypeId
+	Long contentId
+	Long revision
+	
+	
+	// TODO this should be reviewed
+	//ContentType contentType
+	
+	static belongsTo	= [user: User]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
+	static hasMany		= [promotion: Promotion]
+	
+    static mapping = {
+		
+		sort id: "desc" // or "asc"
+    }
+    
+	static constraints = {
+		
+		jobNumber()
+		contentTypeId()
+		contentId()
+		revision()
+    }
+		
+	public String toString() {
+		return "${id}";
 	}
-
-	static	constraints = {
-	}
-
-	/*
-	 * Methods of the Domain Class
-	 */
-	//	@Override	// Override toString for a nicer / more descriptive UI
-	//	public String toString() {
-	//		return "${name}";
-	//	}
+	
 }
