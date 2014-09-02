@@ -1,164 +1,324 @@
 package hmof
-import grails.transaction.Transactional
+
+//import grails.transaction.Transactional
+import hmof.deploy.*
+import hmof.Program //TODO
+import hmof.security.User
+import hmof.security.Role
+import hmof.security.UserRole
 
 /**
  * DeploymentService
  * A service class encapsulates the core business logic of a Grails application
  */
-@Transactional
+//@Transactional //TODO
 class DeploymentService {
 
 	// inject Spring Security
 	def springSecurityService
+	def jobService
+	def sessionFactory
 
 	/**
-	 * require a program ID and a deployment environment
-	 * Returns all the Bundles, Secure Programs and Commerce Objects that meet the criteria
+	 * get the children objects of a Program
+	 * @param instanceId
 	 * @return
 	 */
-	def promoteProgram(params) {
+	def getProgramChildren(instanceId) {
 
-		// A deployable bundle has a SP and its datestamp for the environment is null or < lastupdated
-		def deployableBundles = Bundle.where{
-			program{ id==params.id}
-			devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
+		// A deployable Bundle belongs to the deployable Program and must have a SecureProgram.
+		def deployableBundle = Bundle.where{ program{ id==instanceId} && secureProgram{} }
+
+		// get all Bundle that belong to the Program being deployed
+		def allProgramBundle = Bundle.where{ program{ id==instanceId } }
+
+		// get a unique listing of SecureProgram belonging to the Program being deployed
+		Set uniqueSecureProgram = allProgramBundle.list().secureProgram.id.flatten()
+
+		// get a unique listing of CommerceObject belonging to the Program being deployed
+		Set uniqueCommerceObject = allProgramBundle.list().secureProgram.commerceObject.id.flatten()
+
+		// deployment logic for Content B
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram}.list()
 		}
 
-		// get all Bundles that belong to the Program being deployed that also have a SP
-		def allProgramBundles = Bundle.where{ program{ id==params.id }
-			secureProgram {}
+		// deployment logic for a Content C
+		def deployableCommerceObject = []
+		if(!uniqueCommerceObject.isEmpty()){
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
 		}
 
-		// get a unique listing of Secure Programs belonging to the Program being deployed
-		Set uniqueSp = allProgramBundles.list().secureProgram.id.flatten()
-
-		// get a unique listing of Commerce Objects belonging to the Program being deployed
-		Set uniqueCo = allProgramBundles.list().secureProgram.commerceObjects.id.flatten()
-
-		// deployment logic for SP where datestamp for the environment is null or < lastupdated
-		def deployableSp = SecureProgram.where{id in uniqueSp && devEnvironment == null || devEnvironment < lastUpdated }
-
-		// deployment logic for a Commerce Object where datestamp for the environment is null or < lastupdated
-		//def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
-		def deployableCo = CommerceObject.where{id in uniqueCo}
-
-
-		// return list of deployable bundles, deployable SP and deployable CO
-		def (bundleList, secureProgramList, commerceObjectList) = [deployableBundles.list(), deployableSp.list(), deployableCo.list()]
+		// return list of deployable Bundle (Bundles), deployable SecureProgram (SP) and deployable CommerceObject (CO)
+		def (bundleList, secureProgramList, commerceObjectList) = [deployableBundle.list(), deployableSecureProgram, deployableCommerceObject]
 
 	}
 
 	/**
-	 * Promote an individual Bundle
-	 * @param params
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
 	 * @return
 	 */
-	def promoteBundle(params) {
+	def getBundleChildren(instanceId) {
 
-		// A deployable bundle has a SP and its datestamp for the environment is null or < lastupdated
-		def deployableBundle = Bundle.where{
-			id==params.id && devEnvironment == null || devEnvironment < lastUpdated && secureProgram{}
+		// deployable content A has a SecureProgram
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
+
+		// deployment logic for Content B
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram}.list()
 		}
 
-		// get a listing of Secure Programs belonging to the Bundle being deployed
-		Set uniqueSp = deployableBundle.list().secureProgram.id.flatten()
-		def deployableSp = SecureProgram.where{id in uniqueSp && devEnvironment == null || devEnvironment < lastUpdated }
+		// get a unique listing of Content C belonging to the Content B being deployed
+		Set uniqueCommerceObject = deployableSecureProgram.commerceObject.id.flatten()
 
-		// get a unique listing of Commerce Objects belonging to the Secure Program being deployed
-		Set uniqueCo = deployableSp.list().commerceObjects.id.flatten()
-		// TODO
-		//def deployableCo = CommerceObject.where{id in uniqueCo && devEnvironment == null || devEnvironment < lastUpdated }
-		def deployableCo = CommerceObject.where{id in uniqueCo}
-
-		// return Deployable Bundle, SP and CO
-		def (bundleInstance, secureProgramList, commerceObjectList) = [deployableBundle.list(), deployableSp.list(), deployableCo.list()]
-
-	}
-
-	/**
-	 * Promote Individual Secure Program an its children
-	 * @param params
-	 * @return
-	 */
-	def promoteSecureProgram(params) {
-
-		def secureProgram = SecureProgram.where{id==params.id}
-
-		// SP and its datestamp for the environment is null or < lastupdated
-		def deployableSp = secureProgram.where{devEnvironment == null || devEnvironment < lastUpdated}
-
-		def commerceObjects = secureProgram.list().commerceObjects.id.flatten()
-
-		def deployableCo = CommerceObject.where{id in commerceObjects
-			//&& devEnvironment == null || devEnvironment < lastUpdated
+		// deployment logic for a Content C
+		def deployablecommerceObject = []
+		if(!uniqueCommerceObject.isEmpty()){
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
 		}
 
-		// return Deployable Bundle, SP and CO
-		def (secureProgramInstance, commerceObjectList) = [deployableSp.list(), deployableCo.list()]
+		// return Deployable SecureProgram and CommerceObject
+		def (secureProgramList, commerceObjectList) = [deployableSecureProgram, deployableCommerceObject]
 
 	}
 
 
 	/**
-	 * TODO update this method
-	 * Promote Commerce Object
-	 * @param params
+	 * Get the children objects of an individual SecureProgram (Secure Program), and Content C
+	 * @param instanceId
 	 * @return
 	 */
-	def promoteCommerceObjectTest1(params) {
+	def getSecureProgramChildren(instanceId) {
 
-		def commerceObject = CommerceObject.where{id==params.id}
+		def deployableSecureProgram = SecureProgram.where{id==instanceId}
 
-		// SP and its datestamp for the environment is null or < lastupdated
-		def deployableCo = commerceObject.where{
-			//devEnvironment == null || devEnvironment < lastUpdated
+		// get a unique listing of Content C belonging to the Content B being deployed
+		Set uniqueCommerceObject = deployableSecureProgram.list().commerceObject.id.flatten()
+
+		def deployableCommerceObject = []
+		if(!uniqueCommerceObject.isEmpty()){
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
 		}
 
-		// return Deployable CO as a detached criteria
-		def (commerceObjectInstance) = [deployableCo.list()]
+		// return Deployable CommerceObject
+		def (commerceObjectList) = [deployableCommerceObject]
+
+	}
+
+
+	/**
+	 * get Job/Promotion details for the Instance being passed in based on its environment id
+	 * @param instanceId
+	 * @param environmentId
+	 * @return
+	 */
+	def getPromotionDetails(instanceId, environmentId) {
+
+		// All jobs for this Instance
+		def jobDetails = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}
+
+		// Get Job Numbers and add to list
+		def jobNumbers = jobDetails.jobNumber.list()
+
+		// Iterate through the Job Numbers where the environment ID matches and return the latest promotion instance
+		def promoInstanceList = []
+		if(!jobNumbers.isEmpty()){
+			promoInstanceList = Promotion.where{jobNumber in jobNumbers && environments{id==environmentId} }.list(max:1, sort:"dateCreated", order:"desc")
+		}
+		def job_Number = promoInstanceList.jobNumber
+		def status_Type = promoInstanceList.status
+		def user_Name = User.where{id == promoInstanceList.userId}.username.get()
+
+		// get the revision number of the instance
+		def revision_Number = Job.where{jobNumber == promoInstanceList.jobNumber && contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.revision.get()
+
+		def (job, status, revision, user) = [job_Number, status_Type, revision_Number, user_Name].flatten()
 
 	}
 
 	/**
-	 * TODO Plugin Security Plugin and pass in roles to this action	 
-	 * @param params
-	 * @param role
+	 * Get the Environment associated with the User
 	 * @return
 	 */
-	def promoteCommerceObject(params) {
-		
-		// Testing Spring Security
-		def user = springSecurityService.authentication
-		String userRole = user.authorities
+	def getUserEnvironmentInformation(){
 
+		// get role of user
+		def principal = springSecurityService.principal
+		def authorities = principal.authorities
 
-		def commerceObject = CommerceObject.where{id==params.id}
-		def deployableCommerceObject
-
-		if(userRole.contains('ROLE_DEV')){
-			println "dev User"
-
-			// SP and its datestamp for the environment is null or < lastupdated
-			deployableCommerceObject = commerceObject.where{
-				//devEnvironment == null || devEnvironment < lastUpdated
-			}
-		}
-		else if (userRole.contains('ROLE_QA')){
-			println "qa User"
-			deployableCommerceObject = commerceObject.where{
-				// TODO separate environments from CommerceObject domain
-				//devEnvironment !=null && qaEnvironment == null || qaEnvironment < lastUpdated
-				//devEnvironment !=null && devEnvironment >= lastUpdated && qaEnvironment == null || qaEnvironment < lastUpdated
-			}
-		}
-		else if (userRole.contains('ROLE_PROD')){
-			println "prod User"
-			deployableCommerceObject = commerceObject.where{
-				//devEnvironment != null && devEnvironment >= lastUpdated	&& qaEnvironment != null && qaEnvironment >= lastUpdated && prodEnvironment == null || prodEnvironment < lastUpdated
-			}
-		}
-
-		def (commerceObjectInstance) = [deployableCommerceObject.list()]
+		// get role id of user
+		def roleId = Role.where{authority==authorities}.get()
+		println "roleId " + roleId
+		def envName = getEnvironmentName(roleId.id)
+		println "EnvName " + envName
+		def envId = Environment.where{name==envName}.get()
 
 	}
+
+	/**
+	 * Helper Method If Prod User then return 2 if QA user then return 1
+	 * @param environmentId
+	 * @return
+	 */
+	def getPreviousEnvironment(environmentId){
+
+		def prevEnvironment
+		if(environmentId==3L){prevEnvironment=2L}
+		else if(environmentId==2L){prevEnvironment=1L}
+
+		prevEnvironment
+
+	}
+
+
+	/**
+	 * Return the Promotion Instance on Dev or QA based on the Users environment permission	
+	 * @param instanceId
+	 * @param environment
+	 * @return
+	 */
+	def getDeployedInstance(instanceId, environment) {
+
+		def environmentToCheck = getPreviousEnvironment(environment.id)
+		def previousEnvironment = Environment.where{id==environmentToCheck}.get()
+		println "Previous Environment: " +  previousEnvironment
+
+		def jobDetails = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}
+
+		// Get Job Numbers and add to list
+		def jobNumbers = jobDetails.jobNumber.list()
+
+		println "All job Numbers for Instance " + jobNumbers
+
+		// Iterate through the Job Numbers where the environment ID matches and return the latest promotion instance
+		def promoInstanceList = []
+		if(!jobNumbers.isEmpty()){
+			promoInstanceList = Promotion.where{jobNumber in jobNumbers && environments{id==previousEnvironment.id} }.list(max:1, sort:"dateCreated", order:"desc")
+		}
+		// Type Long
+		Long InstanceNumber = Promotion.where{id==promoInstanceList.id}.id.get()
+		println "The Instance Number: " +  InstanceNumber
+
+		// Get the Instance that was deployed to the previous environment
+		def promoInstance = Promotion.where{id==InstanceNumber}.get()
+
+		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
+			println "Stop the promotion!"
+
+		}else{
+
+			promoInstance
+		}
+
+	}
+
+
+	/**
+	 * Get the environment name
+	 * @return
+	 */
+	def getEnvironmentName(Long roleId){
+		def envName
+
+		if(roleId == 2){
+			envName = "Dev"
+		} else if(roleId == 3){
+			envName = "QA"
+		} else if(roleId == 4){
+			envName = "Production"
+		}
+		return envName
+	}
+
+	/**
+	 * 
+	 * @param deployableInstance
+	 * @return
+	 */
+	def getCurrentEnversRevision(def deployableInstance){
+
+		// TODO put measures in to check for null
+		List allRevisions = deployableInstance.retrieveRevisions()
+		def currentRevision = allRevisions[-1]
+	}
+
+	/**
+	 * Get the current Job Number
+	 * @return
+	 */
+	def getCurrentJobNumber(){
+
+		def currentJobNumber = Job.createCriteria().get {
+			projections { max "jobNumber" } } as Long
+
+		if (currentJobNumber == null){currentJobNumber = 1}
+		else{currentJobNumber += 1}
+
+		currentJobNumber
+	}
+
+	/**
+	 * Deploy or Promote Jobs in Pending Status	
+	 * @return
+	 */
+	def executeJob(){
+
+		// get first instance in pending status
+		def promotionJobInstance = Promotion.where{status == "PENDING" }.list(max:1)
+		def promotionJobNumber =  promotionJobInstance.jobNumber
+
+		def jobList = Job.where{jobNumber == promotionJobNumber}.list()
+
+		if(!promotionJobInstance.isEmpty()){
+
+			def status1 = JobStatus.In_Progress.toString()
+
+			Long promotionJobId =  promotionJobInstance.id[0]
+			def promotionInstance = Promotion.get(promotionJobId)
+
+			promotionInstance.properties = [status: status1]
+			promotionInstance.save(failOnError: true, flush:true)
+
+			// for PDC
+			//def processJobs = jobService.processJobs2(jobList, promotionInstance)
+
+			def processJobs = jobService.processJobs(jobList, promotionInstance)
+			def status2 = null
+
+			if (processJobs){
+
+				status2 = JobStatus.Success.toString()
+
+			} else {status2 = JobStatus.Failure.toString()}
+
+
+			// return map
+			def results = [status: status2, promotionId:promotionJobInstance.id]
+		}
+
+	}
+
+	/**
+	 * Update the Promotion instance
+	 * @param jobIdList
+	 * @return
+	 */
+	def updateStatus(def promotionUpdate){
+
+		println "Promotion Instance to Update: " +  promotionUpdate
+
+		def promotionInstance = Promotion.where{id == promotionUpdate.promotionId}.get()
+		promotionInstance.properties = [status:promotionUpdate.status]
+
+	}
+
+
 }
