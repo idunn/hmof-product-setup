@@ -8,7 +8,7 @@ import hmof.deploy.*
  */
 class JobService {
 
-	//static transactional = false //TODO
+	static transactional = false //TODO
 	def deploymentService
 
 	/**

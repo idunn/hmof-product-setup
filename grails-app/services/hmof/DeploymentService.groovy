@@ -2,7 +2,6 @@ package hmof
 
 //import grails.transaction.Transactional
 import hmof.deploy.*
-import hmof.Program //TODO
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
@@ -13,6 +12,8 @@ import hmof.security.UserRole
  */
 //@Transactional //TODO
 class DeploymentService {
+	
+	static transactional = false
 
 	// inject Spring Security
 	def springSecurityService
