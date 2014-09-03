@@ -11,6 +11,8 @@ class Bundle {
 	String duration
 	Date dateCreated
 	Date lastUpdated
+	
+	ContentType contentType
 
 	static belongsTo = [program:Program]
 	static hasMany = [secureProgram:SecureProgram]
