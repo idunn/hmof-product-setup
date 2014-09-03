@@ -32,17 +32,18 @@ class BootStrap {
 		onlineIsbn:'9780123456999', copyright:2016, securityWord:'equal').save(failOnError:true)
 
 
+		Bundle.withTransaction{
+			def b1 = new Bundle(program:p1, isbn:'9780123456781', title:'Visual Math ete, Grade 7, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).save(failOnError:true)
+			def b2 = new Bundle(program:p1, isbn:'9780123456782', title:'Visual Math ete, Grade 7 Premium, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).save(failOnError:true)
+			def b3 = new Bundle(program:p1, isbn:'9780123456783', title:'Visual Math ete, Grade 7, 2016, 5Y', duration:'5-Year').addToSecureProgram(sp1).addToSecureProgram(sp2).save(failOnError:true)
+			def b4 = new Bundle(program:p1, isbn:'9780123456784', title:'Visual Math ete, Grade 7, 2016, 3Y', duration:'3-Year').addToSecureProgram(sp3).save(failOnError:true)
 
-		def b1 = new Bundle(program:p1, isbn:'9780123456781', title:'Visual Math ete, Grade 7, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).save(failOnError:true)
-		def b2 = new Bundle(program:p1, isbn:'9780123456782', title:'Visual Math ete, Grade 7 Premium, 2016, 6Y', duration:'6-Year').addToSecureProgram(sp1).save(failOnError:true)
-		def b3 = new Bundle(program:p1, isbn:'9780123456783', title:'Visual Math ete, Grade 7, 2016, 5Y', duration:'5-Year').addToSecureProgram(sp1).addToSecureProgram(sp2).save(failOnError:true)
-		def b4 = new Bundle(program:p1, isbn:'9780123456784', title:'Visual Math ete, Grade 7, 2016, 3Y', duration:'3-Year').addToSecureProgram(sp3).save(failOnError:true)
+			def b5 = new Bundle(program:p1, isbn:'9780123456791', title:'Visual Math ete Grade 8, 2016, 6Y', duration:'6-Year').addToSecureProgram(new SecureProgram(productName:'Visual Math: Mathematics 2',
+			registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017)).addToSecureProgram(sp4).save(failOnError:true)
 
-		def b5 = new Bundle(program:p1, isbn:'9780123456791', title:'Visual Math ete Grade 8, 2016, 6Y', duration:'6-Year').addToSecureProgram(new SecureProgram(productName:'Visual Math: Mathematics 2',
-		registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017)).addToSecureProgram(sp4).save(failOnError:true)
-
-		def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year').save(failOnError:true)
-
+			def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year').save(failOnError:true)
+		}
+		
 		//Security
 		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
 		def userRole = Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
@@ -70,7 +71,7 @@ class BootStrap {
 		if (!devUser.authorities.contains(devRole)) {
 			UserRole.create devUser, devRole, true
 		}
-		
+
 		def qaUser = User.findByUsername('qa') ?: new User(username: 'qa', password: 'qa').save(failOnError: true)
 		if (!qaUser.authorities.contains(userRole)) {
 			UserRole.create qaUser, userRole, true
@@ -78,7 +79,7 @@ class BootStrap {
 		if (!qaUser.authorities.contains(qaRole)) {
 			UserRole.create qaUser, qaRole, true
 		}
-		
+
 		def prodUser = User.findByUsername('prod') ?: new User(username: 'prod', password: 'prod').save(failOnError: true)
 		if (!prodUser.authorities.contains(userRole)) {
 			UserRole.create prodUser, userRole, true
@@ -86,12 +87,6 @@ class BootStrap {
 		if (!prodUser.authorities.contains(prodRole)) {
 			UserRole.create prodUser, prodRole, true
 		}
-		
-		
-		
-		//assert User.count() == 2
-		//assert Role.count() == 2
-		//assert UserRole.count() == 3
 
 
 	}
