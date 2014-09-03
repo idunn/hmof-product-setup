@@ -1,11 +1,14 @@
 package hmof
 
+import org.hibernate.envers.Audited
+
+@Audited
 class CommerceObject {
 
 	String objectName
 	String isbn
 	
-	// deployment dates
+	
 	Date dateCreated
 	Date lastUpdated	
 	

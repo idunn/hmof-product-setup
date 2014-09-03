@@ -15,7 +15,7 @@ class UserRole implements Serializable {
 		}
 
 		other.user?.id == user?.id &&
-		other.role?.id == role?.id
+				other.role?.id == role?.id
 	}
 
 	int hashCode() {
@@ -28,14 +28,14 @@ class UserRole implements Serializable {
 	static UserRole get(long userId, long roleId) {
 		UserRole.where {
 			user == User.load(userId) &&
-			role == Role.load(roleId)
+					role == Role.load(roleId)
 		}.get()
 	}
 
 	static boolean exists(long userId, long roleId) {
 		UserRole.where {
 			user == User.load(userId) &&
-			role == Role.load(roleId)
+					role == Role.load(roleId)
 		}.count() > 0
 	}
 
@@ -50,7 +50,7 @@ class UserRole implements Serializable {
 
 		int rowCount = UserRole.where {
 			user == User.load(u.id) &&
-			role == Role.load(r.id)
+					role == Role.load(r.id)
 		}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }
@@ -61,9 +61,9 @@ class UserRole implements Serializable {
 	static void removeAll(User u, boolean flush = false) {
 		if (u == null) return
 
-		UserRole.where {
-			user == User.load(u.id)
-		}.deleteAll()
+			UserRole.where {
+				user == User.load(u.id)
+			}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }
 	}
@@ -71,9 +71,9 @@ class UserRole implements Serializable {
 	static void removeAll(Role r, boolean flush = false) {
 		if (r == null) return
 
-		UserRole.where {
-			role == Role.load(r.id)
-		}.deleteAll()
+			UserRole.where {
+				role == Role.load(r.id)
+			}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }
 	}
@@ -81,7 +81,7 @@ class UserRole implements Serializable {
 	static constraints = {
 		role validator: { Role r, UserRole ur ->
 			if (ur.user == null) return
-			boolean existing = false
+				boolean existing = false
 			UserRole.withNewSession {
 				existing = UserRole.exists(ur.user.id, r.id)
 			}

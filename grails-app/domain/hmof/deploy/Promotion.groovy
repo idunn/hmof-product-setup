@@ -9,10 +9,11 @@ import java.util.Date
  */
 class Promotion {
 
-	Date	dateCreated
-	Date	lastUpdated
 	String  status
 	Long 	jobNumber
+
+	Date	dateCreated
+	Date	lastUpdated
 
 	static belongsTo	= [job: Job,user: User,environments: Environment]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 

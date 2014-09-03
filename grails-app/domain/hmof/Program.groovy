@@ -1,5 +1,8 @@
 package hmof
 
+import org.hibernate.envers.Audited
+
+@Audited
 class Program {
 
 	String name
