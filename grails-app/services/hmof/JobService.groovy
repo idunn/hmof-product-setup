@@ -8,7 +8,7 @@ import hmof.deploy.*
  */
 class JobService {
 
-	//static transactional = false
+	//static transactional = false //TODO
 	def deploymentService
 
 	/**
@@ -27,29 +27,29 @@ class JobService {
 			def program = jobs.find{it.contentTypeId == 1}
 			def bundle = jobs.findAll{it.contentTypeId == 2}
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
-			def commernceObject = jobs.findAll{it.contentTypeId == 4}
+			def commerceObject = jobs.findAll{it.contentTypeId == 4}
 
 			// Deploy Content C
-			if(!commernceObject.isEmpty()){
+			if(!commerceObject.isEmpty()){
 
-				commernceObject.each{
+				commerceObject.each{
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 
-					def commernceObjectInstance = CommernceObject.where{id==instanceNumber}.get()
-					def EnversInstanceToDeploy = commernceObjectInstance.findAtRevision(revisionNumber.toInteger())
+					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
+					def EnversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					println "Mock deployment of Content C to: " + deploymentUrl
-					println EnversInstanceToDeploy.name
-					println EnversInstanceToDeploy.description
-					println "Finished Deploying Content C."
+					println "Mock deployment of Commerce Object to: " + deploymentUrl
+					println EnversInstanceToDeploy.objectName
+					println EnversInstanceToDeploy.isbn
+					println "Finished Deploying Commerce Object."
 
 				}
 			}
 
-			// Deploy Content B
+			// Deploy Secure Program
 			if(!secureProgram.isEmpty()){
 
 				secureProgram.each{
@@ -61,15 +61,15 @@ class JobService {
 					def EnversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					println "Mock deployment of Content B to " + deploymentUrl
-					println EnversInstanceToDeploy.teacherUrl
-					println EnversInstanceToDeploy.isbn
-					println "Finished Deploying Content B."
+					println "Mock deployment of Secure Program " + deploymentUrl
+					println EnversInstanceToDeploy.productName
+					println EnversInstanceToDeploy.registrationIsbn
+					println "Finished Deploying Secure Program."
 
 				}
 			}
 
-			// Deploy Content A with its associations
+			// Deploy Bundle with its associations
 			if (!bundle.isEmpty()){
 
 				bundle.each{
@@ -81,32 +81,32 @@ class JobService {
 					def EnversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
 					// only one of these variables are used //TODO
-					def (content_A_Children, content_C) = deploymentService.getBundleChildren(BundleInstance.id)
+					def (bundle_Children, content_C) = deploymentService.getBundleChildren(BundleInstance.id)
 
 					// pass to Geb
-					println "Mock deployment of Content A to: " + deploymentUrl
+					println "Mock deployment of Bundle to: " + deploymentUrl
 					println EnversInstanceToDeploy.isbn
-					println EnversInstanceToDeploy.name
+					println EnversInstanceToDeploy.title
 
-					println "############################4"
-					// Add Content B to A
-					content_A_Children.each{
 
-						println "Add Content B: " + it.name
+					// Add Content SP to Bundle
+					bundle_Children.each{
+
+						println "Add Secure Program: " + it.name
 
 						Long instanceId = it.id
 						def secureProgramInstance = SecureProgram.where{id==instanceId}.get()
-						def (content_B_Children) = deploymentService.getSecureProgramChildren(secureProgramInstance.id)
+						def (secureProgram_Children) = deploymentService.getSecureProgramChildren(secureProgramInstance.id)
 
 						// Add C to B indirectly A
-						content_B_Children.each{
+						secureProgram_Children.each{
 
-							println "Add Content C: " + it.name
+							println "Add Commerce Object: " + it.name
 
 						}
 					}
 
-					println "Finished Deploying Content A."
+					println "Finished Deploying Bundles."
 				}
 			}
 		}
@@ -118,5 +118,5 @@ class JobService {
 		}
 
 		return true
-	}	
+	}
 }
