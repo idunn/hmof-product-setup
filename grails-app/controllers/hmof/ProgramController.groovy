@@ -30,20 +30,18 @@ class ProgramController {
 	 */
 	def deploy(){		
 		
-		//TODO
-		//def instanceId = params.instanceDetail
-		def instanceId = params.id		
+		
+		def instanceId = params.instanceDetail				
 		
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
 
 		def programInstance = Program.get(instanceId)
 
-		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-		
-		//TODO
-		def test1 = springSecurityService?.currentUser?.id		
-		def userId = User.where{id==test1}.get()		
+		def deploymentJobNumber = deploymentService.getCurrentJobNumber()		
+	
+		def user = springSecurityService?.currentUser?.id		
+		def userId = User.where{id==user}.get()		
 
 		// Create a map of job data to persist
 		def job = [contentId: programInstance.id, revision: deploymentService.getCurrentEnversRevision(programInstance), contentTypeId: programInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
