@@ -25,6 +25,8 @@
     <r:require module="application"/>
 
 	<r:layoutResources />
+	<!-- Define which resource modules should be used for all pages TODO Review add to Module-->
+	<script src="${resource(dir:'js',file:'myScript.js')}"></script>
 	<g:layoutHead />
 	
 	
