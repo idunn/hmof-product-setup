@@ -29,6 +29,9 @@
 
 <section id="list-program" class="first">
 
+<div>
+<g:form>
+
 	<table class="table table-bordered margin-top-medium">
 		<thead>
 			<tr>
@@ -122,6 +125,13 @@
 	<sec:ifAnyGranted roles="ROLE_QA, ROLE_PROD">
 	<g:actionSubmit style="color: #ffffff;background-color: #428bca;border-color: #357ebd;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;" value="Promote" onClick="return promote()"/>
 	</sec:ifAnyGranted>
+	
+	<%-- Required to pass to JavaScript --%>
+	<g:hiddenField name="instanceDetail"/>
+	<g:hiddenField name="instanceToBePromoted"/>
+	
+</g:form>
+</div>
 	
 	<div>
 		<bs:paginate total="${programInstanceCount}" />
