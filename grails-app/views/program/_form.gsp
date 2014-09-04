@@ -34,20 +34,6 @@
 </div>
 
 <div
-	class="${hasErrors(bean: programInstance, field: 'devEnvironment', 'error')} ">
-	<label for="devEnvironment" class="control-label"><g:message
-			code="program.devEnvironment.label" default="Dev Environment" /></label>
-	<div>
-		<bs:datePicker name="devEnvironment" precision="day"
-			value="${programInstance?.devEnvironment}" default="none"
-			noSelection="['': '']" />
-		<span class="help-inline">
-			${hasErrors(bean: programInstance, field: 'devEnvironment', 'error')}
-		</span>
-	</div>
-</div>
-
-<div
 	class="${hasErrors(bean: programInstance, field: 'bundles', 'error')} ">
 	<label for="bundles" class="control-label"><g:message
 			code="program.bundles.label" default="Bundles" /></label>
