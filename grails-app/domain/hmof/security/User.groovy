@@ -1,5 +1,8 @@
 package hmof.security
 
+import hmof.deploy.Job
+import hmof.deploy.Promotion
+
 class User {
 
 	transient springSecurityService
@@ -10,6 +13,8 @@ class User {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+	
+	static hasMany = [ jobs: Job, promotions: Promotion]
 
 	static transients = ['springSecurityService']
 
