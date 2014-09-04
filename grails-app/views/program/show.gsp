@@ -97,25 +97,7 @@
 					<td valign="top" class="value"><g:formatDate
 							date="${programInstance?.lastUpdated}" /></td>
 
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.devEnvironment.label" default="Dev Environment" /></td>
-
-					<td valign="top" class="value"><g:formatDate
-							date="${programInstance?.devEnvironment}" /></td>
-
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.devEnvironment.label" default="QA Environment" /></td>
-
-					<td valign="top" class="value"><g:formatDate
-							date="${programInstance?.qaEnvironment}" /></td>
-
-				</tr>
+				</tr>				
 
 			</tbody>
 		</table>
