@@ -12,7 +12,7 @@ import hmof.security.UserRole
  */
 //@Transactional //TODO
 class DeploymentService {
-	
+
 	static transactional = false
 
 	// inject Spring Security
@@ -37,7 +37,7 @@ class DeploymentService {
 		Set uniqueSecureProgram = allProgramBundle.list().secureProgram.id.flatten()
 
 		// get a unique listing of CommerceObject belonging to the Program being deployed
-		Set uniqueCommerceObject = allProgramBundle.list().secureProgram.commerceObject.id.flatten()
+		Set uniqueCommerceObject = allProgramBundle.list().secureProgram.commerceObjects.id.flatten()
 
 		// deployment logic for Content B
 		def deployableSecureProgram = []
@@ -154,12 +154,9 @@ class DeploymentService {
 		// get role of user
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
-
 		// get role id of user
 		def roleId = Role.where{authority==authorities}.get()
-		println "roleId " + roleId
 		def envName = getEnvironmentName(roleId.id)
-		println "EnvName " + envName
 		def envId = Environment.where{name==envName}.get()
 
 	}
