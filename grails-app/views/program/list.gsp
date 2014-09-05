@@ -22,11 +22,9 @@
 <body>
 
 <sec:ifNotLoggedIn>
-		Please <g:link controller='login' action='auth'><b>login</b></g:link> to view Programs.
+		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content
 </sec:ifNotLoggedIn>
 	
-<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PM, ROLE_QA, ROLE_PROD">
-
 <section id="list-program" class="first">
 
 <div>
@@ -49,9 +47,7 @@
 				
 				<th>${'QA'}</th>
 				
-				<th>${'Prod'}</th>
-				
-				<th>${'View'}</th>
+				<th>${'Prod'}</th>				
 			
 			</tr>
 		</thead>
@@ -109,9 +105,7 @@
 				<br>
 				User: ${jobdetailprod[3]}
 				<br>
-				</td>
-				
-				<td><g:link action="show" id="${programInstance.id}">${'view'}</g:link></td>
+				</td>				
 			
 			</tr>
 		</g:each>
@@ -137,7 +131,6 @@
 		<bs:paginate total="${programInstanceCount}" />
 	</div>
 </section>
-</sec:ifAnyGranted>
 </body>
 
 </html>

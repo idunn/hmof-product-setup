@@ -12,10 +12,9 @@
 <body>
 
 <sec:ifNotLoggedIn>
-		Please <g:link controller='login' action='auth'><b>login</b></g:link> to view Bundles.
+		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content
 </sec:ifNotLoggedIn>
 
-<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PM, ROLE_QA, ROLE_PROD">
 
 <section id="list-bundle" class="first">
 <div>
@@ -32,10 +31,10 @@
 				<g:sortableColumn property="title" title="${message(code: 'bundle.title.label', default: 'Title')}" />
 			
 				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />
+				
+				<th><g:message code="bundle.program.label" default="Program" /></th>
 			
 				<g:sortableColumn property="dateCreated" title="${message(code: 'bundle.dateCreated.label', default: 'Date Created')}" />				
-			
-				<th><g:message code="bundle.program.label" default="Program" /></th>
 				
 				<th>${'Dev'}</th>
 				
@@ -60,10 +59,10 @@
 				<td>${fieldValue(bean: bundleInstance, field: "title")}</td>
 			
 				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>
-			
-				<td><g:formatDate date="${bundleInstance.dateCreated}" /></td>
-			
+				
 				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>
+			
+				<td><g:formatDate date="${bundleInstance.dateCreated}" /></td>			
 				
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(bundleInstance,1)}" />
 						
@@ -128,7 +127,6 @@
 	</div>
 </section>
 
-</sec:ifAnyGranted>
 </body>
 
 </html>

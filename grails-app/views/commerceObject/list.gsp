@@ -12,7 +12,7 @@
 <body>
 
 <sec:ifNotLoggedIn>
-		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content.
+		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content
 </sec:ifNotLoggedIn>
 
 <section id="list-commerceObject" class="first">
