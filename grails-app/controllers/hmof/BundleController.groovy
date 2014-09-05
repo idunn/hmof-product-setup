@@ -13,10 +13,7 @@ class BundleController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-	def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Bundle.list(params), model:[bundleInstanceCount: Bundle.count()]
-    }
+	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)

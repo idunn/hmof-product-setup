@@ -13,10 +13,7 @@ class SecureProgramController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-	def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
-    }
+	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
