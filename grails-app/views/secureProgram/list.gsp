@@ -23,14 +23,11 @@
 			
 				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" />
 			
+				<g:sortableColumn property="dateCreated" title="${message(code: 'secureProgram.dateCreated.label', default: 'Date Created')}" />
+			
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'secureProgram.lastUpdated.label', default: 'Last Updated')}" />
-				
-				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.devEnvironment.label', default: 'Dev Environment')}" />
-				
-				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.qaEnvironment.label', default: 'QA Environment')}" />
-				
-				<g:sortableColumn property="devEnvironment" title="${message(code: 'secureProgram.prodEnvironment.label', default: 'Prod Environment')}" />
-						
+			
+				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
 			
 			</tr>
 		</thead>
@@ -44,13 +41,11 @@
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
 			
+				<td><g:formatDate date="${secureProgramInstance.dateCreated}" /></td>
+			
 				<td><g:formatDate date="${secureProgramInstance.lastUpdated}" /></td>
-				
-				<td><g:formatDate date="${secureProgramInstance.devEnvironment}" /></td>
-				
-				<td><g:formatDate date="${secureProgramInstance.qaEnvironment}" /></td>
-				
-				<td><g:formatDate date="${secureProgramInstance.prodEnvironment}" /></td>	
+			
+				<td>${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
 			
 			</tr>
 		</g:each>
