@@ -35,7 +35,7 @@
 				
 				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "duration")}</td>
 				
-			</tr>			
+			</tr>
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="bundle.dateCreated.label" default="Date Created" /></td>
@@ -48,20 +48,6 @@
 				<td valign="top" class="name"><g:message code="bundle.lastUpdated.label" default="Last Updated" /></td>
 				
 				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.lastUpdated}" /></td>
-				
-			</tr>
-			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.devEnvironment.label" default="Dev Environment" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.devEnvironment}" /></td>
-				
-			</tr>
-			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.qaEnvironment.label" default="QA Environment" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.qaEnvironment}" /></td>
 				
 			</tr>
 		
