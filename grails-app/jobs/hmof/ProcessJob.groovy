@@ -1,10 +1,5 @@
 package hmof
 
-import hmh.poc.deploy.Promotion
-import hmh.poc.deploy.Job
-
-
-
 class ProcessCommerceObjectJob {
 
 	def deploymentService
