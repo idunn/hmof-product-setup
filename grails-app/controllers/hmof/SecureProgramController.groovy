@@ -27,22 +27,19 @@ class SecureProgramController {
 	 */
 	def deploy(){
 		
-		def instanceId = params.instanceDetail
+		def instanceId = params.instanceDetail		
 		
-		println "instanceId##########" + instanceId
 		// TODO merge method with Program
 		def (commerceObject) = deploymentService.getSecureProgramChildren(instanceId)
 		def childContent = commerceObject
-		println "After childContent......." + childContent
+		
 		def secureProgramInstance = SecureProgram.get(instanceId)
 
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
 		
 		def user = springSecurityService?.currentUser?.id
-		def userId = User.where{id==user}.get()
+		def userId = User.where{id==user}.get()		
 		
-		println "After User......."
-
 		// Create a map of job data to persist
 		def job = [contentId: secureProgramInstance.id, revision: deploymentService.getCurrentEnversRevision(secureProgramInstance), contentTypeId: secureProgramInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
