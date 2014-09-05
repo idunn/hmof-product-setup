@@ -28,20 +28,20 @@ class ProgramController {
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
-	def deploy(){		
-		
-		
-		def instanceId = params.instanceDetail				
-		
+	def deploy(){
+
+
+		def instanceId = params.instanceDetail
+
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
 
 		def programInstance = Program.get(instanceId)
 
-		def deploymentJobNumber = deploymentService.getCurrentJobNumber()		
-	
-		def user = springSecurityService?.currentUser?.id		
-		def userId = User.where{id==user}.get()		
+		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
+
+		def user = springSecurityService?.currentUser?.id
+		def userId = User.where{id==user}.get()
 
 		// Create a map of job data to persist
 		def job = [contentId: programInstance.id, revision: deploymentService.getCurrentEnversRevision(programInstance), contentTypeId: programInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
@@ -58,7 +58,7 @@ class ProgramController {
 		def envId = deploymentService.getUserEnvironmentInformation()
 
 		def promote = [status: "PENDING", job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
-		Promotion p1 = new Promotion(promote).save(failOnError:true)		
+		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
 
@@ -122,7 +122,11 @@ class ProgramController {
 	}
 
 	@Transactional
-	def save(Program programInstance) {
+	def save() {
+
+		def contentType = ContentType.where{id==1}.get()
+		params.contentType = contentType
+		def programInstance = new Program(params)
 		if (programInstance == null) {
 			notFound()
 			return
@@ -132,10 +136,7 @@ class ProgramController {
 			respond programInstance.errors, view:'create'
 			return
 		}
-		
-		//TODO ADD CONTENT TYPE check if this Works!!
-		def contentType = ContentType.where{id==1}.get()
-		programInstance.contentType = contentType
+
 		programInstance.save flush:true
 
 		request.withFormat {
@@ -162,11 +163,7 @@ class ProgramController {
 			respond programInstance.errors, view:'edit'
 			return
 		}
-		
-		// TODO check
-		def contentType = ContentType.where{id==1}.get()
-		programInstance.contentType = contentType
-		
+
 		programInstance.save flush:true
 
 		request.withFormat {
