@@ -81,7 +81,7 @@ class JobService {
 					def EnversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
 					// only one of these variables are used //TODO
-					def (bundle_Children, content_C) = deploymentService.getBundleChildren(BundleInstance.id)
+					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
 
 					// pass to Geb
 					println "Mock deployment of Bundle to: " + deploymentUrl

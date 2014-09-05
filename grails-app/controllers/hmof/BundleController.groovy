@@ -3,6 +3,11 @@ package hmof
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import hmof.deploy.Job
+import hmof.deploy.Promotion
+import hmof.security.User
+import hmof.security.Role
+import hmof.security.UserRole
 
 /**
  * BundleController
@@ -10,8 +15,93 @@ import grails.transaction.Transactional
  */
 @Transactional(readOnly = true)
 class BundleController {
+	
+	def springSecurityService
+	def deploymentService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	
+	
+	/**
+	 * Persist job details to the job and promotions tables
+	 * @return
+	 */
+	def deploy(){
+		
+		def instanceId = params.instanceDetail		
+		
+		// TODO merge method with Program
+		def (secureProgram, commerceObject) = deploymentService.getBundleChildren(instanceId)
+		def childContent = secureProgram + commerceObject
+
+		def bundleInstance = Bundle.get(instanceId)		
+
+		def deploymentJobNumber = deploymentService.getCurrentJobNumber()		
+		
+		def user = springSecurityService?.currentUser?.id
+		def userId = User.where{id==user}.get()		
+
+		// Create a map of job data to persist
+		def job = [contentId: bundleInstance.id, revision: deploymentService.getCurrentEnversRevision(bundleInstance), contentTypeId: bundleInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
+
+		// Add Program instance to Job
+		Job j1 = new Job(job).save(failOnError:true)
+
+		childContent.each{
+
+			def content = [contentId: it.id, revision: deploymentService.getCurrentEnversRevision(it), contentTypeId: it.contentType.contentId, jobNumber: j1.getJobNumber(), user: userId]
+			Job j2 = new Job(content).save(failOnError:true)
+		}
+
+		def envId = deploymentService.getUserEnvironmentInformation()		
+
+		def promote = [status: "PENDING", job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
+		Promotion p1 = new Promotion(promote).save(failOnError:true)
+
+		redirect(action: "list")
+
+	}
+
+	/**
+	 * Promote content that has already been promoted to Dev OR QA
+	 * @return
+	 */
+	def promote(){
+		
+		// TODO is this the same as instanceId
+		def bundleInstance = Bundle.get(params.instanceToBePromoted)
+
+		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
+
+		def envId = deploymentService.getUserEnvironmentInformation()
+
+		def promotionInstance = deploymentService.getDeployedInstance(bundleInstance, envId)
+
+		if(promotionInstance==null){
+
+			flash.message = "Can't Promote as Content not deployed OR Promoted to an earlier environment"
+			redirect(action: "list")
+			return
+		}
+
+		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
+
+		def promotion = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.list()
+
+		if(promotion.isEmpty()){
+
+			def promote = [status: "PENDING", job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
+			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
+
+		} else{
+
+			flash.message = "Job Already Promoted or In-Progress"
+
+		}
+
+		redirect(action: "list")
+
+	}
 
 	def index(Integer max) {redirect(action: "list", params: params)}
 

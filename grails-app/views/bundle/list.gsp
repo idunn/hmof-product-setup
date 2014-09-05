@@ -119,7 +119,7 @@
 	
 	<%-- Required to pass to JavaScript --%>
 	<g:hiddenField name="instanceDetail"/>
-	<%--<g:hiddenField name="instanceToBePromoted"/>--%>
+	<g:hiddenField name="instanceToBePromoted"/>
 	
 </g:form>
 </div>

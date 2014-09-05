@@ -81,7 +81,7 @@ class DeploymentService {
 		Set uniqueCommerceObject = deployableSecureProgram.commerceObject.id.flatten()
 
 		// deployment logic for a Content C
-		def deployablecommerceObject = []
+		def deployableCommerceObject = []
 		if(!uniqueCommerceObject.isEmpty()){
 			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
 		}
