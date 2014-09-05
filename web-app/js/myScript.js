@@ -37,7 +37,7 @@ function toggle(box,theId) {
 		var optionSelected = $('input[name=rad]:checked').val();				
 		var instanceDetail = document.getElementById("instanceDetail");
 		instanceDetail.value = optionSelected;		
-		var deployProgram=confirm("Are you sure you want to deploy this program?");
+		var deployProgram=confirm("Are you sure you want to deploy?");
 		if(deployProgram){
 			return true;
 			}
@@ -46,7 +46,7 @@ function toggle(box,theId) {
 			}		
 		}
 		else{
-				alert("Please select a program to deploy!");
+				alert("Please select content to deploy!");
 				return false;
 			}
 	}
@@ -57,7 +57,7 @@ function toggle(box,theId) {
 		var optionSelected = $('input[name=rad]:checked').val();				
 		var instanceToBePromoted = document.getElementById("instanceToBePromoted");
 		instanceToBePromoted.value = optionSelected;		
-		var promoteProgram=confirm("Are you sure you want to promote this program?");
+		var promoteProgram=confirm("Are you sure you want to promote?");
 		if(promoteProgram){
 			return true;
 			}
@@ -66,7 +66,7 @@ function toggle(box,theId) {
 			}		
 		}
 		else{
-				alert("Please select a program to promote!");
+				alert("Please select content to promote!");
 				return false;
 			}
 	}
