@@ -78,7 +78,7 @@ class DeploymentService {
 		}
 
 		// get a unique listing of Content C belonging to the Content B being deployed
-		Set uniqueCommerceObject = deployableSecureProgram.commerceObject.id.flatten()
+		Set uniqueCommerceObject = deployableSecureProgram.commerceObjects.id.flatten()
 
 		// deployment logic for a Content C
 		def deployableCommerceObject = []
@@ -102,7 +102,7 @@ class DeploymentService {
 		def deployableSecureProgram = SecureProgram.where{id==instanceId}
 
 		// get a unique listing of Content C belonging to the Content B being deployed
-		Set uniqueCommerceObject = deployableSecureProgram.list().commerceObject.id.flatten()
+		Set uniqueCommerceObject = deployableSecureProgram.list().commerceObjects.id.flatten()
 
 		def deployableCommerceObject = []
 		if(!uniqueCommerceObject.isEmpty()){
