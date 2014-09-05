@@ -32,7 +32,12 @@ class CommerceObjectController {
     }
 
     @Transactional
-    def save(CommerceObject commerceObjectInstance) {
+    def save() {
+		
+		def contentType = ContentType.where{id==4}.get()
+		params.contentType = contentType
+		def commerceObjectInstance = new CommerceObject(params)
+		
         if (commerceObjectInstance == null) {
             notFound()
             return

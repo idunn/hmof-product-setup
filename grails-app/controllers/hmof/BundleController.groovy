@@ -32,7 +32,12 @@ class BundleController {
     }
 
     @Transactional
-    def save(Bundle bundleInstance) {
+    def save() {
+		
+		def contentType = ContentType.where{id==2}.get()
+		params.contentType = contentType
+		def bundleInstance = new Bundle(params)
+		
         if (bundleInstance == null) {
             notFound()
             return

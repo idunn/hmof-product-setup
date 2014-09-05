@@ -32,7 +32,12 @@ class SecureProgramController {
     }
 
     @Transactional
-    def save(SecureProgram secureProgramInstance) {
+    def save() {
+		
+		def contentType = ContentType.where{id==3}.get()
+		params.contentType = contentType
+		def secureProgramInstance = new SecureProgram(params)
+		
         if (secureProgramInstance == null) {
             notFound()
             return
