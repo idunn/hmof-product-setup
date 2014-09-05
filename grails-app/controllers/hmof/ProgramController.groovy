@@ -127,6 +127,7 @@ class ProgramController {
 		def contentType = ContentType.where{id==1}.get()
 		params.contentType = contentType
 		def programInstance = new Program(params)
+		
 		if (programInstance == null) {
 			notFound()
 			return
