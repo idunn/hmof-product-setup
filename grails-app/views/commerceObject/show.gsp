@@ -31,6 +31,20 @@
 			</tr>
 		
 			<tr class="prop">
+				<td valign="top" class="name"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.pathToCoverImage.label" default="Path To Cover Image" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "pathToCoverImage")}</td>
@@ -90,20 +104,6 @@
 				<td valign="top" class="name"><g:message code="commerceObject.comments.label" default="Comments" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "comments")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></td>
 				
 			</tr>
 		
