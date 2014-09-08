@@ -1,24 +1,24 @@
 <%--<ul class="nav pull-right">--%>
 	<li class="dropdown">
 	
-<%--<sec:ifNotLoggedIn>--%>
+<sec:ifNotLoggedIn>
 
-		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-			<!-- TODO: integrate Springsource Security etc. and show User's name ... -->
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">			
     		<i class="glyphicon glyphicon-user"></i>
     		<g:message code="security.signin.label"/><b class="caret"></b>
 		</a>
 
 		<ul class="dropdown-menu" role="menu">
 			<li class="form-container">
-				<form action="/j_spring_security_check" method="post" accept-charset="UTF-8">
-<%--				<form action="login" method="post" accept-charset="UTF-8">--%>
-					<input class="form-control" style="margin-bottom: 15px;" type="text"		placeholder="Username" id="username" name="username">
-					<input class="form-control" style="margin-bottom: 15px;" type="password"	placeholder="Password" id="password" name="password">
-					<input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
-					<label class="string optional" for="user_remember_me"> Remember me</label>
+				<%--<form action="/j_spring_security_check" method="post" accept-charset="UTF-8">--%>
+				<%--<form action="login" method="post" accept-charset="UTF-8">--%>
+				<g:form controller='j_spring_security_check' name="loginForm" autocomplete='off'>
+					<input class="form-control" style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="j_username">
+					<input class="form-control" style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="j_password">
+					<%--<input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
+					<label class="string optional" for="user_remember_me"> Remember me</label>--%>
 					<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
-				</form>
+				</g:form >
 			</li>
 			<li class="divider"></li>
 			<li class="button-container">
@@ -27,7 +27,20 @@
 			</li>
 		</ul>
 
-<%--</sec:ifNotLoggedIn>--%>
+</sec:ifNotLoggedIn>
+
+<sec:ifLoggedIn>
+<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i> <sec:username /><b class="caret"></b></a>
+		<ul class="dropdown-menu">
+			
+			<li><a href="${createLink(controller: 'j_spring_security_logout')}">Logout</a></li>
+		</ul>
+	</li>
+</sec:ifLoggedIn>
+
+
+
+
 <%--<sec:ifLoggedIn>--%>
 <%----%>
 <%--		<a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" href="#">--%>
