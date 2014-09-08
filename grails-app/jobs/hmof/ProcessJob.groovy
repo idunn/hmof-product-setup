@@ -1,6 +1,6 @@
 package hmof
 
-class ProcessCommerceObjectJob {
+class ProcessJob {
 
 	def deploymentService
 
