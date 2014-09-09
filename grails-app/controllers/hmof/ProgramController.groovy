@@ -28,6 +28,7 @@ class ProgramController {
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
+	@Transactional
 	def deploy(){
 
 
@@ -68,6 +69,7 @@ class ProgramController {
 	 * Promote content that has already been promoted to Dev OR QA
 	 * @return
 	 */
+	@Transactional
 	def promote(){
 
 		def programInstance = Program.get(params.instanceToBePromoted)

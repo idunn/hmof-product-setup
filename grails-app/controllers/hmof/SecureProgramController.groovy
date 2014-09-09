@@ -25,6 +25,7 @@ class SecureProgramController {
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
+	@Transactional
 	def deploy(){
 		
 		def instanceId = params.instanceDetail		
@@ -65,6 +66,7 @@ class SecureProgramController {
 	 * Promote content that has already been promoted to Dev OR QA
 	 * @return
 	 */
+	@Transactional
 	def promote(){
 		
 		// TODO is this the same as instanceId
