@@ -31,9 +31,7 @@
 			
 				<g:sortableColumn property="registrationIsbn" title="${message(code: 'secureProgram.registrationIsbn.label', default: 'Registration Isbn')}" />
 			
-				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" />
-			
-				<g:sortableColumn property="dateCreated" title="${message(code: 'secureProgram.dateCreated.label', default: 'Date Created')}" />				
+				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" />								
 			
 				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
 				
@@ -59,9 +57,7 @@
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "registrationIsbn")}</td>
 			
-				<td>${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
-			
-				<td><g:formatDate date="${secureProgramInstance.dateCreated}" /></td>				
+				<td>${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>						
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
 				

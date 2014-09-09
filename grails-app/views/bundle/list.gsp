@@ -32,9 +32,7 @@
 			
 				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />
 				
-				<th><g:message code="bundle.program.label" default="Program" /></th>
-			
-				<g:sortableColumn property="dateCreated" title="${message(code: 'bundle.dateCreated.label', default: 'Date Created')}" />				
+				<th><g:message code="bundle.program.label" default="Program" /></th>								
 				
 				<th>${'Dev'}</th>
 				
@@ -60,9 +58,7 @@
 			
 				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>
 				
-				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>
-			
-				<td><g:formatDate date="${bundleInstance.dateCreated}" /></td>			
+				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>							
 				
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(bundleInstance,1)}" />
 						

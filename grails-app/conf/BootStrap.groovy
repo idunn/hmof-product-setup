@@ -72,7 +72,7 @@ class BootStrap {
 			def b3 = new Bundle(program:p1, isbn:'9780123456783', title:'Visual Math ete, Grade 7, 2016, 5Y', duration:'5-Year',contentType:ct2).addToSecureProgram(sp1).addToSecureProgram(sp2).save(failOnError:true)
 			def b4 = new Bundle(program:p1, isbn:'9780123456784', title:'Visual Math ete, Grade 7, 2016, 3Y', duration:'3-Year',contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
 			def b5 = new Bundle(program:p1, isbn:'9780123456791', title:'Visual Math ete Grade 8, 2016, 6Y', duration:'6-Year',contentType:ct2).addToSecureProgram(new SecureProgram(productName:'Visual Math: Mathematics 2',
-			registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017,contentType:ct2)).addToSecureProgram(sp4).save(failOnError:true)
+			registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017,contentType:ct3)).addToSecureProgram(sp4).save(failOnError:true)
 			def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year',contentType:ct2).save(failOnError:true)
 
 		}

@@ -39,9 +39,7 @@
 				
 				<th>${'Current Revision'}</th>
 			
-				<g:sortableColumn property="discipline" title="${message(code: 'program.discipline.label', default: 'Discipline')}" />
-			
-				<g:sortableColumn property="dateCreated" title="${message(code: 'program.dateCreated.label', default: 'Date Created')}" />				
+				<g:sortableColumn property="discipline" title="${message(code: 'program.discipline.label', default: 'Discipline')}" />								
 				
 				<th>${'Dev'}</th>
 				
@@ -64,9 +62,7 @@
 				
 				<td>${jobdetails.getCurrentEnversRevision(programInstance)}</td>
 			
-				<td>${fieldValue(bean: programInstance, field: "discipline")}</td>
-			
-				<td><g:formatDate date="${programInstance.dateCreated}" /></td>				
+				<td>${fieldValue(bean: programInstance, field: "discipline")}</td>							
 				
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(programInstance,1)}" />
 						
