@@ -92,7 +92,7 @@ class JobService {
 					// Add Content SP to Bundle
 					bundle_Children.each{
 
-						println "Add Secure Program: " + it.name
+						println "Add Secure Program: " + it.productName + " " + it.registrationIsbn
 
 						Long instanceId = it.id
 						def secureProgramInstance = SecureProgram.where{id==instanceId}.get()
@@ -101,12 +101,12 @@ class JobService {
 						// Add C to B indirectly A
 						secureProgram_Children.each{
 
-							println "Add Commerce Object: " + it.name
+							println "Add Commerce Object: " + it.objectName + " " + it.isbn
 
 						}
 					}
 
-					println "Finished Deploying Bundles."
+					println "Finished Deploying Bundle."
 				}
 			}
 		}
