@@ -1,12 +1,15 @@
 package hmof
 import geb.*
+import geb.driver.CachingDriverFactory
 
 
 class RedPagesDriver  {
 
 
 	RedPagesDriver(def url){
-
+		
+		def cachedDriver = CachingDriverFactory.clearCache()
+		println "cachedDriver" + cachedDriver
 		init(url)
 	}
 

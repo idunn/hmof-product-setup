@@ -4,6 +4,9 @@ import org.openqa.selenium.remote.DesiredCapabilities
 //import org.openqa.selenium.chrome.ChromeDriver
 //import org.openqa.selenium.chrome.ChromeOptions
 
+
+//import geb.driver.CachingDriverFactory
+
 System.setProperty('phantomjs.binary.path', 'C:\\Java\\phantomjs.exe')
 driver = {new PhantomJSDriver(new DesiredCapabilities())}
 
@@ -22,9 +25,14 @@ driver = new ChromeDriver(capabilities)
 //WebDriver driver = new ChromeDriver(options)
 */
 
+
+
+//def cachedDriver = CachingDriverFactory.clearCache()
+//def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
+
 reportsDir = "target/geb-reports"
 
 waiting {
-	timeout = 30
+	timeout = 100
 	retryInterval = 1
 }
