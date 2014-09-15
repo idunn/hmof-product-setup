@@ -18,31 +18,24 @@ class RedPagesDriver  {
 		RedPagesLogin rpl = new RedPagesLogin()
 		rpl.init(url)
 
-		try{
 
-			Browser.drive{
-				println "Starting Geb Automation"
+		Browser.drive{
+			println "Starting Geb Automation"
 
-				to RedPagesLogin
-				login "jforare@harcourt.com", "11surf"
+			to RedPagesLogin
+			login "jforare@harcourt.com", "11surf"
 
-				// Manage Existing ISBN
-				//lookupIsbn secureProgramData[1]
-				//UpdateSecureProgramForm(secureProgramData)
+			// Manage Existing ISBN
+			//lookupIsbn secureProgramData[1]
+			//UpdateSecureProgramForm(secureProgramData)
 
-				println "Completed Geb Automation"
-			}
-
-
-		}catch(Exception e){
-
-			println "Exception " + e
+			println "Completed Geb Automation"
 		}
 
 	}
-	
+
 	static main(args) {
-		
+
 		RedPagesDriver test = new RedPagesDriver("http://support-review.hrw.com")
 	}
 }
