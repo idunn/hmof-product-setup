@@ -1,6 +1,7 @@
 package hmof
 
 import hmof.deploy.*
+import geb.*
 
 /**
  * JobService
@@ -10,6 +11,7 @@ class JobService {
 
 	static transactional = false //TODO
 	def deploymentService
+	def commerceObjectService
 
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
@@ -22,6 +24,7 @@ class JobService {
 
 			// Get the environment URL
 			def deploymentUrl = Environment.where{id==promotionInstance.environmentsId}.url.get()
+
 
 			// Divide out the instances
 			def program = jobs.find{it.contentTypeId == 1}
@@ -40,11 +43,19 @@ class JobService {
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
 					def EnversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
-					// Pass data to Geb
-					println "Mock deployment of Commerce Object to: " + deploymentUrl
-					println EnversInstanceToDeploy.objectName
-					println EnversInstanceToDeploy.isbn
-					println "Finished Deploying Commerce Object."
+					// TODO WORK on this				
+					//String testUrl = "http://support-review.hrw.com"
+					//commerceObjectService.loginToRedPages( testUrl )
+
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl)
+
+					/* Pass data to Geb
+					 println "Mock deployment of Commerce Object to: " + deploymentUrl
+					 println EnversInstanceToDeploy.objectName
+					 println EnversInstanceToDeploy.isbn
+					 println "Finished Deploying Commerce Object."*/
+
+
 
 				}
 			}
@@ -116,6 +127,7 @@ class JobService {
 			return false
 
 		}
+
 
 		return true
 	}

@@ -5,27 +5,44 @@ import geb.*
 class RedPagesDriver  {
 
 
-	static main(args) {
+	RedPagesDriver(def url){
 
-		def secureProgramData = ["Product Setup Ivan2 - Grades 6-9", "9241234567891", "9241234567892", "Language Arts", "2016"]
+		init(url)
+	}
+
+
+	def init(def url){
+
+		println "url: " + url
 
 		RedPagesLogin rpl = new RedPagesLogin()
-		rpl.init("http://support-review-cert.hrw.com")
+		rpl.init(url)
 
-		Browser.drive{
-			println "Starting Geb Automation"
+		try{
 
-			to RedPagesLogin
-			login "jforare@harcourt.com", "11surf"
+			Browser.drive{
+				println "Starting Geb Automation"
 
-			// Manage Existing ISBN
-			lookupIsbn secureProgramData[1]
-			UpdateSecureProgramForm(secureProgramData)
+				to RedPagesLogin
+				login "jforare@harcourt.com", "11surf"
 
-			println "Completed Geb Automation"
+				// Manage Existing ISBN
+				//lookupIsbn secureProgramData[1]
+				//UpdateSecureProgramForm(secureProgramData)
 
+				println "Completed Geb Automation"
+			}
+
+
+		}catch(Exception e){
+
+			println "Exception " + e
 		}
 
 	}
-
+	
+	static main(args) {
+		
+		RedPagesDriver test = new RedPagesDriver("http://support-review.hrw.com")
+	}
 }

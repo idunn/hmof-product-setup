@@ -12,9 +12,9 @@ class BootStrap {
 
 	def init = { servletContext ->
 
-		def cert = Environment.findByName('Dev') ?: new Environment(name: 'Dev', priorityOrder: '0', url: "http://support-review-cert.hrw.com/hrw/ecom/admin_hub.jsp").save(failOnError: true)
-		def qa = Environment.findByName('QA') ?: new Environment(name: 'QA',priorityOrder: '1', url: "http://support-review.hrw.com/hrw/ecom/admin_hub.jsp").save(failOnError: true)
-		def prod = Environment.findByName('Production') ?: new Environment(name: 'Production', priorityOrder: '2',  url: "http://support.hrw.com/hrw/ecom/admin_hub.jsp" ).save(failOnError: true)
+		def cert = Environment.findByName('Dev') ?: new Environment(name: 'Dev', priorityOrder: '0', url: "http://support-review-cert.hrw.com").save(failOnError: true)
+		def qa = Environment.findByName('QA') ?: new Environment(name: 'QA',priorityOrder: '1', url: "http://support-review.hrw.com").save(failOnError: true)
+		def prod = Environment.findByName('Production') ?: new Environment(name: 'Production', priorityOrder: '2',  url: "http://support.hrw.com" ).save(failOnError: true)
 
 		ContentType ct1 = new ContentType(contentId:1, name:'Program').save(failOnError:true)
 		ContentType ct2 = new ContentType(contentId:2, name:'Bundle').save(failOnError:true)

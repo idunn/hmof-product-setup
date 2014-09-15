@@ -1,11 +1,13 @@
-import org.openqa.selenium.WebDriver
+//import org.openqa.selenium.WebDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.remote.DesiredCapabilities
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeOptions
+//import org.openqa.selenium.chrome.ChromeDriver
+//import org.openqa.selenium.chrome.ChromeOptions
 
 System.setProperty('phantomjs.binary.path', 'C:\\Java\\phantomjs.exe')
 driver = {new PhantomJSDriver(new DesiredCapabilities())}
+
+//autoClearCookies = false
 
 /*File file = new File("C:/Java/chrome/chromedriver.exe")
 System.setProperty('webdriver.chrome.driver', file.getAbsolutePath())
@@ -23,6 +25,6 @@ driver = new ChromeDriver(capabilities)
 reportsDir = "target/geb-reports"
 
 waiting {
-	timeout = 100
-	retryInterval =1
+	timeout = 30
+	retryInterval = 1
 }
