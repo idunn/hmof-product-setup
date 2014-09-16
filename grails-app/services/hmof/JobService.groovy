@@ -43,19 +43,11 @@ class JobService {
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
 					def EnversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
-					// TODO WORK on this				
-					//String testUrl = "http://support-review.hrw.com"
+					// TODO WORK on this
 					//commerceObjectService.loginToRedPages( testUrl )
-
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl)
-
-					/* Pass data to Geb
-					 println "Mock deployment of Commerce Object to: " + deploymentUrl
-					 println EnversInstanceToDeploy.objectName
-					 println EnversInstanceToDeploy.isbn
-					 println "Finished Deploying Commerce Object."*/
-
-
+					
+					// Pass data to Geb
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, EnversInstanceToDeploy)
 
 				}
 			}

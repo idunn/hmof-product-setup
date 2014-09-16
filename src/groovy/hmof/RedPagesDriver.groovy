@@ -6,17 +6,17 @@ import geb.driver.CachingDriverFactory
 class RedPagesDriver  {
 
 
-	RedPagesDriver(def url){
+	RedPagesDriver(def url, def EnversInstanceToDeploy){
 		
 		def cachedDriver = CachingDriverFactory.clearCache()
 		println "cachedDriver" + cachedDriver
-		init(url)
+		init(url, EnversInstanceToDeploy)
 	}
 
 
-	def init(def url){
-
+	def init(def url, def EnversInstanceToDeploy){		
 		println "url: " + url
+		println "EnversInstanceToDeploy " + EnversInstanceToDeploy
 
 		RedPagesLogin rpl = new RedPagesLogin()
 		rpl.init(url)
@@ -26,11 +26,8 @@ class RedPagesDriver  {
 			println "Starting Geb Automation"
 
 			to RedPagesLogin
-			login "jforare@harcourt.com", "11surf"
-
-			// Manage Existing ISBN
-			//lookupIsbn secureProgramData[1]
-			//UpdateSecureProgramForm(secureProgramData)
+			login "jforare@harcourt.com", "11surf"			
+			lookupIsbn (EnversInstanceToDeploy)			
 
 			println "Completed Geb Automation"
 		}
