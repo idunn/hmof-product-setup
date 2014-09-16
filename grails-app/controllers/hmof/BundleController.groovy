@@ -22,6 +22,19 @@ class BundleController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 	
 	
+	/*
+	 * 
+	 */
+	@Transactional
+	def updateBundleParent(def currentInstance){		
+		
+		def bundle = Bundle.where{id==currentInstance.id}.get()
+		// get parent of current Instance		
+		def ProgramToUpdate = bundle.program		
+		ProgramToUpdate.properties = [lastUpdated: new Date()]		
+		
+	}	
+	
 	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
@@ -68,9 +81,8 @@ class BundleController {
 	 * @return
 	 */
 	@Transactional
-	def promote(){
+	def promote(){		
 		
-		// TODO is this the same as instanceId
 		def bundleInstance = Bundle.get(params.instanceToBePromoted)
 
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -135,9 +147,10 @@ class BundleController {
         if (bundleInstance.hasErrors()) {
             respond bundleInstance.errors, view:'create'
             return
-        }
+        }		
 
         bundleInstance.save flush:true
+		
 
         request.withFormat {
             form {
@@ -165,6 +178,9 @@ class BundleController {
         }
 
         bundleInstance.save flush:true
+		
+		// direct Parent needs to be updated
+		updateBundleParent(bundleInstance)
 
         request.withFormat {
             form {
