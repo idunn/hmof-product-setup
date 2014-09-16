@@ -30,7 +30,7 @@ class RedPagesDriver  {
 			lookupIsbn (EnversInstanceToDeploy)			
 
 			println "Completed Geb Automation"
-		}
+		}.quit() // quit is important in a multi-threaded application
 
 	}
 
