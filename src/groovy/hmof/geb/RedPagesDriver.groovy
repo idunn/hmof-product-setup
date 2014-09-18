@@ -9,11 +9,11 @@ class RedPagesDriver  {
 	private static Logger log = Logger.getLogger(RedPagesDriver.class)
 
 
-	RedPagesDriver(def url, def EnversInstanceToDeploy){
+	RedPagesDriver(def url, def enversInstanceToDeploy){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.info "cachedDriver" + cachedDriver
-		init(url, EnversInstanceToDeploy)
+		init(url, enversInstanceToDeploy)
 	}
 
 
