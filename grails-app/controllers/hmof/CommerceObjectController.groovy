@@ -22,6 +22,33 @@ class CommerceObjectController {
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
 	/**
+	 * Update the parents of the object being updated
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def updateParent(def currentInstance){
+
+		def secureProgramInstances = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
+
+		secureProgramInstances.each{
+			it.properties = [lastUpdated: new Date()]
+		}
+
+		def bundleInstances = Bundle.where{secureProgram{id in secureProgramInstances.id}}.list()
+
+		bundleInstances.each{
+			it.properties = [lastUpdated: new Date()]
+		}
+
+		def programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		programInstances.each{
+			it.properties = [lastUpdated: new Date()]
+		}
+
+	}
+
+	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
@@ -59,7 +86,6 @@ class CommerceObjectController {
 	@Transactional
 	def promote(){
 
-		// TODO is this the same as instanceId
 		def commerceObjectInstance = CommerceObject.get(params.instanceToBePromoted)
 
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -154,6 +180,8 @@ class CommerceObjectController {
 		}
 
 		commerceObjectInstance.save flush:true
+		// update the timeStamp of all its parents so that the change is reflected in Envers
+		updateParent(commerceObjectInstance)
 
 		request.withFormat {
 			form {
