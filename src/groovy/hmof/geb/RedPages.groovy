@@ -1,7 +1,12 @@
 package hmof.geb
 import geb.*
+import org.apache.log4j.Logger
 
-class RedPagesLogin extends Page {
+
+class HmofRedPagesLogin extends Page {
+	
+	
+	private static Logger log = Logger.getLogger(HmofRedPagesLogin.class)
 
 
 	def init(def baseUrl){
@@ -30,6 +35,8 @@ class RedPagesLogin extends Page {
 }
 
 class CommerceObjectWork extends Page {
+	
+	private static Logger log = Logger.getLogger(CommerceObjectWork.class)
 
 
 	static content = {
@@ -45,20 +52,20 @@ class CommerceObjectWork extends Page {
 		lookupIsbnField.value enversInstanceToDeploy.isbn
 		searchButton.click()
 
-		println "Testing if CommerceObject Exists..."
+		log.info "Testing if CommerceObject Exists..."
 
 		def update = $("a", href: contains("Update"))
 		if(update){
 			waitFor(15) {update.click()}
 			// Add object
-			println "Updating CO"
+			log.info "Updating CO"
 			addCommerceObjectData(enversInstanceToDeploy)
 			$("input", value: "Update").click()
 		} else{
 			$("a", text:"Home").click()
 			waitFor(15) {$("a", text: contains("Add New Commerce Object")).click()}
 			// Add object
-			println "Adding CO"
+			log.info "Adding CO"
 			addCommerceObjectData(enversInstanceToDeploy)
 			$("input", value: "Add").click()
 
@@ -70,7 +77,7 @@ class CommerceObjectWork extends Page {
 
 		String blank = ""
 
-		println "Adding Commerce Object Form Data..."
+		log.info "Adding Commerce Object Form Data..."
 
 		waitFor(25) {$("input", name: "Name").value(enversInstanceToDeploy.objectName)}
 		$("textarea", name: "Desc").value("Data entered using Product Setup Web Application")

@@ -1,41 +1,40 @@
 package hmof.geb
 import geb.*
 import geb.driver.CachingDriverFactory
+import org.apache.log4j.Logger
 
 
 class RedPagesDriver  {
+	
+	private static Logger log = Logger.getLogger(RedPagesDriver.class)
 
 
 	RedPagesDriver(def url, def EnversInstanceToDeploy){
-		
+
 		def cachedDriver = CachingDriverFactory.clearCache()
-		println "cachedDriver" + cachedDriver
+		log.info "cachedDriver" + cachedDriver
 		init(url, EnversInstanceToDeploy)
 	}
 
 
-	def init(def url, def EnversInstanceToDeploy){		
-		println "url: " + url
-		println "EnversInstanceToDeploy " + EnversInstanceToDeploy
+	def init(def url, def EnversInstanceToDeploy){
+		log.info "url: " + url
+		log.info "EnversInstanceToDeploy " + EnversInstanceToDeploy
 
-		RedPagesLogin rpl = new RedPagesLogin()
+		HmofRedPagesLogin rpl = new HmofRedPagesLogin()
 		rpl.init(url)
 
 
 		Browser.drive{
-			println "Starting Geb Automation"
+			log.info "Starting Geb Automation"
 
-			to RedPagesLogin
-			login "jforare@harcourt.com", "11surf"			
-			lookupIsbn (EnversInstanceToDeploy)			
+			to HmofRedPagesLogin
+			login "jforare@harcourt.com", "11surf"
+			lookupIsbn (EnversInstanceToDeploy)
 
-			println "Completed Geb Automation"
+			log.info "Completed Geb Automation"
 		}.quit() // quit is important in a multi-threaded application
 
 	}
 
-	static main(args) {
-
-		RedPagesDriver test = new RedPagesDriver("http://support-review.hrw.com")
-	}
 }
