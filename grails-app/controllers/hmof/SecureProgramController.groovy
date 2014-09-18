@@ -15,32 +15,53 @@ import hmof.security.UserRole
  */
 @Transactional(readOnly = true)
 class SecureProgramController {
-	
+
 	def springSecurityService
 	def deploymentService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-	
+	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+	/**
+	 * Update the parents of the object being updated
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def updateParent(def currentInstance){
+
+		def bundleInstances = Bundle.where{secureProgram{id==currentInstance.id}}.list()
+
+		bundleInstances.each{
+			it.properties = [lastUpdated: new Date()]
+		}
+
+		def programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		programInstances.each{
+			it.properties = [lastUpdated: new Date()]
+		}
+
+	}
+
+
 	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
 	@Transactional
 	def deploy(){
+
+		def instanceId = params.instanceDetail
 		
-		def instanceId = params.instanceDetail		
-		
-		// TODO merge method with Program
 		def (commerceObject) = deploymentService.getSecureProgramChildren(instanceId)
 		def childContent = commerceObject
-		
+
 		def secureProgramInstance = SecureProgram.get(instanceId)
 
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-		
+
 		def user = springSecurityService?.currentUser?.id
-		def userId = User.where{id==user}.get()		
-		
+		def userId = User.where{id==user}.get()
+
 		// Create a map of job data to persist
 		def job = [contentId: secureProgramInstance.id, revision: deploymentService.getCurrentEnversRevision(secureProgramInstance), contentTypeId: secureProgramInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
@@ -69,7 +90,6 @@ class SecureProgramController {
 	@Transactional
 	def promote(){
 		
-		// TODO is this the same as instanceId
 		def secureProgramInstance = SecureProgram.get(params.instanceToBePromoted)
 
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -107,99 +127,101 @@ class SecureProgramController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
-    }
+		params.max = Math.min(max ?: 10, 100)
+		respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
+	}
 
-    def show(SecureProgram secureProgramInstance) {
-        respond secureProgramInstance
-    }
+	def show(SecureProgram secureProgramInstance) {
+		respond secureProgramInstance
+	}
 
-    def create() {
-        respond new SecureProgram(params)
-    }
+	def create() {
+		respond new SecureProgram(params)
+	}
 
-    @Transactional
-    def save() {
-		
+	@Transactional
+	def save() {
+
 		def contentType = ContentType.where{id==3}.get()
 		params.contentType = contentType
 		def secureProgramInstance = new SecureProgram(params)
-		
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
 
-        if (secureProgramInstance.hasErrors()) {
-            respond secureProgramInstance.errors, view:'create'
-            return
-        }
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        secureProgramInstance.save flush:true
+		if (secureProgramInstance.hasErrors()) {
+			respond secureProgramInstance.errors, view:'create'
+			return
+		}
 
-        request.withFormat {
-            form {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect secureProgramInstance
-            }
-            '*' { respond secureProgramInstance, [status: CREATED] }
-        }
-    }
+		secureProgramInstance.save flush:true
 
-    def edit(SecureProgram secureProgramInstance) {
-        respond secureProgramInstance
-    }
+		request.withFormat {
+			form {
+				flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect secureProgramInstance
+			}
+			'*' { respond secureProgramInstance, [status: CREATED] }
+		}
+	}
 
-    @Transactional
-    def update(SecureProgram secureProgramInstance) {
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
+	def edit(SecureProgram secureProgramInstance) {
+		respond secureProgramInstance
+	}
 
-        if (secureProgramInstance.hasErrors()) {
-            respond secureProgramInstance.errors, view:'edit'
-            return
-        }
+	@Transactional
+	def update(SecureProgram secureProgramInstance) {
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        secureProgramInstance.save flush:true
+		if (secureProgramInstance.hasErrors()) {
+			respond secureProgramInstance.errors, view:'edit'
+			return
+		}
 
-        request.withFormat {
-            form {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect secureProgramInstance
-            }
-            '*'{ respond secureProgramInstance, [status: OK] }
-        }
-    }
+		secureProgramInstance.save flush:true
+		// Update the timeStamp of all its parents so that the change is reflected in Envers
+		updateParent(secureProgramInstance)
 
-    @Transactional
-    def delete(SecureProgram secureProgramInstance) {
+		request.withFormat {
+			form {
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect secureProgramInstance
+			}
+			'*'{ respond secureProgramInstance, [status: OK] }
+		}
+	}
 
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
+	@Transactional
+	def delete(SecureProgram secureProgramInstance) {
 
-        secureProgramInstance.delete flush:true
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        request.withFormat {
-            form {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
+		secureProgramInstance.delete flush:true
 
-    protected void notFound() {
-        request.withFormat {
-            form {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
+		request.withFormat {
+			form {
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect action:"index", method:"GET"
+			}
+			'*'{ render status: NO_CONTENT }
+		}
+	}
+
+	protected void notFound() {
+		request.withFormat {
+			form {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
+				redirect action: "index", method: "GET"
+			}
+			'*'{ render status: NOT_FOUND }
+		}
+	}
 }
