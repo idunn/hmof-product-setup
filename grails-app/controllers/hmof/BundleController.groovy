@@ -26,7 +26,7 @@ class BundleController {
 	 * 
 	 */
 	@Transactional
-	def updateBundleParent(def currentInstance){		
+	def updateParent(def currentInstance){		
 		
 		def bundle = Bundle.where{id==currentInstance.id}.get()
 		// get parent of current Instance		
@@ -42,9 +42,8 @@ class BundleController {
 	@Transactional
 	def deploy(){
 		
-		def instanceId = params.instanceDetail		
+		def instanceId = params.instanceDetail			
 		
-		// TODO merge method with Program
 		def (secureProgram, commerceObject) = deploymentService.getBundleChildren(instanceId)
 		def childContent = secureProgram + commerceObject
 
@@ -179,8 +178,8 @@ class BundleController {
 
         bundleInstance.save flush:true
 		
-		// direct Parent needs to be updated
-		updateBundleParent(bundleInstance)
+		// update the timeStamp of its parent so that the change is reflected in Envers
+		updateParent(bundleInstance)
 
         request.withFormat {
             form {
