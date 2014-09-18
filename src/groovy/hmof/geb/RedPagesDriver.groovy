@@ -1,4 +1,4 @@
-package hmof
+package hmof.geb
 import geb.*
 import geb.driver.CachingDriverFactory
 

@@ -1,4 +1,4 @@
-package hmof
+package hmof.geb
 import geb.*
 
 class RedPagesLogin extends Page {
