@@ -37,7 +37,10 @@
 			<div class="${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')} ">
 				<label for="secureProgram" class="control-label"><g:message code="bundle.secureProgram.label" default="Secure Program" /></label>
 				<div>
-					<g:select class="form-control" name="secureProgram" from="${hmof.SecureProgram.list()}" multiple="multiple" optionKey="id" size="5" value="${bundleInstance?.secureProgram*.id}" class="many-to-many"/>
+					<g:select class="form-control" name="secureProgram" from="${hmof.SecureProgram.list()}" 
+					noSelection="['':'-None-']" 
+					multiple="multiple" optionKey="id" size="10" 
+					value="${bundleInstance?.secureProgram*.id}" class="many-to-many"/>
 					<span class="help-inline">${hasErrors(bean: bundleInstance, field: 'secureProgram', 'error')}</span>
 				</div>
 			</div>
