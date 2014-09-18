@@ -32,8 +32,8 @@
 
 	<table class="table table-bordered margin-top-medium">
 		<thead>
-			<tr>
-				<th>${''}</th>
+			<tr>				
+				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" />
 			
 				<g:sortableColumn property="name" title="${message(code: 'program.name.label', default: 'Name')}" />
 				

@@ -22,7 +22,7 @@
 	<table class="table table-bordered margin-top-medium">
 		<thead>
 			<tr>
-				<th>${''}</th>
+				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" />
 			
 				<g:sortableColumn property="objectName" title="${message(code: 'commerceObject.objectName.label', default: 'Object Name')}" />
 				
