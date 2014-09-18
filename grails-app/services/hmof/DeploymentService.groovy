@@ -187,14 +187,14 @@ class DeploymentService {
 
 		def environmentToCheck = getPreviousEnvironment(environment.id)
 		def previousEnvironment = Environment.where{id==environmentToCheck}.get()
-		println "Previous Environment: " +  previousEnvironment
+		log.debug "Previous Environment: " +  previousEnvironment
 
 		def jobDetails = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}
 
 		// Get Job Numbers and add to list
 		def jobNumbers = jobDetails.jobNumber.list()
 
-		println "All job Numbers for Instance " + jobNumbers
+		log.debug "All job Numbers for Instance " + jobNumbers
 
 		// Iterate through the Job Numbers where the environment ID matches and return the latest promotion instance
 		def promoInstanceList = []
@@ -203,13 +203,13 @@ class DeploymentService {
 		}
 		// Type Long
 		Long InstanceNumber = Promotion.where{id==promoInstanceList.id}.id.get()
-		println "The Instance Number: " +  InstanceNumber
+		log.debug "The Instance Number: " +  InstanceNumber
 
 		// Get the Instance that was deployed to the previous environment
 		def promoInstance = Promotion.where{id==InstanceNumber}.get()
 
 		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
-			println "Stop the promotion!"
+			log.debug "Stop the promotion!"
 
 		}else{
 
@@ -311,7 +311,7 @@ class DeploymentService {
 	 */
 	def updateStatus(def promotionUpdate){
 
-		println "Promotion Instance to Update: " +  promotionUpdate
+		log.info "Promotion Instance to Update: " +  promotionUpdate
 
 		def promotionInstance = Promotion.where{id == promotionUpdate.promotionId}.get()
 		promotionInstance.properties = [status:promotionUpdate.status]

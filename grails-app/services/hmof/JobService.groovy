@@ -25,7 +25,8 @@ class JobService {
 
 			// Get the environment URL
 			def deploymentUrl = Environment.where{id==promotionInstance.environmentsId}.url.get()
-
+			
+			log.info "The deployment Url is: " + deploymentUrl
 
 			// Divide out the instances
 			def program = jobs.find{it.contentTypeId == 1}
@@ -65,10 +66,10 @@ class JobService {
 					def EnversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					println "Mock deployment of Secure Program " + deploymentUrl
-					println EnversInstanceToDeploy.productName
-					println EnversInstanceToDeploy.registrationIsbn
-					println "Finished Deploying Secure Program."
+					log.info "Mock deployment of Secure Program " + deploymentUrl
+					log.info EnversInstanceToDeploy.productName
+					log.info EnversInstanceToDeploy.registrationIsbn
+					log.info "Finished Deploying Secure Program."
 
 				}
 			}
@@ -88,15 +89,15 @@ class JobService {
 					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
 
 					// pass to Geb
-					println "Mock deployment of Bundle to: " + deploymentUrl
-					println EnversInstanceToDeploy.isbn
-					println EnversInstanceToDeploy.title
+					log.info "Mock deployment of Bundle to: " + deploymentUrl
+					log.info EnversInstanceToDeploy.isbn
+					log.info EnversInstanceToDeploy.title
 
 
 					// Add Content SP to Bundle
 					bundle_Children.each{
 
-						println "Add Secure Program: " + it.productName + " " + it.registrationIsbn
+						log.info "Add Secure Program: " + it.productName + " " + it.registrationIsbn
 
 						Long instanceId = it.id
 						def secureProgramInstance = SecureProgram.where{id==instanceId}.get()
@@ -105,18 +106,18 @@ class JobService {
 						// Add C to B indirectly A
 						secureProgram_Children.each{
 
-							println "Add Commerce Object: " + it.objectName + " " + it.isbn
+							log.info "Add Commerce Object: " + it.objectName + " " + it.isbn
 
 						}
 					}
 
-					println "Finished Deploying Bundle."
+					log.info "Finished Deploying Bundle."
 				}
 			}
 		}
 		catch(Exception e){
 
-			println "Exception deploying content: " + e
+			log.error "Exception deploying content: " + e
 			return false
 
 		}
