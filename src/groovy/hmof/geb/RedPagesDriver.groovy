@@ -15,7 +15,7 @@ class RedPagesDriver  {
 
 
 	def driveBrowser(def url, def enversInstanceToDeploy){
-		log.info "url: " + url
+		log.info "Deployment url: " + url
 		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 		
 		// This url allows us to bypass the login
@@ -25,14 +25,12 @@ class RedPagesDriver  {
 
 			if(enversInstanceToDeploy.contentTypeId==4){
 				
-				log.info "Starting Geb Automation for CommerceObject"
-
-				HmofRedPagesLogin rpl = new HmofRedPagesLogin()
-				rpl.initBaseUrl(skipLoginUrl)
-
-				to HmofRedPagesLogin				
-				//login "jforare@harcourt.com", "11surf"				
-				skipLogin()				
+				log.info "Starting Geb Automation for CommerceObject"				
+				
+				CommerceObjectWork cow = new CommerceObjectWork()
+				cow.initBaseUrl(skipLoginUrl)
+				
+				to CommerceObjectWork							
 				lookupIsbn (enversInstanceToDeploy)
 
 				log.info "Completed Geb Automation of CommerceObject"

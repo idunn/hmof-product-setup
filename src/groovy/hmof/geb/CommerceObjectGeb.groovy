@@ -1,11 +1,9 @@
 package hmof.geb
 import geb.*
-import geb.Browser
 import groovy.util.logging.Log4j
 
 @Log4j
-class HmofRedPagesLogin extends Page {	
-
+class CommerceObjectWork extends Page {
 
 	def initBaseUrl(def baseUrl){
 		log.info "baseUrl" + baseUrl
@@ -14,60 +12,24 @@ class HmofRedPagesLogin extends Page {
 	}
 
 	static url
-	
-	static content = {
 
-		usernameField(wait:true){$("form").find("input", name: "Login")}
-		passwordField {$("form").find("input", name: "Password")}
-		loginButton {$("form").find("input", name: "login")}
-		eComerceHome (to: CommerceObjectWork, wait:true){$("a", text: contains("Ecommerce"))}
-		manageCommerceObject(to: CommerceObjectWork, wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
 
-	}
-
-	/**
-	 * Navigate via Red Page login
-	 * @param username
-	 * @param password
-	 */
-	void login(String username, String password){
-		log.info "In login method"
-		usernameField.value username
-		passwordField.value password
-		loginButton.click()
-		eComerceHome.click()
-	}
-	
-	/**
-	 * Bypass the login
-	 * @return
-	 */
-	def skipLogin(){
-		
-		log.info "Bypassing login..."
-		manageCommerceObject.click()		
-	}
-	
-	
-}
-
-@Log4j
-class CommerceObjectWork extends Page {
-	
-	
 	static content = {
 
 		manageCommerceObject(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
-		lookupIsbnField {$("input", name: "ISBN")}
+		isbnField {$("input", name: "ISBN")}
 		searchButton{$("form").find("input", name: "search")}
+		updateButton{$("input", value: "Update")}
+		homeLink{$("a", text:"Home")}
+		addLink{$("input", value: "Add")}
 
-	}	
-	
+	}
+
 
 	void lookupIsbn(def enversInstanceToDeploy){
-		log.info "Looking up ISBN..."
-		//manageCommerceObject.click()
-		lookupIsbnField.value enversInstanceToDeploy.isbn
+		log.info "Looking up ISBN...."
+		manageCommerceObject.click()
+		isbnField.value enversInstanceToDeploy.isbn
 		searchButton.click()
 
 		log.info "Checking if CommerceObject Exists..."
@@ -75,17 +37,17 @@ class CommerceObjectWork extends Page {
 		def update = $("a", href: contains("Update"))
 		if(update){
 			waitFor(15) {update.click()}
-			
+
 			log.info "Updating Commerce Object"
 			addCommerceObjectData(enversInstanceToDeploy)
-			$("input", value: "Update").click()
+			updateButton.click()
 		} else{
-			$("a", text:"Home").click()
+			homeLink.click()
 			waitFor(15) {$("a", text: contains("Add New Commerce Object")).click()}
-			
+
 			log.info "Adding CommerceObject"
 			addCommerceObjectData(enversInstanceToDeploy)
-			$("input", value: "Add").click()
+			addLink.click()
 
 		}
 	}
@@ -107,8 +69,9 @@ class CommerceObjectWork extends Page {
 		$("input", name: "DfltIcon").value(enversInstanceToDeploy.pathToCoverImage?: blank)
 
 		$("input", type:"checkbox", name:"HubPage").value(true)
-		
-		$("input", name: "ISBN").value(enversInstanceToDeploy.isbn)
+
+		//$("input", name: "ISBN").value(enversInstanceToDeploy.isbn)
+		isbnField.value(enversInstanceToDeploy.isbn)
 
 		$("input", type:"checkbox", name:"SProgDependent").value(true)
 
