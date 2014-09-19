@@ -1,83 +1,105 @@
 package hmof.geb
 import geb.*
-import org.apache.log4j.Logger
+import geb.Browser
+import groovy.util.logging.Log4j
+
+@Log4j
+class HmofRedPagesLogin extends Page {	
 
 
-class HmofRedPagesLogin extends Page {
-	
-	
-	private static Logger log = Logger.getLogger(HmofRedPagesLogin.class)
-
-
-	def init(def baseUrl){
+	def initBaseUrl(def baseUrl){
+		log.info "baseUrl" + baseUrl
 		url = baseUrl
 
 	}
 
 	static url
+	
 	static content = {
 
 		usernameField(wait:true){$("form").find("input", name: "Login")}
 		passwordField {$("form").find("input", name: "Password")}
 		loginButton {$("form").find("input", name: "login")}
 		eComerceHome (to: CommerceObjectWork, wait:true){$("a", text: contains("Ecommerce"))}
+		manageCommerceObject(to: CommerceObjectWork, wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
 
 	}
 
-
+	/**
+	 * Navigate via Red Page login
+	 * @param username
+	 * @param password
+	 */
 	void login(String username, String password){
+		log.info "In login method"
 		usernameField.value username
 		passwordField.value password
 		loginButton.click()
 		eComerceHome.click()
 	}
-
+	
+	/**
+	 * Bypass the login
+	 * @return
+	 */
+	def skipLogin(){
+		
+		log.info "Bypassing login..."
+		manageCommerceObject.click()		
+	}
+	
+	
 }
 
+@Log4j
 class CommerceObjectWork extends Page {
 	
-	private static Logger log = Logger.getLogger(CommerceObjectWork.class)
-
-
+	
 	static content = {
 
-		manageSecureProgram(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
+		manageCommerceObject(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
 		lookupIsbnField {$("input", name: "ISBN")}
 		searchButton{$("form").find("input", name: "search")}
 
-	}
+	}	
+	
 
 	void lookupIsbn(def enversInstanceToDeploy){
-		manageSecureProgram.click()
+		log.info "Looking up ISBN..."
+		//manageCommerceObject.click()
 		lookupIsbnField.value enversInstanceToDeploy.isbn
 		searchButton.click()
 
-		log.info "Testing if CommerceObject Exists..."
+		log.info "Checking if CommerceObject Exists..."
 
 		def update = $("a", href: contains("Update"))
 		if(update){
 			waitFor(15) {update.click()}
-			// Add object
-			log.info "Updating CO"
+			
+			log.info "Updating Commerce Object"
 			addCommerceObjectData(enversInstanceToDeploy)
 			$("input", value: "Update").click()
 		} else{
 			$("a", text:"Home").click()
 			waitFor(15) {$("a", text: contains("Add New Commerce Object")).click()}
-			// Add object
-			log.info "Adding CO"
+			
+			log.info "Adding CommerceObject"
 			addCommerceObjectData(enversInstanceToDeploy)
 			$("input", value: "Add").click()
 
 		}
 	}
 
-
+	/**
+	 * Data to pass into RedPages
+	 * @param enversInstanceToDeploy
+	 * @return
+	 */
 	def addCommerceObjectData(def enversInstanceToDeploy){
 
 		String blank = ""
 
-		log.info "Adding Commerce Object Form Data..."
+		log.info "Adding Commerce Object Form Envers Object..."
 
 		waitFor(25) {$("input", name: "Name").value(enversInstanceToDeploy.objectName)}
 		$("textarea", name: "Desc").value("Data entered using Product Setup Web Application")

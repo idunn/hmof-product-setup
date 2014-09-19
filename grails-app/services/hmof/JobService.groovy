@@ -43,13 +43,14 @@ class JobService {
 					Long revisionNumber = it.revision
 
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
-					def EnversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
 					// TODO WORK on this
-					//commerceObjectService.loginToRedPages( testUrl )
+					//log.info "deploying using Service"
+					//commerceObjectService.deployCommerceObject( deploymentUrl, enversInstanceToDeploy )
 					
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, EnversInstanceToDeploy)
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}

@@ -1,43 +1,43 @@
 package hmof.geb
 import geb.*
 import geb.driver.CachingDriverFactory
-import org.apache.log4j.Logger
+import groovy.util.logging.Log4j
 
-
+@Log4j
 class RedPagesDriver  {
-
-	private static Logger log = Logger.getLogger(RedPagesDriver.class)
-
-
+	
 	RedPagesDriver(def url, def enversInstanceToDeploy){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.info "cachedDriver" + cachedDriver
-		init(url, enversInstanceToDeploy)
+		driveBrowser(url, enversInstanceToDeploy)
 	}
 
 
-	def init(def url, def enversInstanceToDeploy){
+	def driveBrowser(def url, def enversInstanceToDeploy){
 		log.info "url: " + url
 		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
+		
+		// This url allows us to bypass the login
+		String skipLoginUrl = url + "/hrw/ecom/admin_hub.jsp"
 
 		Browser.drive{
 
 			if(enversInstanceToDeploy.contentTypeId==4){
-
-				println "In CommerceObject##########"
+				
 				log.info "Starting Geb Automation for CommerceObject"
 
 				HmofRedPagesLogin rpl = new HmofRedPagesLogin()
-				rpl.init(url)
+				rpl.initBaseUrl(skipLoginUrl)
 
-				to HmofRedPagesLogin
-				login "jforare@harcourt.com", "11surf"
+				to HmofRedPagesLogin				
+				//login "jforare@harcourt.com", "11surf"				
+				skipLogin()				
 				lookupIsbn (enversInstanceToDeploy)
 
 				log.info "Completed Geb Automation of CommerceObject"
 
-			} else{println "Not a CommerceObject"}
+			} else{ log.error "Not a CommerceObject" }
 
 		}.quit() // quit is important in a multi-threaded application
 
