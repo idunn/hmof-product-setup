@@ -45,7 +45,13 @@ class RedPagesDriver  {
 				to SecureProgramWork
 				lookupIsbn (enversInstanceToDeploy)
 
-			}else{ log.error "Must be a Bundle!" }
+			}else if (enversInstanceToDeploy.contentTypeId==2){
+
+				log.info "Starting Geb Automation for Bundle"
+
+
+			}else{ log.error "Must be a Bundle!" // throw assert error
+			}
 
 		}.quit() // quit is important in a multi-threaded application
 

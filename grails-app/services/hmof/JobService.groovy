@@ -45,8 +45,7 @@ class JobService {
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
-					// TODO WORK on this
-					//log.info "deploying using Service"
+					// TODO WORK on this					
 					//commerceObjectService.deployCommerceObject( deploymentUrl, enversInstanceToDeploy )
 					
 					// Pass data to Geb
@@ -64,13 +63,10 @@ class JobService {
 					Long revisionNumber = it.revision
 
 					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()
-					def EnversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+					def enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					log.info "Mock deployment of Secure Program " + deploymentUrl
-					log.info EnversInstanceToDeploy.productName
-					log.info EnversInstanceToDeploy.registrationIsbn
-					log.info "Finished Deploying Secure Program."
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}
@@ -84,15 +80,15 @@ class JobService {
 					Long revisionNumber = it.revision
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
-					def EnversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
 					// only one of these variables are used //TODO
 					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
 
 					// pass to Geb
 					log.info "Mock deployment of Bundle to: " + deploymentUrl
-					log.info EnversInstanceToDeploy.isbn
-					log.info EnversInstanceToDeploy.title
+					log.info enversInstanceToDeploy.isbn
+					log.info enversInstanceToDeploy.title
 
 
 					// Add Content SP to Bundle
