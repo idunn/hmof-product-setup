@@ -5,7 +5,7 @@ import org.apache.log4j.Logger
 
 
 class RedPagesDriver  {
-	
+
 	private static Logger log = Logger.getLogger(RedPagesDriver.class)
 
 
@@ -17,22 +17,28 @@ class RedPagesDriver  {
 	}
 
 
-	def init(def url, def EnversInstanceToDeploy){
+	def init(def url, def enversInstanceToDeploy){
 		log.info "url: " + url
-		log.info "EnversInstanceToDeploy " + EnversInstanceToDeploy
-
-		HmofRedPagesLogin rpl = new HmofRedPagesLogin()
-		rpl.init(url)
-
+		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 
 		Browser.drive{
-			log.info "Starting Geb Automation"
 
-			to HmofRedPagesLogin
-			login "jforare@harcourt.com", "11surf"
-			lookupIsbn (EnversInstanceToDeploy)
+			if(enversInstanceToDeploy.contentTypeId==4){
 
-			log.info "Completed Geb Automation"
+				println "In CommerceObject##########"
+				log.info "Starting Geb Automation for CommerceObject"
+
+				HmofRedPagesLogin rpl = new HmofRedPagesLogin()
+				rpl.init(url)
+
+				to HmofRedPagesLogin
+				login "jforare@harcourt.com", "11surf"
+				lookupIsbn (enversInstanceToDeploy)
+
+				log.info "Completed Geb Automation of CommerceObject"
+
+			} else{println "Not a CommerceObject"}
+
 		}.quit() // quit is important in a multi-threaded application
 
 	}
