@@ -22,7 +22,7 @@ class CommerceObjectWork extends Page {
 		searchButton{$("form").find("input", name: "search")}		
 		
 		updateButton{$("input", value: "Update")}
-		updateLink{$("a", href: contains("Update"))}
+		updateLink(required:false){$("a", href: contains("Update"))}
 		homeLink{$("a", text:"Home")}
 		addLink{$("input", value: "Add")}		
 		

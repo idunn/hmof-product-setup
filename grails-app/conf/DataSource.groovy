@@ -34,7 +34,7 @@ environments {
 			driverClassName = "com.mysql.jdbc.Driver"
 			username = "productsetup"
 			password = "products3tup!"
-			dbCreate = "create-drop"
+			dbCreate = "update" // was create-drop now update
 			url = "jdbc:mysql://127.0.0.1:3306/productsetup"			
 			dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 			properties {
