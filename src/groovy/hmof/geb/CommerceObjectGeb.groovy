@@ -6,7 +6,7 @@ import groovy.util.logging.Log4j
 class CommerceObjectWork extends Page {
 
 	def initBaseUrl(def baseUrl){
-		log.info "baseUrl" + baseUrl
+		log.info "Base Url: " + baseUrl
 		url = baseUrl
 
 	}
@@ -16,34 +16,53 @@ class CommerceObjectWork extends Page {
 
 	static content = {
 
-		manageCommerceObject(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
+		manageCommerceObjectLink(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
+		addCommerceObjectLink(wait:true) {$("a", text: contains("Add New Commerce Object"))}
 		isbnField {$("input", name: "ISBN")}
-		searchButton{$("form").find("input", name: "search")}
+		searchButton{$("form").find("input", name: "search")}		
+		
 		updateButton{$("input", value: "Update")}
+		updateLink{$("a", href: contains("Update"))}
 		homeLink{$("a", text:"Home")}
-		addLink{$("input", value: "Add")}
+		addLink{$("input", value: "Add")}		
+		
+		objectName(wait:true){$("input", name: "Name")}
+		pathToCoverImage{$("input", name: "DfltIcon")}
+		hubPageSelect{$("input", type:"checkbox", name:"HubPage")}
+		secureProgramDependent{$("input", type:"checkbox", name:"SProgDependent")}
+		teacherLabel{$("input", name: "TeacherLabel")}
+		teacherUrl{$("input", name: "TeacherURL")}
+		studentLabel{$("input", name: "StudentLabel")}
+		studentUrl{$("input", name: "StudentURL")}
+		objectType{$("select", name: "ObjectType")}
+		objectReorder{$("input", name: "rTypeOrder")}
+		subject{$("select", name: "Subject")}
+		gradeLevel{$("select", name: "GradeLevel")}
+
+		// Modules
+		globalModule { module GebModule }
 
 	}
 
 
 	void lookupIsbn(def enversInstanceToDeploy){
 		log.info "Looking up ISBN...."
-		manageCommerceObject.click()
+		manageCommerceObjectLink.click()
 		isbnField.value enversInstanceToDeploy.isbn
 		searchButton.click()
 
 		log.info "Checking if CommerceObject Exists..."
-
-		def update = $("a", href: contains("Update"))
+		
+		def update = updateLink
 		if(update){
-			waitFor(15) {update.click()}
-
+			waitFor(25) {update.click()}
+			
 			log.info "Updating Commerce Object"
 			addCommerceObjectData(enversInstanceToDeploy)
 			updateButton.click()
 		} else{
-			homeLink.click()
-			waitFor(15) {$("a", text: contains("Add New Commerce Object")).click()}
+			homeLink.click()			
+			addCommerceObjectLink.click()
 
 			log.info "Adding CommerceObject"
 			addCommerceObjectData(enversInstanceToDeploy)
@@ -53,50 +72,49 @@ class CommerceObjectWork extends Page {
 	}
 
 	/**
-	 * Data to pass into RedPages
+	 * Data to pass into RedPages to add CommerceObject information
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def addCommerceObjectData(def enversInstanceToDeploy){
+	def addCommerceObjectData(def content){
+
+		log.info "Adding Commerce Object Data From Envers Object..."
 
 		String blank = ""
 
-		log.info "Adding Commerce Object Form Envers Object..."
+		objectName.value(content.objectName)
 
-		waitFor(25) {$("input", name: "Name").value(enversInstanceToDeploy.objectName)}
-		$("textarea", name: "Desc").value("Data entered using Product Setup Web Application")
+		globalModule.description
 
-		$("input", name: "DfltIcon").value(enversInstanceToDeploy.pathToCoverImage?: blank)
+		pathToCoverImage.value(content.pathToCoverImage?: blank)
 
-		$("input", type:"checkbox", name:"HubPage").value(true)
+		hubPageSelect.value(true)
 
-		//$("input", name: "ISBN").value(enversInstanceToDeploy.isbn)
-		isbnField.value(enversInstanceToDeploy.isbn)
+		isbnField.value(content.isbn)
 
-		$("input", type:"checkbox", name:"SProgDependent").value(true)
+		secureProgramDependent.value(true)
 
-		$("input", name: "TeacherLabel").value(enversInstanceToDeploy.teacherLabel?: blank)
-		$("input", name: "TeacherURL").value(enversInstanceToDeploy.teacherUrl?: blank)
-		$("input", name: "StudentLabel").value(enversInstanceToDeploy.studentLabel?: blank)
-		$("input", name: "StudentURL").value(enversInstanceToDeploy.studentUrl?: blank)
+		teacherLabel.value(content.teacherLabel?: blank)
+		teacherUrl.value(content.teacherUrl?: blank)
+		studentLabel.value(content.studentLabel?: blank)
+		studentUrl.value(content.studentUrl?: blank)
 
-		$("select", name: "ObjectType").value(enversInstanceToDeploy.objectType)
+		objectType.value(content.objectType)
+		objectReorder.value(content.objectReorderNumber)
+		
+		// TODO set this from parent object in view
+		//subject.value("Reading") 
 
-		$("input", name: "rTypeOrder").value(enversInstanceToDeploy.objectReorderNumber)
-		//$("select", name: "Subject").value("Reading") TODO set this from parent or leave none // TODO work on category and subject
-
-
-		// Multiselect TODO allow user to select individual grades
 		def grades = []
-		if (!enversInstanceToDeploy.gradeLevel.contains("-")){
-			grades = enversInstanceToDeploy.gradeLevel
-		} else if(enversInstanceToDeploy.gradeLevel.equals("6-8")){
+		if (!content.gradeLevel.contains("-")){
+			grades = content.gradeLevel
+		} else if(content.gradeLevel.equals("6-8")){
 			grades = ["6","7","8"]
-		}else if(enversInstanceToDeploy.gradeLevel.equals("9-12")){
+		}else if(content.gradeLevel.equals("9-12")){
 			grades = ["9","10","11", "12"]
 		} else {grades = ["6","7","8", "9","10","11", "12"]}
 
-		$("select", name: "GradeLevel").value(grades)
+		gradeLevel.value(grades)
 
 	}
 

@@ -50,7 +50,8 @@ class RedPagesDriver  {
 				log.info "Starting Geb Automation for Bundle"
 
 
-			}else{ log.error "Must be a Bundle!" // throw assert error
+			}else{ log.error "Content Type not supported!"
+
 			}
 
 		}.quit() // quit is important in a multi-threaded application
