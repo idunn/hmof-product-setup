@@ -27,13 +27,21 @@ class SecureProgramWork extends Page {
 		onlineIsbnField {$("input", name: "StudentEditionISBN")}
 		curriculumAreasField{$("select", name: "CurriculumAreas")}
 		copyrightYearField {$("select", name: "CopyrightYear")}
-		
-		// Other fields		
+
+		// Knewton KG
+		knewtonEnabled{$("input", name: "Knewton_enabled")}
+		knowledgeGraphId{$("input", name: "KnowledgeGraphId")}
+		activeInterventionTime{$("input", name: "ActiveInterventionTime")}
+		enrichmentTime{$("input", name: "EnrichmentTime")}
+		interventionTime{$("input", name: "InterventionTime")}
+
+
+		// Other fields
 		comment {$("textarea", name: "Comments")}
 		onlineResourcesLabel{$("input", name: "OnlineResourcesLabel")}
 		onlineResourcesUrl{$("input", name: "OnlineResourcesURL")}
 		bookCoverImage {$("input", name: "BookCoverImage")}
-		
+
 		addTeacherResLabel{$("input", name: "AddTeacherResLabel")}
 		addTeacherResUrl{$("input", name: "AddTeacherResURL")}
 		addTeacherResLabel2{$("input", name: "AddTeacherResLabel2")}
@@ -42,7 +50,7 @@ class SecureProgramWork extends Page {
 		addTeacherResUrl3{$("input", name: "AddTeacherResURL3")}
 		addTeacherResLabel4{$("input", name: "AddTeacherResLabel4")}
 		addTeacherResUrl4{$("input", name: "AddTeacherResURL4")}
-		
+
 		addStudentResLabel{$("input", name: "AddStudentResLabel")}
 		addStudentResUrl{$("input", name: "AddStudentResURL")}
 		addStudentResLabel2{$("input", name: "AddStudentResLabel2")}
@@ -56,17 +64,16 @@ class SecureProgramWork extends Page {
 		word1Field {$("input", name: "Word1")}
 		word1LocationField {$("input", name: "Location1")}
 		word1PageNumberField {$("input", name: "PageNum1")}
-		
+
 		word2Field {$("input", name: "Word2")}
 		word2LocationField {$("input", name: "Location2")}
 		word2PageNumberField {$("input", name: "PageNum2")}
-		
+
 		word3Field {$("input", name: "Word3")}
 		word3LocationField {$("input", name: "Location3")}
 		word3PageNumberField {$("input", name: "PageNum3")}
-		
-		// TODO test
-		secureProgramAlreadyExistsText(wait: 10, required:false){$("font", text: contains("A secure program with the specified teacher edition ISBN already exists."))}
+
+		secureProgramAlreadyExistsText(wait: 15, required:false){$("font", text: contains("A secure program with the specified teacher edition ISBN already exists."))}
 
 		//Input value add
 		AddButton{$("input", value: "Add")}
@@ -76,7 +83,7 @@ class SecureProgramWork extends Page {
 	}
 
 	/**
-	 * Workaround: Need to add then update
+	 * This is a workaround as Geb does not handle JS Alert boxes
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
@@ -92,19 +99,21 @@ class SecureProgramWork extends Page {
 		word1PageNumberField.value (enversInstanceToDeploy.securityWordPage)
 		AddButton.click()
 		if(secureProgramAlreadyExistsText){
-			log.info "Secure Program already exists..."
+			log.info "Secure Program already exists ###########..."
 			homeButton.click()
-		} else{log.info "Secure Program does not exist!"}
-
-
-
+		} else{
+			log.info "Secure Program does not exist!"
+		}
 	}
-
+	/**
+	 * Add basic then update with full data
+	 * @param enversInstanceToDeploy
+	 */
 	void lookupIsbn(def enversInstanceToDeploy){
 
 		basicAdd (enversInstanceToDeploy)
 
-		log.info "Updating SecureProgram ISBN..."
+		log.info "Updating SecureProgram ISBN ####2..."
 		manageSecureProgram.click()
 		lookupIsbnField.value enversInstanceToDeploy.registrationIsbn
 		searchButton.click()
@@ -113,32 +122,72 @@ class SecureProgramWork extends Page {
 		addSecureProgramData(enversInstanceToDeploy)
 
 	}
-
+	
+	/**
+	 * Full form data
+	 * @param enversInstanceToDeploy
+	 * @return
+	 */
 	def addSecureProgramData(def enversInstanceToDeploy){
-		
+
 		String blank = ""
 
-		log.info "Adding SecureProgram Data..."
-		programNameField.value (enversInstanceToDeploy.productName)
-		teacherIsbnField.value (enversInstanceToDeploy.registrationIsbn)
-		onlineIsbnField.value (enversInstanceToDeploy.onlineIsbn)
-		// curriculumAreasField
-		copyrightYearField.value (enversInstanceToDeploy.copyright)
+		log.info "Adding SecureProgram Data #####3..."
+		programNameField.value(enversInstanceToDeploy.productName)
+		teacherIsbnField.value(enversInstanceToDeploy.registrationIsbn)
+		onlineIsbnField.value(enversInstanceToDeploy.onlineIsbn)
 		
-		onlineResourcesLabel.value(enversInstanceToDeploy.labelForOnlineResource)
-		onlineResourcesUrl.value(enversInstanceToDeploy.pathToResource)
-		bookCoverImage.value(enversInstanceToDeploy.pathToCoverImage)
+		// curriculumAreasField TODO
 		
+		copyrightYearField.value(enversInstanceToDeploy.copyright)
+		
+		// comments TODO
+
+		onlineResourcesLabel.value(enversInstanceToDeploy.labelForOnlineResource?: blank)
+		onlineResourcesUrl.value(enversInstanceToDeploy.pathToResource?: blank)
+		bookCoverImage.value(enversInstanceToDeploy.pathToCoverImage?: blank)
+
+		// essay grader prompts TODO
+
+		log.info enversInstanceToDeploy.knewtonProduct
+		knewtonEnabled.value(enversInstanceToDeploy.knewtonProduct)
+
+		if(enversInstanceToDeploy.knewtonProduct){
+			log.info "This is a Knewton Product..."
+
+			if(url.contains("review-cert")){
+
+				log.info "In Cert-Review..."
+				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdDev)
+
+			} else if (url.contains("support-review")){
+
+				log.info "In Prod-Review..."
+				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdQA)
+
+			} else if (url.contains("support.hrw.com")){
+
+				log.info "Production..."
+				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdProd)
+			}
+
+			activeInterventionTime.value(enversInstanceToDeploy.knowledgeGraphWarmUpTimeLimit)
+			enrichmentTime.value(enversInstanceToDeploy.knowledgeGraphEnrichmentTimeLimit)
+			interventionTime.value(enversInstanceToDeploy.knowledgeGraphEnrichmentCbiTimeLimit)
+
+		}
+
 		addTeacherResLabel.value(enversInstanceToDeploy.labelForTeacherAdditionalResource?: blank)
 		addTeacherResUrl.value(enversInstanceToDeploy.pathToTeacherAdditionalResource?: blank)
-		
+
 		addStudentResLabel.value(enversInstanceToDeploy.labelForStudentAdditionalResource?: blank)
 		addStudentResUrl.value(enversInstanceToDeploy.pathToStudentAdditionalResource?: blank)
-		
-		
+
+
 		word1Field.value(enversInstanceToDeploy.securityWord)
 		word1LocationField.value(enversInstanceToDeploy.securityWordLocation)
-		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)		
+		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)
+
 		
 		updateButton.click()
 
