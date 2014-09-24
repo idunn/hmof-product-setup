@@ -20,12 +20,12 @@
 					<input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
 				</g:form >
 			</li>
-			<li class="divider"></li>
+			<%--<li class="divider"></li>
 			<li class="button-container">
 				<!-- NOTE: the renderDialog MUST be placed outside the NavBar (at least for Bootstrap 2.1.1): see bottom of main.gsp -->
 				<g:render template="/_common/modals/registerTextLink"/>
 			</li>
-		</ul>
+		--%></ul>
 
 </sec:ifNotLoggedIn>
 

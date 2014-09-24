@@ -1,0 +1,273 @@
+@CHARSET "ISO-8859-1";
+
+.comments{
+        margin: 1em 0;           
+        background-color: #EEEEEE;
+        border: 1px solid lightblue;
+}
+  
+.styled-search {    width:300px;   background: #F8F8F8;    border: 1px solid #DDDDDD;    height: 30px;    border-radius:2px;  } 
+
+.styled-select {    width:50px;    overflow: hidden;    background: #F8F8F8;    border: 1px solid #DDDDDD;    height: 30px;    border-radius:2px;  }   .styled-select select {   width: 100%;   border: 0;   line-height: 1.5;   -webkit-appearance: none;   -moz-appearance: none;   text-indent: 0.01px;   text-overflow: '';   appearance: none;   background: transparent url("/img/smart_arrows.png") no-repeat scroll 97% 8px;   @media (-webkit-min-device-pixel-ratio: 2),      (min-resolution: 192dpi) {       background: transparent url("/img/smart_arrows@2x.png") no-repeat scroll 97% 8px;       background-size: 16px 144px;     } } 
+
+.result {
+        margin-bottom: 1em;
+      }
+
+.result .displayLink {
+        color: green;
+      }
+.stucomment {
+        padding: 10px;
+    margin-right: 0.5em;
+    line-height: 12px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.45) inset;
+    color: #FFF;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+    background-color: #EB8D00;
+    background-image: linear-gradient(to bottom, #F90, #CC7A00);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+      }
+ .result .name {
+        font-size: larger;
+      }
+.pagination a {
+    text-decoration: none;
+    padding: 10px;
+    margin-right: 0.5em;
+    line-height: 32px;
+    color: #444;
+    text-shadow: 0px -1px 0px rgba(255, 255, 255, 0.25);
+    background-color: #F8F8F8;
+    background-image: linear-gradient(to bottom, #FFF, #EEE);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+.pagination .currentStep {
+    padding: 10px;
+    margin-right: 0.5em;
+    line-height: 32px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.45) inset;
+    color: #FFF;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+    background-color: #EB8D00;
+    background-image: linear-gradient(to bottom, #F90, #CC7A00);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+
+/*!
+ * Bootstrap v3.0.3 (http://getbootstrap.com)
+ * Copyright 2013 Twitter, Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0
+ */
+.kicks-header{
+	 background-color: #222222;
+    border-color: #080808;
+}
+
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container:before,
+.container:after {
+  display: table;
+  content: " ";
+}
+
+.container:after {
+  clear: both;
+}
+
+.container:before,
+.container:after {
+  display: table;
+  content: " ";
+}
+
+.container:after {
+  clear: both;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.navbar-header:before,
+.navbar-header:after {
+  display: table;
+  content: " ";
+}
+
+.navbar-header:after {
+  clear: both;
+}
+
+.navbar-header:before,
+.navbar-header:after {
+  display: table;
+  content: " ";
+}
+
+.navbar-header:after {
+  clear: both;
+}
+
+@media (min-width: 768px) {
+  .navbar-header {
+    float: left;
+  }
+}
+.navbar-toggle {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-right: 15px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.navbar-toggle .icon-bar + .icon-bar {
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .navbar-toggle {
+    display: none;
+  }
+}
+.navbar-brand {
+  float: left;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .navbar > .container .navbar-brand {
+    margin-left: -15px;
+  }
+}
+.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-brand {
+  color: #777777;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #5e5e5e;
+  background-color: transparent;
+}
+.navbar-inverse {
+  background-color: #222222;
+  border-color: #080808;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #999999;
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: #ffffff;
+  background-color: transparent;
+}
+.navbar-toggle {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-right: 15px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.navbar-toggle .icon-bar + .icon-bar {
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .navbar-toggle {
+    display: none;
+  }
+}
+     
+ /* spring security Ui plugin css */    
+     
+     .icon_role {
+	background-image: url('${fam.icon(name: 'lock')}');
+}
+.icon_users {
+	background-image: url('${fam.icon(name: 'group')}');
+}
+.icon_user {
+	background-image: url('${fam.icon(name: 'user')}');
+}
+.icon_error {
+	background-image: url('${fam.icon(name: 'exclamation')}');
+}
+.icon_info {
+	background-image: url('${fam.icon(name: 'information')}');
+}
+.icon, .ui-tabs .ui-tabs-nav li a.icon {
+	background-repeat: no-repeat;
+	padding-left: 24px;
+	background-position: 4px center;
+}
+ /* spring security Ui plugin css end */ 

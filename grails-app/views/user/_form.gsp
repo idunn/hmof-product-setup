@@ -20,6 +20,23 @@
 
 </div>
 
+	<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'role', 'error')}">
+	<label for="role"><g:message code="user.role.label" default="Role" /></label>
+				
+					<g:each var="auth" in="${authorityList}">
+						<div style="padding-left:245px;">
+							<input type="checkbox" name="${auth.authority}" id="${auth.authority}" value="on" ${userInstance.id && userInstance?.getAuthorities()?.contains(auth) ? 'checked=checked' : ''}/>
+							<%-- <g:checkBox name="${auth.authority}" value="on" checked="${!userInstance.id ? 'false' : 'true'}" />--%>
+							${auth.authority.encodeAsHTML()}
+						</div>
+					</g:each>
+					<span class="help-inline">${hasErrors(bean: userInstance, field: 'role', 'error')}</span>
+				
+		</div>
+		
+				
+		
+
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'accountExpired', 'error')} ">
 	<label for="accountExpired">
 		<g:message code="user.accountExpired.label" default="Account Expired" />

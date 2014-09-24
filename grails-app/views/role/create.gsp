@@ -1,34 +1,52 @@
-<%@ page import="hmof.security.Role" %>
-<!DOCTYPE html>
 <html>
 
 <head>
-	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'role.label', default: 'Role')}" />
-	<title><g:message code="default.create.label" args="[entityName]" /></title>
+	<meta name='layout' content='springSecurityUI'/>
+	<g:set var="entityName" value="${message(code: 'role.label', default: 'Role')}"/>
+	<title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 
 <body>
 
-	<section id="create-role" class="first">
+<div class="body">
 
-		<g:hasErrors bean="${roleInstance}">
-		<div class="alert alert-danger">
-			<g:renderErrors bean="${roleInstance}" as="list" />
+	<s2ui:form width='100%' height='200' elementId='formContainer'
+	           titleCode='default.create.label' titleCodeArgs='[entityName]'>
+
+	<g:form action="save" name='roleCreateForm'>
+		<div class="dialog">
+
+			<br/>
+
+			<table>
+				<tbody>
+
+					<s2ui:textFieldRow name='authority' labelCode='role.authority.label' bean="${role}"
+					                   size='50' labelCodeDefault='Authority' value="${role?.authority}"/>
+
+					<tr><td>&nbsp;</td></tr>
+
+					<tr class="prop">
+						<td valign="top">
+							<s2ui:submitButton elementId='create' form='roleCreateForm' messageCode='default.button.create.label'/>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
 		</div>
-		</g:hasErrors>
 
-		<g:form action="save" class="form-horizontal" role="form" >
-			<g:render template="form"/>
+	</g:form>
 
-			<div class="form-actions margin-top-medium">
-				<g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-	            <button class="btn" type="reset"><g:message code="default.button.reset.label" default="Reset" /></button>
-			</div>
-		</g:form>
+	</s2ui:form>
 
-	</section>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('#authority').focus();
+});
+</script>
 
 </body>
-
 </html>

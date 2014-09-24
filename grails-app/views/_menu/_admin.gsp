@@ -21,5 +21,13 @@
 				<g:message code="default.systeminfo.label"/>
 			</a>
 		</li>
+			<sec:ifAnyGranted roles="ROLE_ADMIN">
+		<li class="">
+			<a href="${createLink(uri: '/user')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				<g:message code="security.header.label"/>
+			</a>
+		</li>
+		</sec:ifAnyGranted>
 	</ul>
 </li>

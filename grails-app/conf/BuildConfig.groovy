@@ -44,6 +44,9 @@ grails.project.dependency.resolution = {
 		//mavenRepo "http://repository.codehaus.org"
 		//mavenRepo "http://download.java.net/maven/2/"
 		//mavenRepo "http://repository.jboss.com/maven2/"
+		//mavenRepo 'http://download.java.net/maven/2/'
+		//mavenRepo 'http://repo.spring.io/milestone'
+		mavenRepo "http://repo.grails.org/grails/core"
 	}
 
 	dependencies {
@@ -61,6 +64,12 @@ grails.project.dependency.resolution = {
 		compile"com.github.detro.ghostdriver:phantomjsdriver:1.0.1", {
 			transitive = false
 		}
+		
+		compile('org.apache.lucene:lucene-highlighter:2.4.1',
+			'org.apache.lucene:lucene-analyzers:2.4.1',
+			'org.apache.lucene:lucene-queries:2.4.1',
+			'org.apache.lucene:lucene-snowball:2.4.1',
+			'org.apache.lucene:lucene-spellchecker:2.4.1')
 	}
 
 	plugins {
@@ -80,12 +89,18 @@ grails.project.dependency.resolution = {
 		compile ":lesscss-resources:1.3.0.3"
 		compile ":console:1.3"
 
+		compile ":spring-security-ui:1.0-RC2"
+		
+		
 		// plugins needed at runtime but not for compilation
 		runtime ":hibernate:3.6.10.9" // or ":hibernate4:4.3.4"
 		runtime ":database-migration:1.3.8"
 		runtime ":jquery:1.11.0.2"
 		runtime ":resources:1.2.7"
 		runtime ":envers:2.1.0"
+		
+		//Searchable
+		compile ":searchable:0.6.9"
 		
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
