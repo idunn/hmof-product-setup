@@ -48,6 +48,12 @@ class RedPagesDriver  {
 			}else if (enversInstanceToDeploy.contentTypeId==2){
 
 				log.info "Starting Geb Automation for Bundle"
+				
+				BundleGebWork bgw = new BundleGebWork()
+				bgw.initBaseUrl(skipLoginUrl)
+				
+				to BundleGebWork
+				lookupIsbn (enversInstanceToDeploy)
 
 
 			}else{ log.error "Content Type not supported!"

@@ -83,9 +83,13 @@ class JobService {
 					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
 
 					// pass to Geb
-					log.info "Mock deployment of Bundle to: " + deploymentUrl
-					log.info enversInstanceToDeploy.isbn
-					log.info enversInstanceToDeploy.title
+					//log.info "Mock deployment of Bundle to: " + deploymentUrl
+					//log.info enversInstanceToDeploy.isbn
+					//log.info enversInstanceToDeploy.title
+					
+					//TODO
+					// Pass data to Geb
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 
 					// Add Content SP to Bundle

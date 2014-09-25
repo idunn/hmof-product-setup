@@ -24,6 +24,23 @@ class BundleGebWork extends Page {
 
 		bundleTitle {$("form").find("input", name: "BndlTitle")}
 		saveButton {$("form").find("input", name: "Save")}
+		
+		
+		// CONNECTING
+		
+		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
+		addTeacherIsbn{$("form").find("input", name: "TeacherISBN")}
+		
+		// Platform Objects		
+		activityManager{$("input", type:"checkbox", value:"ACTIVITY_MGR")}
+		classManager{$("input", type:"checkbox", value:"CLASS_MGR")}
+
+		// object used in some language arts
+		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
+		studentEssayUnits{$("input", name:"unitsSTUDENT_ESSAYS")}
+		
+		//Duration
+		duration{$("select", name: "SubscrLen")}
 
 		// Modules
 		globalModule { module GebModule }
@@ -41,24 +58,18 @@ class BundleGebWork extends Page {
 		lookupButton.click()
 
 		// TODO
-
-		def update = globalModule.updateLink
-		// def update = $("a", href: contains("Update"))
+		def update = globalModule.updateLink		
 		if(update){
 			waitFor(15) {globalModule.updateLink.click()}
-
-			//Update Title
-			//waitFor(15) {$("form").find("input", name: "Update").click()}
+			
 			waitFor(15){globalModule.updateButtonName.click()}
-
-			//$("form").find("input", name: "BndlTitle").value("Adding New eBundle - Custom Dev - 2014")
+			
 			bundleTitle.value(enversInstanceToDeploy.title)
-
-			//$("form").find("input", name: "Save").click()
+			
 			saveButton.click()
-
 			addBundleData(enversInstanceToDeploy)
-			//$("input", value: "Add").click()
+
+			//TODO
 			globalModule.addButton.click()
 
 		} else{
@@ -82,7 +93,11 @@ class BundleGebWork extends Page {
 
 	def addBundleData(def enversInstanceToDeploy){
 
-		log.info "Add Bundle Data... #########123"
+		log.info "Add Bundle Data..."
+		
+		addSecureProgram.click()
+		addTeacherIsbn.value("054423881X")
+		duration.value("2190")
 
 	}
 
