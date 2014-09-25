@@ -5,7 +5,7 @@ import org.hibernate.envers.Audited
 
 @Audited
 class Bundle {
-
+	//static searchable = true
 	String isbn
 	String title
 	String duration
@@ -13,16 +13,20 @@ class Bundle {
 	Date lastUpdated
 	
 	ContentType contentType
-
+	//Program program
 	static belongsTo = [program:Program]
 	static hasMany = [secureProgram:SecureProgram]
-
+	static searchable = {
+		secureProgram component: true
+		   
+   }
 	static constraints = {
 
 		isbn (blank: false, unique: true)
 		title (blank: false)
 		duration (inList: ["1-Year", "2-Year", "3-Year", "4-Year", "5-Year", "6-Year", "7-Year", "8-Year"], nullable:true)
-	}
+		program()
+		}
 
 	String toString(){
 		"${isbn}: ${title}"

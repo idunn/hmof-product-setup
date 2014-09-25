@@ -5,7 +5,7 @@ import org.hibernate.envers.Audited
 
 @Audited
 class SecureProgram {
-
+	//static searchable = true
 	String productName
 	String registrationIsbn
 	String onlineIsbn
@@ -43,7 +43,10 @@ class SecureProgram {
 
 	static belongsTo = Bundle
 	static hasMany = [commerceObjects:CommerceObject]
-
+	static searchable = {
+		commerceObjects component: true
+		   
+   }
 	static constraints = {
 
 		productName (blank: false)

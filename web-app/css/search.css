@@ -26,11 +26,22 @@
     box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.45) inset;
     color: #FFF;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
-    background-color: #EB8D00;
-    background-image: linear-gradient(to bottom, #F90, #CC7A00);
+    background-color: #686868;
+    background-image: linear-gradient(to bottom, #000000, #000000);
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
       }
+.divul-search{
+	color:#D07D00;font-weight: bold;padding-left:10px;
+}  
+ .divli-search{
+	color:black;font-weight: bold;
+}    
+
+.divborder-search{
+	border: 2px solid;border-radius: 10px;margin-right: 0.5em;
+}  
+      
  .result .name {
         font-size: larger;
       }

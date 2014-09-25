@@ -4,7 +4,7 @@ import org.hibernate.envers.Audited
 
 @Audited
 class CommerceObject {
-
+	static searchable = true
 	String objectName
 	String isbn
 	
