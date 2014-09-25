@@ -20,7 +20,7 @@ class CommerceObjectWork extends Page {
 		addCommerceObjectLink(wait:true) {$("a", text: contains("Add New Commerce Object"))}
 		isbnField {$("input", name: "ISBN")}
 		searchButton{$("form").find("input", name: "search")}		
-		updateLink(required:false){$("a", href: contains("Update"))}			
+		//updateLink(required:false){$("a", href: contains("Update"))}			
 		
 		objectName(wait:true){$("input", name: "Name")}
 		pathToCoverImage{$("input", name: "DfltIcon")}
@@ -49,9 +49,9 @@ class CommerceObjectWork extends Page {
 
 		log.info "Checking if CommerceObject Exists..."
 		
-		def update = updateLink
+		def update = globalModule.updateLink
 		if(update){
-			waitFor(25) {update.click()}
+			waitFor(25) {globalModule.click()}
 			
 			log.info "Updating Commerce Object"
 			addCommerceObjectData(enversInstanceToDeploy)			
