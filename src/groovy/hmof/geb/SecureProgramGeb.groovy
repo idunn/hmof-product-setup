@@ -19,8 +19,7 @@ class SecureProgramWork extends Page {
 		manageSecureProgram(wait:true) { $("a", text: contains("Manage Existing Secure Program"))}
 		addSecureProgramLink(wait:true) {$("a", text: contains("Add New Secure Program"))}
 		lookupIsbnField {$("input", name: "TeacherISBN")}
-		searchButton{$("form").find("input", name: "search")}
-		updateButton(wait: true) {$("form").find("input", value: "Update")}
+		searchButton{$("form").find("input", name: "search")}		
 
 		programNameField (wait: true) {$("input", name: "ProgramName")}
 		teacherIsbnField {$("input", name: "TeacherEditionISBN")}
@@ -73,12 +72,11 @@ class SecureProgramWork extends Page {
 		word3LocationField {$("input", name: "Location3")}
 		word3PageNumberField {$("input", name: "PageNum3")}
 
-		secureProgramAlreadyExistsText(wait: 15, required:false){$("font", text: contains("A secure program with the specified teacher edition ISBN already exists."))}
+		secureProgramAlreadyExistsText(wait: 5, required:false){$("font", text: contains("A secure program with the specified teacher edition ISBN already exists."))}
 
-		//Input value add
-		AddButton{$("input", value: "Add")}
-		updateButton{$("input", value: "Update")}
-		homeButton{$("a", text: contains("Home"))}
+		// Modules
+		globalModule { module GebModule }	
+		
 
 	}
 
@@ -97,10 +95,12 @@ class SecureProgramWork extends Page {
 		word1Field.value (enversInstanceToDeploy.securityWord)
 		word1LocationField.value (enversInstanceToDeploy.securityWordLocation)
 		word1PageNumberField.value (enversInstanceToDeploy.securityWordPage)
-		AddButton.click()
+		
+		globalModule.addButton.click()
+		
 		if(secureProgramAlreadyExistsText){
-			log.info "Secure Program already exists ###########..."
-			homeButton.click()
+			log.info "Secure Program already exists"			
+			globalModule.homeButton.click()
 		} else{
 			log.info "Secure Program does not exist!"
 		}
@@ -113,11 +113,11 @@ class SecureProgramWork extends Page {
 
 		basicAdd (enversInstanceToDeploy)
 
-		log.info "Updating SecureProgram ISBN ####2..."
+		log.info "Updating SecureProgram"
 		manageSecureProgram.click()
 		lookupIsbnField.value enversInstanceToDeploy.registrationIsbn
-		searchButton.click()
-		updateButton.click()
+		searchButton.click()		
+		globalModule.updateButton.click()
 
 		addSecureProgramData(enversInstanceToDeploy)
 
@@ -132,7 +132,7 @@ class SecureProgramWork extends Page {
 
 		String blank = ""
 
-		log.info "Adding SecureProgram Data #####3..."
+		log.info "Adding SecureProgram Data"
 		programNameField.value(enversInstanceToDeploy.productName)
 		teacherIsbnField.value(enversInstanceToDeploy.registrationIsbn)
 		onlineIsbnField.value(enversInstanceToDeploy.onlineIsbn)
@@ -141,7 +141,7 @@ class SecureProgramWork extends Page {
 		
 		copyrightYearField.value(enversInstanceToDeploy.copyright)
 		
-		// comments TODO
+		comment.value(enversInstanceToDeploy.comments?: blank)
 
 		onlineResourcesLabel.value(enversInstanceToDeploy.labelForOnlineResource?: blank)
 		onlineResourcesUrl.value(enversInstanceToDeploy.pathToResource?: blank)
@@ -186,10 +186,9 @@ class SecureProgramWork extends Page {
 
 		word1Field.value(enversInstanceToDeploy.securityWord)
 		word1LocationField.value(enversInstanceToDeploy.securityWordLocation)
-		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)
-
+		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)		
 		
-		updateButton.click()
+		globalModule.updateButton.click()
 
 	}
 
