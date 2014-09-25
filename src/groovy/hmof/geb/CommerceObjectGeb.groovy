@@ -22,7 +22,8 @@ class CommerceObjectWork extends Page {
 		searchButton{$("form").find("input", name: "search")}		
 		//updateLink(required:false){$("a", href: contains("Update"))}			
 		
-		objectName(wait:true){$("input", name: "Name")}
+		//objectName(wait:true){$("input", name: "Name")}
+		objectName{$("input", name: "Name")}
 		pathToCoverImage{$("input", name: "DfltIcon")}
 		hubPageSelect{$("input", type:"checkbox", name:"HubPage")}
 		secureProgramDependent{$("input", type:"checkbox", name:"SProgDependent")}
@@ -51,7 +52,7 @@ class CommerceObjectWork extends Page {
 		
 		def update = globalModule.updateLink
 		if(update){
-			waitFor(25) {globalModule.click()}
+			waitFor(25) {globalModule.updateLink.click()}
 			
 			log.info "Updating Commerce Object"
 			addCommerceObjectData(enversInstanceToDeploy)			
@@ -77,9 +78,9 @@ class CommerceObjectWork extends Page {
 
 		log.info "Adding Commerce Object Data From Envers Object..."
 
-		String blank = ""
+		String blank = ""		
 
-		objectName.value(content.objectName)
+		objectName.value(content.objectName)		
 
 		globalModule.description
 
@@ -87,7 +88,7 @@ class CommerceObjectWork extends Page {
 
 		hubPageSelect.value(true)
 
-		isbnField.value(content.isbn)
+		isbnField.value(content.isbn)		
 
 		secureProgramDependent.value(true)
 
@@ -100,7 +101,7 @@ class CommerceObjectWork extends Page {
 		objectReorder.value(content.objectReorderNumber)
 		
 		// TODO set this from parent object in view
-		//subject.value("Reading") 
+		//subject.value("Reading") 		
 
 		def grades = []
 		if (!content.gradeLevel.contains("-")){
