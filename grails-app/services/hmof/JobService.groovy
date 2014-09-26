@@ -46,7 +46,7 @@ class JobService {
 					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb TODO
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}
@@ -63,7 +63,7 @@ class JobService {
 					def enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}
@@ -83,22 +83,29 @@ class JobService {
 					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
 
 					// pass to Geb
-					//log.info "Mock deployment of Bundle to: " + deploymentUrl
-					//log.info enversInstanceToDeploy.isbn
-					//log.info enversInstanceToDeploy.title
+					log.info "Mock deployment of Bundle to: " + deploymentUrl
+					log.info enversInstanceToDeploy.isbn
+					log.info enversInstanceToDeploy.title
 					
 					//TODO
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 
 					// Add Content SP to Bundle
 					bundle_Children.each{
 
-						log.info "Add Secure Program: " + it.productName + " " + it.registrationIsbn
+						//log.info "Add Secure Program: " + it.productName + " " + it.registrationIsbn
 
 						Long instanceId = it.id
+						
+						// Add SP						
 						def secureProgramInstance = SecureProgram.where{id==instanceId}.get()
+						
+						//if(secureProgramInstance.id == true)
+						
+						secureProgram.each{ println "Secureprogram info" + it.contentId + " " + it.revision}
+						
 						def (secureProgram_Children) = deploymentService.getSecureProgramChildren(secureProgramInstance.id)
 
 						// Add C to B indirectly A
