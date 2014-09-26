@@ -28,7 +28,7 @@
 				
 				<th>${'Current Revision'}</th>
 			
-				<g:sortableColumn property="isbn" title="${message(code: 'commerceObject.isbn.label', default: 'Isbn')}" />								
+				<g:sortableColumn property="isbnNumber" title="${message(code: 'commerceObject.isbn.label', default: 'Isbn')}" />								
 			
 				<th>${'Dev'}</th>
 				
@@ -50,7 +50,7 @@
 				
 				<td>${jobdetails.getCurrentEnversRevision(commerceObjectInstance)}</td>
 			
-				<td>${fieldValue(bean: commerceObjectInstance, field: "isbn")}</td>				
+				<td>${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</td>				
 				
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(commerceObjectInstance,1)}" />
 						

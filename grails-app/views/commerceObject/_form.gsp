@@ -10,11 +10,11 @@
 				</div>
 			</div>
 
-			<div class="${hasErrors(bean: commerceObjectInstance, field: 'isbn', 'error')} required">
-				<label for="isbn" class="control-label"><g:message code="commerceObject.isbn.label" default="Isbn" /><span class="required-indicator">*</span></label>
+			<div class="${hasErrors(bean: commerceObjectInstance, field: 'isbnNumber', 'error')} required">
+				<label for="isbnNumber" class="control-label"><g:message code="commerceObject.isbnNumber.label" default="Isbn" /><span class="required-indicator">*</span></label>
 				<div>
-					<g:textField class="form-control" name="isbn" required="" value="${commerceObjectInstance?.isbn}"/>
-					<span class="help-inline">${hasErrors(bean: commerceObjectInstance, field: 'isbn', 'error')}</span>
+					<g:textField class="form-control" name="isbnNumber" required="" value="${commerceObjectInstance?.isbnNumber}"/>
+					<span class="help-inline">${hasErrors(bean: commerceObjectInstance, field: 'isbnNumber', 'error')}</span>
 				</div>
 			</div>
 

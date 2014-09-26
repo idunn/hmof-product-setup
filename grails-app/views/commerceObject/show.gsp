@@ -24,9 +24,9 @@
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.isbn.label" default="Isbn" /></td>
+				<td valign="top" class="name"><g:message code="commerceObject.isbnNumber.label" default="Isbn" /></td>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isbn")}</td>
+				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</td>
 				
 			</tr>
 		

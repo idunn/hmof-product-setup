@@ -6,7 +6,7 @@ import org.hibernate.envers.Audited
 class CommerceObject {
 	static searchable = true
 	String objectName
-	String isbn
+	String isbnNumber
 	
 	
 	Date dateCreated
@@ -29,7 +29,7 @@ class CommerceObject {
 	static constraints = {
 
 		objectName (blank: false, unique: true)
-		isbn (blank: false, unique: true)
+		isbnNumber (blank: false, unique: true)
 		
 		dateCreated ()
 		lastUpdated ()	

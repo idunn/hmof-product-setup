@@ -45,7 +45,7 @@ class CommerceObjectWork extends Page {
 	void lookupIsbn(def enversInstanceToDeploy){
 		log.info "Looking up ISBN...."
 		manageCommerceObjectLink.click()
-		isbnField.value enversInstanceToDeploy.isbn
+		isbnField.value enversInstanceToDeploy.isbnNumber
 		searchButton.click()
 
 		log.info "Checking if CommerceObject Exists..."
@@ -88,7 +88,7 @@ class CommerceObjectWork extends Page {
 
 		hubPageSelect.value(true)
 
-		isbnField.value(content.isbn)		
+		isbnField.value(content.isbnNumber)		
 
 		secureProgramDependent.value(true)
 
