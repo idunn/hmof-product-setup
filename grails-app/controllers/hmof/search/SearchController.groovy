@@ -15,32 +15,14 @@ class SearchController {
      */
     def search = {
 		params.suggestQuery = false
+	
         if (!params.q?.trim()) {
             return [:]
         }
-        try {
+        try {			
 			
-			params.withHighlighter = { highlighter, index, sr ->
-				// lazy-init the storage
-				if (!sr.highlights) {
-					sr.highlights = []
-				}
-				def matchedFragment =[]
-				println params.equals("registrationIsbn")
-				if(params.equals("isbn"))				
-				 matchedFragment = highlighter.fragment("isbn")
-	else if(params.equals("registrationIsbn"))
-	 matchedFragment = highlighter.fragment("registrationIsbn")
-	
-	
-	
-	
-				//def matchedFragment = highlighter.multiValueFragmentWithSeparator("studentComment")
-				sr.highlights[index] =  (matchedFragment ?: "")
-			}
-	
-	
-      return [ searchResult: searchableService.search(params.q,params)]
+	        return [ searchResult: searchableService.search(params.q,params)]
+			
           
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]
