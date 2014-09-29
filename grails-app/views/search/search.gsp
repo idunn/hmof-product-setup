@@ -19,8 +19,7 @@
 </head>
 <body onload="focusQueryInput();">
 
-<g:set var="test" value="Hello"></g:set>
-<%=test%>
+
 
 	<div id="main">
 		<g:set var="haveQuery" value="${params.q?.trim()}" />
