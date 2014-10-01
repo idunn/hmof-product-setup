@@ -1,6 +1,7 @@
 package hmof
 
 
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import hmof.deploy.Job
@@ -9,10 +10,6 @@ import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
 
-/**
- * SecureProgramController
- * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
- */
 @Transactional(readOnly = true)
 class SecureProgramController {
 
@@ -131,97 +128,98 @@ class SecureProgramController {
 		respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
 	}
 
-	def show(SecureProgram secureProgramInstance) {
-		respond secureProgramInstance
-	}
+    def show(SecureProgram secureProgramInstance) {
+        respond secureProgramInstance
+    }
 
-	def create() {
-		respond new SecureProgram(params)
-	}
+    def create() {
+        respond new SecureProgram(params)
+    }
 
-	@Transactional
-	def save() {
-
-		def contentType = ContentType.where{id==3}.get()
+    @Transactional
+    def save() {	
+    def contentType = ContentType.where{id==3}.get()
 		params.contentType = contentType
 		def secureProgramInstance = new SecureProgram(params)
+        if (secureProgramInstance == null) {
+            notFound()
+            return
+        }
 
-		if (secureProgramInstance == null) {
-			notFound()
+        if (secureProgramInstance.hasErrors()) {
+            respond secureProgramInstance.errors, view:'create'
+            return
+        }
+
+	//	secureProgramInstance.save(flush:true, failOnError: true)
+		if (!secureProgramInstance.save(flush: true)) {
+			render(view: "create", model: [secureProgramInstance: secureProgramInstance])
 			return
 		}
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
+                redirect secureProgramInstance
+            }
+            '*' { respond secureProgramInstance, [status: CREATED] }
+        }
+    }
 
-		if (secureProgramInstance.hasErrors()) {
-			respond secureProgramInstance.errors, view:'create'
-			return
-		}
+    def edit(SecureProgram secureProgramInstance) {
+        respond secureProgramInstance
+    }
 
-		secureProgramInstance.save flush:true
+    @Transactional
+    def update(SecureProgram secureProgramInstance) {
+        if (secureProgramInstance == null) {
+            notFound()
+            return
+        }
 
-		request.withFormat {
-			form {
-				flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
-				redirect secureProgramInstance
-			}
-			'*' { respond secureProgramInstance, [status: CREATED] }
-		}
-	}
-
-	def edit(SecureProgram secureProgramInstance) {
-		respond secureProgramInstance
-	}
-
-	@Transactional
-	def update(SecureProgram secureProgramInstance) {
-		if (secureProgramInstance == null) {
-			notFound()
-			return
-		}
-
-		if (secureProgramInstance.hasErrors()) {
-			respond secureProgramInstance.errors, view:'edit'
-			return
-		}
+        if (secureProgramInstance.hasErrors()) {
+            respond secureProgramInstance.errors, view:'edit'
+            return
+        }
 
 		secureProgramInstance.save flush:true
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(secureProgramInstance)
 
-		request.withFormat {
-			form {
-				flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-				redirect secureProgramInstance
-			}
-			'*'{ respond secureProgramInstance, [status: OK] }
-		}
-	}
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+                redirect secureProgramInstance
+            }
+            '*'{ respond secureProgramInstance, [status: OK] }
+        }
+    }
 
-	@Transactional
-	def delete(SecureProgram secureProgramInstance) {
+    @Transactional
+    def delete(SecureProgram secureProgramInstance) {
 
-		if (secureProgramInstance == null) {
-			notFound()
-			return
-		}
+        if (secureProgramInstance == null) {
+            notFound()
+            return
+        }
 
-		secureProgramInstance.delete flush:true
+        secureProgramInstance.delete flush:true
 
-		request.withFormat {
-			form {
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-				redirect action:"index", method:"GET"
-			}
-			'*'{ render status: NO_CONTENT }
-		}
-	}
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
 
-	protected void notFound() {
-		request.withFormat {
-			form {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
-				redirect action: "index", method: "GET"
-			}
-			'*'{ render status: NOT_FOUND }
-		}
-	}
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
+    }
 }

@@ -19,8 +19,6 @@
 </head>
 <body onload="focusQueryInput();">
 
-
-
 	<div id="main">
 		<g:set var="haveQuery" value="${params.q?.trim()}" />
 		<g:set var="haveResults" value="${searchResult?.results}" />
@@ -137,7 +135,7 @@
 									<div class="divul-search">Associated Secure Programs</div>
 									<ul style="list-style-type: square;">
 
-										<g:each in="${result.secureProgram}" status="index1"  var="b">
+										<g:each in="${result.secureProgram}"  var="b">
 											<li><g:link controller="secureProgram" action="show"
 													id="${b.id}">													
 														<b>
@@ -148,7 +146,7 @@
 											<g:if test="${b.commerceObjects}">
 												<div class="divli-search">Associated Commerce Objects</div>
 												<ul>
-													<g:each in="${b.commerceObjects}" status="i" var="co">
+													<g:each in="${b.commerceObjects}"  var="co">
 														
 														<li><g:link controller="CommerceObject" action="show"
 																id="${co.id}">																

@@ -150,51 +150,52 @@
 				</div>
 			</div>
 
-			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdDev', 'error')} ">
+			<div class="fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdDev', 'error')} ">
 				<label for="knowledgeGraphIdDev" class="control-label"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph Id Dev" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphIdDev" value="${secureProgramInstance?.knowledgeGraphIdDev}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdDev', 'error')}</span>
+					<g:textField class="form-control" name="knowledgeGraphIdDev" pattern="${secureProgramInstance.constraints.knowledgeGraphIdDev.matches}" value="${secureProgramInstance?.knowledgeGraphIdDev}"  />
+				
 				</div>
 			</div>
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdQA', 'error')} ">
 				<label for="knowledgeGraphIdQA" class="control-label"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph Id QA" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphIdQA" value="${secureProgramInstance?.knowledgeGraphIdQA}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdQA', 'error')}</span>
+					<g:textField class="form-control" name="knowledgeGraphIdQA" pattern="${secureProgramInstance.constraints.knowledgeGraphIdQA.matches}"  value="${secureProgramInstance?.knowledgeGraphIdQA}"/>
+					
 				</div>
 			</div>
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdProd', 'error')} ">
 				<label for="knowledgeGraphIdProd" class="control-label"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph Id Prod" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphIdProd" value="${secureProgramInstance?.knowledgeGraphIdProd}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdProd', 'error')}</span>
+					<g:textField class="form-control" name="knowledgeGraphIdProd" pattern="${secureProgramInstance.constraints.knowledgeGraphIdProd.matches}" value="${secureProgramInstance?.knowledgeGraphIdProd}"/>
+					
 				</div>
 			</div>
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphWarmUpTimeLimit', 'error')} ">
 				<label for="knowledgeGraphWarmUpTimeLimit" class="control-label"><g:message code="secureProgram.knowledgeGraphWarmUpTimeLimit.label" default="Knowledge Graph Warm Up Time Limit" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphWarmUpTimeLimit" value="${secureProgramInstance?.knowledgeGraphWarmUpTimeLimit}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphWarmUpTimeLimit', 'error')}</span>
+					<g:select name="knowledgeGraphWarmUpTimeLimit" from="${5..60}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'knowledgeGraphWarmUpTimeLimit')}" noSelection="['': '']"/>
+					
 				</div>
 			</div>
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentTimeLimit', 'error')} ">
 				<label for="knowledgeGraphEnrichmentTimeLimit" class="control-label"><g:message code="secureProgram.knowledgeGraphEnrichmentTimeLimit.label" default="Knowledge Graph Enrichment Time Limit" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphEnrichmentTimeLimit" value="${secureProgramInstance?.knowledgeGraphEnrichmentTimeLimit}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentTimeLimit', 'error')}</span>
+				<g:select name="knowledgeGraphEnrichmentTimeLimit" from="${5..60}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentTimeLimit')}" noSelection="['': '']"/>
+					
+					
 				</div>
 			</div>
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentCbiTimeLimit', 'error')} ">
 				<label for="knowledgeGraphEnrichmentCbiTimeLimit" class="control-label"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment Cbi Time Limit" /></label>
 				<div>
-					<g:textField class="form-control" name="knowledgeGraphEnrichmentCbiTimeLimit" value="${secureProgramInstance?.knowledgeGraphEnrichmentCbiTimeLimit}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentCbiTimeLimit', 'error')}</span>
+					<g:select name="knowledgeGraphEnrichmentCbiTimeLimit" from="${5..60}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'knowledgeGraphEnrichmentCbiTimeLimit')}" noSelection="['': '']"/>
+					
 				</div>
 			</div>
 
