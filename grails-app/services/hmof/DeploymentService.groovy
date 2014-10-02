@@ -21,6 +21,34 @@ class DeploymentService {
 	def sessionFactory
 
 	/**
+	 * Get the bundles children as a map
+	 * @param instanceId
+	 * @return
+	 */
+	def getChildrenMap(instanceId) {
+
+		def mapOfChildren = [:]
+
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()
+
+		secureProgramList.each{
+
+			def secureProgramId = it
+			def sp = SecureProgram.where{id==secureProgramId}.get()
+			def commerceObjectIds = sp.commerceObjects.id
+
+			// add to map
+			mapOfChildren<< [(secureProgramId):commerceObjectIds]
+
+		}
+
+		log.info "Children Map: " + mapOfChildren
+		mapOfChildren
+
+	}
+
+	/**
 	 * get the children objects of a Program
 	 * @param instanceId
 	 * @return

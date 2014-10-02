@@ -15,6 +15,8 @@ class Job {
 
 	Date dateCreated
 	Date lastUpdated
+	
+	Map children
 
 	static belongsTo	= [user: User]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 	static hasMany		= [promotion: Promotion]
@@ -30,6 +32,7 @@ class Job {
 		contentTypeId()
 		contentId()
 		revision()
+		children(blank: false, nullable:true)
 	}
 
 	public String toString() {

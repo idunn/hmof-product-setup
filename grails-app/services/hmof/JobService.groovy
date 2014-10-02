@@ -47,6 +47,7 @@ class JobService {
 
 					// Pass data to Geb TODO
 					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					println "CO" + enversInstanceToDeploy.isbnNumber
 
 				}
 			}
@@ -64,6 +65,7 @@ class JobService {
 
 					// Pass data to Geb
 					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					println "SP" + enversInstanceToDeploy.registrationIsbn
 
 				}
 			}
@@ -111,7 +113,7 @@ class JobService {
 						// Add C to B indirectly A
 						secureProgram_Children.each{
 
-							log.info "Add Commerce Object: " + it.objectName + " " + it.isbn
+							log.info "Add Commerce Object: " + it.objectName + " " + it.isbnNumber
 
 						}
 					}
