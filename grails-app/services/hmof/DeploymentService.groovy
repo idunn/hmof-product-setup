@@ -27,7 +27,8 @@ class DeploymentService {
 	 */
 	def getChildrenMap(instanceId) {
 
-		def mapOfChildren = [:]
+		//def mapOfChildren = [:]
+		HashMap mapOfChildren = []
 
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
 		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()
