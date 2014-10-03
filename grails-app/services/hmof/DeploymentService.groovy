@@ -21,21 +21,21 @@ class DeploymentService {
 	def sessionFactory
 
 	/**
-	 * Get the bundles children as a map
+	 * Get the bundles children as a map of String where the Key is the id of the SP and the value is the CO id
 	 * @param instanceId
 	 * @return
 	 */
-	def getChildrenMap(instanceId) {
+	def getChildrenMap(instanceId) {		
 
 		//def mapOfChildren = [:]
 		HashMap mapOfChildren = []
 
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
-		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()
+		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()		
 
 		secureProgramList.each{
 
-			def secureProgramId = it
+			String secureProgramId = it
 			def sp = SecureProgram.where{id==secureProgramId}.get()
 			def commerceObjectIds = sp.commerceObjects.id
 			String coIds = commerceObjectIds.join(',')
