@@ -56,6 +56,17 @@ class ProgramController {
 			Job j2 = new Job(content).save(failOnError:true)
 		}
 
+		// Add child relationship to each bundle
+		def jobToUpdate = Job.where{jobNumber == deploymentJobNumber && contentTypeId==2 }.list()
+
+		jobToUpdate.each{
+
+			def bundleJobInstance = it
+			def childMap = deploymentService.getChildrenMap(bundleJobInstance.contentId)
+			bundleJobInstance.children = childMap
+
+		}
+
 		def envId = deploymentService.getUserEnvironmentInformation()
 
 		def promote = [status: "PENDING", job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
@@ -129,7 +140,7 @@ class ProgramController {
 		def contentType = ContentType.where{id==1}.get()
 		params.contentType = contentType
 		def programInstance = new Program(params)
-		
+
 		if (programInstance == null) {
 			notFound()
 			return
