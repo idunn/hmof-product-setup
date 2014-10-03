@@ -38,9 +38,10 @@ class DeploymentService {
 			def secureProgramId = it
 			def sp = SecureProgram.where{id==secureProgramId}.get()
 			def commerceObjectIds = sp.commerceObjects.id
+			String coIds = commerceObjectIds.join(',')
 
 			// add to map
-			mapOfChildren<< [(secureProgramId):commerceObjectIds]
+			mapOfChildren<< [(secureProgramId):coIds]
 
 		}
 
