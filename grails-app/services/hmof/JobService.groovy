@@ -77,13 +77,14 @@ class JobService {
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
+					def mapOfChildren = it.children
+					
+					println "mapOfChildren ###############" + mapOfChildren
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
-					// only one of these variables are used //TODO
-					def (bundle_Children, content_C) = deploymentService.getBundleChildren(bundleInstance.id)
-
+					
 					// pass to Geb
 					log.info "Mock deployment of Bundle to: " + deploymentUrl
 					log.info enversInstanceToDeploy.isbn
@@ -94,29 +95,7 @@ class JobService {
 					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 
-					// Add Content SP to Bundle
-					bundle_Children.each{
-
-						//log.info "Add Secure Program: " + it.productName + " " + it.registrationIsbn
-
-						Long instanceId = it.id
-						
-						// Add SP						
-						def secureProgramInstance = SecureProgram.where{id==instanceId}.get()
-						
-						//if(secureProgramInstance.id == true)
-						
-						secureProgram.each{ println "Secureprogram info" + it.contentId + " " + it.revision}
-						
-						def (secureProgram_Children) = deploymentService.getSecureProgramChildren(secureProgramInstance.id)
-
-						// Add C to B indirectly A
-						secureProgram_Children.each{
-
-							log.info "Add Commerce Object: " + it.objectName + " " + it.isbnNumber
-
-						}
-					}
+					
 
 					log.info "Finished Deploying Bundle."
 				}
