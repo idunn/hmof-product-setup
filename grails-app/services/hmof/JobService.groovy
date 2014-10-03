@@ -25,7 +25,7 @@ class JobService {
 
 			// Get the environment URL
 			def deploymentUrl = Environment.where{id==promotionInstance.environmentsId}.url.get()
-			
+
 			log.info "The deployment Url is: " + deploymentUrl
 
 			// Divide out the instances
@@ -46,7 +46,7 @@ class JobService {
 					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb TODO
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)					
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}
@@ -77,24 +77,44 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
-					
+
 					println "mapOfChildren ###############" + mapOfChildren
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
-					
-					// pass to Geb
-					log.info "Mock deployment of Bundle to: " + deploymentUrl
-					log.info enversInstanceToDeploy.isbn
-					log.info enversInstanceToDeploy.title
-					
+					def testMap = [:]
+
+					// TODO this is WIP refactor variable and pass testMap to Geb
+					mapOfChildren.each{
+
+						String secureProgramId = it.key
+						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()
+						def spEnvers = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+
+						def commerceObjectIds = it.value
+						List coValues = commerceObjectIds.split(',')
+						def listOfCo = []
+
+						coValues.each{
+
+							def valueTest = it
+							def commerceObjectInstance = CommerceObject.where{id==valueTest}.get()
+							def coEnvers = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+							listOfCo << coEnvers
+						}
+
+						// add to map
+						testMap<< [(spEnvers):listOfCo]
+						println "testMap: " + testMap
+
+
+					}
+
 					//TODO
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, mapOfChildren)
+					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, mapOfChildren)
 
-
-					
 
 					log.info "Finished Deploying Bundle."
 				}
