@@ -46,8 +46,7 @@ class JobService {
 					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb TODO
-					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
-					println "CO" + enversInstanceToDeploy.isbnNumber
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)					
 
 				}
 			}
@@ -92,7 +91,7 @@ class JobService {
 					
 					//TODO
 					// Pass data to Geb
-					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, mapOfChildren)
 
 
 					

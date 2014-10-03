@@ -14,7 +14,15 @@ class RedPagesDriver  {
 	}
 
 
-	def driveBrowser(def url, def enversInstanceToDeploy){
+	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren){
+
+		def cachedDriver = CachingDriverFactory.clearCache()
+		log.info "cachedDriver" + cachedDriver
+		driveBrowser(url, enversInstanceToDeploy, mapOfChildren)
+	}
+
+
+	def driveBrowser(def url, def enversInstanceToDeploy, def optional = null){
 		log.info "Deployment url: " + url
 		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 
@@ -27,11 +35,11 @@ class RedPagesDriver  {
 
 				log.info "Starting Geb Automation for CommerceObject"
 
-				CommerceObjectWork cow = new CommerceObjectWork()
+				/*CommerceObjectWork cow = new CommerceObjectWork()
 				cow.initBaseUrl(skipLoginUrl)
 
 				to CommerceObjectWork
-				lookupIsbn (enversInstanceToDeploy)
+				lookupIsbn (enversInstanceToDeploy)*/
 
 				log.info "Completed Geb Automation of CommerceObject"
 
@@ -48,12 +56,12 @@ class RedPagesDriver  {
 			}else if (enversInstanceToDeploy.contentTypeId==2){
 
 				log.info "Starting Geb Automation for Bundle"
-				
-				BundleGebWork bgw = new BundleGebWork()
+
+				/*BundleGebWork bgw = new BundleGebWork()
 				bgw.initBaseUrl(skipLoginUrl)
-				
+
 				to BundleGebWork
-				lookupIsbn (enversInstanceToDeploy)
+				lookupIsbn (enversInstanceToDeploy)*/
 
 
 			}else{ log.error "Content Type not supported!"
