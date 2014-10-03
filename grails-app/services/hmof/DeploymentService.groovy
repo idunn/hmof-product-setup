@@ -25,9 +25,8 @@ class DeploymentService {
 	 * @param instanceId
 	 * @return
 	 */
-	def getChildrenMap(instanceId) {		
-
-		//def mapOfChildren = [:]
+	def getChildrenMap(instanceId) {
+		
 		HashMap mapOfChildren = []
 
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
@@ -45,7 +44,7 @@ class DeploymentService {
 
 		}
 
-		log.info "Children Map: " + mapOfChildren
+		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren
 		mapOfChildren
 
 	}
