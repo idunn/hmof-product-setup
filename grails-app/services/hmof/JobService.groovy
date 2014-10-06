@@ -45,7 +45,7 @@ class JobService {
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 
-					// Pass data to Geb TODO
+					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
@@ -63,8 +63,7 @@ class JobService {
 					def enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 					// Pass data to Geb
-					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
-					println "SP" + enversInstanceToDeploy.registrationIsbn
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
 
 				}
 			}
@@ -78,14 +77,14 @@ class JobService {
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
 
-					println "mapOfChildren ###############" + mapOfChildren
+					log.info "Map Of Children: " + mapOfChildren
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
-					def testMap = [:]
+					def childMap = [:]
 
-					// TODO this is WIP refactor variable and pass testMap to Geb
+					// TODO
 					mapOfChildren.each{
 
 						String secureProgramId = it.key
@@ -93,28 +92,25 @@ class JobService {
 						def spEnvers = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
 						def commerceObjectIds = it.value
-						List coValues = commerceObjectIds.split(',')
-						def listOfCo = []
+						List commerceObjectValues = commerceObjectIds.split(',')
+						def listOfCommerceObjects = []
 
-						coValues.each{
+						commerceObjectValues.each{
 
-							def valueTest = it
-							def commerceObjectInstance = CommerceObject.where{id==valueTest}.get()
-							def coEnvers = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-							listOfCo << coEnvers
+							def idValue = it
+							def commerceObjectInstance = CommerceObject.where{id==idValue}.get()
+							def enversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+							listOfCommerceObjects << enversInstance
 						}
 
 						// add to map
-						testMap<< [(spEnvers):listOfCo]
-						println "testMap: " + testMap
-
+						childMap<< [(spEnvers):listOfCommerceObjects]
+						log.info "child Map Of Objects: " + childMap
 
 					}
 
-					//TODO
 					// Pass data to Geb
-					//RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, mapOfChildren)
-
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap)
 
 					log.info "Finished Deploying Bundle."
 				}

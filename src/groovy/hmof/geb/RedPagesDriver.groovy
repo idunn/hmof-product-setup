@@ -36,10 +36,9 @@ class RedPagesDriver  {
 				log.info "Starting Geb Automation for CommerceObject"
 
 				/*CommerceObjectWork cow = new CommerceObjectWork()
-				cow.initBaseUrl(skipLoginUrl)
-
-				to CommerceObjectWork
-				lookupIsbn (enversInstanceToDeploy)*/
+				 cow.initBaseUrl(skipLoginUrl)
+				 to CommerceObjectWork
+				 lookupIsbn (enversInstanceToDeploy)*/
 
 				log.info "Completed Geb Automation of CommerceObject"
 
@@ -47,21 +46,21 @@ class RedPagesDriver  {
 
 				log.info "Starting Geb Automation for SecureProgram"
 
-				SecureProgramWork spw = new SecureProgramWork()
-				spw.initBaseUrl(skipLoginUrl)
-
-				to SecureProgramWork
-				lookupIsbn (enversInstanceToDeploy)
+				/*SecureProgramWork spw = new SecureProgramWork()
+				 spw.initBaseUrl(skipLoginUrl)
+				 to SecureProgramWork
+				 lookupIsbn (enversInstanceToDeploy)*/
 
 			}else if (enversInstanceToDeploy.contentTypeId==2){
 
 				log.info "Starting Geb Automation for Bundle"
 
 				/*BundleGebWork bgw = new BundleGebWork()
-				bgw.initBaseUrl(skipLoginUrl)
+				 bgw.initBaseUrl(skipLoginUrl)
+				 to BundleGebWork
+				 lookupIsbn (enversInstanceToDeploy)*/
 
-				to BundleGebWork
-				lookupIsbn (enversInstanceToDeploy)*/
+				log.info "Completed Geb Automation of Bundle"
 
 
 			}else{ log.error "Content Type not supported!"
