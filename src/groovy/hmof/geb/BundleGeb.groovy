@@ -18,27 +18,31 @@ class BundleGebWork extends Page {
 
 		//TODO
 		manageBundlesLink(wait:true) { $("a", text: contains("Manage Existing eProduct Bundles"))}
+		addNewBundleLink(wait:true) { $("a", text: contains("Add New eProduct Bundle"))}
+
 		lookupIsbnField{$("input", name: "BndlISBN")}
+		orderEntryType{$("select", name: "OrderEntryType")}
+		bundleTitle {$("form").find("input", name: "BndlTitle")}
+
 		lookupButton{$("form").find("input", name: "Lookup")}
 		homeButton {$("input", value: "Home")}
-
-		bundleTitle {$("form").find("input", name: "BndlTitle")}
 		saveButton {$("form").find("input", name: "Save")}
-		
-		
-		// CONNECTING
-		
+
+
+
+
+		// Relationship building
 		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
 		addTeacherIsbn{$("form").find("input", name: "TeacherISBN")}
-		
-		// Platform Objects		
+
+		// Platform Objects
 		activityManager{$("input", type:"checkbox", value:"ACTIVITY_MGR")}
 		classManager{$("input", type:"checkbox", value:"CLASS_MGR")}
 
 		// object used in some language arts
 		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
 		studentEssayUnits{$("input", name:"unitsSTUDENT_ESSAYS")}
-		
+
 		//Duration
 		duration{$("select", name: "SubscrLen")}
 
@@ -58,46 +62,52 @@ class BundleGebWork extends Page {
 		lookupButton.click()
 
 		// TODO
-		def update = globalModule.updateLink		
+		def update = globalModule.updateLink
 		if(update){
+
+			log.info "Bundle ISBN Exists."
+
 			waitFor(15) {globalModule.updateLink.click()}
-			
+
 			waitFor(15){globalModule.updateButtonName.click()}
-			
+
 			bundleTitle.value(enversInstanceToDeploy.title)
-			
+
 			saveButton.click()
-			addBundleData(enversInstanceToDeploy)
+			//addBundleData(enversInstanceToDeploy)
 
 			//TODO
-			globalModule.addButton.click()
+			//globalModule.addButton.click()
 
 		} else{
 
-			log.info"In else..."
+			log.info"Creating New Bundle..."
 
-			/*$("a", text:"Home").click()
-			 waitFor(15) {$("a", text: contains("Add New eProduct Bundle")).click()}
-			 // Add bundle data
-			 $("input", name: "BndlISBN").value(OnlineIsbn)
-			 $("select", name: "OrderEntryType").value("All")
-			 $("input", name: "BndlTitle").value("Adding New eBundle - Custom Dev - 2014")
-			 $("input", value: "Add").click()
-			 addBundleData(enversInstanceToDeploy)
-			 $("input", value: "Add").click()*/
+			homeButton.click()
+			addNewBundleLink.click()
+			lookupIsbnField.value(enversInstanceToDeploy.isbn)
+			orderEntryType.value("All")
+			bundleTitle.value(enversInstanceToDeploy.title)
+
+			globalModule.addButton.click()
+
+			//addBundleData(enversInstanceToDeploy)
+			//$("input", value: "Add").click()
 
 		}
 
 
 	}
 
-	def addBundleData(def enversInstanceToDeploy){
+	def addBundleData(def mapOfChildren){
 
 		log.info "Add Bundle Data..."
-		
+
 		addSecureProgram.click()
 		addTeacherIsbn.value("054423881X")
 		duration.value("2190")
+		
+		globalModule.addButton.click()
 
 	}
 

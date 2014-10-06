@@ -55,10 +55,13 @@ class RedPagesDriver  {
 
 				log.info "Starting Geb Automation for Bundle"
 
-				/*BundleGebWork bgw = new BundleGebWork()
-				 bgw.initBaseUrl(skipLoginUrl)
+				 BundleGebWork bundle = new BundleGebWork()
+				 bundle.initBaseUrl(skipLoginUrl)
+				 
 				 to BundleGebWork
-				 lookupIsbn (enversInstanceToDeploy)*/
+				 
+				 lookupIsbn (enversInstanceToDeploy)
+				 addBundleData (optional)
 
 				log.info "Completed Geb Automation of Bundle"
 
