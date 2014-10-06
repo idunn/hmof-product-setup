@@ -35,10 +35,10 @@ class RedPagesDriver  {
 
 				log.info "Starting Geb Automation for CommerceObject"
 
-				/*CommerceObjectWork cow = new CommerceObjectWork()
-				 cow.initBaseUrl(skipLoginUrl)
-				 to CommerceObjectWork
-				 lookupIsbn (enversInstanceToDeploy)*/
+				CommerceObjectWork cow = new CommerceObjectWork()
+				cow.initBaseUrl(skipLoginUrl)
+				to CommerceObjectWork
+				lookupIsbn (enversInstanceToDeploy)
 
 				log.info "Completed Geb Automation of CommerceObject"
 
@@ -46,22 +46,22 @@ class RedPagesDriver  {
 
 				log.info "Starting Geb Automation for SecureProgram"
 
-				/*SecureProgramWork spw = new SecureProgramWork()
-				 spw.initBaseUrl(skipLoginUrl)
-				 to SecureProgramWork
-				 lookupIsbn (enversInstanceToDeploy)*/
+				SecureProgramWork spw = new SecureProgramWork()
+				spw.initBaseUrl(skipLoginUrl)
+				to SecureProgramWork
+				lookupIsbn (enversInstanceToDeploy)
 
 			}else if (enversInstanceToDeploy.contentTypeId==2){
 
 				log.info "Starting Geb Automation for Bundle"
 
-				 BundleGebWork bundle = new BundleGebWork()
-				 bundle.initBaseUrl(skipLoginUrl)
-				 
-				 to BundleGebWork
-				 
-				 lookupIsbn (enversInstanceToDeploy)
-				 addBundleData (optional)
+				BundleGebWork bundle = new BundleGebWork()
+				bundle.initBaseUrl(skipLoginUrl)
+
+				to BundleGebWork
+
+				lookupIsbn (enversInstanceToDeploy)
+				addBundleData (optional)
 
 				log.info "Completed Geb Automation of Bundle"
 

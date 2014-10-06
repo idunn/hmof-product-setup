@@ -36,8 +36,8 @@ class BundleGebWork extends Page {
 		addTeacherIsbn{$("form").find("input", name: "TeacherISBN")}
 
 		// Platform Objects
-		activityManager{$("input", type:"checkbox", value:"ACTIVITY_MGR")}
-		classManager{$("input", type:"checkbox", value:"CLASS_MGR")}
+		activityManager(wait:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
+		classManager(wait:true) {$("input", type:"checkbox", value:"CLASS_MGR")}
 
 		// object used in some language arts
 		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
@@ -74,10 +74,6 @@ class BundleGebWork extends Page {
 			bundleTitle.value(enversInstanceToDeploy.title)
 
 			saveButton.click()
-			//addBundleData(enversInstanceToDeploy)
-
-			//TODO
-			//globalModule.addButton.click()
 
 		} else{
 
@@ -91,22 +87,40 @@ class BundleGebWork extends Page {
 
 			globalModule.addButton.click()
 
-			//addBundleData(enversInstanceToDeploy)
-			//$("input", value: "Add").click()
-
 		}
 
 
 	}
-
+	/**
+	 * Add the SecurePrograms and CommerceObjects to the Bundle
+	 * @param mapOfChildren
+	 * @return
+	 */
 	def addBundleData(def mapOfChildren){
 
-		log.info "Add Bundle Data..."
+		log.info "Adding Bundle Data..."
 
 		addSecureProgram.click()
-		addTeacherIsbn.value("054423881X")
-		duration.value("2190")
+
+		mapOfChildren.each{
+			def secureProgramInstance = it.key
+			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)			
+
+			def commerceObjectMap = it.value
+			commerceObjectMap.each{
+
+				def commerceObjectInstance = it
+				waitFor(100) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}				
+			}			
+
+		}
 		
+		// Add Platform Commerce Objects
+		activityManager.click()
+		classManager.click()
+
+		duration.value("2190")
+
 		globalModule.addButton.click()
 
 	}
