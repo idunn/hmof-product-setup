@@ -46,9 +46,10 @@ class SecureProgram {
 	static searchable = { commerceObjects component: true }
 	static constraints = {
 
-		productName (blank: false)
-		registrationIsbn (blank: false, unique: true)
-		onlineIsbn (blank: false)
+		productName (blank:false,nullable:false)
+           
+		registrationIsbn (blank: false,nullable:false, unique: true)
+		onlineIsbn (blank: false,nullable:false)
 
 		dateCreated ()
 		lastUpdated ()
@@ -76,7 +77,7 @@ class SecureProgram {
 
 				if(null==val){
 
-					return 'SecureProgram.knowledgeGraphIdDev.hexadecimal'
+					return 'hmof.SecureProgram.knowledgeGraphIdDev.matches.invalid'
 				}else{
 
 					return true
@@ -90,10 +91,10 @@ class SecureProgram {
 
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)
 			{
-				println val
+				
 				if(null==val){
-					println val
-					return 'SecureProgram.knowledgeGraphIdQA.hexadecimal'
+					
+					return 'hmof.SecureProgram.knowledgeGraphIdQA.matches.invalid'
 				}else{
 
 					return true
@@ -106,13 +107,10 @@ class SecureProgram {
 		knowledgeGraphIdProd (nullable:true,validator: { val, obj ->
 
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)
-			{
-				println val
-				if(null==val){
-					println val
-					return 'SecureProgram.knowledgeGraphIdProd.hexadecimal'
+			{				
+				if(null==val){					
+					return 'hmof.SecureProgram.knowledgeGraphIdProd.matches.invalid'
 				}else{
-
 					return true
 				}
 			}else
@@ -123,13 +121,10 @@ class SecureProgram {
 		knowledgeGraphWarmUpTimeLimit (nullable:true,validator: { val, obj ->
 
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)
-			{
-				println val
-				if(null==val){
-					println val
+			{				
+				if(null==val){					
 					return 'SecureProgram.knowledgeGraphWarmUpTimeLimit.range'
 				}else{
-
 					return true
 				}
 			}else
@@ -140,10 +135,8 @@ class SecureProgram {
 		knowledgeGraphEnrichmentTimeLimit (nullable:true,validator: { val, obj ->
 
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)
-			{
-				println val
-				if(null==val){
-					println val
+			{			
+				if(null==val){					
 					return 'SecureProgram.knowledgeGraphEnrichmentTimeLimit.range'
 				}else{
 
@@ -158,12 +151,9 @@ class SecureProgram {
 
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)
 			{
-				println val
 				if(null==val){
-					println val
 					return 'SecureProgram.knowledgeGraphEnrichmentCbiTimeLimit.range'
 				}else{
-
 					return true
 				}
 			}else
