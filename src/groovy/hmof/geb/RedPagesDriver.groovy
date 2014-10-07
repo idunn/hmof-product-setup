@@ -13,7 +13,6 @@ class RedPagesDriver  {
 		driveBrowser(url, enversInstanceToDeploy)
 	}
 
-
 	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
@@ -21,57 +20,71 @@ class RedPagesDriver  {
 		driveBrowser(url, enversInstanceToDeploy, mapOfChildren)
 	}
 
-
+	/**
+	 * Interact with the various Geb Classes
+	 * @param url
+	 * @param enversInstanceToDeploy
+	 * @return
+	 */
 	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null){
-		log.info "Deployment url: " + url
-		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
+		log.debug "Deployment url: " + url
+		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 
 		// This url allows us to bypass the login
-		String skipLoginUrl = url + "/hrw/ecom/admin_hub.jsp"
+		String bypassLogin = url + "/hrw/ecom/admin_hub.jsp"
+		try{
 
-		Browser.drive{
+			Browser.drive{
 
-			if(enversInstanceToDeploy.contentTypeId==4){
+				if(enversInstanceToDeploy.contentTypeId==4){
 
-				log.info "Starting Geb Automation for CommerceObject"
+					log.info "Starting Geb Automation for CommerceObject"
 
-				CommerceObjectWork cow = new CommerceObjectWork()
-				cow.initBaseUrl(skipLoginUrl)
-				to CommerceObjectWork
-				lookupIsbn (enversInstanceToDeploy)
+					CommerceObjectWork cow = new CommerceObjectWork()
+					cow.initBaseUrl(bypassLogin)
+					to CommerceObjectWork
+					lookupIsbn (enversInstanceToDeploy)
 
-				log.info "Completed Geb Automation of CommerceObject"
+					log.info "Completed Geb Automation of CommerceObject"
 
-			} else if (enversInstanceToDeploy.contentTypeId==3){
+				} else if (enversInstanceToDeploy.contentTypeId==3){
 
-				log.info "Starting Geb Automation for SecureProgram"
+					log.info "Starting Geb Automation for SecureProgram"
 
-				SecureProgramWork spw = new SecureProgramWork()
-				spw.initBaseUrl(skipLoginUrl)
-				to SecureProgramWork
-				lookupIsbn (enversInstanceToDeploy)
+					SecureProgramWork spw = new SecureProgramWork()
+					spw.initBaseUrl(bypassLogin)
+					to SecureProgramWork
+					lookupIsbn (enversInstanceToDeploy)
 
-			}else if (enversInstanceToDeploy.contentTypeId==2){
+				}else if (enversInstanceToDeploy.contentTypeId==2){
 
-				log.info "Starting Geb Automation for Bundle"
+					log.info "Starting Geb Automation for Bundle"
 
-				BundleGebWork bundle = new BundleGebWork()
-				bundle.initBaseUrl(skipLoginUrl)
+					BundleGebWork bundle = new BundleGebWork()
+					bundle.initBaseUrl(bypassLogin)
 
-				to BundleGebWork
+					to BundleGebWork
 
-				lookupIsbn (enversInstanceToDeploy)
-				addBundleData (mapOfChildren, enversInstanceToDeploy)
+					lookupIsbn (enversInstanceToDeploy)
+					addBundleData (mapOfChildren, enversInstanceToDeploy)
 
-				log.info "Completed Geb Automation of Bundle"
+					log.info "Completed Geb Automation of Bundle"
 
 
-			}else{ log.error "Content Type not supported!"
+				}else{ log.error "Content Type not supported!"
 
-			}
+				}
 
-		}.quit() // quit is important in a multi-threaded application
+			}.quit() // quit is important in a multi-threaded application
+		}catch(Exception e){
 
+			log.error"Exception in Geb: " + e
+
+		}finally{
+
+			log.info"Cleaning up Resources"
+			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
+
+		}
 	}
-
 }
