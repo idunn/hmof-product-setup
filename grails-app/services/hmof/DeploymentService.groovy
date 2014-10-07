@@ -35,6 +35,7 @@ class DeploymentService {
 		secureProgramList.each{
 
 			String secureProgramId = it
+			println "secureProgramId: " + secureProgramId
 			def sp = SecureProgram.where{id==secureProgramId}.get()
 			def commerceObjectIds = sp.commerceObjects.id
 			String coIds = commerceObjectIds.join(',')
@@ -45,6 +46,7 @@ class DeploymentService {
 		}
 
 		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren
+		println "222 mapOfChildren: " + mapOfChildren
 		mapOfChildren
 
 	}

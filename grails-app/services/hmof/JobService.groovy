@@ -78,6 +78,7 @@ class JobService {
 					def mapOfChildren = it.children
 
 					log.info "Map Of Children: " + mapOfChildren
+					println "333 mapOfChildren" + mapOfChildren
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
@@ -87,15 +88,23 @@ class JobService {
 					// TODO
 					mapOfChildren.each{
 
-						String secureProgramId = it.key
+						def secureProgramId = it.key
+						println "secureProgramId: " + secureProgramId
 						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()
+						println "secureProgramInstance "  + secureProgramInstance
 						def spEnvers = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+						println "spEnvers " + spEnvers
 
 						def commerceObjectIds = it.value
 						List commerceObjectValues = commerceObjectIds.split(',')
 						def listOfCommerceObjects = []
+						
+						println "Size: " +  commerceObjectValues.size()
 
 						commerceObjectValues.each{
+							
+							// TODO Split adds a blank value
+							log.info"commerceObject ID" + it
 
 							def idValue = it
 							def commerceObjectInstance = CommerceObject.where{id==idValue}.get()

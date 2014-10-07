@@ -116,8 +116,8 @@ class BundleGebWork extends Page {
 		}
 		
 		// Add Platform Commerce Objects
-		activityManager.click()
-		classManager.click()
+		//activityManager.click()
+		//classManager.click()
 
 		duration.value("2190")
 
