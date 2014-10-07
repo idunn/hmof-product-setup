@@ -6,11 +6,11 @@ import geb.*
 
 /**
  * JobService
- * A service class encapsulates the core business logic of a Grails application
+ * Take the jobs and process them by pushing the content to the environment via Geb
  */
 class JobService {
 
-	static transactional = false //TODO
+	static transactional = false
 	def deploymentService
 	def commerceObjectService
 
@@ -34,7 +34,7 @@ class JobService {
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
 			def commerceObject = jobs.findAll{it.contentTypeId == 4}
 
-			// Deploy Content C
+			// Deploy Commerce Object
 			if(!commerceObject.isEmpty()){
 
 				commerceObject.each{
@@ -68,7 +68,7 @@ class JobService {
 				}
 			}
 
-			// Deploy Bundle with its associations
+			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
 
 				bundle.each{
@@ -78,43 +78,43 @@ class JobService {
 					def mapOfChildren = it.children
 
 					log.info "Map Of Children: " + mapOfChildren
-					println "333 mapOfChildren" + mapOfChildren
 
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()
 					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 
 					def childMap = [:]
 
-					// TODO
+					// Turn map of Strings into map of child objects
 					mapOfChildren.each{
 
 						def secureProgramId = it.key
-						println "secureProgramId: " + secureProgramId
+
+						log.debug "secureProgram Id: " + secureProgramId
+
 						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()
-						println "secureProgramInstance "  + secureProgramInstance
-						def spEnvers = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
-						println "spEnvers " + spEnvers
+						def spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 
-						def commerceObjectIds = it.value
-						List commerceObjectValues = commerceObjectIds.split(',')
+						def commerceObjectValue = it.value
+						List commerceObjectIds = []
+
+						if (commerceObjectValue.contains(",")){
+							commerceObjectIds = commerceObjectValue.split(',')
+						}else { commerceObjectIds = commerceObjectValue.toList() }
+
+						log.info "CO Size: " +  commerceObjectIds.size()
+
 						def listOfCommerceObjects = []
-						
-						println "Size: " +  commerceObjectValues.size()
 
-						commerceObjectValues.each{
-							
-							// TODO Split adds a blank value
-							log.info"commerceObject ID" + it
+						commerceObjectIds.each{
 
 							def idValue = it
 							def commerceObjectInstance = CommerceObject.where{id==idValue}.get()
-							def enversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-							listOfCommerceObjects << enversInstance
+							def coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+							listOfCommerceObjects << coEnversInstance
 						}
 
-						// add to map
-						childMap<< [(spEnvers):listOfCommerceObjects]
-						log.info "child Map Of Objects: " + childMap
+						childMap << [(spEnversInstance):listOfCommerceObjects]
+						log.info "child Map of Objects sent to Geb: " + childMap
 
 					}
 
