@@ -27,8 +27,7 @@ class BundleGebWork extends Page {
 		lookupButton{$("form").find("input", name: "Lookup")}
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
-
-
+		findButton {$("input", value: "Find")}
 
 
 		// Relationship building
@@ -96,32 +95,89 @@ class BundleGebWork extends Page {
 	 * @param mapOfChildren
 	 * @return
 	 */
-	def addBundleData(def mapOfChildren){
+	def addBundleData(def mapOfChildren, def enversInstanceToDeploy){
 
 		log.info "Adding Bundle Data..."
 
-		addSecureProgram.click()
-
 		mapOfChildren.each{
+
+			// move click within the loop
+			addSecureProgram.click()
+
+			// Add Platform Commerce Objects TODO
+			activityManager.click()
+			classManager.click()
+
 			def secureProgramInstance = it.key
-			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)			
+			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
+			findButton.click()
 
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 
 				def commerceObjectInstance = it
-				waitFor(100) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}				
-			}			
+				waitFor(100) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}
+			}
+
+			def durationLength = getDuration(enversInstanceToDeploy.duration)
+			duration.value(durationLength)
+
+			globalModule.addButton.click()
 
 		}
-		
-		// Add Platform Commerce Objects
-		//activityManager.click()
-		//classManager.click()
 
-		duration.value("2190")
+	}
 
-		globalModule.addButton.click()
+	/**
+	 * Helper method to return the String value of the Bundle duration
+	 * Platform currently supports 1-Year or 6-Year
+	 * @param durationLength
+	 * @return
+	 */
+	def getDuration(def durationLength){
+
+		def x = durationLength
+		switch (x) {
+			case '1-Year':
+				log.info"1-Year"
+				durationLength = "365"
+				break
+			case '2-Year':
+				log.info"2-Year"
+				durationLength = "2190"
+				break
+			case '3-Year':
+				log.info"3-Year"
+				durationLength = "2190"
+				break
+			case '4-Year':
+				log.info"4-Year"
+				durationLength = "2190"
+				break
+			case '5-Year':
+				log.info"5-Year"
+				durationLength = "2190"
+				break
+			case '6-Year':
+				log.info"6-Year"
+				durationLength = "2190"
+				break
+			case '7-Year':
+				log.info"7-Year"
+				durationLength = "2190"
+				break
+			case '8-Year':
+				log.info"8-Year"
+				durationLength = "2190"
+				break
+			default:
+				durationLength = "2190"
+		}
+
+		log.info" durationLength in Switch: " + durationLength
+
+		durationLength
+
 
 	}
 

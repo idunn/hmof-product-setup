@@ -22,7 +22,7 @@ class RedPagesDriver  {
 	}
 
 
-	def driveBrowser(def url, def enversInstanceToDeploy, def optional = null){
+	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null){
 		log.info "Deployment url: " + url
 		log.info "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 
@@ -61,7 +61,7 @@ class RedPagesDriver  {
 				to BundleGebWork
 
 				lookupIsbn (enversInstanceToDeploy)
-				addBundleData (optional)
+				addBundleData (mapOfChildren, enversInstanceToDeploy)
 
 				log.info "Completed Geb Automation of Bundle"
 
