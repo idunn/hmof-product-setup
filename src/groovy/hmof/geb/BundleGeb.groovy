@@ -16,7 +16,6 @@ class BundleGebWork extends Page {
 
 	static content = {
 
-		//TODO
 		manageBundlesLink(wait:true) { $("a", text: contains("Manage Existing eProduct Bundles"))}
 		addNewBundleLink(wait:true) { $("a", text: contains("Add New eProduct Bundle"))}
 
@@ -48,8 +47,6 @@ class BundleGebWork extends Page {
 		// Modules
 		globalModule { module GebModule }
 
-
-
 	}
 
 	void lookupIsbn(def enversInstanceToDeploy){
@@ -60,46 +57,26 @@ class BundleGebWork extends Page {
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
 
-		// TODO
 		def update = globalModule.updateLink
 		if(update){
 
 			log.info "Bundle ISBN Exists."
-			log.info "Delete and Recreate..."
+			log.info "Deleting and Recreatin Bundle..."
 
-			//waitFor(15) {globalModule.updateLink.click()}
-
-			//waitFor(15){globalModule.updateButtonName.click()}
-
-			//bundleTitle.value(enversInstanceToDeploy.title)
-			
 			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/).click()}
 			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/).click()}
-			
-			homeButton.click()
-			addNewBundleLink.click()
-			lookupIsbnField.value(enversInstanceToDeploy.isbn)
-			orderEntryType.value("All")
-			bundleTitle.value(enversInstanceToDeploy.title)
-
-			globalModule.addButton.click()
-
-			//saveButton.click()
-
-		} else{
-
-			log.info"Creating New Bundle..."
-
-			homeButton.click()
-			addNewBundleLink.click()
-			lookupIsbnField.value(enversInstanceToDeploy.isbn)
-			orderEntryType.value("All")
-			bundleTitle.value(enversInstanceToDeploy.title)
-
-			globalModule.addButton.click()
 
 		}
 
+		log.info"Creating New Bundle..."
+
+		homeButton.click()
+		addNewBundleLink.click()
+		lookupIsbnField.value(enversInstanceToDeploy.isbn)
+		orderEntryType.value("All")
+		bundleTitle.value(enversInstanceToDeploy.title)
+
+		globalModule.addButton.click()
 
 	}
 	/**
@@ -116,7 +93,7 @@ class BundleGebWork extends Page {
 			// move click within the loop
 			addSecureProgram.click()
 
-			// Add Platform Commerce Objects TODO
+			// Add Platform Commerce Objects
 			activityManager.click()
 			classManager.click()
 
