@@ -65,14 +65,26 @@ class BundleGebWork extends Page {
 		if(update){
 
 			log.info "Bundle ISBN Exists."
+			log.info "Delete and Recreate..."
 
-			waitFor(15) {globalModule.updateLink.click()}
+			//waitFor(15) {globalModule.updateLink.click()}
 
-			waitFor(15){globalModule.updateButtonName.click()}
+			//waitFor(15){globalModule.updateButtonName.click()}
 
+			//bundleTitle.value(enversInstanceToDeploy.title)
+			
+			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/).click()}
+			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/).click()}
+			
+			homeButton.click()
+			addNewBundleLink.click()
+			lookupIsbnField.value(enversInstanceToDeploy.isbn)
+			orderEntryType.value("All")
 			bundleTitle.value(enversInstanceToDeploy.title)
 
-			saveButton.click()
+			globalModule.addButton.click()
+
+			//saveButton.click()
 
 		} else{
 
