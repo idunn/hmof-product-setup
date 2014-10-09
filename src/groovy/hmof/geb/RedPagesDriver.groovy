@@ -77,13 +77,13 @@ class RedPagesDriver  {
 
 			}.quit() // quit is important in a multi-threaded application
 		}catch(Exception e){
-
+			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
 			log.error"Exception in Geb: " + e
 
 		}finally{
 
-			log.info"Cleaning up Resources"
-			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
+			log.info"###################################################################"
+			
 
 		}
 	}
