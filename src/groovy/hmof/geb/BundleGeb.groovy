@@ -26,12 +26,12 @@ class BundleGebWork extends Page {
 		lookupButton{$("form").find("input", name: "Lookup")}
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
-		findButton {$("input", value: "Find")}
+		findButton(wait:true) {$("input", value: "Find")}
 
 
 		// Relationship building
 		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
-		addTeacherIsbn{$("form").find("input", name: "TeacherISBN")}
+		addTeacherIsbn(wait:true){$("form").find("input", name: "TeacherISBN")}
 
 		// Platform Objects
 		activityManager(wait:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
@@ -105,7 +105,7 @@ class BundleGebWork extends Page {
 			commerceObjectMap.each{
 
 				def commerceObjectInstance = it
-				waitFor(100) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}
+				waitFor(200) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}
 			}
 
 			def durationLength = getDuration(enversInstanceToDeploy.duration)
