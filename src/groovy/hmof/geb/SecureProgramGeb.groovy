@@ -19,7 +19,9 @@ class SecureProgramWork extends Page {
 		manageSecureProgram(wait:true) { $("a", text: contains("Manage Existing Secure Program"))}
 		addSecureProgramLink(wait:true) {$("a", text: contains("Add New Secure Program"))}
 		lookupIsbnField {$("input", name: "TeacherISBN")}
-		searchButton{$("form").find("input", name: "search")}		
+		searchButton{$("form").find("input", name: "search")}
+
+		updateButton(wait: 2, required:false){$("input", value: "Update")}
 
 		programNameField (wait: true) {$("input", name: "ProgramName")}
 		teacherIsbnField {$("input", name: "TeacherEditionISBN")}
@@ -71,58 +73,46 @@ class SecureProgramWork extends Page {
 		word3Field {$("input", name: "Word3")}
 		word3LocationField {$("input", name: "Location3")}
 		word3PageNumberField {$("input", name: "PageNum3")}
-
-		secureProgramAlreadyExistsText(wait: 5, required:false){$("font", text: contains("A secure program with the specified teacher edition ISBN already exists."))}
-
+		
 		// Modules
-		globalModule { module GebModule }	
-		
+		globalModule { module GebModule }
 
 	}
 
-	/**
-	 * This is a workaround as Geb does not handle JS Alert boxes
-	 * @param enversInstanceToDeploy
-	 * @return
-	 */
-	def basicAdd(def enversInstanceToDeploy){
 
-		log.info "Adding Basic..."
-
-		addSecureProgramLink.click()
-		programNameField.value (enversInstanceToDeploy.productName)
-		teacherIsbnField.value (enversInstanceToDeploy.registrationIsbn)
-		word1Field.value (enversInstanceToDeploy.securityWord)
-		word1LocationField.value (enversInstanceToDeploy.securityWordLocation)
-		word1PageNumberField.value (enversInstanceToDeploy.securityWordPage)
-		
-		globalModule.addButton.click()
-		
-		if(secureProgramAlreadyExistsText){
-			log.info "Secure Program already exists"			
-			globalModule.homeButton.click()
-		} else{
-			log.info "Secure Program does not exist!"
-		}
-	}
 	/**
-	 * Add basic then update with full data
+	 * Check if SecureProgram Exists: if not update else add new SecureProgram
 	 * @param enversInstanceToDeploy
 	 */
 	void lookupIsbn(def enversInstanceToDeploy){
 
-		basicAdd (enversInstanceToDeploy)
-
-		log.info "Updating SecureProgram"
 		manageSecureProgram.click()
-		lookupIsbnField.value enversInstanceToDeploy.registrationIsbn
-		searchButton.click()		
-		globalModule.updateButton.click()
+		lookupIsbnField.value(enversInstanceToDeploy.registrationIsbn)
 
-		addSecureProgramData(enversInstanceToDeploy)
+		// Handle Alert box
+		withAlert{searchButton.click()}
 
+		def update = updateButton
+		if(update){
+			waitFor(15) {updateButton.click()}
+			log.info "Secure Program already exists"
+			log.info "Updating SecureProgram"
+			addSecureProgramData(enversInstanceToDeploy)
+			updateButton.click()
+
+		}else{
+			log.info "Secure Program does not exist"
+			globalModule.homeButton.click()
+
+			log.info "Adding new Secure Program"
+			addSecureProgramLink.click()
+			addSecureProgramData(enversInstanceToDeploy)
+
+			globalModule.addButton.click()
+
+		}
 	}
-	
+
 	/**
 	 * Full form data
 	 * @param enversInstanceToDeploy
@@ -136,11 +126,11 @@ class SecureProgramWork extends Page {
 		programNameField.value(enversInstanceToDeploy.productName)
 		teacherIsbnField.value(enversInstanceToDeploy.registrationIsbn)
 		onlineIsbnField.value(enversInstanceToDeploy.onlineIsbn)
-		
+
 		// curriculumAreasField TODO
-		
+
 		copyrightYearField.value(enversInstanceToDeploy.copyright)
-		
+
 		comment.value(enversInstanceToDeploy.comments?: blank)
 
 		onlineResourcesLabel.value(enversInstanceToDeploy.labelForOnlineResource?: blank)
@@ -187,8 +177,6 @@ class SecureProgramWork extends Page {
 		word1Field.value(enversInstanceToDeploy.securityWord)
 		word1LocationField.value(enversInstanceToDeploy.securityWordLocation)
 		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)		
-		
-		globalModule.updateButton.click()
 
 	}
 
