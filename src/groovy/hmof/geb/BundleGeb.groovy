@@ -44,6 +44,10 @@ class BundleGebWork extends Page {
 		//Duration
 		duration{$("select", name: "SubscrLen")}
 
+		deleteRestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
+		deleteUnrestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
+		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
+
 		// Modules
 		globalModule { module GebModule }
 
@@ -57,18 +61,26 @@ class BundleGebWork extends Page {
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
 
-		def update = globalModule.updateLink
-		if(update){
+		def bundleExist = deleteRestricted
+		if(bundleExist){
 
-			log.info "Bundle ISBN Exists."
-			log.info "Deleting and Recreatin Bundle..."
+			log.info "Restricted Bundle ISBN Exists."
+			log.info "Deleting and recreating Restricted Bundle..."
 
-			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/).click()}
-			withConfirm(true){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/).click()}
+			withConfirm(true){deleteRestricted.click()}
 
 		}
 
+		def unrestrictedBundleExist = deleteUnrestricted
+		if(unrestrictedBundleExist){
+			log.info "UnRestricted Bundle ISBN Exists."
+			withConfirm(true){deleteUnrestricted.click()}			
+
+		}
+		
+		
 		log.info"Creating New Bundle..."
+		assert noBundleText		
 
 		homeButton.click()
 		addNewBundleLink.click()
@@ -93,9 +105,10 @@ class BundleGebWork extends Page {
 			// move click within the loop
 			addSecureProgram.click()
 
+			//TODO
 			// Add Platform Commerce Objects
-			activityManager.click()
-			classManager.click()
+			//activityManager.click()
+			//classManager.click()
 
 			def secureProgramInstance = it.key
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)

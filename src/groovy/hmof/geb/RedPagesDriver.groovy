@@ -79,6 +79,7 @@ class RedPagesDriver  {
 		}catch(Exception e){
 			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
 			log.error"Exception in Geb: " + e
+			throw e
 
 		}finally{
 
