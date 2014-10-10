@@ -306,3 +306,289 @@
 	
 	color: green;
 }
+
+  .error-even{
+	
+	color: green;
+}
+
+
+section {
+	DISPLAY: block;
+}
+section {
+    padding-top: 60px;
+}
+section > .row {
+    margin-bottom: 10px;
+}
+.control-group {
+    margin-bottom: 20px;
+}
+.control-group {
+    margin-bottom: 10px;}
+[class*="span"] {
+    float: left;
+    margin-left: 20px;
+    min-height: 1px;
+}
+.span12 {
+	WIDTH: 940px
+}
+.span11 {
+	WIDTH: 860px
+}
+.span10 {
+	WIDTH: 780px
+}
+.span9 {
+	WIDTH: 700px
+}
+.span8 {
+	WIDTH: 620px
+}
+.span7 {
+	WIDTH: 540px
+}
+.span6 {
+	WIDTH: 460px
+}
+.span5 {
+	WIDTH: 380px
+}
+.span4 {
+	WIDTH: 300px
+}
+.span3 {
+	WIDTH: 220px
+}
+.span2 {
+	WIDTH: 140px
+}
+.span1 {
+	WIDTH: 60px
+}
+
+[class*='span'].pull-right {
+	FLOAT: right
+}
+.row-fluid [class*='span'].pull-right {
+	FLOAT: right
+}
+.container {
+	MARGIN-LEFT: auto; MARGIN-RIGHT: auto
+}
+.container:before {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.container:after {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.container:after {
+	CLEAR: both
+}
+.container-fluid {
+	PADDING-LEFT: 20px; PADDING-RIGHT: 20px
+}
+.container-fluid:before {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.container-fluid:after {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.container-fluid:after {
+	CLEAR: both
+}
+INPUT {
+	MARGIN-LEFT: 0px
+}
+TEXTAREA {
+	MARGIN-LEFT: 0px
+}
+.uneditable-input {
+	MARGIN-LEFT: 0px
+}
+.controls-row [class*='span'] + [class*='span'] {
+	MARGIN-LEFT: 20px
+}
+INPUT.span12 {
+	WIDTH: 926px
+}
+TEXTAREA.span12 {
+	WIDTH: 926px
+}
+.span12.uneditable-input {
+	WIDTH: 926px
+}
+INPUT.span11 {
+	WIDTH: 846px
+}
+TEXTAREA.span11 {
+	WIDTH: 846px
+}
+.span11.uneditable-input {
+	WIDTH: 846px
+}
+INPUT.span10 {
+	WIDTH: 766px
+}
+TEXTAREA.span10 {
+	WIDTH: 766px
+}
+.span10.uneditable-input {
+	WIDTH: 766px
+}
+INPUT.span9 {
+	WIDTH: 686px
+}
+TEXTAREA.span9 {
+	WIDTH: 686px
+}
+.span9.uneditable-input {
+	WIDTH: 686px
+}
+INPUT.span8 {
+	WIDTH: 606px
+}
+TEXTAREA.span8 {
+	WIDTH: 606px
+}
+.span8.uneditable-input {
+	WIDTH: 606px
+}
+INPUT.span7 {
+	WIDTH: 526px
+}
+TEXTAREA.span7 {
+	WIDTH: 526px
+}
+.span7.uneditable-input {
+	WIDTH: 526px
+}
+INPUT.span6 {
+	WIDTH: 446px
+}
+TEXTAREA.span6 {
+	WIDTH: 446px
+}
+.span6.uneditable-input {
+	WIDTH: 446px
+}
+INPUT.span5 {
+	WIDTH: 366px
+}
+TEXTAREA.span5 {
+	WIDTH: 366px
+}
+.span5.uneditable-input {
+	WIDTH: 366px
+}
+INPUT.span4 {
+	WIDTH: 286px
+}
+TEXTAREA.span4 {
+	WIDTH: 286px
+}
+.span4.uneditable-input {
+	WIDTH: 286px
+}
+INPUT.span3 {
+	WIDTH: 206px
+}
+TEXTAREA.span3 {
+	WIDTH: 206px
+}
+.span3.uneditable-input {
+	WIDTH: 206px
+}
+INPUT.span2 {
+	WIDTH: 126px
+}
+TEXTAREA.span2 {
+	WIDTH: 126px
+}
+.span2.uneditable-input {
+	WIDTH: 126px
+}
+INPUT.span1 {
+	WIDTH: 46px
+}
+TEXTAREA.span1 {
+	WIDTH: 46px
+}
+.span1.uneditable-input {
+	WIDTH: 46px
+}
+
+.controls > .radio:first-child {
+	PADDING-TOP: 5px
+}
+.controls > .checkbox:first-child {
+	PADDING-TOP: 5px
+}
+.controls-row [class*='span'] + [class*='span'] {
+	MARGIN-LEFT: 20px
+}
+.controls-row {
+	
+}
+.controls-row:before {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.controls-row:after {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.controls-row:after {
+	CLEAR: both
+}
+.controls-row [class*='span'] {
+	FLOAT: left
+}
+.form-horizontal .controls {
+	MARGIN-LEFT: 180px
+}
+.form-horizontal .controls:first-child {
+	
+}
+.control-group {
+	MARGIN-BOTTOM: 10px
+}
+LEGEND + .control-group {
+	MARGIN-TOP: 20px; -webkit-margin-top-collapse: separate
+}
+.form-horizontal .control-group {
+	MARGIN-BOTTOM: 20px
+}
+.form-horizontal .control-group:before {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.form-horizontal .control-group:after {
+	LINE-HEIGHT: 0; DISPLAY: table; CONTENT: ""
+}
+.form-horizontal .control-group:after {
+	CLEAR: both
+}
+.form-horizontal .control-label {
+	TEXT-ALIGN: right; WIDTH: 160px; FLOAT: left; PADDING-TOP: 5px
+}
+.form-horizontal .controls {
+	MARGIN-LEFT: 180px
+}
+.form-horizontal .controls:first-child {
+	
+}
+.form-horizontal .help-block {
+	MARGIN-BOTTOM: 0px
+}
+.form-horizontal INPUT + .help-block {
+	MARGIN-TOP: 10px
+}
+.form-horizontal SELECT + .help-block {
+	MARGIN-TOP: 10px
+}
+.form-horizontal TEXTAREA + .help-block {
+	MARGIN-TOP: 10px
+}
+.form-horizontal .form-actions {
+	PADDING-LEFT: 180px
+}
