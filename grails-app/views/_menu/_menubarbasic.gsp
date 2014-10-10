@@ -1,21 +1,27 @@
 <div class="">
-	<ul class="nav nav-tabs" data-role="listview" data-split-icon="gear"
-		data-filter="true">
+	<ul class="nav nav-tabs" data-role="listview" data-split-icon="gear" data-filter="true">
 
-		<g:each status="i" var="c"
-			in="${grailsApplication.controllerClasses.sort { it.logicalPropertyName } }">
-			
-			<li
-				class="controller${params.controller == c.logicalPropertyName ? " active" : ""}">
-				<g:if
-					test="${c.toString().contains('Bundle') || c.toString().contains('Secure') || c.toString().contains('Commerce') || c.toString().contains('Program') }">
 
-					<g:link controller="${c.logicalPropertyName}" action="index">
-						<g:message code="${c.logicalPropertyName}.label"
-							default="${c.logicalPropertyName.capitalize()}" />
-					</g:link>
-
-				</g:if>
-			</li>
-		</g:each>
+       <li	class="controller${params.controller == 'program' ? " active" : ""}">
+			<g:link controller="Program" action="index">
+						<g:message code="Program.Controller.label"/>
+			</g:link>
+		</li>
+       <li	class="controller${params.controller == 'bundle' ? " active" : ""}">				
+            <g:link controller="Bundle" action="index">
+					<g:message code="Bundle.Controller.label"/>	
+			</g:link>				
+		</li>
+		
+		  <li	class="controller${params.controller == 'secureProgram' ? " active" : ""}">				
+            <g:link controller="SecureProgram" action="index">
+						<g:message code="SecureProgram.Controller.label"/>	
+			</g:link>				
+		</li>
+		<li	class="controller${params.controller == 'commerceObject' ? " active" : ""}">				
+            <g:link controller="CommerceObject" action="index">
+						<g:message code="CommerceObject.Controller.label"/>	
+			</g:link>				
+		</li>
+		</ul>
 </div>
