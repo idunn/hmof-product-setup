@@ -105,6 +105,8 @@
 	<g:select name="essayGraderPrompts" class="form-control" from="${secureProgramInstance.constraints.essayGraderPrompts.inList}" value="${secureProgramInstance?.essayGraderPrompts}" valueMessagePrefix="secureProgram.essayGraderPrompts" />
 </div>
 </div>
+<div>
+<span style="font-weight:bold;color:#2A6496;font-size:18px;">Platform Features</span>
 		<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeDashboardObject', 'error-field')} ">
 				<label for="includeDashboardObject" class="control-label"><g:message code="secureProgram.includeDashboardObject.label" default="Include Dashboard Object" /></label>
 				<div class="controls">
@@ -119,7 +121,7 @@
 					<bs:checkBox name="includeEplannerObject" value="${secureProgramInstance?.includeEplannerObject}" />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeEplannerObject', 'error-field')}</span>
 				</div>
-			</div>
+			</div></div>
 			
 </section></div>
 
@@ -231,7 +233,7 @@
 
 <h3>Links of Additional Resources</h3>
 	<div id="accordion2">
-	<span style="font-weight:bold;color:#2A6496;font-height:16px;">Teacher Additional Resources</span>
+	<span style="font-weight:bold;color:#2A6496;font-size:16px;">Teacher Additional Resources</span>
 <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'labelForTeacherAdditionalResource', 'error-field')} ">
 				<label for="labelForTeacherAdditionalResource" class="control-label col-sw-1" ><g:message code="secureProgram.labelForTeacherAdditionalResource.label" default="Label For Teacher Additional Resource" /></label>
 				<div class="controls">
@@ -320,7 +322,7 @@
 </div>
 </div>
 
-<span style="font-weight:bold;color:#2A6496;font-height:16px;">Student Additional Resources</span>
+<span style="font-weight:bold;color:#2A6496;font-size:16px;">Student Additional Resources</span>
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'labelForStudentAdditionalResource', 'error-field')} ">
 				<label for="labelForStudentAdditionalResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForStudentAdditionalResource.label" default="Label For Student Additional Resource" /></label>
 				<div class="controls">

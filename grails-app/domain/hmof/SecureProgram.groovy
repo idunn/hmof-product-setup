@@ -18,9 +18,9 @@ class SecureProgram {
 	Date lastUpdated
 
 	String labelForTeacherAdditionalResource
-	String pathToTeacherAdditionalResource
+	long pathToTeacherAdditionalResource
 	String labelForStudentAdditionalResource
-	String pathToStudentAdditionalResource
+	long pathToStudentAdditionalResource
 
 	String securityWord = "changeme"
 	String securityWordLocation = "1"
@@ -43,19 +43,19 @@ class SecureProgram {
 	String curriculumArea
 	String essayGraderPrompts
 	String labelForTeacherAdditionalResource2
-	String pathToTeacherAdditionalResource2
+	long pathToTeacherAdditionalResource2
 	String labelForStudentAdditionalResource2
-	String pathToStudentAdditionalResource2
+	long pathToStudentAdditionalResource2
 	
 	String labelForTeacherAdditionalResource3
-	String pathToTeacherAdditionalResource3
+	long pathToTeacherAdditionalResource3
 	String labelForStudentAdditionalResource3
-	String pathToStudentAdditionalResource3
+	long pathToStudentAdditionalResource3
 	
 	String labelForTeacherAdditionalResource4
-	String pathToTeacherAdditionalResource4
+	long pathToTeacherAdditionalResource4
 	String labelForStudentAdditionalResource4
-	String pathToStudentAdditionalResource4
+	long pathToStudentAdditionalResource4
 	
 	String securityWord2
 	String securityWordLocation2
