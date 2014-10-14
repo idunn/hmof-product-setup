@@ -94,7 +94,7 @@ class JobService {
 						
 						log.info"In Groovy SQL ###########################"
 						//get the properties we are interested in 
-						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION)
+						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, contentType:bundleInstance.CONTENT_TYPE_ID)
 
 					}
 
