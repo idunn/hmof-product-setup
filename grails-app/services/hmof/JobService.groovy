@@ -13,6 +13,7 @@ class JobService {
 	static transactional = false
 	def deploymentService
 	def commerceObjectService
+	def enversQueryService
 
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
@@ -79,8 +80,26 @@ class JobService {
 
 					log.info "Map Of Children: " + mapOfChildren
 
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()
-					def enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+					// TODO
+					// if instance has been deleted return a GroovyRowResult object from the Envers Audit table
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedBundle(instanceNumber, revisionNumber)
+					
+					def enversInstanceToDeploy
+
+					if (bundleInstance instanceof hmof.Bundle){
+
+						enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+					}
+					else{
+						
+						log.info"In Groovy SQL ###########################"
+						//get the properties we are interested in 
+						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION)
+
+					}
+
+
+
 
 					def childMap = [:]
 
