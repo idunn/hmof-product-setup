@@ -60,8 +60,19 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 
-					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()
-					def enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
+					def enversInstanceToDeploy
+
+					if (secureProgramInstance instanceof hmof.SecureProgram){
+						enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+					}
+
+					// TODO 1
+					else{
+						log.warn"Promoting deleted Secure Program from Envers"
+						def secureProgramMap = createSecureProgramMap(secureProgramInstance)
+						enversInstanceToDeploy = new SecureProgram(secureProgramMap)
+					}
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
@@ -104,10 +115,10 @@ class JobService {
 						def secureProgramId = it.key
 						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
 
-						//TODO
+						//TODO 2
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
+						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(instanceNumber, secureProgramRev, 3)
 						def spEnversInstance
 						if (secureProgramInstance instanceof hmof.SecureProgram){
 
@@ -115,10 +126,9 @@ class JobService {
 						}
 
 						else{
-
-							log.info"In Groovy SQL for SP"
-							// Get the properties we are interested in
-							spEnversInstance = new SecureProgram(registrationIsbn:spEnversInstance.REGISTRATION_ISBN, includeDashboardObject:spEnversInstance.INCLUDE_DASHBOARD_OBJECT, includeEplannerObject:spEnversInstance.INCLUDE_EPLANNER_OBJECT, contentType:spEnversInstance.CONTENT_TYPE_ID )
+							log.warn"Promoting deleted Secure Program for Bundle from Envers"							
+							def secureProgramMap = createSecureProgramMap(secureProgramInstance)							
+							spEnversInstance = new SecureProgram(secureProgramMap)
 						}
 
 						def commerceObjectValue = it.value
@@ -177,6 +187,21 @@ class JobService {
 		log.info "Revision Number:  " +  revNumber
 
 		revNumber
+	}
+
+	/**
+	 * Return a new Secure Program Map from Envers
+	 * @param spEnversInstance
+	 * @return
+	 */
+	def createSecureProgramMap(def sp){
+
+		log.debug"Creating new Secure Program Map from Envers"
+
+		def secureProgramMap = [productName:sp.PRODUCT_NAME, registrationIsbn:sp.REGISTRATION_ISBN, onlineIsbn:sp.ONLINE_ISBN, copyright:sp.COPYRIGHT, securityWord:sp.SECURITY_WORD,
+			securityWordLocation: sp.SECURITY_WORD_LOCATION, securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT,
+			includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT, contentType:sp.CONTENT_TYPE_ID]		
+
 	}
 
 }

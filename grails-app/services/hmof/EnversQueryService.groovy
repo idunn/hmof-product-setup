@@ -29,8 +29,7 @@ class EnversQueryService {
 			row = sql.firstRow( "select top 1 * from SECURE_PROGRAM_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
 			
 		}
-
-		log.info row
+		
 
 		sql.close()
 		row
