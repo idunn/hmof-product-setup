@@ -101,9 +101,9 @@ class SecureProgram {
 			}
 			}
 )
-		pathToTeacherAdditionalResource (nullable:true)
+		pathToTeacherAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		labelForStudentAdditionalResource (nullable:true)
-		pathToStudentAdditionalResource (nullable:true)
+		pathToStudentAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 
 		securityWord (blank: false)
 		securityWordLocation (blank: false)
@@ -211,19 +211,19 @@ class SecureProgram {
 		essayGraderPrompts(inList: ["Not Required", "Middle School", "High School"], nullable:false)
 		
 		labelForTeacherAdditionalResource2(nullable:true)
-		pathToTeacherAdditionalResource2(nullable:true)
+		pathToTeacherAdditionalResource2(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		labelForStudentAdditionalResource2(nullable:true)
-		pathToStudentAdditionalResource2(nullable:true)
+		pathToStudentAdditionalResource2(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		
 		labelForTeacherAdditionalResource3(nullable:true)
-		pathToTeacherAdditionalResource3(nullable:true)
+		pathToTeacherAdditionalResource3(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		labelForStudentAdditionalResource3(nullable:true)
-		pathToStudentAdditionalResource3(nullable:true)
+		pathToStudentAdditionalResource3(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		
 		labelForTeacherAdditionalResource4(nullable:true)
-		pathToTeacherAdditionalResource4(nullable:true)
+		pathToTeacherAdditionalResource4(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		labelForStudentAdditionalResource4(nullable:true)
-		pathToStudentAdditionalResource4(nullable:true)
+		pathToStudentAdditionalResource4(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		
 		securityWord2(nullable:true)
 		securityWordLocation2(nullable:true)
