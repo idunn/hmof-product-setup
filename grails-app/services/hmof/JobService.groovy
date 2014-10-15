@@ -77,29 +77,24 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
+					def enversInstanceToDeploy
 
 					log.info "Map Of Children: " + mapOfChildren
 
-					// TODO
-					// if instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedBundle(instanceNumber, revisionNumber)
-					
-					def enversInstanceToDeploy
+
+					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 2)
 
 					if (bundleInstance instanceof hmof.Bundle){
 
 						enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
 					}
 					else{
-						
-						log.info"In Groovy SQL ###########################"
-						//get the properties we are interested in 
+
+						log.info"In Groovy SQL"
+						// Get the properties we are interested in
 						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, contentType:bundleInstance.CONTENT_TYPE_ID)
-
 					}
-
-
-
 
 					def childMap = [:]
 
@@ -107,11 +102,24 @@ class JobService {
 					mapOfChildren.each{
 
 						def secureProgramId = it.key
+						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
 
+						//TODO
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()
-						def spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
+						def spEnversInstance
+						if (secureProgramInstance instanceof hmof.SecureProgram){
+
+							spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+						}
+
+						else{
+
+							log.info"In Groovy SQL for SP"
+							// Get the properties we are interested in
+							spEnversInstance = new SecureProgram(registrationIsbn:spEnversInstance.REGISTRATION_ISBN, includeDashboardObject:spEnversInstance.INCLUDE_DASHBOARD_OBJECT, includeEplannerObject:spEnversInstance.INCLUDE_EPLANNER_OBJECT, contentType:spEnversInstance.CONTENT_TYPE_ID )
+						}
 
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
@@ -154,4 +162,21 @@ class JobService {
 
 		return true
 	}
+
+	/**
+	 * Helper method to return the value of the content's revision
+	 * @param spId
+	 * @param jobList
+	 * @return
+	 */
+	def getRevisionNumber(spId, jobList){
+
+		Long secureProgramId = spId.toLong()
+
+		def revNumber = jobList.find{secureProgramId in it.contentId}.revision
+		log.info "Revision Number:  " +  revNumber
+
+		revNumber
+	}
+
 }
