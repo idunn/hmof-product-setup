@@ -84,23 +84,10 @@ class SecureProgram {
 		
 		copyright (blank: false, nullable:true)
 		labelForOnlineResource (blank: false, nullable:true)
-		pathToResource (blank: false, nullable:true)
-		pathToCoverImage (blank: false, nullable:true)
+		pathToResource (blank: false, nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToCoverImage (blank: false, nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 
-		labelForTeacherAdditionalResource (nullable:true,validator: { val, obj ->
-			if(val!=null)
-			{
-				println(val.indexOf("http://") == -1)
-				
-				println(val.charAt(0) != "/")
-				if(val.indexOf("http://") == -1 && val.charAt(0) != "/")
-				{
-					return 'hmof.SecureProgram.labelForTeacherAdditionalResource.matches.invalid'
-				}
-				
-			}
-			}
-)
+		labelForTeacherAdditionalResource (nullable:true)
 		pathToTeacherAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 		labelForStudentAdditionalResource (nullable:true)
 		pathToStudentAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)

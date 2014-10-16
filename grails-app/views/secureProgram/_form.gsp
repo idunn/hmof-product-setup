@@ -68,9 +68,10 @@
 
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'pathToResource', 'error-field')} ">
 				<label for="pathToResource" class="control-label col-sw-1"><g:message code="secureProgram.pathToResource.label" default="Path To Resource" /></label>
-				<div class="controls">
-					<g:textField class="form-control" name="pathToResource" value="${secureProgramInstance?.pathToResource}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'pathToResource', 'error-field')}</span>
+				<div  class="controls">			
+				
+					<g:textField class="form-control" name="pathToResource"   value="${secureProgramInstance?.pathToResource}"/>
+				
 				</div>
 			</div>
 
@@ -556,8 +557,10 @@
 
 $( "#accordion" ).accordion({ heightStyle: "content",autoHeight: false, clearStyle: true});
 
+
 function pageonload()
-{	
+{		
+	
 	var selectIds = $('#Teach2,#Teach3,#Teach4,#Student2,#Student3,#Student4');
 	$(function ($) {
 	    selectIds.on('show.bs.collapse hidden.bs.collapse', function () {
