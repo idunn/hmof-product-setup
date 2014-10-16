@@ -45,9 +45,9 @@ class JobService {
 
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 4)
 					def enversInstanceToDeploy
-					//TODO 3
-
+					
 					if (commerceObjectInstance instanceof hmof.CommerceObject){
+						log.info"In normal deploy/promote for CO."
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 					}
 
@@ -77,8 +77,7 @@ class JobService {
 					if (secureProgramInstance instanceof hmof.SecureProgram){
 						enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 					}
-
-					// TODO 1
+					
 					else{
 						log.warn"Promoting deleted Secure Program from Envers"
 						def secureProgramMap = createSecureProgramMap(secureProgramInstance)
@@ -113,14 +112,14 @@ class JobService {
 					}
 					else{
 
-						log.info"In Groovy SQL"
+						log.warn"Promoting deleted Bundle from Envers"
 						// Get the properties we are interested in
 						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, contentType:bundleInstance.CONTENT_TYPE_ID)
 					}
 
 					def childMap = [:]
 
-					// Turn map of Strings into map of child objects
+					// Turn map of Strings into map of content child objects
 					mapOfChildren.each{
 
 						def secureProgramId = it.key
@@ -152,8 +151,7 @@ class JobService {
 						log.info "Commerce Object Size: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
-
-						// TODO last
+						
 						commerceObjectIds.each{
 
 							def commerceObjectId = it
@@ -222,7 +220,7 @@ class JobService {
 	def createSecureProgramMap(def sp){
 
 		log.warn"Creating new Secure Program Map from Envers"
-
+		// TODO update with new fields
 		def secureProgramMap = [productName:sp.PRODUCT_NAME, registrationIsbn:sp.REGISTRATION_ISBN, onlineIsbn:sp.ONLINE_ISBN, copyright:sp.COPYRIGHT, securityWord:sp.SECURITY_WORD,
 			securityWordLocation: sp.SECURITY_WORD_LOCATION, securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT,
 			includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT, contentType:sp.CONTENT_TYPE_ID]
@@ -237,8 +235,10 @@ class JobService {
 	def createCommerceObjectMap(def co){
 
 		log.warn"Creating new Commerce Object Map from Envers"
-
-		def commerceObjectMap = [contentType:co.CONTENT_TYPE_ID]
+		// TODO update with new fields
+		def commerceObjectMap = [objectName:co.OBJECT_NAME,isbnNumber:co.ISBN_NUMBER,pathToCoverImage:co.PATH_TO_COVER_IMAGE,teacherLabel:co.TEACHER_LABEL,
+			 teacherUrl:co.TEACHER_URL, studentLabel:co.STUDENT_LABEL, studentUrl:co.STUDENT_URL, objectType:co.OBJECT_TYPE, objectReorderNumber:co.OBJECT_REORDER_NUMBER,
+			 gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS,contentType:co.CONTENT_TYPE_ID]
 
 	}
 
