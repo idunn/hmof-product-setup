@@ -200,15 +200,15 @@ class JobService {
 
 	/**
 	 * Helper method to return the value of the content's revision
-	 * @param spId
+	 * @param contentId
 	 * @param jobList
 	 * @return
 	 */
-	def getRevisionNumber(spId, jobList){
+	def getRevisionNumber(contentId, jobList){
 
-		Long secureProgramId = spId.toLong()
+		Long contentIdNumber = contentId.toLong()
 
-		def revNumber = jobList.find{secureProgramId in it.contentId}.revision
+		def revNumber = jobList.find{contentIdNumber in it.contentId}.revision
 		log.info "Revision Number:  " +  revNumber
 
 		revNumber
