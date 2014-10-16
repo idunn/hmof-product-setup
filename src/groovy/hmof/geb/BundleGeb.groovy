@@ -107,8 +107,8 @@ class BundleGebWork extends Page {
 
 			//TODO
 			// Add Platform Commerce Objects
-			//activityManager.click()
-			//classManager.click()
+			activityManager.click()
+			classManager.click()
 
 			def secureProgramInstance = it.key
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
