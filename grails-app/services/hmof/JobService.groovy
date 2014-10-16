@@ -43,8 +43,19 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 
-					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()
-					def enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 4)
+					def enversInstanceToDeploy
+					//TODO 3
+
+					if (commerceObjectInstance instanceof hmof.CommerceObject){
+						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+					}
+
+					else{
+						log.warn"Promoting deleted Commerce Object from Envers"
+						def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
+						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
+					}
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
@@ -115,10 +126,10 @@ class JobService {
 						def secureProgramId = it.key
 						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
 
-						//TODO 2
+
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(instanceNumber, secureProgramRev, 3)
+						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 						def spEnversInstance
 						if (secureProgramInstance instanceof hmof.SecureProgram){
 
@@ -126,8 +137,8 @@ class JobService {
 						}
 
 						else{
-							log.warn"Promoting deleted Secure Program for Bundle from Envers"							
-							def secureProgramMap = createSecureProgramMap(secureProgramInstance)							
+							log.warn"Promoting deleted Secure Program for Bundle from Envers"
+							def secureProgramMap = createSecureProgramMap(secureProgramInstance)
 							spEnversInstance = new SecureProgram(secureProgramMap)
 						}
 
@@ -138,15 +149,29 @@ class JobService {
 							commerceObjectIds = commerceObjectValue.split(',')
 						}else { commerceObjectIds = commerceObjectValue.toList() }
 
-						log.info "CO Size: " +  commerceObjectIds.size()
+						log.info "Commerce Object Size: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
 
+						// TODO last
 						commerceObjectIds.each{
 
-							def idValue = it
-							def commerceObjectInstance = CommerceObject.where{id==idValue}.get()
-							def coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+							def commerceObjectId = it
+							def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
+
+							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: enversQueryService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
+							def coEnversInstance
+
+							if (commerceObjectInstance instanceof hmof.CommerceObject){
+								coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+							}
+
+							else{
+								log.warn"Promoting deleted Commerce Object for Bundle from Envers"
+								def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
+								coEnversInstance = new CommerceObject(commerceObjectMap)
+							}
+
 							listOfCommerceObjects << coEnversInstance
 						}
 
@@ -196,11 +221,24 @@ class JobService {
 	 */
 	def createSecureProgramMap(def sp){
 
-		log.debug"Creating new Secure Program Map from Envers"
+		log.warn"Creating new Secure Program Map from Envers"
 
 		def secureProgramMap = [productName:sp.PRODUCT_NAME, registrationIsbn:sp.REGISTRATION_ISBN, onlineIsbn:sp.ONLINE_ISBN, copyright:sp.COPYRIGHT, securityWord:sp.SECURITY_WORD,
 			securityWordLocation: sp.SECURITY_WORD_LOCATION, securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT,
-			includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT, contentType:sp.CONTENT_TYPE_ID]		
+			includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT, contentType:sp.CONTENT_TYPE_ID]
+
+	}
+
+	/**
+	 * Return a new Commerce Object Map from Envers
+	 * @param co
+	 * @return
+	 */
+	def createCommerceObjectMap(def co){
+
+		log.warn"Creating new Commerce Object Map from Envers"
+
+		def commerceObjectMap = [contentType:co.CONTENT_TYPE_ID]
 
 	}
 

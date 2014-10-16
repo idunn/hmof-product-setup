@@ -30,6 +30,11 @@ class EnversQueryService {
 			
 		}
 		
+		if (contentType==4){
+			row = sql.firstRow( "select top 1 * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
+			
+		}		
+		
 
 		sql.close()
 		row
