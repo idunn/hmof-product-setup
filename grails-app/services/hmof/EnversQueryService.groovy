@@ -21,17 +21,17 @@ class EnversQueryService {
 		def row = null 
 		
 		if (contentType==2){
-			row = sql.firstRow( "select top 1 * from Bundle_Aud where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
+			row = sql.firstRow( "select * from Bundle_Aud where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
 			
 		}
 		
 		if (contentType==3){
-			row = sql.firstRow( "select top 1 * from SECURE_PROGRAM_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
+			row = sql.firstRow( "select * from SECURE_PROGRAM_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
 			
 		}
 		
 		if (contentType==4){
-			row = sql.firstRow( "select top 1 * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
+			row = sql.firstRow( "select * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=?", [instanceId, revision] )
 			
 		}		
 		
