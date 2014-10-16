@@ -45,7 +45,7 @@ class JobService {
 
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 4)
 					def enversInstanceToDeploy
-					
+
 					if (commerceObjectInstance instanceof hmof.CommerceObject){
 						log.info"In normal deploy/promote for CO."
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
@@ -77,7 +77,7 @@ class JobService {
 					if (secureProgramInstance instanceof hmof.SecureProgram){
 						enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 					}
-					
+
 					else{
 						log.warn"Promoting deleted Secure Program from Envers"
 						def secureProgramMap = createSecureProgramMap(secureProgramInstance)
@@ -151,7 +151,7 @@ class JobService {
 						log.info "Commerce Object Size: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
-						
+
 						commerceObjectIds.each{
 
 							def commerceObjectId = it
@@ -213,22 +213,37 @@ class JobService {
 	}
 
 	/**
-	 * Return a new Secure Program Map from Envers
+	 * Return a new Secure Program Map from Envers to deal with scenarios where the content was deleted between deployment and promotion
 	 * @param spEnversInstance
 	 * @return
 	 */
 	def createSecureProgramMap(def sp){
 
 		log.warn"Creating new Secure Program Map from Envers"
-		// TODO update with new fields
-		def secureProgramMap = [productName:sp.PRODUCT_NAME, registrationIsbn:sp.REGISTRATION_ISBN, onlineIsbn:sp.ONLINE_ISBN, copyright:sp.COPYRIGHT, securityWord:sp.SECURITY_WORD,
-			securityWordLocation: sp.SECURITY_WORD_LOCATION, securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT,
-			includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT, contentType:sp.CONTENT_TYPE_ID]
+		// TODO update with new fields when Domain is updated - hopefully never!
+
+		def secureProgramMap = [productName:sp.PRODUCT_NAME, registrationIsbn:sp.REGISTRATION_ISBN, onlineIsbn:sp.ONLINE_ISBN, copyright:sp.COPYRIGHT, labelForOnlineResource:sp.LABEL_FOR_ONLINE_RESOURCE,
+			pathToResource:sp.PATH_TO_RESOURCE, pathToCoverImage:sp.PATH_TO_COVER_IMAGE, labelForTeacherAdditionalResource:sp.LABEL_FOR_TEACHER_ADDITIONAL_RESOURCE,
+			pathToTeacherAdditionalResource:sp.PATH_TO_TEACHER_ADDITIONAL_RESOURCE,labelForStudentAdditionalResource:sp.LABEL_FOR_STUDENT_ADDITIONAL_RESOURCE,
+			pathToStudentAdditionalResource:sp.PATH_TO_STUDENT_ADDITIONAL_RESOURCE,securityWord:sp.SECURITY_WORD, securityWordLocation:sp.SECURITY_WORD_LOCATION,
+			securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT, includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT,
+			knowledgeGraphIdDev:sp.KNOWLEDGE_GRAPH_ID_DEV, knowledgeGraphIdQA:sp.KNOWLEDGE_GRAPH_IDQA, knowledgeGraphIdProd:sp.KNOWLEDGE_GRAPH_ID_PROD,
+			knowledgeGraphWarmUpTimeLimit:sp.KNOWLEDGE_GRAPH_WARM_UP_TIME_LIMIT, knowledgeGraphEnrichmentTimeLimit:sp.KNOWLEDGE_GRAPH_ENRICHMENT_TIME_LIMIT,
+			knowledgeGraphEnrichmentCbiTimeLimit:sp.KNOWLEDGE_GRAPH_ENRICHMENT_CBI_TIME_LIMIT,comments:sp.COMMENTS, curriculumArea:sp.CURRICULUM_AREA,
+			essayGraderPrompts:sp.ESSAY_GRADER_PROMPTS, labelForTeacherAdditionalResource2:sp.LABEL_FOR_TEACHER_ADDITIONAL_RESOURCE2,
+			pathToTeacherAdditionalResource2:sp.PATH_TO_TEACHER_ADDITIONAL_RESOURCE2, labelForStudentAdditionalResource2:sp.LABEL_FOR_STUDENT_ADDITIONAL_RESOURCE2,
+			pathToStudentAdditionalResource2:sp.PATH_TO_STUDENT_ADDITIONAL_RESOURCE2,labelForTeacherAdditionalResource3:sp.LABEL_FOR_TEACHER_ADDITIONAL_RESOURCE3,
+			pathToTeacherAdditionalResource3:sp.PATH_TO_TEACHER_ADDITIONAL_RESOURCE3,labelForStudentAdditionalResource3:sp.LABEL_FOR_STUDENT_ADDITIONAL_RESOURCE3,
+			pathToStudentAdditionalResource3:sp.PATH_TO_STUDENT_ADDITIONAL_RESOURCE3,labelForTeacherAdditionalResource4:sp.LABEL_FOR_TEACHER_ADDITIONAL_RESOURCE4,
+			pathToTeacherAdditionalResource4:sp.PATH_TO_TEACHER_ADDITIONAL_RESOURCE4,labelForStudentAdditionalResource4:sp.LABEL_FOR_STUDENT_ADDITIONAL_RESOURCE4,
+			pathToStudentAdditionalResource4:sp.PATH_TO_STUDENT_ADDITIONAL_RESOURCE4,securityWord2:sp.SECURITY_WORD2, securityWordLocation2:sp.SECURITY_WORD_LOCATION2,
+			securityWordPage2:sp.SECURITY_WORD_PAGE2,	 securityWord3:sp.SECURITY_WORD3,securityWordLocation3:sp.SECURITY_WORD_LOCATION3, securityWordPage3:sp.SECURITY_WORD_PAGE3,
+			contentType:sp.CONTENT_TYPE_ID]
 
 	}
 
 	/**
-	 * Return a new Commerce Object Map from Envers
+	 * Return a new Commerce Object Map from Envers to deal with scenarios where the content was deleted between deployment and promotion
 	 * @param co
 	 * @return
 	 */
@@ -237,8 +252,8 @@ class JobService {
 		log.warn"Creating new Commerce Object Map from Envers"
 		// TODO update with new fields
 		def commerceObjectMap = [objectName:co.OBJECT_NAME,isbnNumber:co.ISBN_NUMBER,pathToCoverImage:co.PATH_TO_COVER_IMAGE,teacherLabel:co.TEACHER_LABEL,
-			 teacherUrl:co.TEACHER_URL, studentLabel:co.STUDENT_LABEL, studentUrl:co.STUDENT_URL, objectType:co.OBJECT_TYPE, objectReorderNumber:co.OBJECT_REORDER_NUMBER,
-			 gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS,contentType:co.CONTENT_TYPE_ID]
+			teacherUrl:co.TEACHER_URL, studentLabel:co.STUDENT_LABEL, studentUrl:co.STUDENT_URL, objectType:co.OBJECT_TYPE, objectReorderNumber:co.OBJECT_REORDER_NUMBER,
+			gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS,contentType:co.CONTENT_TYPE_ID]
 
 	}
 
