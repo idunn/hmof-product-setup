@@ -7,10 +7,14 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'bundle.label', default: 'Bundle')}" />
 	<title><g:message code="default.show.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
+	type="text/css">
 </head>
 
 <body>
-
+<div class="row">
+	<div class="widget stacked ">
+		<div class="widget-content">
 <section id="show-bundle" class="first">
 
 	<table class="table">
@@ -29,7 +33,12 @@
 				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "title")}</td>
 				
 			</tr>
-		
+		<tr class="prop">
+				<td valign="top" class="name"><g:message code="bundle.includePremiumCommerceObjects.label" default="include Premium CommerceObjects" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "includePremiumCommerceObjects")}</td>
+				
+			</tr>
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="bundle.duration.label" default="Duration" /></td>
 				
@@ -74,7 +83,9 @@
 		</tbody>
 	</table>
 </section>
-
+</div>
+</div>
+</div>
 </body>
 
 </html>

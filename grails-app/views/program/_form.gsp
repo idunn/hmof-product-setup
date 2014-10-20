@@ -1,13 +1,14 @@
 <%@ page import="hmof.Program"%>
 
 
-
+<div class="span7">
+	<section>
 <div
-	class="${hasErrors(bean: programInstance, field: 'name', 'error')} required">
-	<label for="name" class="control-label"><g:message
+	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'name', 'error')} required">
+	<label for="name" class="control-label col-sw-1"><g:message
 			code="program.name.label" default="Name" /><span
 		class="required-indicator">*</span></label>
-	<div>
+	<div class="controls">
 		<g:textField class="form-control" name="name"
 			pattern="${programInstance.constraints.name.matches}" required=""
 			value="${programInstance?.name}" />
@@ -18,11 +19,11 @@
 </div>
 
 <div
-	class="${hasErrors(bean: programInstance, field: 'discipline', 'error')} required">
-	<label for="discipline" class="control-label"><g:message
+	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'discipline', 'error')} required">
+	<label for="discipline" class="control-label col-sw-1"><g:message
 			code="program.discipline.label" default="Discipline" /><span
 		class="required-indicator">*</span></label>
-	<div>
+	<div class="controls">
 		<g:select class="form-control" name="discipline"
 			from="${programInstance.constraints.discipline.inList}" required=""
 			value="${programInstance?.discipline}"
@@ -34,10 +35,10 @@
 </div>
 
 <div
-	class="${hasErrors(bean: programInstance, field: 'bundles', 'error')} ">
-	<label for="bundles" class="control-label"><g:message
+	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'bundles', 'error')} ">
+	<label for="bundles" class="control-label col-sw-1"><g:message
 			code="program.bundles.label" default="Bundles" /></label>
-	<div>
+	<div class="controls">
 
 		<ul class="one-to-many">
 			<g:each in="${programInstance?.bundles?}" var="b">
@@ -56,4 +57,5 @@
 		</span>
 	</div>
 </div>
-
+</section>
+</div>

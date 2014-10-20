@@ -152,8 +152,11 @@ class CommerceObjectController {
 			return
 		}
 
-		commerceObjectInstance.save flush:true
-
+		//commerceObjectInstance.save flush:true
+		if (!commerceObjectInstance.save(flush: true)) {
+			render(view: "create", model: [commerceObjectInstance: commerceObjectInstance])
+			return
+		}
 		request.withFormat {
 			form {
 				flash.message = message(code: 'default.created.message', args: [message(code: 'commerceObjectInstance.label', default: 'CommerceObject'), commerceObjectInstance.id])

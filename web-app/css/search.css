@@ -708,3 +708,10 @@ LEGEND + .control-group {
   .col-sw-3{
 	font-weight:bold;color:#2A6496;font-size:18px;font-family: 'Open Sans';  
   }
+  
+  .col-sw-4{
+	width:15%;
+  } 
+  
+  
+  

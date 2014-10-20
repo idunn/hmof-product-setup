@@ -160,8 +160,11 @@ class BundleController {
 			return
 		}
 
-		bundleInstance.save flush:true
-
+		//bundleInstance.save flush:true
+		if (!bundleInstance.save(flush: true)) {
+			render(view: "create", model: [bundleInstance: bundleInstance])
+			return
+		}
 
 		request.withFormat {
 			form {

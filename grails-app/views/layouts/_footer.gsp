@@ -5,37 +5,31 @@
 				<h4>Product</h4>
 				<ul class="unstyled">
 					<li>
-			    		<i class="glyphicon glyphicon-home"></i>
-						<a href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+			    		<i class="glyphicon glyphicon-book"></i>
+						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/User+Guide+-+Product+Setup+App">User Guide</a>
 					</li>
 					<li>
-			    		<i class="glyphicon glyphicon-eye-open"></i>
-						<a href="${createLink(uri: '/')}"><g:message code="default.tour.label"/></a>
+			    		<i class="glyphicon glyphicon-hand-right"></i>
+						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
 					</li>
 					<li>
-			    		<i class="glyphicon glyphicon-money"></i>
-						<a href="${createLink(uri: '/')}"><g:message code="default.pricing.label"/></a>
+			    			<i class="glyphicon glyphicon-hand-right"></i>
+						<a target="_blank" href="https://jira.hmhpub.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=2&components=30020649&summary=New%20Feature!&customfield_10044=10221&priority=4">Suggest a Feature</a>
 					</li>
-					<li>
-			    		<i class="glyphicon glyphicon-comments"></i>
-						<a href="${createLink(uri: '/')}"><g:message code="default.faq.label"/></a>
-					</li>
+					
 				</ul>
 			</div>
 			<div class="col-lg-2">
-				<h4>Company</h4>
+				<h4>Contact Us</h4>
 				<ul class="unstyled">
 					<li>
-			    		<i class="glyphicon glyphicon-info-sign"></i>
-						<a href="${createLink(uri: '/about')}">
-							<g:message code="default.about.label"/>
-						</a>
+			    		<i class="glyphicon glyphicon-remove"></i>
+						<a target="_blank" href="https://jira.hmhpub.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=1&components=30020649&summary=I%20found%20a%20bug!&customfield_10044=10221&priority=4">Log a bug</a>
 					</li>
+					
 					<li>
 			    		<i class="glyphicon glyphicon-envelope"></i>
-						<a href="${createLink(uri: '/contact')}">
-							<g:message code="default.contact.label"/>
-						</a>
+						<a target="_top" href="mailto:DublinTPDCustomDevelopment@hmhco.com">Contact</a>
 					</li>
 				</ul>
 			</div>

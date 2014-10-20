@@ -7,10 +7,14 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'secureProgram.label', default: 'SecureProgram')}" />
 	<title><g:message code="default.show.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
+	type="text/css">
 </head>
 
 <body>
-
+<div class="row">
+	<div class="widget stacked ">
+		<div class="widget-content">
 <section id="show-secureProgram" class="first">
 
 	<table class="table">
@@ -50,7 +54,12 @@
 				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
 				
 			</tr>
-		
+		  <tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.curriculumArea.label" default="Curriculum Area" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "curriculumArea")}</td>
+				
+			</tr>
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.copyright.label" default="Copyright" /></td>
 				
@@ -92,12 +101,7 @@
 				
 			</tr>
 			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.curriculumArea.label" default="Curriculum Area" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "curriculumArea")}</td>
-				
-			</tr>
+			
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.essayGraderPrompts.label" default="Essay Grader Prompts" /></td>
 				
@@ -370,7 +374,9 @@
 		</tbody>
 	</table>
 </section>
-
+</div>
+</div>
+</div>
 </body>
 
 			

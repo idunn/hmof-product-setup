@@ -8,10 +8,14 @@
 <g:set var="entityName"
 	value="${message(code: 'program.label', default: 'Program')}" />
 <title><g:message code="default.show.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
+	type="text/css">
 </head>
 
 <body>
-
+<div class="row">
+	<div class="widget stacked ">
+		<div class="widget-content">
 	<section id="show-program" class="first">
 
 		<table class="table">
@@ -102,7 +106,9 @@
 			</tbody>
 		</table>
 	</section>
-
+</div>
+</div>
+</div>
 </body>
 
 </html>
