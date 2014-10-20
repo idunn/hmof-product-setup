@@ -5,7 +5,7 @@ import geb.*
 class GebModule extends Module {
 	
 	static content = {
-		description { $("textarea", name: "Desc").value("Data entered using Product Setup Web Application") }
+		description { $("textarea", name: "Desc")}
 		addButton{$("input", value: "Add")}
 		//TODO test iContains
 		homeButton{$("a", text: iContains("Home"))}
