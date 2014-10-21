@@ -239,8 +239,8 @@ class DeploymentService {
 		// Get the Instance that was deployed to the previous environment
 		def promoInstance = Promotion.where{id==InstanceNumber}.get()
 
-		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
-			log.debug "Stop the promotion!"
+		if(promoInstance == null || promoInstance.status !=JobStatus.Success){
+			log.warn "Preventing the promotion!"
 
 		}else{
 
@@ -301,32 +301,29 @@ class DeploymentService {
 	def executeJob(){
 
 		// get first instance in pending status
-		def promotionJobInstance = Promotion.where{status == "PENDING" }.list(max:1)
+		def promotionJobInstance = Promotion.where{status == JobStatus.Pending }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
 
 		def jobList = Job.where{jobNumber == promotionJobNumber}.list()
 
 		if(!promotionJobInstance.isEmpty()){
 
-			def status1 = JobStatus.In_Progress.toString()
+			def status1 = JobStatus.In_Progress
 
 			Long promotionJobId =  promotionJobInstance.id[0]
 			def promotionInstance = Promotion.get(promotionJobId)
 
 			promotionInstance.properties = [status: status1]
-			promotionInstance.save(failOnError: true, flush:true)
-
-			// for PDC
-			//def processJobs = jobService.processJobs2(jobList, promotionInstance)
+			promotionInstance.save(failOnError: true, flush:true)			
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
 			def status2 = null
 
 			if (processJobs){
 
-				status2 = JobStatus.Success.toString()
+				status2 = JobStatus.Success
 
-			} else {status2 = JobStatus.Failure.toString()}
+			} else {status2 = JobStatus.Failed}
 
 
 			// return map

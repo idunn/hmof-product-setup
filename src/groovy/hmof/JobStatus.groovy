@@ -4,7 +4,8 @@ public enum JobStatus {
 	Pending("Pending"),
 	In_Progress("In_Progress"),
 	Success("Success"),
-	Failure("Failure")
+	Failed("Failed"),
+	Failure("Failure") // TODO remove
 
 	String status
 

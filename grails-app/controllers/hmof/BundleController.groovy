@@ -80,7 +80,7 @@ class BundleController {
 
 		def envId = deploymentService.getUserEnvironmentInformation()
 
-		def promote = [status: "PENDING", job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
+		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
@@ -115,11 +115,11 @@ class BundleController {
 
 		if(promotion.isEmpty()){
 
-			def promote = [status: "PENDING", job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
+			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 
 		} else{
-
+			// TODO if job is In_Progress stop else warn and re-promote
 			flash.message = "Job Already Promoted or In-Progress"
 
 		}
