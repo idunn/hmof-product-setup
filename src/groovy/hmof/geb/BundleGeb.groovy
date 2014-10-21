@@ -47,6 +47,9 @@ class BundleGebWork extends Page {
 		deleteRestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
 		deleteUnrestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
 		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
+		
+		//TODO
+		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
 
 		// Modules
 		globalModule { module GebModule }
@@ -128,6 +131,17 @@ class BundleGebWork extends Page {
 
 		}
 
+	}
+	
+	/**
+	 * Simple check to confirm that Bundle is not empty
+	 * @return
+	 */
+	def confirmBundle(){		
+		
+		assert nonEmptyBundle
+		log.info "Bundle contains data!"
+		
 	}
 
 	/**

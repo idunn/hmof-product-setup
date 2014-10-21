@@ -66,10 +66,9 @@ class RedPagesDriver  {
 					to BundleGebWork
 
 					lookupIsbn (enversInstanceToDeploy)
-					addBundleData (mapOfChildren, enversInstanceToDeploy)
+					addBundleData (mapOfChildren, enversInstanceToDeploy)					
 					
-					// TODO
-					log.info"assert bundle contains content"
+					log.info"asserting bundle contains content"
 					confirmBundle()
 
 					log.info "Completed Geb Automation of Bundle"
