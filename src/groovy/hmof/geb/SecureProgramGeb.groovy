@@ -130,15 +130,15 @@ class SecureProgramWork extends Page {
 		
 		curriculumAreasField.value(content.curriculumArea?: "Other")
 
-		copyrightYearField.value(content.copyright)
+		copyrightYearField.value(content.copyright)		
 
 		comment.value(content.comments?: blank)
 
 		onlineResourcesLabel.value(content.labelForOnlineResource?: blank)
 		onlineResourcesUrl.value(content.pathToResource?: blank)
-		bookCoverImage.value(content.pathToCoverImage?: blank)
+		bookCoverImage.value(content.pathToCoverImage?: blank)		
 				
-		essayGraderPrompts.value(content.essayGraderPrompts?: "Not Required")
+		essayGraderPrompts.value(content.essayGraderPrompts?: "Not Required")		
 
 		log.info content.knewtonProduct
 		knewtonEnabled.value(content.knewtonProduct)
@@ -198,13 +198,13 @@ class SecureProgramWork extends Page {
 		word1LocationField.value(content.securityWordLocation)
 		word1PageNumberField.value(content.securityWordPage)		
 		
-		word2Field.value(content.securityWord2)
-		word2LocationField.value(content.securityWordLocation2)
-		word2PageNumberField.value(content.securityWordPage2)
+		word2Field.value(content.securityWord2?: blank)
+		word2LocationField.value(content.securityWordLocation2?: blank)
+		word2PageNumberField.value(content.securityWordPage2?: blank)
 		
-		word3Field.value(content.securityWord3)
-		word3LocationField.value(content.securityWordLocation3)
-		word3PageNumberField.value(content.securityWordPage3)
+		word3Field.value(content.securityWord3?: blank)
+		word3LocationField.value(content.securityWordLocation3?: blank)
+		word3PageNumberField.value(content.securityWordPage3?: blank)
 
 	}
 
