@@ -42,6 +42,7 @@ class SecureProgramWork extends Page {
 		onlineResourcesLabel{$("input", name: "OnlineResourcesLabel")}
 		onlineResourcesUrl{$("input", name: "OnlineResourcesURL")}
 		bookCoverImage {$("input", name: "BookCoverImage")}
+		essayGraderPrompts {$("select", name: "EssayGraderPrompts")}
 
 		addTeacherResLabel{$("input", name: "AddTeacherResLabel")}
 		addTeacherResUrl{$("input", name: "AddTeacherResURL")}
@@ -118,65 +119,92 @@ class SecureProgramWork extends Page {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def addSecureProgramData(def enversInstanceToDeploy){
+	def addSecureProgramData(def content){
 
 		String blank = ""
 
 		log.info "Adding SecureProgram Data"
-		programNameField.value(enversInstanceToDeploy.productName)
-		teacherIsbnField.value(enversInstanceToDeploy.registrationIsbn)
-		onlineIsbnField.value(enversInstanceToDeploy.onlineIsbn)
+		programNameField.value(content.productName)
+		teacherIsbnField.value(content.registrationIsbn)
+		onlineIsbnField.value(content.onlineIsbn)		
+		
+		curriculumAreasField.value(content.curriculumArea?: "Other")
 
-		// curriculumAreasField TODO
+		copyrightYearField.value(content.copyright)
 
-		copyrightYearField.value(enversInstanceToDeploy.copyright)
+		comment.value(content.comments?: blank)
 
-		comment.value(enversInstanceToDeploy.comments?: blank)
+		onlineResourcesLabel.value(content.labelForOnlineResource?: blank)
+		onlineResourcesUrl.value(content.pathToResource?: blank)
+		bookCoverImage.value(content.pathToCoverImage?: blank)
+				
+		essayGraderPrompts.value(content.essayGraderPrompts?: "Not Required")
 
-		onlineResourcesLabel.value(enversInstanceToDeploy.labelForOnlineResource?: blank)
-		onlineResourcesUrl.value(enversInstanceToDeploy.pathToResource?: blank)
-		bookCoverImage.value(enversInstanceToDeploy.pathToCoverImage?: blank)
+		log.info content.knewtonProduct
+		knewtonEnabled.value(content.knewtonProduct)
 
-		// essay grader prompts TODO
-
-		log.info enversInstanceToDeploy.knewtonProduct
-		knewtonEnabled.value(enversInstanceToDeploy.knewtonProduct)
-
-		if(enversInstanceToDeploy.knewtonProduct){
+		if(content.knewtonProduct){
 			log.info "This is a Knewton Product..."
 
 			if(url.contains("review-cert")){
 
 				log.info "In Cert-Review..."
-				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdDev)
+				knowledgeGraphId.value(content.knowledgeGraphIdDev)
 
 			} else if (url.contains("support-review")){
 
 				log.info "In Prod-Review..."
-				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdQA)
+				knowledgeGraphId.value(content.knowledgeGraphIdQA)
 
 			} else if (url.contains("support.hrw.com")){
 
 				log.info "Production..."
-				knowledgeGraphId.value(enversInstanceToDeploy.knowledgeGraphIdProd)
+				knowledgeGraphId.value(content.knowledgeGraphIdProd)
 			}
 
-			activeInterventionTime.value(enversInstanceToDeploy.knowledgeGraphWarmUpTimeLimit)
-			enrichmentTime.value(enversInstanceToDeploy.knowledgeGraphEnrichmentTimeLimit)
-			interventionTime.value(enversInstanceToDeploy.knowledgeGraphEnrichmentCbiTimeLimit)
+			activeInterventionTime.value(content.knowledgeGraphWarmUpTimeLimit)
+			enrichmentTime.value(content.knowledgeGraphEnrichmentTimeLimit)
+			interventionTime.value(content.knowledgeGraphEnrichmentCbiTimeLimit)
 
 		}
+		
+		// Additional links
+		addTeacherResLabel.value(content.labelForTeacherAdditionalResource?: blank)
+		addTeacherResUrl.value(content.pathToTeacherAdditionalResource?: blank)		
+		
+		addTeacherResLabel2.value(content.labelForTeacherAdditionalResource2?: blank)
+		addTeacherResUrl2.value(content.pathToTeacherAdditionalResource2?: blank)
+		
+		addTeacherResLabel3.value(content.labelForTeacherAdditionalResource3?: blank)
+		addTeacherResUrl3.value(content.pathToTeacherAdditionalResource3?: blank)
+		
+		addTeacherResLabel4.value(content.labelForTeacherAdditionalResource4?: blank)
+		addTeacherResUrl4.value(content.pathToTeacherAdditionalResource4?: blank)		
+		
+		addStudentResLabel.value(content.labelForStudentAdditionalResource?: blank)
+		addStudentResUrl.value(content.pathToStudentAdditionalResource?: blank)		
+		
+		addStudentResLabel2.value(content.labelForStudentAdditionalResource2?: blank)
+		addStudentResUrl2.value(content.pathToStudentAdditionalResource2?: blank)
+		
+		addStudentResLabel3.value(content.labelForStudentAdditionalResource3?: blank)
+		addStudentResUrl3.value(content.pathToStudentAdditionalResource3?: blank)
+		
+		addStudentResLabel4.value(content.labelForStudentAdditionalResource4?: blank)
+		addStudentResUrl4.value(content.pathToStudentAdditionalResource4?: blank)		
 
-		addTeacherResLabel.value(enversInstanceToDeploy.labelForTeacherAdditionalResource?: blank)
-		addTeacherResUrl.value(enversInstanceToDeploy.pathToTeacherAdditionalResource?: blank)
-
-		addStudentResLabel.value(enversInstanceToDeploy.labelForStudentAdditionalResource?: blank)
-		addStudentResUrl.value(enversInstanceToDeploy.pathToStudentAdditionalResource?: blank)
-
-
-		word1Field.value(enversInstanceToDeploy.securityWord)
-		word1LocationField.value(enversInstanceToDeploy.securityWordLocation)
-		word1PageNumberField.value(enversInstanceToDeploy.securityWordPage)		
+		// registration words
+		word1Field.value(content.securityWord)
+		word1LocationField.value(content.securityWordLocation)
+		word1PageNumberField.value(content.securityWordPage)		
+		
+		word2Field.value(content.securityWord2)
+		word2LocationField.value(content.securityWordLocation2)
+		word2PageNumberField.value(content.securityWordPage2)
+		
+		word3Field.value(content.securityWord3)
+		word3LocationField.value(content.securityWordLocation3)
+		word3PageNumberField.value(content.securityWordPage3)
 
 	}
 
