@@ -45,8 +45,7 @@ class DeploymentService {
 
 		}
 
-		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren
-		println "222 mapOfChildren: " + mapOfChildren
+		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren		
 		mapOfChildren
 
 	}
@@ -61,23 +60,23 @@ class DeploymentService {
 		// A deployable Bundle belongs to the deployable Program and must have a SecureProgram.
 		def deployableBundle = Bundle.where{ program{ id==instanceId} && secureProgram{} }
 
-		// get all Bundle that belong to the Program being deployed
+		// get all Bundles that belong to the Program being deployed
 		def allProgramBundle = Bundle.where{ program{ id==instanceId } }
 
-		// get a unique listing of SecureProgram belonging to the Program being deployed
+		// get a unique listing of SecurePrograms belonging to the Program being deployed
 		Set uniqueSecureProgram = allProgramBundle.list().secureProgram.id.flatten()
 
-		// get a unique listing of CommerceObject belonging to the Program being deployed
+		// get a unique listing of CommerceObjects belonging to the Program being deployed
 		Set uniqueCommerceObject = allProgramBundle.list().secureProgram.commerceObjects.id.flatten()
 
-		// deployment logic for Content B
+		// deployment logic for SP
 		def deployableSecureProgram = []
 		// Needed for MySql database
 		if(!uniqueSecureProgram.isEmpty()){
 			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram}.list()
 		}
 
-		// deployment logic for a Content C
+		// deployment logic for a CO
 		def deployableCommerceObject = []
 		if(!uniqueCommerceObject.isEmpty()){
 			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
@@ -101,17 +100,17 @@ class DeploymentService {
 		// get a unique listing of Content B belonging to the deployable Content A
 		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
 
-		// deployment logic for Content B
+		// deployment logic for SP
 		def deployableSecureProgram = []
 		// Needed for MySql database
 		if(!uniqueSecureProgram.isEmpty()){
 			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram}.list()
 		}
 
-		// get a unique listing of Content C belonging to the Content B being deployed
+		// get a unique listing of CO belonging to the SP being deployed
 		Set uniqueCommerceObject = deployableSecureProgram.commerceObjects.id.flatten()
 
-		// deployment logic for a Content C
+		// deployment logic for CO
 		def deployableCommerceObject = []
 		if(!uniqueCommerceObject.isEmpty()){
 			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list()
