@@ -98,6 +98,7 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
+
 					def enversInstanceToDeploy
 
 					log.info "Map Of Children: " + mapOfChildren
@@ -114,8 +115,11 @@ class JobService {
 
 						log.warn"Promoting deleted Bundle from Envers"
 						// Get the properties we are interested in
-						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, contentType:bundleInstance.CONTENT_TYPE_ID)
+						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
 					}
+
+					Boolean includePremium = enversInstanceToDeploy.includePremiumCommerceObjects
+					log.info "Bundle is Premium: $includePremium"
 
 					def childMap = [:]
 
@@ -170,7 +174,14 @@ class JobService {
 								coEnversInstance = new CommerceObject(commerceObjectMap)
 							}
 
-							listOfCommerceObjects << coEnversInstance
+							// Handle Premium Commerce Objects							
+							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
+								
+								listOfCommerceObjects << coEnversInstance
+
+							}
+
+
 						}
 
 						childMap << [(spEnversInstance):listOfCommerceObjects]
@@ -253,7 +264,7 @@ class JobService {
 		// TODO update with new fields
 		def commerceObjectMap = [objectName:co.OBJECT_NAME,isbnNumber:co.ISBN_NUMBER,pathToCoverImage:co.PATH_TO_COVER_IMAGE,teacherLabel:co.TEACHER_LABEL,
 			teacherUrl:co.TEACHER_URL, studentLabel:co.STUDENT_LABEL, studentUrl:co.STUDENT_URL, objectType:co.OBJECT_TYPE, objectReorderNumber:co.OBJECT_REORDER_NUMBER,
-			gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS,contentType:co.CONTENT_TYPE_ID]
+			gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS, isPremium:co.IS_PREMIUM,contentType:co.CONTENT_TYPE_ID]
 
 	}
 
