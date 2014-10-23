@@ -6,7 +6,7 @@ import org.hibernate.envers.Audited
 
 @Audited
 class Bundle {
-	//static searchable = true
+	
 	String isbn
 	String title
 	String duration
