@@ -8,6 +8,7 @@ class Program {
 
 	String name
 	String discipline
+	String state
 	Date dateCreated
 	Date lastUpdated
 
@@ -28,6 +29,7 @@ class Program {
 
 		name (matches: /[A-Za-z0-9]+/, nullable:false, unique:false, blank:false)
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
+		state(nullable:true)
 		contentType ()
 		dateCreated ()
 		lastUpdated ()

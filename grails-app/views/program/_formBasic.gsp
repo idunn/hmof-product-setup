@@ -18,6 +18,27 @@
 </div>
 
 <div
+	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'state', 'error')} required">
+	<label for="state" class="control-label col-sw-1"><g:message
+			code="program.discipline.label" default="State" /><span
+		class="required-indicator">*</span></label>
+	<div class="controls">
+	
+		<g:stateDropDown id="state" name="state" value="${programInstance?.state}" />
+	
+	
+		<%-- <g:select class="form-control" name="discipline"
+			from="${programInstance.constraints.discipline.inList}" required=""
+			value="${programInstance?.discipline}"
+			valueMessagePrefix="program.discipline" /> --%>
+			
+			
+		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'state', 'error')}
+		</span>
+	</div>
+</div>
+
+<div
 	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'discipline', 'error')} required">
 	<label for="discipline" class="control-label col-sw-1"><g:message
 			code="program.discipline.label" default="Discipline" /><span
@@ -33,27 +54,3 @@
 </div>
 </section>
 </div>
-<%--<div
-	class="${hasErrors(bean: programInstance, field: 'bundles', 'error')} ">
-	<label for="bundles" class="control-label"><g:message
-			code="program.bundles.label" default="Bundles" /></label>
-	<div>
-
-		<ul class="one-to-many">
-			<g:each in="${programInstance?.bundles?}" var="b">
-				<li><g:link controller="bundle" action="show" id="${b.id}">
-						${b?.encodeAsHTML()}
-					</g:link></li>
-			</g:each>
-			<li class="add"><g:link controller="bundle" action="create"
-					params="['program.id': programInstance?.id]">
-					${message(code: 'default.add.label', args: [message(code: 'bundle.label', default: 'Bundle')])}
-				</g:link></li>
-		</ul>
-
-		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'bundles', 'error')}
-		</span>
-	</div>
-</div>
-
---%>
