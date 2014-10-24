@@ -20,18 +20,11 @@
 <div
 	class="control-group fieldcontain ${hasErrors(bean: programInstance, field: 'state', 'error')} required">
 	<label for="state" class="control-label col-sw-1"><g:message
-			code="program.discipline.label" default="State" /><span
+			code="program.state.label" default="State" /><span
 		class="required-indicator">*</span></label>
 	<div class="controls">
 	
-		<g:stateDropDown id="state" name="state" value="${programInstance?.state}" />
-	
-	
-		<%-- <g:select class="form-control" name="discipline"
-			from="${programInstance.constraints.discipline.inList}" required=""
-			value="${programInstance?.discipline}"
-			valueMessagePrefix="program.discipline" /> --%>
-			
+		<g:stateDropDown class="form-control" id="state" name="state" required="" value="${programInstance?.state}" valueMessagePrefix="program.state" />			
 			
 		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'state', 'error')}
 		</span>

@@ -40,6 +40,16 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 					</td>
 
 				</tr>
+				
+				<tr class="prop">
+					<td valign="top" class="name"><g:message
+							code="program.state.label" default="State" /></td>
+
+					<td valign="top" class="value">
+						${fieldValue(bean: programInstance, field: "state")}
+					</td>
+
+				</tr>
 
 				<tr class="prop">
 					<td valign="top" class="name"><g:message

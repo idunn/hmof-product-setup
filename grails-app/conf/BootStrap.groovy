@@ -30,8 +30,8 @@ class BootStrap {
 
 			Program.withTransaction{
 
-				def p1 = new Program(name:'visualmath', discipline:'math', contentType:ct1).save(failOnError:true)
-				def p2 = new Program(name:'hmhcollections2016', discipline:'language_arts', contentType:ct1).save(failOnError:true)
+				def p1 = new Program(name:'visualmath', state:'FL', discipline:'math', contentType:ct1).save(failOnError:true)
+				def p2 = new Program(name:'hmhcollections2016', state:'NA', discipline:'language_arts', contentType:ct1).save(failOnError:true)
 			}
 
 

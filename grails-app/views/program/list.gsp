@@ -38,6 +38,8 @@
 				<g:sortableColumn property="name" title="${message(code: 'program.name.label', default: 'Name')}" />
 				
 				<th>${'Current Revision'}</th>
+				
+				<g:sortableColumn property="state" title="${message(code: 'program.state.label', default: 'State')}" />
 			
 				<g:sortableColumn property="discipline" title="${message(code: 'program.discipline.label', default: 'Discipline')}" />								
 				
@@ -61,6 +63,8 @@
 				<td><g:link action="show" id="${programInstance.id}">${fieldValue(bean: programInstance, field: "name")}</g:link></td>
 				
 				<td>${jobdetails.getCurrentEnversRevision(programInstance)}</td>
+				
+				<td>${fieldValue(bean: programInstance, field: "state")}</td>	
 			
 				<td>${fieldValue(bean: programInstance, field: "discipline")}</td>							
 				

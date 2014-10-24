@@ -29,7 +29,7 @@ class Program {
 
 		name (matches: /[A-Za-z0-9]+/, nullable:false, unique:false, blank:false)
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
-		state(nullable:true)
+		state(nullable:false)
 		contentType ()
 		dateCreated ()
 		lastUpdated ()
@@ -37,6 +37,6 @@ class Program {
 	}
 
 	String toString(){
-		"${name}"
+		"${name}_${state}"
 	}
 }
