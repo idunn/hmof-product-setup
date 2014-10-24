@@ -1,16 +1,19 @@
 package hmof
 
-class StatesTagLib {
-	//static defaultEncodeAs = 'html'
-	//static encodeAsForTags = [tagName: 'raw']
+class StatesTagLib {	
 
-
+	/**
+	 * American State Drop down
+	 */
 	def stateDropDown = { attrs ->
 		def stateList = [
 			AL:"Alabama",
 			AK:"Alaska",
+			AS:"American Samoa",
 			AZ:"Arizona",
 			AR:"Arkansas",
+			AA:"Armed Forces Americas",
+			AP:"Armed Forces Pacific",
 			CA:"California",
 			CO:"Colorado",
 			CT:"Connecticut",
@@ -18,6 +21,7 @@ class StatesTagLib {
 			DE:"Delaware",
 			FL:"Florida",
 			GA:"Georgia",
+			GU:"Guam",
 			HI:"Hawaii",
 			ID:"Idaho",
 			IL:"Illinois",
@@ -42,10 +46,12 @@ class StatesTagLib {
 			NY:"New York",
 			NC:"North Carolina",
 			ND:"North Dakota",
+			MP:"Northern Mariana Islands",
 			OH:"Ohio",
 			OK:"Oklahoma",
 			OR:"Oregon",
 			PA:"Pennsylvania",
+			PR:"Puerto Rico",
 			RI:"Rhode Island",
 			SC:"South Carolina",
 			SD:"South Dakota",
@@ -53,12 +59,13 @@ class StatesTagLib {
 			TX:"Texas",
 			UT:"Utah",
 			VT:"Vermont",
+			VI:"Virgin Islands",
 			VA:"Virginia",
 			WA:"Washington",
 			WI:"Wisconsin",
 			WV:"West Virginia",
 			WY:"Wyoming"]
-		out << "<select name='${attrs.name}' id='${attrs.id}'>"
+		out << "<select name='${attrs.name}' id='${attrs.id}' class='form-control' required=''>"
 		out << "<option value='NA'>National</option>"
 		stateList.each {
 			out << "<option value='${it.key}'"
@@ -73,7 +80,7 @@ class StatesTagLib {
 
 
 	/**
-	 * Test TagLib
+	 * Template TagLib
 	 */
 	def repeat = { attrs, body ->
 		// retrieve the 'times' attribute and convert it to an int
