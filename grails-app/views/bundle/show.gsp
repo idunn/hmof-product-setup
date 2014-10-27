@@ -44,7 +44,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				
 			</tr>
 		<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.includePremiumCommerceObjects.label" default="include Premium CommerceObjects" /></td>
+				<td valign="top" class="name"><g:message code="bundle.includePremiumCommerceObjects.label" default="Include Premium Commerce Objects" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "includePremiumCommerceObjects")}</td>
 				

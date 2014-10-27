@@ -1,9 +1,6 @@
 <%@ page import="hmof.SecureProgram" %>
 <% def year = new Date().getAt(Calendar.YEAR) %>
 
-	
-
-
  <div class="span7">
         <section>
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'productName', 'error-field')} required">
@@ -119,7 +116,7 @@
 
  <div class="span12" >
   <div class="platformf">Security Words</div><br>
-			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWord', 'error-field')} required col-xs-4">
+			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWord', 'error-field')} required col-sw-5">
 				<label for="securityWord" class="control-label col-sw-1"><g:message code="secureProgram.securityWord.label" default="Security Word" /><span class="required-indicator">*</span></label>
 				<div class="controls">
 					<g:textField class="form-control" name="securityWord" required="" value="${secureProgramInstance?.securityWord}"/>
@@ -127,15 +124,15 @@
 				</div>
 			</div>
 
-			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation', 'error-field')} required col-xs-4">
+			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation', 'error-field')} required col-sw-6">
 				<label for="securityWordLocation" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation.label" default="Security Word Location" /><span class="required-indicator">*</span></label>
 				<div class="controls"> 
-					<g:textField class="form-control" name="securityWordLocation" required="" value="${secureProgramInstance?.securityWordLocation}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation', 'error-field')}</span>
+								<g:select name="securityWordLocation" from="${1..10}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'securityWordLocation')}" noSelection="['': '']"/>
+					
 				</div>
 			</div>
 
-			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordPage', 'error-field')} required col-xs-4">
+			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordPage', 'error-field')} required col-sw-5">
 				<label for="securityWordPage" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage.label" default="Security Word Page" /><span class="required-indicator">*</span></label>
 				<div class="controls">
 					<g:textField class="form-control" name="securityWordPage" required="" value="${secureProgramInstance?.securityWordPage}"/>
@@ -153,7 +150,7 @@
 	
 	
 	 <section>
-<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord2', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord2', 'error-field')} col-sw-5">
 	<label for="securityWord2" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWord2.label" default="Security Word2" />
 		
@@ -163,17 +160,19 @@
 </div>
 </div>
 
-<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation2', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation2', 'error-field')} col-sw-7">
 	<label for="securityWordLocation2" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location2" />
 		
 	</label>
 	<div class="controls">
-	<g:textField class="form-control" name="securityWordLocation2" value="${secureProgramInstance?.securityWordLocation2}"/>
+	<g:select name="securityWordLocation2" from="${1..10}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'securityWordLocation2')}" noSelection="['': '']"/>
+					
+	
 </div>
 </div>
 
-<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordPage2', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordPage2', 'error-field')} col-sw-5">
 	<label for="securityWordPage2" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWordPage2.label" default="Security Word Page2" />
 		
@@ -187,7 +186,7 @@
 
 
 <section>
-<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWord3', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord3', 'error-field')} col-sw-5">
 	<label for="securityWord3" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWord3.label" default="Security Word3" />
 		
@@ -197,17 +196,18 @@
 </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation3', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation3', 'error-field')} col-sw-7">
 	<label for="securityWordLocation3" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location3" />
 		
 	</label>
 	<div class="controls">
-	<g:textField class="form-control" name="securityWordLocation3" value="${secureProgramInstance?.securityWordLocation3}"/>
+	<g:select name="securityWordLocation3" from="${1..10}" class="form-control" value="${fieldValue(bean: secureProgramInstance, field: 'securityWordLocation3')}" noSelection="['': '']"/>
+					
 </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'securityWordPage3', 'error-field')} col-xs-4">
+<div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordPage3', 'error-field')} col-sw-5">
 	<label for="securityWordPage3" class="control-label col-sw-1">
 		<g:message code="secureProgram.securityWordPage3.label" default="Security Word Page3" />
 		
@@ -433,19 +433,8 @@
 </div>
 
 
-<h3 class="col-sw-1">Comments</h3>
-	<div id="accordion3">
-	   <div class="${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')} ">
-				
-				<div>
-					<g:textArea class="form-control" name="comments" cols="80" rows="5" maxlength="255" value="${secureProgramInstance?.comments}"/>
-					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')}</span>
-				</div>
-			</div>
-	</div>
-
 		<h3 class="col-sw-1">Knewton</h3>
-	<div id="accordion4">
+	<div id="accordion3">
 	
 
 			<div class="${hasErrors(bean: secureProgramInstance, field: 'knewtonProduct', 'error-field')} ">
@@ -457,6 +446,7 @@
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knewtonProduct', 'error-field')}</span>
 				</div>
 			</div>
+			
 <div id="demo" class="collapse">
 <div class="span6">
    
@@ -507,13 +497,25 @@
 					
 				</div>
 			</div>
-			</div>
+			
+</div>
 </div>
 </div>
 
+
 		</div></section></div>
 		
-		
+<div class="span12">
+       <section>
+       <div class="platformf">Comments</div><br>
+	   <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')} ">
+				<label for="comments" class="control-label col-sw-1"><g:message code="secureProgram.comments.label" default="Comments" /></label>
+				<div class="controls">
+					<g:textArea class="form-control" name="comments" cols="80" rows="5" maxlength="255" value="${secureProgramInstance?.comments}"/>
+					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')}</span>
+						</div>
+</div>
+		</section></div>
 <div class="span12">
        <section>
        <div class="platformf">Commerce Objects</div><br>
@@ -528,6 +530,7 @@
 				</div>
 </div>
 		</section></div>
+		
 <g:eachError bean="${secureProgramInstance}" field="pathToTeacherAdditionalResource">
    <input type="hidden" id="lar" name="lar" value="true"/>
 </g:eachError>
@@ -568,13 +571,22 @@ function pageonload()
 	    })
 	});
 	var knewtonProd = document.getElementById("knewtonProduct").checked;
-	var lar =document.getElementById("lar").value;
-	alert(lar);
-	if(knewtonProd && lar){
+	 if(knewtonProd){
+		    $("#accordion1").hide();			
+		    $("#accordion2").hide();
+		    $("#accordion3").show();			
+			
+		    $("#demo").show();
+			$("#demo").toggleClass('collapse');
+			
+			}
+	var  lar =document.getElementById("lar").value;
+	
+	if(knewtonProd && lar=="true"){
 	    $("#accordion1").hide();			
 	    $("#accordion2").show();
-	    $("#accordion3").hide();			
-	    $("#accordion4").show();	
+	    $("#accordion3").show();			
+	 	
 	    $("#demo").show();
 		$('#demo').toggleClass('collapse');
 		$('#Teach2').toggleClass('collapse');
@@ -584,20 +596,15 @@ function pageonload()
 		$('#Student3').toggleClass('collapse');
 		$('#Student4').toggleClass('collapse');
 		
-		}else if(knewtonProd && !lar){
-    $("#accordion1").hide();			
-    $("#accordion2").hide();
-    $("#accordion3").hide();			
-    $("#accordion4").show();	
-    $("#demo").show();
-	$('#demo').toggleClass('collapse');
+		}
+
 	
-	}else if(lar && !knewtonProd)
+	
+	 if(lar=="true" && !knewtonProd)
 		{				 
 			  $("#accordion1").hide();			
 			    $("#accordion2").show();
 			    $("#accordion3").hide();			
-			    $("#accordion4").hide();	
 			    $('#Teach2').toggleClass('collapse');
 				$('#Teach3').toggleClass('collapse');
 				$('#Teach4').toggleClass('collapse');

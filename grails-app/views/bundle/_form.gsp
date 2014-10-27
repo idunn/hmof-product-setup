@@ -30,7 +30,7 @@
 			class="control-group fieldcontain ${hasErrors(bean: bundleInstance, field: 'includePremiumCommerceObjects', 'error-field')} ">
 			<label for="includePremiumCommerceObjects" class="control-label col-sw-1">
 				<g:message code="commerceObject.includePremiumCommerceObjects.label"
-					default="Include Premium CommerceObjects" />
+					default="Include Premium Commerce Objects" />
 
 			</label>
 			<div class="controls">

@@ -9,7 +9,7 @@ import hmof.deploy.Promotion
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
-
+import grails.plugin.springsecurity.annotation.Secured
 @Transactional(readOnly = true)
 class SecureProgramController {
 
@@ -45,6 +45,7 @@ class SecureProgramController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
 		def instanceId = params.instanceDetail
@@ -85,6 +86,7 @@ class SecureProgramController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
 		
 		def secureProgramInstance = SecureProgram.get(params.instanceToBePromoted)
@@ -131,7 +133,7 @@ class SecureProgramController {
     def show(SecureProgram secureProgramInstance) {
         respond secureProgramInstance
     }
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
     def create() {
         respond new SecureProgram(params)
     }
@@ -163,7 +165,7 @@ class SecureProgramController {
             '*' { respond secureProgramInstance, [status: CREATED] }
         }
     }
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
     def edit(SecureProgram secureProgramInstance) {
         respond secureProgramInstance
     }
@@ -194,6 +196,7 @@ class SecureProgramController {
     }
 
     @Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
     def delete(SecureProgram secureProgramInstance) {
 
         if (secureProgramInstance == null) {

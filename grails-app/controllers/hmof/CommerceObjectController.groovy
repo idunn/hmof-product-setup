@@ -8,7 +8,7 @@ import hmof.deploy.Promotion
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
-
+import grails.plugin.springsecurity.annotation.Secured
 /**
  * CommerceObjectController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -53,6 +53,7 @@ class CommerceObjectController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
 		def instanceId = params.instanceDetail
@@ -84,6 +85,7 @@ class CommerceObjectController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
 
 		def commerceObjectInstance = CommerceObject.get(params.instanceToBePromoted)
@@ -130,7 +132,7 @@ class CommerceObjectController {
 	def show(CommerceObject commerceObjectInstance) {
 		respond commerceObjectInstance
 	}
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
 		respond new CommerceObject(params)
 	}
@@ -165,7 +167,7 @@ class CommerceObjectController {
 			'*' { respond commerceObjectInstance, [status: CREATED] }
 		}
 	}
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def edit(CommerceObject commerceObjectInstance) {
 		respond commerceObjectInstance
 	}
@@ -196,6 +198,7 @@ class CommerceObjectController {
 	}
 
 	@Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def delete(CommerceObject commerceObjectInstance) {
 
 		if (commerceObjectInstance == null) {

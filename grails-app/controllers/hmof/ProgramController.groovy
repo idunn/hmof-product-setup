@@ -10,7 +10,7 @@ import hmof.security.UserRole
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-
+import grails.plugin.springsecurity.annotation.Secured
 /**
  * ProgramController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -81,6 +81,7 @@ class ProgramController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
 
 		def programInstance = Program.get(params.instanceToBePromoted)
@@ -129,7 +130,7 @@ class ProgramController {
 	def show(Program programInstance) {
 		respond programInstance
 	}
-
+	@Secured(['ROLE_ADMIN'])
 	def create() {
 		respond new Program(params)
 	}
@@ -161,7 +162,7 @@ class ProgramController {
 			'*' { respond programInstance, [status: CREATED] }
 		}
 	}
-
+	@Secured(['ROLE_ADMIN'])
 	def edit(Program programInstance) {
 		respond programInstance
 	}
@@ -190,6 +191,7 @@ class ProgramController {
 	}
 
 	@Transactional
+	@Secured(['ROLE_ADMIN'])
 	def delete(Program programInstance) {
 
 		if (programInstance == null) {

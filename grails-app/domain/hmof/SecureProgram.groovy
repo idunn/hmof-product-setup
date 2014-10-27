@@ -23,7 +23,7 @@ class SecureProgram {
 	String pathToStudentAdditionalResource
 
 	String securityWord = "changeme"
-	String securityWordLocation = "1"
+	Integer securityWordLocation = 1
 	String securityWordPage = "5"
 
 	Boolean includeDashboardObject
@@ -58,11 +58,11 @@ class SecureProgram {
 	String pathToStudentAdditionalResource4
 
 	String securityWord2
-	String securityWordLocation2
+	Integer securityWordLocation2
 	String securityWordPage2
 
 	String securityWord3
-	String securityWordLocation3
+	Integer securityWordLocation3
 	String securityWordPage3
 	//TT-3979 changes ends
 
@@ -99,7 +99,7 @@ class SecureProgram {
 		pathToStudentAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 
 		securityWord (blank: false)
-		securityWordLocation (blank: false)
+		securityWordLocation (blank: false,range:1..10)
 		securityWordPage (blank: false)
 		includeDashboardObject (nullable:true)
 		includeEplannerObject (nullable:true)
@@ -219,11 +219,11 @@ class SecureProgram {
 		pathToStudentAdditionalResource4(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
 
 		securityWord2(nullable:true)
-		securityWordLocation2(nullable:true)
+		securityWordLocation2(nullable:true,range:1..10)
 		securityWordPage2(nullable:true)
 
 		securityWord3(nullable:true)
-		securityWordLocation3(nullable:true)
+		securityWordLocation3(nullable:true,range:1..10)
 		securityWordPage3(nullable:true)
 		//TT-3979 changes ends
 

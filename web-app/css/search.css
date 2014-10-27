@@ -715,3 +715,23 @@ LEGEND + .control-group {
   
   
   
+
+  
+  .col-sw-5 {
+  position: relative;
+  min-height: 1px;
+   float: left;
+   width: 35.66666666666667%;
+}
+  .col-sw-6 {
+  position: relative;
+  min-height: 1px;
+   float: left;
+   width: 25.66666666666667%;
+}
+  .col-sw-7 {
+  position: relative;
+  min-height: 1px;
+   float: left;
+   width: 28.66666666666667%;
+}

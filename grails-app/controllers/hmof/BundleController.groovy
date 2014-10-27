@@ -8,7 +8,7 @@ import hmof.deploy.Promotion
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
-
+import grails.plugin.springsecurity.annotation.Secured
 /**
  * BundleController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -40,6 +40,7 @@ class BundleController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
 		def instanceId = params.instanceDetail
@@ -92,6 +93,7 @@ class BundleController {
 	 * @return
 	 */
 	@Transactional
+	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
 
 		def bundleInstance = Bundle.get(params.instanceToBePromoted)
@@ -138,7 +140,7 @@ class BundleController {
 	def show(Bundle bundleInstance) {
 		respond bundleInstance
 	}
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
 		respond new Bundle(params)
 	}
@@ -174,7 +176,7 @@ class BundleController {
 			'*' { respond bundleInstance, [status: CREATED] }
 		}
 	}
-
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def edit(Bundle bundleInstance) {
 		respond bundleInstance
 	}
@@ -206,6 +208,7 @@ class BundleController {
 	}
 
 	@Transactional
+	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def delete(Bundle bundleInstance) {
 
 		if (bundleInstance == null) {
