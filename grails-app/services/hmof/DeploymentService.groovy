@@ -217,7 +217,7 @@ class DeploymentService {
 
 		def environmentToCheck = getPreviousEnvironment(environment.id)
 		def previousEnvironment = Environment.where{id==environmentToCheck}.get()
-		log.debug "Previous Environment: " +  previousEnvironment
+		log.info "Previous Environment: " +  previousEnvironment
 
 		def jobDetails = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}
 
@@ -236,10 +236,10 @@ class DeploymentService {
 		log.debug "The Instance Number: " +  InstanceNumber
 
 		// Get the Instance that was deployed to the previous environment
-		def promoInstance = Promotion.where{id==InstanceNumber}.get()
+		def promoInstance = Promotion.where{id==InstanceNumber}.get()		
 
-		if(promoInstance == null || promoInstance.status !=JobStatus.Success){
-			log.warn "Preventing the promotion!"
+		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
+			log.warn "Preventing the promotion as previous promotion was not successful!"
 
 		}else{
 
