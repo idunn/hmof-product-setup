@@ -96,6 +96,8 @@ class BundleController {
 	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
 
+		final String none = "none"
+
 		def bundleInstance = Bundle.get(params.instanceToBePromoted)
 
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -106,23 +108,31 @@ class BundleController {
 
 		if(promotionInstance==null){
 
-			flash.message = "Can't Promote as Content not deployed OR Promoted to an earlier environment"
+			flash.message = "Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment!"
 			redirect(action: "list")
 			return
 		}
 
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 
-		def promotion = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.list()
+		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
 
-		if(promotion.isEmpty()){
+		if(promotionJobInstance==none){
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 
-		} else{
-			// TODO if job is In_Progress stop else warn and re-promote
-			flash.message = "Job Already Promoted or In-Progress"
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString()){
+
+			flash.message = "Job is already ${JobStatus.In_Progress.toString()}"
+		}
+
+		else{
+
+			// Assume job is failed or successful and user want to re-promote
+			log.info"Job ${promotionJobInstance.jobNumber} being re-promoted"
+			flash.message = "Job ${promotionJobInstance.jobNumber} is being re-promoted"
+			promotionJobInstance.properties = [status:JobStatus.Pending]
 
 		}
 

@@ -49,7 +49,7 @@ class SecureProgramController {
 	def deploy(){
 
 		def instanceId = params.instanceDetail
-		
+
 		def (commerceObject) = deploymentService.getSecureProgramChildren(instanceId)
 		def childContent = commerceObject
 
@@ -88,7 +88,9 @@ class SecureProgramController {
 	@Transactional
 	@Secured(['ROLE_QA', 'ROLE_PROD'])
 	def promote(){
-		
+
+		final String none = "none"
+
 		def secureProgramInstance = SecureProgram.get(params.instanceToBePromoted)
 
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -99,25 +101,34 @@ class SecureProgramController {
 
 		if(promotionInstance==null){
 
-			flash.message = "Can't Promote as Content not deployed OR Promoted to an earlier environment"
+			flash.message = "Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment!"
 			redirect(action: "list")
 			return
 		}
 
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 
-		def promotion = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.list()
+		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
 
-		if(promotion.isEmpty()){
+		if(promotionJobInstance==none){
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 
-		} else{
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString()){
 
-			flash.message = "Job Already Promoted or In-Progress"
+			flash.message = "Job is already ${JobStatus.In_Progress.toString()}"
+		}
+
+		else{
+
+			// Assume job is failed or successful and user want to re-promote
+			log.info"Job ${promotionJobInstance.jobNumber} being re-promoted"
+			flash.message = "Job ${promotionJobInstance.jobNumber} is being re-promoted"
+			promotionJobInstance.properties = [status:JobStatus.Pending]
 
 		}
+
 
 		redirect(action: "list")
 
@@ -130,98 +141,98 @@ class SecureProgramController {
 		respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
 	}
 
-    def show(SecureProgram secureProgramInstance) {
-        respond secureProgramInstance
-    }
+	def show(SecureProgram secureProgramInstance) {
+		respond secureProgramInstance
+	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
-    def create() {
-        respond new SecureProgram(params)
-    }
+	def create() {
+		respond new SecureProgram(params)
+	}
 
-    @Transactional
-    def save() {	
-    def contentType = ContentType.where{id==3}.get()
+	@Transactional
+	def save() {
+		def contentType = ContentType.where{id==3}.get()
 		params.contentType = contentType
 		def secureProgramInstance = new SecureProgram(params)
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        if (secureProgramInstance.hasErrors()) {
-            respond secureProgramInstance.errors, view:'create'
-            return
-        }
-	
+		if (secureProgramInstance.hasErrors()) {
+			respond secureProgramInstance.errors, view:'create'
+			return
+		}
+
 		if (!secureProgramInstance.save(flush: true)) {
 			render(view: "create", model: [secureProgramInstance: secureProgramInstance])
 			return
 		}
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect secureProgramInstance
-            }
-            '*' { respond secureProgramInstance, [status: CREATED] }
-        }
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.created.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect secureProgramInstance
+			}
+			'*' { respond secureProgramInstance, [status: CREATED] }
+		}
+	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
-    def edit(SecureProgram secureProgramInstance) {
-        respond secureProgramInstance
-    }
+	def edit(SecureProgram secureProgramInstance) {
+		respond secureProgramInstance
+	}
 
-    @Transactional
-    def update(SecureProgram secureProgramInstance) {
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
+	@Transactional
+	def update(SecureProgram secureProgramInstance) {
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        if (secureProgramInstance.hasErrors()) {
-            respond secureProgramInstance.errors, view:'edit'
-            return
-        }
+		if (secureProgramInstance.hasErrors()) {
+			respond secureProgramInstance.errors, view:'edit'
+			return
+		}
 
 		secureProgramInstance.save flush:true
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(secureProgramInstance)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect secureProgramInstance
-            }
-            '*'{ respond secureProgramInstance, [status: OK] }
-        }
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect secureProgramInstance
+			}
+			'*'{ respond secureProgramInstance, [status: OK] }
+		}
+	}
 
-    @Transactional
+	@Transactional
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
-    def delete(SecureProgram secureProgramInstance) {
+	def delete(SecureProgram secureProgramInstance) {
 
-        if (secureProgramInstance == null) {
-            notFound()
-            return
-        }
+		if (secureProgramInstance == null) {
+			notFound()
+			return
+		}
 
-        secureProgramInstance.delete flush:true
+		secureProgramInstance.delete flush:true
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
+				redirect action:"index", method:"GET"
+			}
+			'*'{ render status: NO_CONTENT }
+		}
+	}
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
+	protected void notFound() {
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: 'secureProgramInstance.label', default: 'SecureProgram'), params.id])
+				redirect action: "index", method: "GET"
+			}
+			'*'{ render status: NOT_FOUND }
+		}
+	}
 }
