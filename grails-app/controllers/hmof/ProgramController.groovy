@@ -96,7 +96,7 @@ class ProgramController {
 
 		if(promotionInstance==null){
 
-			flash.message = "Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment!"
+			flash.message = "Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment"
 			redirect(action: "list")
 			return
 		}
@@ -110,16 +110,15 @@ class ProgramController {
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString()){
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
 
-			flash.message = "Job is already ${JobStatus.In_Progress.toString()}"
+			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 		}
 
 		else{
 
-			// Assume job is failed or successful and user want to re-promote
-			log.info"Job ${promotionJobInstance.jobNumber} being re-promoted"
-			flash.message = "Job ${promotionJobInstance.jobNumber} is being re-promoted"
+			// If job has failed or is successful and user want to re-promote			
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			promotionJobInstance.properties = [status:JobStatus.Pending]
 
 		}
