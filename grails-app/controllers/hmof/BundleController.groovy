@@ -47,8 +47,16 @@ class BundleController {
 
 		def (secureProgram, commerceObject) = deploymentService.getBundleChildren(instanceId)
 		def childContent = secureProgram + commerceObject
-
-		def bundleInstance = Bundle.get(instanceId)
+		
+		def bundleInstance = Bundle.get(instanceId)		
+		
+		if(childContent.isEmpty()){
+			
+			flash.message = "The '${bundleInstance.title}' Bundle cannot be deployed as it does not have a Secure Program "
+			redirect(action: "list")
+			return
+			
+		}
 
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
 
