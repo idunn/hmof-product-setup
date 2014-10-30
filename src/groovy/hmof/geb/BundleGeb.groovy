@@ -26,7 +26,7 @@ class BundleGebWork extends Page {
 		lookupButton{$("form").find("input", name: "Lookup")}
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
-		findButton(wait:true) {$("input", value: "Find")}
+		findButton(wait:33) {$("input", value: "Find").click()}
 
 
 		// Relationship building
@@ -34,8 +34,10 @@ class BundleGebWork extends Page {
 		addTeacherIsbn(wait:true){$("form").find("input", name: "TeacherISBN")}
 
 		// Platform Objects
-		activityManager(wait:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
-		classManager(wait:true) {$("input", type:"checkbox", value:"CLASS_MGR")}
+		activityManager(wait:true, required:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
+		classManager(wait:true, required:true) {$("input", type:"checkbox", value:"CLASS_MGR")}
+		includeDashboard (wait:30, required:true) {$("font", text: /Dashboard/).children()}
+		includePlanner (wait:30, required:true) {$("font", text: /ePlanner/).children()}
 
 		// object used in some language arts
 		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
@@ -44,11 +46,10 @@ class BundleGebWork extends Page {
 		//Duration
 		duration{$("select", name: "SubscrLen")}
 
-		deleteRestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
-		deleteUnrestricted(required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
+		deleteRestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
+		deleteUnrestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
 		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
-		
-		//TODO
+
 		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
 
 		// Modules
@@ -77,13 +78,13 @@ class BundleGebWork extends Page {
 		def unrestrictedBundleExist = deleteUnrestricted
 		if(unrestrictedBundleExist){
 			log.info "UnRestricted Bundle ISBN Exists."
-			withConfirm(true){deleteUnrestricted.click()}			
+			withConfirm(true){deleteUnrestricted.click()}
 
 		}
-		
-		
+
+
 		log.info"Creating New Bundle..."
-		assert noBundleText		
+		assert noBundleText
 
 		homeButton.click()
 		addNewBundleLink.click()
@@ -105,43 +106,60 @@ class BundleGebWork extends Page {
 
 		mapOfChildren.each{
 
-			// move click within the loop
+			def secureProgramInstance = it.key
+
 			addSecureProgram.click()
 
-			//TODO
-			// Add Platform Commerce Objects
-			activityManager.click()
-			classManager.click()
-
-			def secureProgramInstance = it.key
+			log.info"Adding Secure Program"
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
-			findButton.click()
+			findButton
+
+			log.info"Adding Platform Commerce Objects..."
+			log.info"Adding Activity Manager"
+			activityManager.value(true)
+			log.info"Adding Class Manager"
+			classManager.value(true)
+
+			if (secureProgramInstance.includeDashboardObject){
+				log.info"Adding Dashboard"
+				includeDashboard.value(true)
+			}
+
+			if (secureProgramInstance.includeEplannerObject){
+				log.info"Adding Planner"
+				includePlanner.value(true)
+			}
+
 
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
-
+				log.info"Adding Custom Commerce Objects..."
 				def commerceObjectInstance = it
-				waitFor(200) {$("font", text: contains(commerceObjectInstance.objectName)).children().click()}
+				String coName = commerceObjectInstance.objectName
+				log.info"Adding ${coName}"
+				waitFor(50) {$("font", text: /$coName/).children().value(true)}
 			}
+
 
 			def durationLength = getDuration(enversInstanceToDeploy.duration)
 			duration.value(durationLength)
 
+			log.info"Finished Adding Bundle Data"
 			globalModule.addButton.click()
 
 		}
 
 	}
-	
+
 	/**
 	 * Simple check to confirm that Bundle is not empty
 	 * @return
 	 */
-	def confirmBundle(){		
-		
+	def confirmBundle(){
+
 		assert nonEmptyBundle
 		log.info "Bundle contains data!"
-		
+
 	}
 
 	/**
