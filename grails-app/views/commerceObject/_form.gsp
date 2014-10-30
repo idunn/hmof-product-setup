@@ -131,14 +131,12 @@
 			<label for="objectReorderNumber" class="control-label col-sw-1"><g:message
 					code="commerceObject.objectReorderNumber.label"
 					default="Object Reorder Number" /></label>
-			<div class="controls">
-				<g:field class="form-control" name="objectReorderNumber"
-					type="number" value="${commerceObjectInstance.objectReorderNumber}" />
-				<span class="help-inline">
-					${hasErrors(bean: commerceObjectInstance, field: 'objectReorderNumber', 'error-field')}
-				</span>
+					
+					<div  class="controls"> 
+					<g:select name="objectReorderNumber" from="${1..11}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" />
+					
+				</div>
 			</div>
-		</div>
 		<div
 			class="control-group fieldcontain ${hasErrors(bean: commerceObjectInstance, field: 'subject', 'error-field')} ">
 			<label for="subject" class="control-label"> <g:message
