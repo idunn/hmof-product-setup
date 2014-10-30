@@ -89,14 +89,14 @@ class SecureProgram {
 
 
 		copyright (blank: false, nullable:true)
-		labelForOnlineResource (blank: false, nullable:true)
-		pathToResource (blank: false, nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
-		pathToCoverImage (blank: false, nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		labelForOnlineResource (blank: false, nullable:true)		
+		pathToResource (shared: "globalUrl")		
+		pathToCoverImage (shared: "globalUrl")
 
 		labelForTeacherAdditionalResource (nullable:true)
-		pathToTeacherAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToTeacherAdditionalResource (shared: "globalUrl")
 		labelForStudentAdditionalResource (nullable:true)
-		pathToStudentAdditionalResource (nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToStudentAdditionalResource (shared: "globalUrl")
 
 		securityWord (blank: false)
 		securityWordLocation (blank: false,range:1..10)
@@ -204,19 +204,19 @@ class SecureProgram {
 		essayGraderPrompts(inList: ["Not Required", "Middle School", "High School"], nullable:false)
 
 		labelForTeacherAdditionalResource2(nullable:true)
-		pathToTeacherAdditionalResource2(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToTeacherAdditionalResource2 (shared: "globalUrl")
 		labelForStudentAdditionalResource2(nullable:true)
-		pathToStudentAdditionalResource2(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToStudentAdditionalResource2 (shared: "globalUrl")
 
 		labelForTeacherAdditionalResource3(nullable:true)
-		pathToTeacherAdditionalResource3(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToTeacherAdditionalResource3(shared: "globalUrl")
 		labelForStudentAdditionalResource3(nullable:true)
-		pathToStudentAdditionalResource3(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToStudentAdditionalResource3(shared: "globalUrl")
 
 		labelForTeacherAdditionalResource4(nullable:true)
-		pathToTeacherAdditionalResource4(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToTeacherAdditionalResource4(shared: "globalUrl")
 		labelForStudentAdditionalResource4(nullable:true)
-		pathToStudentAdditionalResource4(nullable:true,matches:/^(http:\/\/|https:\/\/|\/)[\w\.\/\s]*/)
+		pathToStudentAdditionalResource4(shared: "globalUrl")
 
 		securityWord2(nullable:true)
 		securityWordLocation2(nullable:true,range:1..10)
