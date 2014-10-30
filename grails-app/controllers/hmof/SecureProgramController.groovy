@@ -136,7 +136,7 @@ class SecureProgramController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 10, 100)
+		params.max = Math.min(max ?: 100, 200)
 		respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
 	}
 
