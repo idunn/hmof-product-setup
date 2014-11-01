@@ -32,7 +32,12 @@ class SecureProgramController {
 			it.properties = [lastUpdated: new Date()]
 		}
 
-		def programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		def programInstances = []
+
+		if(!bundleInstances.isEmpty()){
+			programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		}
+		
 		programInstances.each{
 			it.properties = [lastUpdated: new Date()]
 		}
@@ -122,7 +127,7 @@ class SecureProgramController {
 
 		else{
 
-			// If job has failed or is successful and user want to re-promote			
+			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			promotionJobInstance.properties = [status:JobStatus.Pending]
 

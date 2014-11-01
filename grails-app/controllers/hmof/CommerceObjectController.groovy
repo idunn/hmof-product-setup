@@ -35,13 +35,22 @@ class CommerceObjectController {
 			it.properties = [lastUpdated: new Date()]
 		}
 
-		def bundleInstances = Bundle.where{secureProgram{id in secureProgramInstances.id}}.list()
+		def bundleInstances = []
+		// Needed for MySql database
+		if(!secureProgramInstances.isEmpty()){
+			bundleInstances = Bundle.where{secureProgram{id in secureProgramInstances.id}}.list()
+		}
 
 		bundleInstances.each{
 			it.properties = [lastUpdated: new Date()]
 		}
 
-		def programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		def programInstances = []
+		// Needed for MySql database
+		if(!bundleInstances.isEmpty()){
+			programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
+		}
+
 		programInstances.each{
 			it.properties = [lastUpdated: new Date()]
 		}
@@ -120,7 +129,7 @@ class CommerceObjectController {
 
 		else{
 
-			// If job has failed or is successful and user want to re-promote			
+			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			promotionJobInstance.properties = [status:JobStatus.Pending]
 
