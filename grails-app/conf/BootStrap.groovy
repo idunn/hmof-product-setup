@@ -54,13 +54,13 @@ class BootStrap {
 				def cob2 = CommerceObject.where{id==2}.get()
 
 				def sp1 = new SecureProgram (productName:'Visual Math: Teacher Edition, Grade 7', registrationIsbn:'0512345671',
-				onlineIsbn:'9780123456781', copyright:2016, securityWord:'algebra', includeDashboardObject:true, includeEplannerObject:true,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Language Arts',essayGraderPrompts:'Middle School', contentType:ct3).addToCommerceObjects(cob1).save(failOnError:true)
+				onlineIsbn:'9780123456781', copyright:2016, securityWord:'algebra', includeDashboardObject:true, includeEplannerObject:false,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Language Arts',essayGraderPrompts:'Middle School', contentType:ct3).addToCommerceObjects(cob1).save(failOnError:true)
 				def sp2 = new SecureProgram (productName:'Visual Math: Teacher Edition, Grade 8', registrationIsbn:'0512345672',
-				onlineIsbn:'9780123456791', copyright:2016, securityWord:'teacher', includeDashboardObject:true, includeEplannerObject:true,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Language Arts',essayGraderPrompts:'Middle School', contentType:ct3).addToCommerceObjects(cob1).addToCommerceObjects(cob2).save(failOnError:true)
+				onlineIsbn:'9780123456791', copyright:2016, securityWord:'teacher', includeDashboardObject:false, includeEplannerObject:true,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Language Arts',essayGraderPrompts:'Middle School', contentType:ct3).addToCommerceObjects(cob1).addToCommerceObjects(cob2).save(failOnError:true)
 				def sp3 = new SecureProgram (productName:'Visual Math: Advanced Algebra, Grade 8', registrationIsbn:'054423881X',
-				onlineIsbn:'9780123456999', copyright:2016, securityWord:'reflection',knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).save(failOnError:true)
+				onlineIsbn:'9780123456999', copyright:2016, securityWord:'reflection', includeDashboardObject:true, includeEplannerObject:true, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).save(failOnError:true)
 				def sp4 = new SecureProgram (productName:'Visual Math: Geometry, Grade 8', registrationIsbn:'054423882X',
-				onlineIsbn:'9780123456999', copyright:2016, securityWord:'equal',knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).save(failOnError:true)
+				onlineIsbn:'9780123456999', copyright:2016, securityWord:'equal', includeDashboardObject:false, includeEplannerObject:false, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).save(failOnError:true)
 			}
 
 
@@ -77,7 +77,7 @@ class BootStrap {
 				def b3 = new Bundle(program:p1, isbn:'9780123456783', title:'Visual Math ete, Grade 7, 2016, 5Y', duration:'5-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp1).addToSecureProgram(sp2).save(failOnError:true)
 				def b4 = new Bundle(program:p1, isbn:'9780123456784', title:'Visual Math ete, Grade 7, 2016, 3Y', duration:'3-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
 				def b5 = new Bundle(program:p1, isbn:'9780123456791', title:'Visual Math ete Grade 8, 2016, 6Y', duration:'6-Year',  includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(new SecureProgram(productName:'Visual Math: Mathematics 2',
-				registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017,curriculumArea:'Mathematics',essayGraderPrompts:'High School',contentType:ct3)).addToSecureProgram(sp4).save(failOnError:true)
+				registrationIsbn:'0512349999',onlineIsbn:'9780123456791', copyright:2017,curriculumArea:'Mathematics',essayGraderPrompts:'High School', includeDashboardObject:false, includeEplannerObject:true, contentType:ct3)).addToSecureProgram(sp4).save(failOnError:true)
 				def b6 = new Bundle(program:p1, isbn:'9780123456792', title:'Visual Math ete, Grade 9, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false, contentType:ct2).save(failOnError:true)
 
 			}
