@@ -2,11 +2,11 @@ package hmof.geb
 
 import geb.*
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger;
 
-@Log4j
 class SecureProgramWork extends Page {
 
-	def initBaseUrl(def baseUrl){
+	def initBaseUrl(def baseUrl,Logger log){
 		log.info "baseUrl" + baseUrl
 		url = baseUrl
 
@@ -85,7 +85,7 @@ class SecureProgramWork extends Page {
 	 * Check if SecureProgram Exists: if not update else add new SecureProgram
 	 * @param enversInstanceToDeploy
 	 */
-	void lookupIsbn(def enversInstanceToDeploy){
+	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 
 		manageSecureProgram.click()
 		lookupIsbnField.value(enversInstanceToDeploy.registrationIsbn)
@@ -98,7 +98,7 @@ class SecureProgramWork extends Page {
 			waitFor(15) {updateButton.click()}
 			log.info "Secure Program already exists"
 			log.info "Updating SecureProgram"
-			addSecureProgramData(enversInstanceToDeploy)
+			addSecureProgramData(enversInstanceToDeploy,log)
 			updateButton.click()
 
 		}else{
@@ -107,7 +107,7 @@ class SecureProgramWork extends Page {
 
 			log.info "Adding new Secure Program"
 			addSecureProgramLink.click()
-			addSecureProgramData(enversInstanceToDeploy)
+			addSecureProgramData(enversInstanceToDeploy,log)
 
 			globalModule.addButton.click()
 
@@ -119,28 +119,34 @@ class SecureProgramWork extends Page {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def addSecureProgramData(def content){
+	def addSecureProgramData(def content,Logger log){
 
 		String blank = ""
 
 		log.info "Adding SecureProgram Data"
-		programNameField.value(content.productName)
-		teacherIsbnField.value(content.registrationIsbn)
-		onlineIsbnField.value(content.onlineIsbn)		
 		
+		log.info "Product Name: "+content.productName
+		programNameField.value(content.productName)
+		log.info "Registration Isbn: "+content.registrationIsbn
+		teacherIsbnField.value(content.registrationIsbn)
+		log.info "Online Isbn: "+content.onlineIsbn
+		onlineIsbnField.value(content.onlineIsbn)		
+		log.info "Curriculum Area: "+content.curriculumArea
 		curriculumAreasField.value(content.curriculumArea?: "Other")
-
+		log.info "Copyright : "+content.copyright
 		copyrightYearField.value(content.copyright)		
-
+		log.info "Comments: "+content.comments
 		comment.value(content.comments?: blank)
-
+		log.info "Label For Online Resource: "+content.labelForOnlineResource
 		onlineResourcesLabel.value(content.labelForOnlineResource?: blank)
+		log.info "Path To Resource : "+content.pathToResource
 		onlineResourcesUrl.value(content.pathToResource?: blank)
+		log.info "Path To Cover Image : "+content.pathToCoverImage
 		bookCoverImage.value(content.pathToCoverImage?: blank)		
-				
+		log.info "Essay Grader Prompts : "+content.essayGraderPrompts
 		essayGraderPrompts.value(content.essayGraderPrompts?: "Not Required")		
 
-		log.info content.knewtonProduct
+		log.info "Is Knewton Product : "+content.knewtonProduct
 		knewtonEnabled.value(content.knewtonProduct)
 
 		if(content.knewtonProduct){
@@ -149,61 +155,93 @@ class SecureProgramWork extends Page {
 			if(url.contains("review-cert")){
 
 				log.info "In Cert-Review..."
+				log.info "Knowledge Graph Id in DEV : "+content.knowledgeGraphIdDev
 				knowledgeGraphId.value(content.knowledgeGraphIdDev)
 
 			} else if (url.contains("support-review")){
 
 				log.info "In Prod-Review..."
+				log.info "Knowledge Graph Id in QA: "+content.knowledgeGraphIdQA
 				knowledgeGraphId.value(content.knowledgeGraphIdQA)
 
 			} else if (url.contains("support.hrw.com")){
 
-				log.info "Production..."
+				log.info "In Production..."
+				log.info "Knowledge Graph Id in PROD: "+content.knowledgeGraphIdProd
 				knowledgeGraphId.value(content.knowledgeGraphIdProd)
 			}
-
+			log.info "Knowledge Graph WarmUp Time Limit : "+content.knowledgeGraphWarmUpTimeLimit
 			activeInterventionTime.value(content.knowledgeGraphWarmUpTimeLimit)
+			log.info "Knowledge Graph Enrichment Time Limit : "+content.knowledgeGraphEnrichmentTimeLimit
 			enrichmentTime.value(content.knowledgeGraphEnrichmentTimeLimit)
+			log.info "Knowledge Graph EnrichmentCbi Time Limit : "+content.knowledgeGraphEnrichmentCbiTimeLimit
 			interventionTime.value(content.knowledgeGraphEnrichmentCbiTimeLimit)
 
 		}
-		
+		log.info "Label For Teacher Additional Resource: "+content.labelForTeacherAdditionalResource
 		// Additional links
 		addTeacherResLabel.value(content.labelForTeacherAdditionalResource?: blank)
+		log.info "Path To Teacher Additional Resource : "+content.pathToTeacherAdditionalResource
 		addTeacherResUrl.value(content.pathToTeacherAdditionalResource?: blank)		
 		
+		log.info "Label For Teacher Additional Resource2: "+content.labelForTeacherAdditionalResource2
 		addTeacherResLabel2.value(content.labelForTeacherAdditionalResource2?: blank)
+		log.info "Path To Teacher Additional Resource2 : "+content.pathToTeacherAdditionalResource2
 		addTeacherResUrl2.value(content.pathToTeacherAdditionalResource2?: blank)
 		
+		log.info "Label For Teacher Additional Resource3: "+content.labelForTeacherAdditionalResource3
 		addTeacherResLabel3.value(content.labelForTeacherAdditionalResource3?: blank)
+		log.info "Path To Teacher Additional Resource3 : "+content.pathToTeacherAdditionalResource3
 		addTeacherResUrl3.value(content.pathToTeacherAdditionalResource3?: blank)
 		
+		log.info "Label For Teacher Additional Resource4: "+content.labelForTeacherAdditionalResource4
 		addTeacherResLabel4.value(content.labelForTeacherAdditionalResource4?: blank)
+		log.info "Path To Teacher Additional Resource4 : "+content.pathToTeacherAdditionalResource4
 		addTeacherResUrl4.value(content.pathToTeacherAdditionalResource4?: blank)		
 		
+		log.info "Label For Student Additional Resource : "+content.labelForStudentAdditionalResource
 		addStudentResLabel.value(content.labelForStudentAdditionalResource?: blank)
+		log.info "Path To Student Additional Resource : "+content.pathToStudentAdditionalResource
 		addStudentResUrl.value(content.pathToStudentAdditionalResource?: blank)		
 		
+		log.info "Label For Student Additional Resource2 : "+content.labelForStudentAdditionalResource2
 		addStudentResLabel2.value(content.labelForStudentAdditionalResource2?: blank)
+		log.info "Path To Student Additional Resource2 : "+content.pathToStudentAdditionalResource2
 		addStudentResUrl2.value(content.pathToStudentAdditionalResource2?: blank)
 		
+		log.info "Label For Student Additional Resource3 : "+content.labelForStudentAdditionalResource3
 		addStudentResLabel3.value(content.labelForStudentAdditionalResource3?: blank)
+		log.info "Path To Student Additional Resource3 : "+content.pathToStudentAdditionalResource3
 		addStudentResUrl3.value(content.pathToStudentAdditionalResource3?: blank)
 		
+		log.info "Label For Student Additional Resource4 : "+content.labelForStudentAdditionalResource4
 		addStudentResLabel4.value(content.labelForStudentAdditionalResource4?: blank)
+		log.info "Path To Student Additional Resource4 : "+content.pathToStudentAdditionalResource4
 		addStudentResUrl4.value(content.pathToStudentAdditionalResource4?: blank)		
 
+		log.info "Security Word: "+content.securityWord
 		// registration words
 		word1Field.value(content.securityWord)
+		log.info "Security Word Location : "+content.securityWordLocation
 		word1LocationField.value(content.securityWordLocation)
+		log.info "Security Word Page : "+content.securityWordPage
 		word1PageNumberField.value(content.securityWordPage)		
 		
+		
+		log.info "Security Word2: "+content.securityWord2
 		word2Field.value(content.securityWord2?: blank)
+		log.info "Security Word Location2 : "+content.securityWordLocation2
 		word2LocationField.value(content.securityWordLocation2?: blank)
+	log.info "Security Word Page3 : "+content.securityWordPage2
 		word2PageNumberField.value(content.securityWordPage2?: blank)
 		
+		
+		
+		log.info "Security Word3: "+content.securityWord3
 		word3Field.value(content.securityWord3?: blank)
+		log.info "Security Word Location3 : "+content.securityWordLocation3
 		word3LocationField.value(content.securityWordLocation3?: blank)
+		log.info "Security Word Page3 : "+content.securityWordPage3
 		word3PageNumberField.value(content.securityWordPage3?: blank)
 
 	}

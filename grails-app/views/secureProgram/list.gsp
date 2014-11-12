@@ -47,7 +47,12 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${secureProgramInstanceList}" status="i" var="secureProgramInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			
+			<% devLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
+			   File devLogFile = new File(devLog)
+			   qaLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/cert/log/"+"${secureProgramInstance.registrationIsbn}"+"-cert_log"+".log"
+			   File qaLogFile = new File(qaLog)
+			   prodLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/prod/log/"+"${secureProgramInstance.registrationIsbn}"+"-prod_log"+".log"
+			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${secureProgramInstance.id}">${secureProgramInstance.id}</g:link> </td>
 			
@@ -71,7 +76,14 @@
 					Revision: ${jobdetail[2]} 
 				<br>
 					User: ${jobdetail[3]} 
-				<br>										
+				<br>	
+					<br>
+											<g:if test="${devLogFile.exists()}">
+												<a href='./download?logFile=<%=devLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				 
+				</g:else>									
 				</td>
 				
 				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(secureProgramInstance,2)}" />
@@ -85,6 +97,13 @@
 				<br>
 				User: ${jobdetailQa[3]}
 				<br>
+				<br>
+											<g:if test="${qaLogFile.exists()}">
+												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				 
+				</g:else>
 				</td>
 				
 				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(secureProgramInstance,3)}" />
@@ -98,6 +117,13 @@
 				<br>
 				User: ${jobdetailprod[3]}
 				<br>
+				<br>
+											<g:if test="${prodLogFile.exists()}">
+												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				 
+				</g:else>
 				</td>
 			
 			</tr>

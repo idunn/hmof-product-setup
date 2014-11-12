@@ -46,7 +46,12 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${bundleInstanceList}" status="i" var="bundleInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			
+			<% devLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/dev/log/"+"${bundleInstance.isbn}"+"-dev_log"+".log"
+			   File devLogFile = new File(devLog)
+			   qaLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/cert/log/"+"${bundleInstance.isbn}"+"-cert_log"+".log"
+			   File qaLogFile = new File(qaLog)
+			   prodLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/prod/log/"+"${bundleInstance.isbn}"+"-prod_log"+".log"
+			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link> </td>
 			
@@ -70,7 +75,14 @@
 					Revision: ${jobdetail[2]} 
 				<br>
 					User: ${jobdetail[3]} 
-				<br>										
+				<br>	
+				<br>
+											<g:if test="${devLogFile.exists()}">
+												<a href='./download?logFile=<%=devLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				 
+				</g:else>									
 				</td>
 				
 				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(bundleInstance,2)}" />
@@ -84,6 +96,13 @@
 				<br>
 				User: ${jobdetailQa[3]}
 				<br>
+				<br>
+											<g:if test="${qaLogFile.exists()}">
+												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				 
+				</g:else>
 				</td>
 				
 				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(bundleInstance,3)}" />
@@ -97,6 +116,13 @@
 				<br>
 				User: ${jobdetailprod[3]}
 				<br>
+				<br>
+											<g:if test="${prodLogFile.exists()}">
+												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
+											</g:if>
+											<g:else>
+				
+				</g:else>
 				</td>
 			
 			</tr>

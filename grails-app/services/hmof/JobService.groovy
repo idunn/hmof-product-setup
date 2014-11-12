@@ -4,6 +4,11 @@ import hmof.deploy.*
 import hmof.geb.RedPagesDriver
 import geb.*
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import hmof.security.User
+
 /**
  * JobService
  * Take the jobs and process them by pushing the content to the environment via Geb
@@ -14,27 +19,44 @@ class JobService {
 	def deploymentService
 	def commerceObjectService
 	def enversQueryService
-
+	Logger log = Logger.getLogger(JobService.class);
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
 	 * @param jobs
 	 * @return
 	 */
 	Boolean processJobs(def jobs, def promotionInstance) {
-
+		String cObjectName="";
+		String spProductName="";
+		String bundleName="";
+		def isbn="";
+		def secureIsbn="";
+		def bundleIsbn=""
 		try{
-
+			
 			// Get the environment URL
-			def deploymentUrl = Environment.where{id==promotionInstance.environmentsId}.url.get()
-
-			log.info "The deployment Url is: " + deploymentUrl
-
+			def environmentInstance = Environment.where{id==promotionInstance.environmentsId}.get()
+			//def envName = Environment.where{id==promotionInstance.environmentsId}.name.get()
+			def envId= environmentInstance.id
+			def deploymentUrl = environmentInstance.url
+			def envName = environmentInstance.name
+	
+	
+		    def user_Name = User.where{id == promotionInstance.userId}.username.get()
+			
+		
 			// Divide out the instances
 			def program = jobs.find{it.contentTypeId == 1}
 			def bundle = jobs.findAll{it.contentTypeId == 2}
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
 			def commerceObject = jobs.findAll{it.contentTypeId == 4}
+			def cacheLocation=ConfigurationHolder.config.cacheLocation
+			log.info "The deployment Url is: " + deploymentUrl
 
+			
+			
+			
+			
 			// Deploy Commerce Object
 			if(!commerceObject.isEmpty()){
 
@@ -42,24 +64,50 @@ class JobService {
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
-
+					Long jobNumber = it.jobNumber
 					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 4)
+					
+					
+					
+					
 					def enversInstanceToDeploy
 
 					if (commerceObjectInstance instanceof hmof.CommerceObject){
 						log.info"In normal deploy/promote for CO."
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+						 cObjectName=enversInstanceToDeploy.toString()
+						 isbn=commerceObjectInstance.isbnNumber
+						
 					}
 
 					else{
 						log.warn"Promoting deleted Commerce Object from Envers"
 						def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
 						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
+						isbn=commerceObjectInstance.isbnNumber
 					}
-
+					
+					initializeLogger(isbn, cacheLocation,envId,4);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+						}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+						
+						}
+					
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
-
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
+					if(rpd){
+					log.info "Finished Deploying Commerce Object."
+					log.info("******************************Status******************************\r\n")
+					log.info("promotionId:"+promotionInstance.id)
+					log.info("Job Status: Success")
+					
+					}
+					
 				}
 			}
 
@@ -70,26 +118,52 @@ class JobService {
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
-
+					Long jobNumber = it.jobNumber
 					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
 					def enversInstanceToDeploy
 
 					if (secureProgramInstance instanceof hmof.SecureProgram){
 						enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+						spProductName=enversInstanceToDeploy.toString()
+						
+						secureIsbn=secureProgramInstance.registrationIsbn
 					}
 
 					else{
 						log.warn"Promoting deleted Secure Program from Envers"
 						def secureProgramMap = createSecureProgramMap(secureProgramInstance)
 						enversInstanceToDeploy = new SecureProgram(secureProgramMap)
+						secureIsbn=secureProgramInstance.registrationIsbn
 					}
-
+					
+					initializeLogger(secureIsbn, cacheLocation,envId,3);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+						}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+"\r\n")
+						
+						}
+					
+					
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy)
-
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
+					
+						if(rpd){
+					log.info "Finished Deploying Secure Program."
+					log.info("******************************Status******************************\r\n")
+					log.info("promotionId:"+promotionInstance.id)
+					log.info("Job Status: Success")
+					
+					}
 				}
 			}
 
+			
+		
+			
 			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
 
@@ -98,9 +172,9 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
-
+					Long jobNumber = it.jobNumber
 					def enversInstanceToDeploy
-
+					log.info "*************************************Bundle each child Map of Objects creation***************************************"
 					log.info "Map Of Children: " + mapOfChildren
 
 
@@ -110,14 +184,17 @@ class JobService {
 					if (bundleInstance instanceof hmof.Bundle){
 
 						enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+						bundleName=enversInstanceToDeploy.toString()
+						bundleIsbn=bundleInstance.isbn
 					}
 					else{
 
 						log.warn"Promoting deleted Bundle from Envers"
 						// Get the properties we are interested in
 						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-					}
-
+						bundleIsbn=bundleInstance.isbn
+						}
+					
 					Boolean includePremium = enversInstanceToDeploy.includePremiumCommerceObjects
 					log.info "Bundle is Premium: $includePremium"
 
@@ -174,7 +251,7 @@ class JobService {
 								coEnversInstance = new CommerceObject(commerceObjectMap)
 							}
 
-							// Handle Premium Commerce Objects							
+							// Handle Premium Commerce Objects
 							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
 								
 								listOfCommerceObjects << coEnversInstance
@@ -188,13 +265,34 @@ class JobService {
 						log.info "child Map of Objects sent to Geb: " + childMap
 
 					}
-
+					initializeLogger(bundleIsbn, cacheLocation,envId,4);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+						}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+						
+						}
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap)
-
-					log.info "Finished Deploying Bundle."
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
+					if(rpd){
+						log.info "Finished Deploying Bundle."
+						log.info("******************************Status******************************\r\n")
+						log.info("promotionId:"+promotionInstance.id)
+						log.info("Job Status: Success")
+						
+						}
+					
 				}
 			}
+			
+			
+			
+			
+		
+			
 		}
 		catch(Exception e){
 
@@ -267,5 +365,60 @@ class JobService {
 			gradeLevel:co.GRADE_LEVEL, comments:co.COMMENTS, isPremium:co.IS_PREMIUM,contentType:co.CONTENT_TYPE_ID]
 
 	}
+	/**
+	 * Initialize logger for each thread
+	 * @param programName
+	 * @param cacheLocation
+	 * @param envId
+	 */
+	void initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
+	final String workingDir = cacheLocation
+	log = Logger.getLogger("Thread" + Thread.currentThread().getName());
+	Properties props=new Properties();
+	props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender");
+	props.setProperty("log4j.appender.file.maxFileSize","100MB");
+	props.setProperty("log4j.appender.file.maxBackupIndex","100");
+	if(envId==1){
+		
+		if(contentType==2){	
+	props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+	}else if(contentType==3){
+	
+	
+	props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+	}else if(contentType==4){	
+	props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+	}
+	}else if(envId==2){
+	if(contentType==2){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		}else if(contentType==3){
+		
+		
+		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		}else if(contentType==4){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		}
+	
+	}else if(envId==3){
+	if(contentType==2){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+		}else if(contentType==3){
+		
+		
+		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+		}else if(contentType==4){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+		}
+	}
+	props.setProperty("log4j.appender.file.threshold","info");
+	props.setProperty("log4j.appender.file.Append","false");
+	props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
+	props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
+	props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
+	PropertyConfigurator.configure(props);
+}
+	
 
 }
+

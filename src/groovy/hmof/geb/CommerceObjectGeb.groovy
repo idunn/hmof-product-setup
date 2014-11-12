@@ -1,11 +1,15 @@
 package hmof.geb
+import org.apache.log4j.Logger;
+
+
 import geb.*
-import groovy.util.logging.Log4j
-
-@Log4j
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+//@Log4j
 class CommerceObjectWork extends Page {
-
-	def initBaseUrl(def baseUrl){
+	static Logger log = Logger.getLogger(CommerceObjectWork.class);
+	def initBaseUrl(def baseUrl,Logger log){
 		log.info "Base Url: " + baseUrl
 		url = baseUrl
 
@@ -40,10 +44,12 @@ class CommerceObjectWork extends Page {
 	}
 
 
-	void lookupIsbn(def enversInstanceToDeploy){
+	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 		log.info "Looking up ISBN...."
 		manageCommerceObjectLink.click()
+		log.info "ISBN Number : "+enversInstanceToDeploy.isbnNumber
 		isbnField.value enversInstanceToDeploy.isbnNumber
+		
 		searchButton.click()
 
 		log.info "Checking if CommerceObject Exists..."
@@ -53,7 +59,7 @@ class CommerceObjectWork extends Page {
 			waitFor(25) {globalModule.updateLink.click()}
 
 			log.info "Updating Existing Commerce Object"
-			addCommerceObjectData(enversInstanceToDeploy)
+			addCommerceObjectData(enversInstanceToDeploy,log)
 			globalModule.updateButton.click()
 
 		} else{
@@ -61,7 +67,7 @@ class CommerceObjectWork extends Page {
 			addCommerceObjectLink.click()
 
 			log.info "Adding New CommerceObject"
-			addCommerceObjectData(enversInstanceToDeploy)
+			addCommerceObjectData(enversInstanceToDeploy,log)
 			globalModule.addButton.click()
 
 		}
@@ -72,37 +78,41 @@ class CommerceObjectWork extends Page {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def addCommerceObjectData(def content){
+	def addCommerceObjectData(def content,Logger log){
 
 		log.info "Adding Commerce Object Data..."
 
 		String blank = ""
-
+		log.info "Object Name :"+content.objectName
 		objectName.value(content.objectName)
-
+		log.info "Comments:"+content.comments
 		globalModule.description.value(content.comments?:"Data entered using the Product Setup Web Application")
-
+		log.info "Path To Cover Image :"+content.pathToCoverImage
 		pathToCoverImage.value(content.pathToCoverImage?: blank)
-
+		log.info "Hub Page Selected : true"
 		hubPageSelect.value(true)
-
+		log.info "ISBN Field value :"+content.isbnNumber
 		isbnField.value(content.isbnNumber)
-
+	    log.info "Secure Program Dependent : true"
 		secureProgramDependent.value(true)
-
+		log.info "Teacher Label :"+content.teacherLabel
 		teacherLabel.value(content.teacherLabel?: blank)
+		log.info "Teacher URL :"+content.teacherUrl
 		teacherUrl.value(content.teacherUrl?: blank)
+		log.info "Student Label :"+content.studentLabel
 		studentLabel.value(content.studentLabel?: blank)
+		log.info "Student URL :"+content.studentUrl
 		studentUrl.value(content.studentUrl?: blank)
-
+		log.info "Object Type :"+content.objectType
 		objectType.value(content.objectType)
+		log.info "Object Reorder :"+content.objectReorderNumber
 		objectReorder.value(content.objectReorderNumber)
-
+		log.info "Subject :"+content.subject
 		subject.value(content.subject?:"None")
 
-		def categoryNumber = getCategory(content.category)
+		def categoryNumber = getCategory(content.category,log)
 		category.value(categoryNumber)
-
+		log.info "Grade Level :"+content.gradeLevel
 		def grades = []
 		if (!content.gradeLevel.contains("-")){
 			grades = content.gradeLevel
@@ -123,7 +133,7 @@ class CommerceObjectWork extends Page {
 	 * @param category
 	 * @return
 	 */
-	def getCategory(def category){
+	def getCategory(def category,Logger log){
 
 		def cat = category
 		switch (cat) {

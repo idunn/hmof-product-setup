@@ -1,12 +1,14 @@
 package hmof.geb
 
+import org.apache.log4j.Logger;
+
 import geb.*
 import groovy.util.logging.Log4j
 
 @Log4j
 class BundleGebWork extends Page {
 
-	def initBaseUrl(def baseUrl){
+	def initBaseUrl(def baseUrl,Logger log){
 		log.info "baseUrl" + baseUrl
 		url = baseUrl
 
@@ -57,10 +59,10 @@ class BundleGebWork extends Page {
 
 	}
 
-	void lookupIsbn(def enversInstanceToDeploy){
+	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 
 		log.info "Looking up Bundle ISBN..."
-
+		log.info "Bundle ISBN :"+enversInstanceToDeploy.isbn
 		manageBundlesLink.click()
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
@@ -100,17 +102,19 @@ class BundleGebWork extends Page {
 	 * @param mapOfChildren
 	 * @return
 	 */
-	def addBundleData(def mapOfChildren, def enversInstanceToDeploy){
+	def addBundleData(def mapOfChildren, def enversInstanceToDeploy,Logger log){
 
-		log.info "Adding Bundle Data..."
+		log.info "Adding Bundle Data...\r\n"
+
 
 		mapOfChildren.each{
-
+			log.info "****************************************Adding Bundle Data.....****************************************\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()
 
 			log.info"Adding Secure Program"
+			log.info"Secure Program Registration Isbn : "+secureProgramInstance.registrationIsbn
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
 			findButton
 
@@ -136,18 +140,22 @@ class BundleGebWork extends Page {
 				log.info"Adding Custom Commerce Objects..."
 				def commerceObjectInstance = it
 				String coName = commerceObjectInstance.objectName
-				log.info"Adding ${coName}"
+				log.info"Adding Commerce Object ${coName}"
+				log.info"Adding Commerce Object isbn :"+commerceObjectInstance.isbnNumber+"\r\n"
 				waitFor(50) {$("font", text: /$coName/).children().value(true)}
 			}
 
 
-			def durationLength = getDuration(enversInstanceToDeploy.duration)
+			def durationLength = getDuration(enversInstanceToDeploy.duration,log)
 			duration.value(durationLength)
 
-			log.info"Finished Adding Bundle Data"
+			
+			
 			globalModule.addButton.click()
+			log.info"****************************************Finished Adding Bundle Data***************************************\r\n"
 
 		}
+		
 
 	}
 
@@ -155,7 +163,7 @@ class BundleGebWork extends Page {
 	 * Simple check to confirm that Bundle is not empty
 	 * @return
 	 */
-	def confirmBundle(){
+	def confirmBundle(Logger log){
 
 		assert nonEmptyBundle
 		log.info "Bundle contains data!"
@@ -168,7 +176,7 @@ class BundleGebWork extends Page {
 	 * @param durationLength
 	 * @return
 	 */
-	def getDuration(def durationLength){
+	def getDuration(def durationLength,Logger log){
 
 		def x = durationLength
 		switch (x) {

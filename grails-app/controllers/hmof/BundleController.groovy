@@ -9,6 +9,8 @@ import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.log4j.Logger;
+import java.util.Properties;
 /**
  * BundleController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -44,35 +46,39 @@ class BundleController {
 	def deploy(){
 
 		def instanceId = params.instanceDetail
-
+		log.info("Bundle  Detail: "+instanceId)
 		def (secureProgram, commerceObject) = deploymentService.getBundleChildren(instanceId)
 		def childContent = secureProgram + commerceObject
-		
+		log.info("childContent: "+childContent)
 		def bundleInstance = Bundle.get(instanceId)		
-		
+		log.info("Deploying bundleInstance ISBN: "+bundleInstance.isbn)
 		if(childContent.isEmpty()){
 			
 			flash.message = "The '${bundleInstance.title}' Bundle cannot be deployed as it does not have a Secure Program "
+			log.info("The '${bundleInstance.title}' Bundle cannot be deployed as it does not have a Secure Program ")
 			redirect(action: "list")
 			return
 			
 		}
-
+		
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-
+		log.info("deploymentJobNumber: "+deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
-
+		log.info("userId: "+userId)
+		log.info("contentId: "+bundleInstance.id)
+		log.info("contentTypeId: "+bundleInstance.contentType.contentId)
 		// Create a map of job data to persist
 		def job = [contentId: bundleInstance.id, revision: deploymentService.getCurrentEnversRevision(bundleInstance), contentTypeId: bundleInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
 		// Add Program instance to Job
 		Job j1 = new Job(job).save(failOnError:true)
-
+		log.info("Successfully added Bundle Instance to job : "+bundleInstance.isbn)
 		childContent.each{
-
+			log.info("Adding child content to job content id"+it.id+",revision"+deploymentService.getCurrentEnversRevision(it)+",contentTypeId"+it.contentType.contentId+",jobNumber"+j1.getJobNumber())
 			def content = [contentId: it.id, revision: deploymentService.getCurrentEnversRevision(it), contentTypeId: it.contentType.contentId, jobNumber: j1.getJobNumber(), user: userId]
 			Job j2 = new Job(content).save(failOnError:true)
+			log.info("Successfully added child content ID:"+it.id+" to job")
 		}
 
 		// Add child relationship to each bundle
@@ -88,10 +94,11 @@ class BundleController {
 
 
 		def envId = deploymentService.getUserEnvironmentInformation()
-
+		log.info("Environment ID:"+envId)
+		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
 		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
-
+		
 		redirect(action: "list")
 
 	}
@@ -107,38 +114,42 @@ class BundleController {
 		final String none = "none"
 
 		def bundleInstance = Bundle.get(params.instanceToBePromoted)
-
+		log.info("Promoting bundleInstance isbn: "+bundleInstance.isbn)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
 		def envId = deploymentService.getUserEnvironmentInformation()
-
+		log.info("User Id: "+userId+",envId:"+envId)
 		def promotionInstance = deploymentService.getDeployedInstance(bundleInstance, envId)
 
 		if(promotionInstance==null){
 
 			flash.message = "Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment"
+			log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
 			redirect(action: "list")
 			return
 		}
 
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
-
+		log.info("jobNumber:"+promotionInstance.getJobNumber())
 		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
 
 		if(promotionJobInstance==none){
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
+			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
+			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
 		}
 
 		else{
 
 			// If job has failed or is successful and user want to re-promote			
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
 			promotionJobInstance.properties = [status:JobStatus.Pending]
 
 		}
@@ -151,6 +162,7 @@ class BundleController {
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 100, 200)
+		log.info "Bundle count:"+Bundle.count()
 		respond Bundle.list(params), model:[bundleInstanceCount: Bundle.count()]
 	}
 
@@ -170,11 +182,13 @@ class BundleController {
 		def bundleInstance = new Bundle(params)
 
 		if (bundleInstance == null) {
+			log.info "Creating Bundle Not Found"
 			notFound()
 			return
 		}
-
+		log.info "Started saving Bundle ISBN:"+bundleInstance.isbn
 		if (bundleInstance.hasErrors()) {
+			log.info "No Errors Found while creating Bundle"
 			respond bundleInstance.errors, view:'create'
 			return
 		}
@@ -192,6 +206,7 @@ class BundleController {
 			}
 			'*' { respond bundleInstance, [status: CREATED] }
 		}
+		log.info "Successfully saved Bundle ISBN:"+bundleInstance.isbn
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def edit(Bundle bundleInstance) {
@@ -201,11 +216,13 @@ class BundleController {
 	@Transactional
 	def update(Bundle bundleInstance) {
 		if (bundleInstance == null) {
+			log.info "Updating Bundle Not Found"
 			notFound()
 			return
 		}
-
+		log.info "Started updating Bundle ISBN:"+bundleInstance.isbn
 		if (bundleInstance.hasErrors()) {
+			log.info "No Errors Found while updating Bundle"
 			respond bundleInstance.errors, view:'edit'
 			return
 		}
@@ -222,6 +239,7 @@ class BundleController {
 			}
 			'*'{ respond bundleInstance, [status: OK] }
 		}
+		log.info "Successfully updated Bundle ISBN:"+bundleInstance.isbn
 	}
 
 	@Transactional
@@ -229,10 +247,11 @@ class BundleController {
 	def delete(Bundle bundleInstance) {
 
 		if (bundleInstance == null) {
+			log.info "Deleting Bundle Not Found"
 			notFound()
 			return
 		}
-
+		log.info "Started deleting Bundle ISBN:"+bundleInstance.isbn
 		bundleInstance.delete flush:true
 
 		request.withFormat {
@@ -242,6 +261,7 @@ class BundleController {
 			}
 			'*'{ render status: NO_CONTENT }
 		}
+		log.info "Successfully deleted Bundle ISBN:"+bundleInstance.isbn
 	}
 
 	protected void notFound() {
@@ -251,6 +271,37 @@ class BundleController {
 				redirect action: "index", method: "GET"
 			}
 			'*'{ render status: NOT_FOUND }
+		}
+	}
+	
+	
+	def download() {
+		def logFile=params.logFile
+		log.debug("logFile is: "+logFile)
+		File downloadFile=new File(logFile)
+		log.debug("downloadFile is:"+downloadFile)
+		try {
+			if(downloadFile.exists()){
+				OutputStream out = null;
+				response.setHeader("Content-Type", "application/octet-stream;")
+				response.setHeader("Content-Disposition", "attachment; filename="+downloadFile.getName())
+				FileInputStream fileInputStream = new FileInputStream(downloadFile);
+				out = response.getOutputStream();
+				int fileCharacter;
+				while((fileCharacter = fileInputStream.read())!= -1) {
+					out.write(fileCharacter);
+				}
+				fileInputStream.close();
+				out.flush();
+				out.close();
+			}
+			else{
+				log.debug "Log file not found"
+			}
+		}
+		catch(Exception e){
+			log.info("exception in download action is: "+e.getMessage())
+			log.info("exception in download action is: "+e.getStackTrace().toString())
 		}
 	}
 }

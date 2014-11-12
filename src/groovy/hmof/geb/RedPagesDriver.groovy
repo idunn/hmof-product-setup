@@ -1,23 +1,28 @@
 package hmof.geb
 import geb.*
 import geb.driver.CachingDriverFactory
-import groovy.util.logging.Log4j
 
-@Log4j
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 class RedPagesDriver  {
 
-	RedPagesDriver(def url, def enversInstanceToDeploy){
+	RedPagesDriver(def url, def enversInstanceToDeploy,Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.info "cachedDriver" + cachedDriver
-		driveBrowser(url, enversInstanceToDeploy)
+		log.debug "******************************************************************************"
+
+	log.info "cachedDriver" + cachedDriver
+		driveBrowser(url, enversInstanceToDeploy,log)
 	}
 
-	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren){
+	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren,Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
+		log.debug "******************************************************************************"
 		log.info "cachedDriver" + cachedDriver
-		driveBrowser(url, enversInstanceToDeploy, mapOfChildren)
+		driveBrowser(url, enversInstanceToDeploy, mapOfChildren,log)
 	}
 
 	/**
@@ -26,7 +31,9 @@ class RedPagesDriver  {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null){
+	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null,Logger log){
+		
+		
 		log.debug "Deployment url: " + url
 		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
 
@@ -41,9 +48,9 @@ class RedPagesDriver  {
 					log.info "Starting Geb Automation for CommerceObject"
 
 					CommerceObjectWork cow = new CommerceObjectWork()
-					cow.initBaseUrl(bypassLogin)
+					cow.initBaseUrl(bypassLogin,log)
 					to CommerceObjectWork
-					lookupIsbn (enversInstanceToDeploy)
+					lookupIsbn (enversInstanceToDeploy,log)
 
 					log.info "Completed Geb Automation of CommerceObject"
 
@@ -52,24 +59,24 @@ class RedPagesDriver  {
 					log.info "Starting Geb Automation for SecureProgram"
 
 					SecureProgramWork spw = new SecureProgramWork()
-					spw.initBaseUrl(bypassLogin)
+					spw.initBaseUrl(bypassLogin,log)
 					to SecureProgramWork
-					lookupIsbn (enversInstanceToDeploy)
+					lookupIsbn (enversInstanceToDeploy,log)
 
 				}else if (enversInstanceToDeploy.contentTypeId==2){
 
 					log.info "Starting Geb Automation for Bundle"
 
 					BundleGebWork bundle = new BundleGebWork()
-					bundle.initBaseUrl(bypassLogin)
+					bundle.initBaseUrl(bypassLogin,log)
 
 					to BundleGebWork
 
-					lookupIsbn (enversInstanceToDeploy)
-					addBundleData (mapOfChildren, enversInstanceToDeploy)					
+					lookupIsbn (enversInstanceToDeploy,log)
+					addBundleData (mapOfChildren, enversInstanceToDeploy,log)					
 					
 					log.info"asserting bundle contains content"
-					confirmBundle()
+					confirmBundle(log)
 
 					log.info "Completed Geb Automation of Bundle"
 
