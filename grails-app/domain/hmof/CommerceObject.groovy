@@ -13,7 +13,7 @@ class CommerceObject {
 	Date dateCreated
 	Date lastUpdated
 
-	String pathToCoverImage
+	String pathToCoverImage = "/nsmedia/images/bc/CHANGEME.jpg"
 	String teacherLabel
 	String teacherUrl
 	String studentLabel

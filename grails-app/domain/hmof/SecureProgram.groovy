@@ -12,7 +12,7 @@ class SecureProgram {
 	String copyright
 	String labelForOnlineResource
 	String pathToResource
-	String pathToCoverImage
+	String pathToCoverImage = "/nsmedia/images/bc/CHANGEME.jpg"
 
 	Date dateCreated
 	Date lastUpdated
@@ -22,7 +22,7 @@ class SecureProgram {
 	String labelForStudentAdditionalResource
 	String pathToStudentAdditionalResource
 
-	String securityWord = "changeme"
+	String securityWord = "CHANGEME"
 	Integer securityWordLocation = 1
 	String securityWordPage = "5"
 
