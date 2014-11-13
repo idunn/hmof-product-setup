@@ -9,7 +9,7 @@ import groovy.util.logging.Log4j
 class BundleGebWork extends Page {
 
 	def initBaseUrl(def baseUrl,Logger log){
-		log.info "baseUrl" + baseUrl
+		log.info "Base Url: " + baseUrl
 		url = baseUrl
 
 	}
