@@ -13,7 +13,7 @@ class RedPagesDriver  {
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.debug "******************************************************************************"
 
-	log.info "cachedDriver" + cachedDriver
+	log.info "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy,log)
 	}
 
@@ -21,7 +21,7 @@ class RedPagesDriver  {
 
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.debug "******************************************************************************"
-		log.info "cachedDriver" + cachedDriver
+		log.info "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy, mapOfChildren,log)
 	}
 
@@ -35,7 +35,7 @@ class RedPagesDriver  {
 		
 		
 		log.debug "Deployment url: " + url
-		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId
+		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId+"\r\n"
 
 		// This url allows us to bypass the login
 		String bypassLogin = url + "/hrw/ecom/admin_hub.jsp"
@@ -45,27 +45,27 @@ class RedPagesDriver  {
 
 				if(enversInstanceToDeploy.contentTypeId==4){
 
-					log.info "Starting Geb Automation for CommerceObject"
+					log.info "Starting Geb Automation for CommerceObject\r\n"
 
 					CommerceObjectWork cow = new CommerceObjectWork()
 					cow.initBaseUrl(bypassLogin,log)
 					to CommerceObjectWork
 					lookupIsbn (enversInstanceToDeploy,log)
 
-					log.info "Completed Geb Automation of CommerceObject"
+					log.info "Completed Geb Automation of CommerceObject\r\n"
 
 				} else if (enversInstanceToDeploy.contentTypeId==3){
 
-					log.info "Starting Geb Automation for SecureProgram"
+					log.info "Starting Geb Automation for SecureProgram\r\n"
 
 					SecureProgramWork spw = new SecureProgramWork()
 					spw.initBaseUrl(bypassLogin,log)
 					to SecureProgramWork
 					lookupIsbn (enversInstanceToDeploy,log)
-
+					log.info "Completed Geb Automation of CommerceObject\r\n"
 				}else if (enversInstanceToDeploy.contentTypeId==2){
 
-					log.info "Starting Geb Automation for Bundle"
+					log.info "Starting Geb Automation for Bundle\r\n"
 
 					BundleGebWork bundle = new BundleGebWork()
 					bundle.initBaseUrl(bypassLogin,log)
@@ -78,7 +78,7 @@ class RedPagesDriver  {
 					log.info"asserting bundle contains content"
 					confirmBundle(log)
 
-					log.info "Completed Geb Automation of Bundle"
+					log.info "Completed Geb Automation of Bundle\r\n"
 
 
 				}else{ log.error "Content Type not supported!"
@@ -93,7 +93,7 @@ class RedPagesDriver  {
 
 		}finally{
 
-			log.info"###################################################################"
+			log.info"###################################################################\r\n"
 			
 
 		}

@@ -70,7 +70,7 @@
 				
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(programInstance,1)}" />
 						
-				<td>				
+				<td>	<g:if test="${jobdetail[0]!=null && jobdetail[1]!=null && jobdetail[2]!=null && jobdetail[3]!=null}">				
 					Job: ${jobdetail[0]}  
 				<br>
 					Status: ${jobdetail[1]} 
@@ -78,12 +78,12 @@
 					Revision: ${jobdetail[2]} 
 				<br>
 					User: ${jobdetail[3]} 
-				<br>										
+				<br>	</g:if>									
 				</td>
 				
 				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(programInstance,2)}" />
 				
-				<td>
+				<td><g:if test="${jobdetailQa[0]!=null && jobdetailQa[1]!=null && jobdetailQa[2]!=null && jobdetailQa[3]!=null}">
 				Job: ${jobdetailQa[0]}
 				<br>
 				Status: ${jobdetailQa[1]}
@@ -91,12 +91,12 @@
 				Revision: ${jobdetailQa[2]}
 				<br>
 				User: ${jobdetailQa[3]}
-				<br>
+				<br></g:if>
 				</td>
 				
 				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(programInstance,3)}" />
 				
-				<td>
+				<td><g:if test="${jobdetailprod[0]!=null && jobdetailprod[1]!=null && jobdetailprod[2]!=null && jobdetailprod[3]!=null}">
 				Job: ${jobdetailprod[0]}
 				<br>
 				Status: ${jobdetailprod[1]}
@@ -104,7 +104,7 @@
 				Revision: ${jobdetailprod[2]}
 				<br>
 				User: ${jobdetailprod[3]}
-				<br>
+				<br></g:if>
 				</td>				
 			
 			</tr>

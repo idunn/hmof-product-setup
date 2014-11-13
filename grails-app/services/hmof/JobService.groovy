@@ -53,8 +53,55 @@ class JobService {
 			def cacheLocation=ConfigurationHolder.config.cacheLocation
 			log.info "The deployment Url is: " + deploymentUrl
 
+			if (!bundle.isEmpty()){
+				
+				bundle.each{					
+										Long instanceNumber = it.contentId
+										Long revisionNumber = it.revision
+										
+										Long jobNumber = it.jobNumber	
+					 				// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+										def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 2)
+																					
+										bundleIsbn=bundleInstance.isbn
+											
+										initializeLogger(bundleIsbn, cacheLocation,envId,2);
+										if(envId==1){
+											log.info("******************************Job Creation******************************\r\n")
+											log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+											//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+											}else if(envId==2 || envId==3){
+											log.info("******************************Job Promotion******************************\r\n")
+											log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+											
+											}
+				}
+			}
 			
-			
+			if (bundle.isEmpty() && !secureProgram.isEmpty()){
+				
+				secureProgram.each{
+
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+					Long jobNumber = it.jobNumber
+					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
+					
+					secureIsbn=secureProgramInstance.registrationIsbn
+					
+					initializeLogger(secureIsbn, cacheLocation,envId,3);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+						}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+"\r\n")
+						
+						}
+											
+					}
+				}
 			
 			
 			// Deploy Commerce Object
@@ -86,7 +133,7 @@ class JobService {
 						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
 						isbn=commerceObjectInstance.isbnNumber
 					}
-					
+					if (bundle.isEmpty() && secureProgram.isEmpty()){
 					initializeLogger(isbn, cacheLocation,envId,4);
 					if(envId==1){
 						log.info("******************************Job Creation******************************\r\n")
@@ -97,14 +144,15 @@ class JobService {
 						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
 						
 						}
+					}
 					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					if(rpd){
 					log.info "Finished Deploying Commerce Object."
+					if(rpd && bundle.isEmpty() && secureProgram.isEmpty()){					
 					log.info("******************************Status******************************\r\n")
 					log.info("promotionId:"+promotionInstance.id)
-					log.info("Job Status: Success")
+					log.info("Job Status: Success\r\n")
 					
 					}
 					
@@ -136,26 +184,15 @@ class JobService {
 						secureIsbn=secureProgramInstance.registrationIsbn
 					}
 					
-					initializeLogger(secureIsbn, cacheLocation,envId,3);
-					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
-						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+"\r\n")
-						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-						}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+"\r\n")
-						
-						}
-					
 					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					
-						if(rpd){
 					log.info "Finished Deploying Secure Program."
+						if(rpd && bundle.isEmpty()){
+					
 					log.info("******************************Status******************************\r\n")
 					log.info("promotionId:"+promotionInstance.id)
-					log.info("Job Status: Success")
+					log.info("Job Status: Success\r\n")
 					
 					}
 				}
@@ -265,23 +302,14 @@ class JobService {
 						log.info "child Map of Objects sent to Geb: " + childMap
 
 					}
-					initializeLogger(bundleIsbn, cacheLocation,envId,4);
-					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
-						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
-						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-						}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
-						
-						}
+					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
 					if(rpd){
 						log.info "Finished Deploying Bundle."
 						log.info("******************************Status******************************\r\n")
 						log.info("promotionId:"+promotionInstance.id)
-						log.info("Job Status: Success")
+						log.info("Job Status: Success\r\n")
 						
 						}
 					
