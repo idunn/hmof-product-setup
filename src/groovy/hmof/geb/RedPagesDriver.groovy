@@ -13,7 +13,7 @@ class RedPagesDriver  {
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.debug "******************************************************************************"
 
-	log.info "cachedDriver :" + cachedDriver+"\r\n"
+	log.debug "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy,log)
 	}
 
@@ -21,7 +21,7 @@ class RedPagesDriver  {
 
 		def cachedDriver = CachingDriverFactory.clearCache()
 		log.debug "******************************************************************************"
-		log.info "cachedDriver :" + cachedDriver+"\r\n"
+		log.debug "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy, mapOfChildren,log)
 	}
 
