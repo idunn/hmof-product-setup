@@ -44,7 +44,7 @@ class CommerceObjectWork extends Page {
 	}
 
 
-	void lookupIsbn(def enversInstanceToDeploy,Logger log){
+	void lookupIsbn(def enversInstanceToDeploy,Logger log){		
 		log.info "Looking up ISBN...."
 		manageCommerceObjectLink.click()
 		log.info "ISBN Number: "+enversInstanceToDeploy.isbnNumber
@@ -139,27 +139,27 @@ class CommerceObjectWork extends Page {
 		log.info "Category Value: " + category
 		switch (cat) {
 			case 'Other':
-				log.info "Other"
+				log.debug "Other"
 				category = '-1'
 				break
 			case 'Science & Health':
-				log.info"Science & Health"
+				log.debug"Science & Health"
 				category = '0'
 				break
 			case 'Social Studies':
-				log.info"Social Studies"
+				log.debug"Social Studies"
 				category = '1'
 				break
 			case 'Language Arts':
-				log.info"Language Arts"
+				log.debug"Language Arts"
 				category = '2'
 				break
 			case 'Mathematics':
-				log.info"Mathematics"
+				log.debug"Mathematics"
 				category = '3'
 				break
 			case 'World Languages':
-				log.info"World Languages"
+				log.debug"World Languages"
 				category = '4'
 				break
 			default:
