@@ -211,8 +211,8 @@ class JobService {
 					def mapOfChildren = it.children
 					Long jobNumber = it.jobNumber
 					def enversInstanceToDeploy
-					log.info "*************************************Bundle each child Map of Objects creation***************************************"
-					log.info "Map Of Children: " + mapOfChildren
+					log.info "*************************************Bundles and Associations***************************************"
+					log.debug "Map Of Children: " + mapOfChildren
 
 
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
@@ -266,7 +266,7 @@ class JobService {
 							commerceObjectIds = commerceObjectValue.split(',')
 						}else { commerceObjectIds = commerceObjectValue.toList() }
 
-						log.info "Commerce Object Size: " +  commerceObjectIds.size()
+						log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
 
@@ -299,7 +299,7 @@ class JobService {
 						}
 
 						childMap << [(spEnversInstance):listOfCommerceObjects]
-						log.info "child Map of Objects sent to Geb: " + childMap
+						log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
 					
@@ -344,7 +344,7 @@ class JobService {
 		Long contentIdNumber = contentId.toLong()
 
 		def revNumber = jobList.find{contentIdNumber in it.contentId}.revision
-		log.info "Revision Number:  " +  revNumber
+		log.debug "Revision Number:  " +  revNumber
 
 		revNumber
 	}

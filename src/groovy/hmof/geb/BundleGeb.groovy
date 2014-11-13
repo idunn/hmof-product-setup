@@ -62,7 +62,7 @@ class BundleGebWork extends Page {
 	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 
 		log.info "Looking up Bundle ISBN..."
-		log.info "Bundle ISBN :"+enversInstanceToDeploy.isbn
+		log.info "Bundle ISBN: "+enversInstanceToDeploy.isbn
 		manageBundlesLink.click()
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
@@ -80,6 +80,7 @@ class BundleGebWork extends Page {
 		def unrestrictedBundleExist = deleteUnrestricted
 		if(unrestrictedBundleExist){
 			log.info "UnRestricted Bundle ISBN Exists."
+			log.info "Deleting and recreating UnRestricted Bundle..."
 			withConfirm(true){deleteUnrestricted.click()}
 
 		}
@@ -114,7 +115,7 @@ class BundleGebWork extends Page {
 			addSecureProgram.click()
 
 			log.info"Adding Secure Program"
-			log.info"Secure Program Registration Isbn : "+secureProgramInstance.registrationIsbn
+			log.info"Secure Program Registration Isbn: "+secureProgramInstance.registrationIsbn
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
 			findButton
 
@@ -141,7 +142,7 @@ class BundleGebWork extends Page {
 				def commerceObjectInstance = it
 				String coName = commerceObjectInstance.objectName
 				log.info"Adding Commerce Object ${coName}"
-				log.info"Adding Commerce Object isbn :"+commerceObjectInstance.isbnNumber+"\r\n"
+				log.info"Adding Commerce Object isbn:"+commerceObjectInstance.isbnNumber+"\r\n"
 				waitFor(50) {$("font", text: /$coName/).children().value(true)}
 			}
 
@@ -149,13 +150,13 @@ class BundleGebWork extends Page {
 			def durationLength = getDuration(enversInstanceToDeploy.duration,log)
 			duration.value(durationLength)
 
-			
-			
+
+
 			globalModule.addButton.click()
 			log.info"****************************************Finished Adding Bundle Data***************************************\r\n"
 
 		}
-		
+
 
 	}
 
@@ -216,7 +217,7 @@ class BundleGebWork extends Page {
 				durationLength = "2190"
 		}
 
-		log.info" durationLength in Switch: " + durationLength
+		log.info "durationLength on Red Pages: " + durationLength/365
 
 		durationLength
 
