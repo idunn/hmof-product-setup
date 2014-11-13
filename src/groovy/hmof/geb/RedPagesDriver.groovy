@@ -62,7 +62,7 @@ class RedPagesDriver  {
 					spw.initBaseUrl(bypassLogin,log)
 					to SecureProgramWork
 					lookupIsbn (enversInstanceToDeploy,log)
-					log.info "Completed Geb Automation of CommerceObject\r\n"
+					log.info "Completed Geb Automation of SecureProgram\r\n"
 				}else if (enversInstanceToDeploy.contentTypeId==2){
 
 					log.info "Starting Geb Automation for Bundle\r\n"
