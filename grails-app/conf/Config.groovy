@@ -103,7 +103,8 @@ environments {
 environments {
 development {
 	applicationVersion="0.8"
-	cacheLocation="D:/ProductSetup-cache/"
+	//cacheLocation="D:/ProductSetup-cache/"
+	cacheLocation="/target/ProductSetup-cache/"
 // log4j configuration
 log4j = {
 	// Example of changing the log pattern for the default console appender:
