@@ -32,6 +32,7 @@ class JobService {
 		def isbn="";
 		def secureIsbn="";
 		def bundleIsbn=""
+		String programName=""
 		try{
 			
 			// Get the environment URL
@@ -46,14 +47,42 @@ class JobService {
 			
 		
 			// Divide out the instances
-			def program = jobs.find{it.contentTypeId == 1}
+			def program = jobs.findAll{it.contentTypeId == 1}
 			def bundle = jobs.findAll{it.contentTypeId == 2}
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
 			def commerceObject = jobs.findAll{it.contentTypeId == 4}
 			def cacheLocation=ConfigurationHolder.config.cacheLocation
 			log.info "The deployment Url is: " + deploymentUrl
 
-			if (!bundle.isEmpty()){
+			
+			if (!program.isEmpty()){
+				
+				program.each{
+										Long instanceNumber = it.contentId
+										Long revisionNumber = it.revision
+										
+										Long jobNumber = it.jobNumber
+									 // If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+										def programInstance = Program.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 1)
+																					
+										programName=programInstance.toString()
+											
+										initializeLogger(programName, cacheLocation,envId,1);
+										if(envId==1){
+											log.info("******************************Job Creation******************************\r\n")
+											log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+											//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+											}else if(envId==2 || envId==3){
+											log.info("******************************Job Promotion******************************\r\n")
+											log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+											
+											}
+				}
+			}
+			
+			
+			
+			if (program.isEmpty() && !bundle.isEmpty()){
 				
 				bundle.each{					
 										Long instanceNumber = it.contentId
@@ -78,7 +107,7 @@ class JobService {
 				}
 			}
 			
-			if (bundle.isEmpty() && !secureProgram.isEmpty()){
+			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
 				
 				secureProgram.each{
 
@@ -133,7 +162,7 @@ class JobService {
 						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
 						isbn=commerceObjectInstance.isbnNumber
 					}
-					if (bundle.isEmpty() && secureProgram.isEmpty()){
+					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
 					initializeLogger(isbn, cacheLocation,envId,4);
 					if(envId==1){
 						log.info("******************************Job Creation******************************\r\n")
@@ -148,8 +177,8 @@ class JobService {
 					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "Finished Deploying Commerce Object."
-					if(rpd && bundle.isEmpty() && secureProgram.isEmpty()){					
+					log.info "Finished Deploying Commerce Object.\r\n"
+					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){					
 					log.info("******************************Status******************************\r\n")
 					log.info("promotionId:"+promotionInstance.id)
 					log.info("Job Status: Success\r\n")
@@ -187,8 +216,8 @@ class JobService {
 					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "Finished Deploying Secure Program."
-						if(rpd && bundle.isEmpty()){
+					log.info "Finished Deploying Secure Program.\r\n"
+						if(rpd && program.isEmpty() && bundle.isEmpty()){
 					
 					log.info("******************************Status******************************\r\n")
 					log.info("promotionId:"+promotionInstance.id)
@@ -306,7 +335,7 @@ class JobService {
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
 					if(rpd){
-						log.info "Finished Deploying Bundle."
+						log.info "Finished Deploying Bundle.\r\n"
 						log.info("******************************Status******************************\r\n")
 						log.info("promotionId:"+promotionInstance.id)
 						log.info("Job Status: Success\r\n")
@@ -407,8 +436,9 @@ class JobService {
 	props.setProperty("log4j.appender.file.maxFileSize","100MB");
 	props.setProperty("log4j.appender.file.maxBackupIndex","100");
 	if(envId==1){
-		
-		if(contentType==2){	
+	if(contentType==1){
+			props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+	}else if(contentType==2){	
 	props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
 	}else if(contentType==3){
 	
@@ -418,7 +448,9 @@ class JobService {
 	props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
 	}
 	}else if(envId==2){
-	if(contentType==2){
+	if(contentType==1){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+        }else if(contentType==2){
 		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
 		}else if(contentType==3){
 		
@@ -429,7 +461,9 @@ class JobService {
 		}
 	
 	}else if(envId==3){
-	if(contentType==2){
+	    if(contentType==1){
+		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+        }else if(contentType==2){
 		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
 		}else if(contentType==3){
 		

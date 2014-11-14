@@ -11,7 +11,7 @@
 	<div class="controls">
 		<g:textField class="form-control" name="name"
 			pattern="${programInstance.constraints.name.matches}" required=""
-			value="${programInstance?.name}" />
+			value="${programInstance?.name}"  data-toggle="tooltip" data-placement="right" data-container="body" title="Please enter the Program Name"/>
 		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'name', 'error')}
 		</span>
 	</div>
@@ -24,7 +24,7 @@
 		class="required-indicator">*</span></label>
 	<div class="controls">
 	
-		<g:stateDropDown class="form-control" id="state" name="state" required="" value="${programInstance?.state}" valueMessagePrefix="program.state" />			
+		<g:stateDropDown class="form-control" id="state" name="state" required="" value="${programInstance?.state}" valueMessagePrefix="program.state"  data-toggle="tooltip" data-placement="right" data-container="body" title="Please enter the Program State"/>			
 			
 		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'state', 'error')}
 		</span>
@@ -40,10 +40,14 @@
 		<g:select class="form-control" name="discipline"
 			from="${programInstance.constraints.discipline.inList}" required=""
 			value="${programInstance?.discipline}"
-			valueMessagePrefix="program.discipline" />
+			valueMessagePrefix="program.discipline" data-toggle="tooltip" data-placement="right" data-container="body" title="Please enter the Program discipline" />
 		<span class="help-inline"> ${hasErrors(bean: programInstance, field: 'discipline', 'error')}
 		</span>
 	</div>
 </div>
 </section>
 </div>
+
+<script>
+   $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>

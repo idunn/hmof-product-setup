@@ -56,7 +56,12 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${programInstanceList}" status="i" var="programInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			
+			<% devLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/dev/log/"+"${programInstance.name}"+"-dev_log"+".log"
+			   File devLogFile = new File(devLog)
+			   qaLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/cert/log/"+"${programInstance.name}"+"-cert_log"+".log"
+			   File qaLogFile = new File(qaLog)
+			   prodLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/prod/log/"+"${programInstance.name}"+"-prod_log"+".log"
+			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${programInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${programInstance.id}">${programInstance.id}</g:link> </td>
 			
@@ -78,7 +83,11 @@
 					Revision: ${jobdetail[2]} 
 				<br>
 					User: ${jobdetail[3]} 
-				<br>	</g:if>									
+				<br>	</g:if>	<br>
+											<g:if test="${devLogFile.exists()}">
+												<a href='./download?logFile=<%=devLog%>'>Log File</a>
+											</g:if>
+																					
 				</td>
 				
 				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(programInstance,2)}" />
@@ -91,7 +100,11 @@
 				Revision: ${jobdetailQa[2]}
 				<br>
 				User: ${jobdetailQa[3]}
-				<br></g:if>
+				<br></g:if><br>
+											<g:if test="${qaLogFile.exists()}">
+												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
+											</g:if>
+											
 				</td>
 				
 				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(programInstance,3)}" />
@@ -104,7 +117,10 @@
 				Revision: ${jobdetailprod[2]}
 				<br>
 				User: ${jobdetailprod[3]}
-				<br></g:if>
+				<br></g:if><br>
+											<g:if test="${prodLogFile.exists()}">
+												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
+											</g:if>
 				</td>				
 			
 			</tr>

@@ -10,7 +10,7 @@
 				class="required-indicator">*</span></label>
 			<div class="controls">
 				<g:textField class="form-control" name="objectName" required=""
-					value="${commerceObjectInstance?.objectName}" />
+					value="${commerceObjectInstance?.objectName}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title which is visible to the Customer and must be unique" />
 
 			</div>
 		</div>
@@ -22,7 +22,7 @@
 				class="required-indicator">*</span></label>
 			<div class="controls">
 				<g:textField class="form-control" maxlength="13" name="isbnNumber" required=""
-					value="${commerceObjectInstance?.isbnNumber}" />
+					value="${commerceObjectInstance?.isbnNumber}" data-toggle="tooltip" data-placement="right" data-container="body" title="A 10-digit unique identifier" />
 
 			</div>
 		</div>
@@ -34,7 +34,7 @@
 					default="Path To Cover Image" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="pathToCoverImage"
-					value="${commerceObjectInstance?.pathToCoverImage}" />
+					value="${commerceObjectInstance?.pathToCoverImage}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to the icon Image located in: /nsmedia/images/bc/" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'pathToCoverImage', 'error-field')}
 				</span>
@@ -47,7 +47,7 @@
 					code="commerceObject.teacherLabel.label" default="Teacher Label" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="teacherLabel"
-					value="${commerceObjectInstance?.teacherLabel}" />
+					value="${commerceObjectInstance?.teacherLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Teacher Url Link" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'teacherLabel', 'error-field')}
 				</span>
@@ -60,7 +60,7 @@
 					code="commerceObject.teacherUrl.label" default="Teacher Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="teacherUrl"
-					value="${commerceObjectInstance?.teacherUrl}" />
+					value="${commerceObjectInstance?.teacherUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Teacher Only content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'teacherUrl', 'error-field')}
 				</span>
@@ -73,7 +73,7 @@
 					code="commerceObject.studentLabel.label" default="Student Label" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="studentLabel"
-					value="${commerceObjectInstance?.studentLabel}" />
+					value="${commerceObjectInstance?.studentLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Student Url Link" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'studentLabel', 'error-field')}
 				</span>
@@ -86,7 +86,7 @@
 					code="commerceObject.studentUrl.label" default="Student Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="studentUrl"
-					value="${commerceObjectInstance?.studentUrl}" />
+					value="${commerceObjectInstance?.studentUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Student Only content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'studentUrl', 'error-field')}
 				</span>
@@ -119,7 +119,7 @@
 				<g:select class="form-control" name="objectType"
 					from="${commerceObjectInstance.constraints.objectType.inList}"
 					value="${commerceObjectInstance?.objectType}"
-					valueMessagePrefix="commerceObject.objectType" />
+					valueMessagePrefix="commerceObject.objectType" data-toggle="tooltip" data-placement="right" data-container="body" title="Groups resources on the resource gadget" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'objectType', 'error-field')}
 				</span>
@@ -133,7 +133,7 @@
 					default="Object Reorder Number" /></label>
 					
 					<div  class="controls"> 
-					<g:select name="objectReorderNumber" from="${1..11}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" />
+					<g:select name="objectReorderNumber" from="${1..11}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" data-toggle="tooltip" data-placement="right" data-container="body" title="Determines the content display sequence on the Resource Gadget" />
 					
 				</div>
 			</div>
@@ -158,7 +158,7 @@
 				<g:select class="form-control" name="gradeLevel"
 					from="${commerceObjectInstance.constraints.gradeLevel.inList}"
 					value="${commerceObjectInstance?.gradeLevel}"
-					valueMessagePrefix="commerceObject.gradeLevel" />
+					valueMessagePrefix="commerceObject.gradeLevel" data-toggle="tooltip" data-placement="right" data-container="body" title="Middle School = 6-8 and High School = 9-12" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'gradeLevel', 'error-field')}
 				</span>
@@ -179,8 +179,8 @@
 
 			</label>
 			<div class="controls">
-				<bs:checkBox name="isPremium"
-					value="${commerceObjectInstance?.isPremium}" />
+				<g:checkBox name="isPremium"
+					value="${commerceObjectInstance?.isPremium}" data-toggle="tooltip" data-placement="right" data-container="body" title="Viewable to Customers who buy Premium Bundles"/>
 			</div>
 		</div>
 
@@ -206,3 +206,6 @@
 	</section>
 </div>
 
+<script>
+   $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>

@@ -81,9 +81,7 @@
 											<g:if test="${devLogFile.exists()}">
 												<a href='./download?logFile=<%=devLog%>'>Log File</a>
 											</g:if>
-											<g:else>
-				 
-				</g:else>									
+														
 				</td>
 				
 				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(secureProgramInstance,2)}" />
@@ -101,9 +99,7 @@
 											<g:if test="${qaLogFile.exists()}">
 												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
 											</g:if>
-											<g:else>
-				 
-				</g:else>
+											
 				</td>
 				
 				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(secureProgramInstance,3)}" />
@@ -121,9 +117,7 @@
 											<g:if test="${prodLogFile.exists()}">
 												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
 											</g:if>
-											<g:else>
-				 
-				</g:else>
+											
 				</td>
 			
 			</tr>
