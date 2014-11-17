@@ -25,8 +25,10 @@ class BundleController {
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
 
-	/*
-	 * 
+	/**
+	 * Update Parent when a change is made to a child
+	 * @param currentInstance
+	 * @return
 	 */
 	@Transactional
 	def updateParent(def currentInstance){
@@ -35,6 +37,22 @@ class BundleController {
 		// get parent of current Instance
 		def ProgramToUpdate = bundle.program
 		ProgramToUpdate.properties = [lastUpdated: new Date()]
+
+	}
+
+	/**
+	 * Remove Children before deleting the Bundle as the Children are also Standalone
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def removeChildren(def currentInstance){
+
+		def bundleToDelete = Bundle.where{id==currentInstance.id}.get()
+		def child = []
+		child += bundleToDelete.secureProgram
+
+		child.each{sp -> bundleToDelete.removeFromSecureProgram(sp) }
 
 	}
 
@@ -252,7 +270,12 @@ class BundleController {
 			notFound()
 			return
 		}
-		log.info "Started deleting Bundle ISBN:"+bundleInstance.isbn
+
+		log.info "Removing Secure Program from the Bundle that is being deleted"
+		// before we delete we remove direct children to prevent referential integrity issues
+		removeChildren(bundleInstance)
+
+		log.info "Started deleting Bundle ISBN:" + bundleInstance.isbn
 		bundleInstance.delete flush:true
 
 		request.withFormat {
