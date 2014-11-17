@@ -21,6 +21,7 @@ class ProgramController {
 
 	def springSecurityService
 	def deploymentService
+	def utilityService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -74,10 +75,10 @@ class ProgramController {
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
-	
+
 		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
-		
+
 		redirect(action: "list")
 
 	}
@@ -95,7 +96,7 @@ class ProgramController {
 		def programInstance = Program.get(params.instanceToBePromoted)
 		log.info("Promoting programInstance name: "+programInstance.name)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
-		
+
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("User Id: "+userId+",envId:"+envId)
 		def promotionInstance = deploymentService.getDeployedInstance(programInstance, envId)
@@ -126,7 +127,7 @@ class ProgramController {
 
 		else{
 
-			// If job has failed or is successful and user want to re-promote			
+			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
 			promotionJobInstance.properties = [status:JobStatus.Pending]
@@ -245,5 +246,13 @@ class ProgramController {
 			}
 			'*'{ render status: NOT_FOUND }
 		}
+	}
+
+	/**
+	 * Download the log file
+	 * @return
+	 */
+	def download() {
+		utilityService.getLogFile(params.logFile)
 	}
 }
