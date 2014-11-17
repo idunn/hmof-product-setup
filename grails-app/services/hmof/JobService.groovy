@@ -6,7 +6,7 @@ import geb.*
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import grails.util.Holders
 import hmof.security.User
 
 /**
@@ -51,7 +51,8 @@ class JobService {
 			def bundle = jobs.findAll{it.contentTypeId == 2}
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
 			def commerceObject = jobs.findAll{it.contentTypeId == 4}
-			def cacheLocation=ConfigurationHolder.config.cacheLocation
+			def cacheLocation=Holders.config.cacheLocation  
+			println("cacheLocation"+cacheLocation)
 			log.info "The deployment Url is: " + deploymentUrl
 
 			
@@ -449,15 +450,15 @@ class JobService {
 	}
 	}else if(envId==2){
 	if(contentType==1){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
         }else if(contentType==2){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
 		}else if(contentType==3){
 		
 		
-		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
 		}else if(contentType==4){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log");
+		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
 		}
 	
 	}else if(envId==3){

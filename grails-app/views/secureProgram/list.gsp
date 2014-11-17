@@ -47,11 +47,11 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${secureProgramInstanceList}" status="i" var="secureProgramInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<% devLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
+			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
-			   qaLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/cert/log/"+"${secureProgramInstance.registrationIsbn}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/review/log/"+"${secureProgramInstance.registrationIsbn}"+"-cert_log"+".log"
 			   File qaLogFile = new File(qaLog)
-			   prodLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/prod/log/"+"${secureProgramInstance.registrationIsbn}"+"-prod_log"+".log"
+			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/prod/log/"+"${secureProgramInstance.registrationIsbn}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${secureProgramInstance.id}">${secureProgramInstance.id}</g:link> </td>

@@ -46,11 +46,11 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${bundleInstanceList}" status="i" var="bundleInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<% devLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/dev/log/"+"${bundleInstance.isbn}"+"-dev_log"+".log"
+			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/dev/log/"+"${bundleInstance.isbn}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
-			   qaLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/cert/log/"+"${bundleInstance.isbn}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/review/log/"+"${bundleInstance.isbn}"+"-cert_log"+".log"
 			   File qaLogFile = new File(qaLog)
-			   prodLog = "${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/prod/log/"+"${bundleInstance.isbn}"+"-prod_log"+".log"
+			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/prod/log/"+"${bundleInstance.isbn}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link> </td>
