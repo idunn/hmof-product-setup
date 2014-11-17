@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(EnversQueryService)
-class EnversQueryServiceSpec extends Specification {
+@TestFor(UtilityService)
+class UtilityServiceSpec extends Specification {
 
     def setup() {
     }

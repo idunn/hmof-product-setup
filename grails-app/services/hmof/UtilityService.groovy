@@ -6,7 +6,7 @@ import java.sql.ResultSet
 import grails.transaction.Transactional
 
 @Transactional
-class EnversQueryService {
+class UtilityService {
 	
 	def dataSource
 

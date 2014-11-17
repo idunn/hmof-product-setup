@@ -18,7 +18,7 @@ class JobService {
 	static transactional = false
 	def deploymentService
 	def commerceObjectService
-	def enversQueryService
+	def utilityService
 	Logger log = Logger.getLogger(JobService.class);
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
@@ -34,106 +34,106 @@ class JobService {
 		def bundleIsbn=""
 		String programName=""
 		try{
-			
+
 			// Get the environment URL
 			def environmentInstance = Environment.where{id==promotionInstance.environmentsId}.get()
 			//def envName = Environment.where{id==promotionInstance.environmentsId}.name.get()
 			def envId= environmentInstance.id
 			def deploymentUrl = environmentInstance.url
 			def envName = environmentInstance.name
-	
-	
-		    def user_Name = User.where{id == promotionInstance.userId}.username.get()
-			
-		
+
+
+			def user_Name = User.where{id == promotionInstance.userId}.username.get()
+
+
 			// Divide out the instances
 			def program = jobs.findAll{it.contentTypeId == 1}
 			def bundle = jobs.findAll{it.contentTypeId == 2}
 			def secureProgram = jobs.findAll{it.contentTypeId == 3}
 			def commerceObject = jobs.findAll{it.contentTypeId == 4}
-			def cacheLocation=Holders.config.cacheLocation  
+			def cacheLocation=Holders.config.cacheLocation
 			println("cacheLocation"+cacheLocation)
 			log.info "The deployment Url is: " + deploymentUrl
 
-			
+
 			if (!program.isEmpty()){
-				
+
 				program.each{
-										Long instanceNumber = it.contentId
-										Long revisionNumber = it.revision
-										
-										Long jobNumber = it.jobNumber
-									 // If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-										def programInstance = Program.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 1)
-																					
-										programName=programInstance.toString()
-											
-										initializeLogger(programName, cacheLocation,envId,1);
-										if(envId==1){
-											log.info("******************************Job Creation******************************\r\n")
-											log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
-											//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-											}else if(envId==2 || envId==3){
-											log.info("******************************Job Promotion******************************\r\n")
-											log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
-											
-											}
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+
+					Long jobNumber = it.jobNumber
+					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+					def programInstance = Program.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 1)
+
+					programName=programInstance.toString()
+
+					initializeLogger(programName, cacheLocation,envId,1);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+					}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+
+					}
 				}
 			}
-			
-			
-			
+
+
+
 			if (program.isEmpty() && !bundle.isEmpty()){
-				
-				bundle.each{					
-										Long instanceNumber = it.contentId
-										Long revisionNumber = it.revision
-										
-										Long jobNumber = it.jobNumber	
-					 				// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-										def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 2)
-																					
-										bundleIsbn=bundleInstance.isbn
-											
-										initializeLogger(bundleIsbn, cacheLocation,envId,2);
-										if(envId==1){
-											log.info("******************************Job Creation******************************\r\n")
-											log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
-											//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-											}else if(envId==2 || envId==3){
-											log.info("******************************Job Promotion******************************\r\n")
-											log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
-											
-											}
+
+				bundle.each{
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+
+					Long jobNumber = it.jobNumber
+					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+
+					bundleIsbn=bundleInstance.isbn
+
+					initializeLogger(bundleIsbn, cacheLocation,envId,2);
+					if(envId==1){
+						log.info("******************************Job Creation******************************\r\n")
+						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+					}else if(envId==2 || envId==3){
+						log.info("******************************Job Promotion******************************\r\n")
+						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+
+					}
 				}
 			}
-			
+
 			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
-				
+
 				secureProgram.each{
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					Long jobNumber = it.jobNumber
-					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
-					
+					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 3)
+
 					secureIsbn=secureProgramInstance.registrationIsbn
-					
+
 					initializeLogger(secureIsbn, cacheLocation,envId,3);
 					if(envId==1){
 						log.info("******************************Job Creation******************************\r\n")
 						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+"\r\n")
 						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-						}else if(envId==2 || envId==3){
+					}else if(envId==2 || envId==3){
 						log.info("******************************Job Promotion******************************\r\n")
 						log.info("Job "+jobNumber+" was promoted by user "+user_Name+"\r\n")
-						
-						}
-											
+
 					}
+
 				}
-			
-			
+			}
+
+
 			// Deploy Commerce Object
 			if(!commerceObject.isEmpty()){
 
@@ -142,19 +142,19 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					Long jobNumber = it.jobNumber
-					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 4)
-					
-					
-					
-					
+					def commerceObjectInstance = CommerceObject.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 4)
+
+
+
+
 					def enversInstanceToDeploy
 
 					if (commerceObjectInstance instanceof hmof.CommerceObject){
 						log.info"In normal deploy/promote for CO."
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-						 cObjectName=enversInstanceToDeploy.toString()
-						 isbn=commerceObjectInstance.isbnNumber
-						
+						cObjectName=enversInstanceToDeploy.toString()
+						isbn=commerceObjectInstance.isbnNumber
+
 					}
 
 					else{
@@ -164,28 +164,28 @@ class JobService {
 						isbn=commerceObjectInstance.isbnNumber
 					}
 					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-					initializeLogger(isbn, cacheLocation,envId,4);
-					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
-						log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
-						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
+						initializeLogger(isbn, cacheLocation,envId,4);
+						if(envId==1){
+							log.info("******************************Job Creation******************************\r\n")
+							log.info("Job "+jobNumber+" was created with ID="+jobNumber+" by user "+user_Name+" in Environment "+envName+"\r\n")
+							//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
 						}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
-						
+							log.info("******************************Job Promotion******************************\r\n")
+							log.info("Job "+jobNumber+" was promoted by user "+user_Name+" in Environment "+envName+"\r\n")
+
 						}
 					}
-					
+
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
 					log.info "Finished Deploying Commerce Object.\r\n"
-					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){					
-					log.info("******************************Status******************************\r\n")
-					log.info("promotionId:"+promotionInstance.id)
-					log.info("Job Status: Success\r\n")
-					
+					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
+						log.info("******************************Status******************************\r\n")
+						log.info("promotionId:"+promotionInstance.id)
+						log.info("Job Status: Success\r\n")
+
 					}
-					
+
 				}
 			}
 
@@ -197,13 +197,13 @@ class JobService {
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					Long jobNumber = it.jobNumber
-					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 3)
+					def secureProgramInstance = SecureProgram.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 3)
 					def enversInstanceToDeploy
 
 					if (secureProgramInstance instanceof hmof.SecureProgram){
 						enversInstanceToDeploy = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 						spProductName=enversInstanceToDeploy.toString()
-						
+
 						secureIsbn=secureProgramInstance.registrationIsbn
 					}
 
@@ -213,24 +213,24 @@ class JobService {
 						enversInstanceToDeploy = new SecureProgram(secureProgramMap)
 						secureIsbn=secureProgramInstance.registrationIsbn
 					}
-					
-					
+
+
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
 					log.info "Finished Deploying Secure Program.\r\n"
-						if(rpd && program.isEmpty() && bundle.isEmpty()){
-					
-					log.info("******************************Status******************************\r\n")
-					log.info("promotionId:"+promotionInstance.id)
-					log.info("Job Status: Success\r\n")
-					
+					if(rpd && program.isEmpty() && bundle.isEmpty()){
+
+						log.info("******************************Status******************************\r\n")
+						log.info("promotionId:"+promotionInstance.id)
+						log.info("Job Status: Success\r\n")
+
 					}
 				}
 			}
 
-			
-		
-			
+
+
+
 			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
 
@@ -246,7 +246,7 @@ class JobService {
 
 
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: enversQueryService.getDeletedObject(instanceNumber, revisionNumber, 2)
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
 
 					if (bundleInstance instanceof hmof.Bundle){
 
@@ -260,8 +260,8 @@ class JobService {
 						// Get the properties we are interested in
 						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
 						bundleIsbn=bundleInstance.isbn
-						}
-					
+					}
+
 					Boolean includePremium = enversInstanceToDeploy.includePremiumCommerceObjects
 					log.info "Bundle is Premium: $includePremium"
 
@@ -276,7 +276,7 @@ class JobService {
 
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: enversQueryService.getDeletedObject(secureProgramId, secureProgramRev, 3)
+						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 						def spEnversInstance
 						if (secureProgramInstance instanceof hmof.SecureProgram){
 
@@ -305,7 +305,7 @@ class JobService {
 							def commerceObjectId = it
 							def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
 
-							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: enversQueryService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
+							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
 							def coEnversInstance
 
 							if (commerceObjectInstance instanceof hmof.CommerceObject){
@@ -320,7 +320,7 @@ class JobService {
 
 							// Handle Premium Commerce Objects
 							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
-								
+
 								listOfCommerceObjects << coEnversInstance
 
 							}
@@ -332,7 +332,7 @@ class JobService {
 						log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
-					
+
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
 					if(rpd){
@@ -340,17 +340,17 @@ class JobService {
 						log.info("******************************Status******************************\r\n")
 						log.info("promotionId:"+promotionInstance.id)
 						log.info("Job Status: Success\r\n")
-						
-						}
-					
+
+					}
+
 				}
 			}
-			
-			
-			
-			
-		
-			
+
+
+
+
+
+
 		}
 		catch(Exception e){
 
@@ -430,58 +430,58 @@ class JobService {
 	 * @param envId
 	 */
 	void initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
-	final String workingDir = cacheLocation
-	log = Logger.getLogger("Thread" + Thread.currentThread().getName());
-	Properties props=new Properties();
-	props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender");
-	props.setProperty("log4j.appender.file.maxFileSize","100MB");
-	props.setProperty("log4j.appender.file.maxBackupIndex","100");
-	if(envId==1){
-	if(contentType==1){
-			props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
-	}else if(contentType==2){	
-	props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
-	}else if(contentType==3){
-	
-	
-	props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
-	}else if(contentType==4){	
-	props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
-	}
-	}else if(envId==2){
-	if(contentType==1){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
-        }else if(contentType==2){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
-		}else if(contentType==3){
-		
-		
-		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
-		}else if(contentType==4){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
+		final String workingDir = cacheLocation
+		log = Logger.getLogger("Thread" + Thread.currentThread().getName());
+		Properties props=new Properties();
+		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender");
+		props.setProperty("log4j.appender.file.maxFileSize","100MB");
+		props.setProperty("log4j.appender.file.maxBackupIndex","100");
+		if(envId==1){
+			if(contentType==1){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+			}else if(contentType==2){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+			}else if(contentType==3){
+
+
+				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+			}else if(contentType==4){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log");
+			}
+		}else if(envId==2){
+			if(contentType==1){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
+			}else if(contentType==2){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
+			}else if(contentType==3){
+
+
+				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
+			}else if(contentType==4){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/review/log/"+programISBN+"-"+"cert_log.log");
+			}
+
+		}else if(envId==3){
+			if(contentType==1){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+			}else if(contentType==2){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+			}else if(contentType==3){
+
+
+				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+			}else if(contentType==4){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
+			}
 		}
-	
-	}else if(envId==3){
-	    if(contentType==1){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
-        }else if(contentType==2){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
-		}else if(contentType==3){
-		
-		
-		props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
-		}else if(contentType==4){
-		props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log");
-		}
+		props.setProperty("log4j.appender.file.threshold","info");
+		props.setProperty("log4j.appender.file.Append","false");
+		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
+		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
+		props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
+		PropertyConfigurator.configure(props);
 	}
-	props.setProperty("log4j.appender.file.threshold","info");
-	props.setProperty("log4j.appender.file.Append","false");
-	props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
-	props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
-	props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
-	PropertyConfigurator.configure(props);
-}
-	
+
 
 }
 
