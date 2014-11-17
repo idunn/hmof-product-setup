@@ -102,7 +102,7 @@ environments {
 // log4j configuration
 environments {
 development {
-	applicationVersion="0.8"	
+	
 	cacheLocation="target/ProductSetup-cache/"
 // log4j configuration
 log4j = {
@@ -147,7 +147,7 @@ log4j = {
 }
 
 production{
-	applicationVersion="0.8"
+	
 	cacheLocation="E:/ProductSetup-cache/"
 	// log4j configuration
 	log4j = {

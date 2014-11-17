@@ -56,11 +56,11 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${programInstanceList}" status="i" var="programInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/dev/log/"+"${programInstance.name}"+"-dev_log"+".log"
+			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/dev/log/"+"${programInstance.name}_${programInstance.state}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
-			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/review/log/"+"${programInstance.name}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/review/log/"+"${programInstance.name}_${programInstance.state}"+"-cert_log"+".log"
 			   File qaLogFile = new File(qaLog)
-			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}"+"/prod/log/"+"${programInstance.name}"+"-prod_log"+".log"
+			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/prod/log/"+"${programInstance.name}_${programInstance.state}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
 				<td><input type="radio" name="rad" id="rad${i}" value="${programInstance.id}" onclick="toggle(this,'row${i}')"/>
 				<g:link action="show" id="${programInstance.id}">${programInstance.id}</g:link> </td>
