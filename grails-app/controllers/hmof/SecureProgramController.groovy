@@ -16,6 +16,7 @@ class SecureProgramController {
 
 	def springSecurityService
 	def deploymentService
+	def utilityService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -38,7 +39,7 @@ class SecureProgramController {
 		if(!bundleInstances.isEmpty()){
 			programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
 		}
-		
+
 		programInstances.each{
 			it.properties = [lastUpdated: new Date()]
 		}
@@ -86,7 +87,7 @@ class SecureProgramController {
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
 		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
-		
+
 		redirect(action: "list")
 
 	}
@@ -257,35 +258,13 @@ class SecureProgramController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
-	
-	
+
+
+	/**
+	 * Download the log file
+	 * @return
+	 */
 	def download() {
-		def logFile=params.logFile
-		log.debug("logFile is: "+logFile)
-		File downloadFile=new File(logFile)
-		log.debug("downloadFile is:"+downloadFile)
-		try {
-			if(downloadFile.exists()){
-				OutputStream out = null;
-				response.setHeader("Content-Type", "application/octet-stream;")
-				response.setHeader("Content-Disposition", "attachment; filename="+downloadFile.getName())
-				FileInputStream fileInputStream = new FileInputStream(downloadFile);
-				out = response.getOutputStream();
-				int fileCharacter;
-				while((fileCharacter = fileInputStream.read())!= -1) {
-					out.write(fileCharacter);
-				}
-				fileInputStream.close();
-				out.flush();
-				out.close();
-			}
-			else{
-				log.debug "Log file not found"
-			}
-		}
-		catch(Exception e){
-			log.info("exception in download action is: "+e.getMessage())
-			log.info("exception in download action is: "+e.getStackTrace().toString())
-		}
+		utilityService.getLogFile(params.logFile)
 	}
 }
