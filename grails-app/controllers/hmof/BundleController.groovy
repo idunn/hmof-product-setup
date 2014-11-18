@@ -46,7 +46,7 @@ class BundleController {
 	 * @return
 	 */
 	@Transactional
-	def removeChildren(def currentInstance){
+	def removeAssociations(def currentInstance){
 
 		def bundleToDelete = Bundle.where{id==currentInstance.id}.get()
 		def child = []
@@ -271,11 +271,10 @@ class BundleController {
 			return
 		}
 
-		log.info "Removing Secure Program from the Bundle that is being deleted"
-		// before we delete we remove direct children to prevent referential integrity issues
-		removeChildren(bundleInstance)
+		log.info "Removing Secure Program associations from the Bundle that is being deleted"		
+		removeAssociations(bundleInstance)
 
-		log.info "Started deleting Bundle ISBN:" + bundleInstance.isbn
+		log.info "Started deleting Bundle ISBN: " + bundleInstance.isbn
 		bundleInstance.delete flush:true
 
 		request.withFormat {
@@ -285,7 +284,7 @@ class BundleController {
 			}
 			'*'{ render status: NO_CONTENT }
 		}
-		log.info "Successfully deleted Bundle ISBN:"+bundleInstance.isbn
+		log.info "Successfully deleted Bundle ISBN: " + bundleInstance.isbn
 	}
 
 	protected void notFound() {

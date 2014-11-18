@@ -1,7 +1,6 @@
 package hmof
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import hmof.deploy.Job
@@ -10,7 +9,8 @@ import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
 import grails.plugin.springsecurity.annotation.Secured
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
+
 @Transactional(readOnly = true)
 class SecureProgramController {
 
@@ -48,6 +48,30 @@ class SecureProgramController {
 
 
 	/**
+	 * Remove Standalone Associations before deleting the SecureProgram
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def removeAssociations(def currentInstance){
+
+		def parentBundles = Bundle.where{secureProgram{id==currentInstance.id}}.list()
+
+		log.info"Parent Bundles in association" + parentBundles
+
+		parentBundles.each{
+
+			def bundle = Bundle.get(it.id)
+			bundle.removeFromSecureProgram(currentInstance)
+		}
+
+		def childCommerceObjects = []
+		childCommerceObjects += currentInstance.commerceObjects
+		childCommerceObjects.each{co -> currentInstance.removeFromCommerceObjects(co) }
+
+	}
+
+	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
@@ -59,22 +83,22 @@ class SecureProgramController {
 		log.info("Secure Program  Detail: "+instanceId)
 		def (commerceObject) = deploymentService.getSecureProgramChildren(instanceId)
 		def childContent = commerceObject
-		log.info("childContent: "+childContent)
+		log.info("childContent: "+ childContent)
 		def secureProgramInstance = SecureProgram.get(instanceId)
-		log.info("Deploying secureProgramInstance : "+secureProgramInstance.productName)
+		log.info("Deploying secureProgramInstance: " + secureProgramInstance.productName)
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-		log.info("deploymentJobNumber: "+deploymentJobNumber)
+		log.info("deploymentJobNumber: " + deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
-		log.info("userId: "+userId)
-		log.info("contentId: "+secureProgramInstance.id)
-		log.info("contentTypeId: "+secureProgramInstance.contentType.contentId)
+		log.info("userId: " + userId)
+		log.info("contentId: " + secureProgramInstance.id)
+		log.info("contentTypeId: " + secureProgramInstance.contentType.contentId)
 		// Create a map of job data to persist
 		def job = [contentId: secureProgramInstance.id, revision: deploymentService.getCurrentEnversRevision(secureProgramInstance), contentTypeId: secureProgramInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
 		// Add Program instance to Job
 		Job j1 = new Job(job).save(failOnError:true)
-		log.info("Successfully added Secure Program Instance to job : "+secureProgramInstance.productName)
+		log.info("Successfully added Secure Program Instance to job: " + secureProgramInstance.productName)
 		childContent.each{
 			log.info("Adding child content to job content id"+it.id+",revision"+deploymentService.getCurrentEnversRevision(it)+",contentTypeId"+it.contentType.contentId+",jobNumber"+j1.getJobNumber())
 			def content = [contentId: it.id, revision: deploymentService.getCurrentEnversRevision(it), contentTypeId: it.contentType.contentId, jobNumber: j1.getJobNumber(), user: userId]
@@ -224,7 +248,7 @@ class SecureProgramController {
 			}
 			'*'{ respond secureProgramInstance, [status: OK] }
 		}
-		log.info "Successfully updated Secure Program :"+secureProgramInstance.productName
+		log.info "Successfully updated Secure Program: " + secureProgramInstance.productName
 	}
 
 	@Transactional
@@ -236,7 +260,11 @@ class SecureProgramController {
 			notFound()
 			return
 		}
-		log.info "Started deleting Secure Program :"+secureProgramInstance.productName
+
+		log.info "Removing Parent/Child associations from the SP that is being deleted"
+		removeAssociations(secureProgramInstance)
+
+		log.info "Started deleting Secure Program: " + secureProgramInstance.productName
 		secureProgramInstance.delete flush:true
 
 		request.withFormat {
@@ -246,7 +274,7 @@ class SecureProgramController {
 			}
 			'*'{ render status: NO_CONTENT }
 		}
-		log.info "Successfully deleted Secure Program :"+secureProgramInstance.productName
+		log.info "Successfully deleted Secure Program: " + secureProgramInstance.productName
 	}
 
 	protected void notFound() {
