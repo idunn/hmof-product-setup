@@ -9,8 +9,8 @@ import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.log4j.Logger
 
-import org.apache.log4j.Logger;
 /**
  * CommerceObjectController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -20,6 +20,7 @@ class CommerceObjectController {
 
 	def springSecurityService
 	def deploymentService
+	def utilityService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -60,6 +61,24 @@ class CommerceObjectController {
 	}
 
 	/**
+	 * Remove Standalone Parent Associations before deleting the Commerce Object
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def removeAssociations(def currentInstance){
+
+		def parentSecureProgram = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
+		log.info"Parent Secure Programs in association" + parentSecureProgram
+
+		parentSecureProgram.each{
+
+			def secureProgram = SecureProgram.get(it.id)
+			secureProgram.removeFromCommerceObjects(currentInstance)
+		}
+	}
+
+	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
@@ -89,7 +108,7 @@ class CommerceObjectController {
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
 		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
-		
+
 		redirect(action: "list")
 
 	}
@@ -239,6 +258,10 @@ class CommerceObjectController {
 			notFound()
 			return
 		}
+
+		log.info "Removing Parent associations from the CO that is being deleted"
+		removeAssociations(commerceObjectInstance)
+
 		log.info "Started deleting Commerce Object :"+commerceObjectInstance.objectName
 		commerceObjectInstance.delete flush:true
 
@@ -261,36 +284,13 @@ class CommerceObjectController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
-	
+
+	/**
+	 * Download the log file
+	 * @return
+	 */
 	def download() {
-		def logFile=params.logFile
-		log.debug("logFile is: "+logFile)
-		File downloadFile=new File(logFile)
-		log.debug("downloadFile is:"+downloadFile)
-		try {
-			if(downloadFile.exists()){
-				OutputStream out = null;
-				response.setHeader("Content-Type", "application/octet-stream;")
-				response.setHeader("Content-Disposition", "attachment; filename="+downloadFile.getName())
-				FileInputStream fileInputStream = new FileInputStream(downloadFile);
-				out = response.getOutputStream();
-				int fileCharacter;
-				while((fileCharacter = fileInputStream.read())!= -1) {
-					out.write(fileCharacter);
-				}
-				fileInputStream.close();
-				out.flush();
-				out.close();
-			}
-			else{
-				log.debug "Log file not found"
-			}
-		}
-		catch(Exception e){
-			log.info("exception in download action is: "+e.getMessage())
-			log.info("exception in download action is: "+e.getStackTrace().toString())
-		}
+		utilityService.getLogFile(params.logFile)
 	}
-	
-	
+
 }
