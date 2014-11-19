@@ -21,7 +21,7 @@
 					code="commerceObject.isbnNumber.label" default="Isbn" /><span
 				class="required-indicator">*</span></label>
 			<div class="controls">
-				<g:textField class="form-control" maxlength="13" name="isbnNumber" required=""
+				<g:textField class="form-control" maxlength="13" name="isbnNumber" required="" 
 					value="${commerceObjectInstance?.isbnNumber}" data-toggle="tooltip" data-placement="right" data-container="body" title="A 10-digit unique identifier" />
 
 			</div>

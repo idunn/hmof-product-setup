@@ -86,7 +86,11 @@ class CommerceObjectController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-		def instanceId = params.instanceDetail
+		def instanceDetail = params.instanceDetail
+		
+		def instanceDetails = instanceDetail.split("/")
+		def instanceId = instanceDetails[0]
+		
 		log.info("Commerce Object  Detail: "+instanceId)
 		def commerceObjectInstance = CommerceObject.get(instanceId)
 		log.info("Deploying commerceObjectInstance : "+commerceObjectInstance.objectName)
@@ -180,6 +184,18 @@ class CommerceObjectController {
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
+		
+		
+		 def lisbnNumber = CommerceObject.executeQuery("select max(isbnNumber) from CommerceObject where isbnNumber like '%557%' and LENGTH(isbnNumber) = 10")
+		
+		  String strISBN= lisbnNumber[0]		  
+		 Long lNumber = Long.valueOf(strISBN);		 
+		 if(lNumber>=5570000001)
+		 lNumber++
+		 else
+		 lNumber=5570000001		
+		 params.isbnNumber=lNumber
+		  
 		respond new CommerceObject(params)
 	}
 
