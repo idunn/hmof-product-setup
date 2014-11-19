@@ -11,7 +11,18 @@ This is the standard dialog that initiates the delete action.
 				<h3 id="DeleteModalLabel"><g:message code="default.button.delete.confirm.title" default="Delete Item"/></h3>
 			</div>
 			<div class="modal-body">
-				<p><g:message code="default.button.delete.confirm.message" args="[entityName]" default="Do you really want to delete this item?"/></p>
+				<p><g:message code="default.button.delete.confirm.message" args="[entityName]" default="Do you really want to delete this item?"/>
+				
+				<g:if test="${entityName == "Bundle"}">
+					<g:if test="${bundleInstance.secureProgram}">
+						<p><g:message code="default.bundle.children" default="This Bundle has the following Secure Programs that will not be deleted"/></p>						
+						<g:each in="${bundleInstance.secureProgram}" status="i" var="bundleChildren">
+							<ul><li>${bundleChildren}</li></ul>
+						</g:each>
+					</g:if>
+				</g:if>
+				
+				</p>
 			</div>
 			<div class="modal-footer">
 				<g:form>
