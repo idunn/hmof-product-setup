@@ -87,10 +87,10 @@ class CommerceObjectController {
 	def deploy(){
 
 		def instanceDetail = params.instanceDetail
-		
+
 		def instanceDetails = instanceDetail.split("/")
 		def instanceId = instanceDetails[0]
-		
+
 		log.info("Commerce Object  Detail: "+instanceId)
 		def commerceObjectInstance = CommerceObject.get(instanceId)
 		log.info("Deploying commerceObjectInstance : "+commerceObjectInstance.objectName)
@@ -180,21 +180,22 @@ class CommerceObjectController {
 	}
 
 	def show(CommerceObject commerceObjectInstance) {
-		respond commerceObjectInstance
+		def parentSecureProgram = SecureProgram.where{commerceObjects{id==commerceObjectInstance.id}}.list()
+		render(view:"show", model:[commerceObjectInstance:commerceObjectInstance, parentSecureProgram:parentSecureProgram ])
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
-	def create() {	
-			
+	def create() {
+
 		Long lNumber =5570000001
-		 def lisbnNumber = CommerceObject.executeQuery("select max(isbnNumber) from CommerceObject where isbnNumber like '%557%' and LENGTH(isbnNumber) = 10")
-		String strISBN= lisbnNumber[0]	
-		 if(strISBN!=null){
-		  lNumber = Long.valueOf(strISBN)		 
-		 if(lNumber>=5570000001)
-		 lNumber++		
-		 }		
-		 params.isbnNumber=lNumber
-		 
+		def lisbnNumber = CommerceObject.executeQuery("select max(isbnNumber) from CommerceObject where isbnNumber like '%557%' and LENGTH(isbnNumber) = 10")
+		String strISBN= lisbnNumber[0]
+		if(strISBN!=null){
+			lNumber = Long.valueOf(strISBN)
+			if(lNumber>=5570000001)
+				lNumber++
+		}
+		params.isbnNumber=lNumber
+
 		respond new CommerceObject(params)
 	}
 

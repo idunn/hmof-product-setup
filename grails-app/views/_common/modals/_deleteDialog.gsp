@@ -24,7 +24,7 @@ This is the standard dialog that initiates the delete action.
 				
 				<g:if test="${entityName == "SecureProgram"}">					
 					<g:if test="${parentBundles}">
-						<p><g:message code="default.secureProgram.parent" default="This Secure program belongs to the following Bundles that will not be deleted"/></p>						
+						<p><g:message code="default.secureProgram.parent" default="This Secure Program is being used by the following Bundles that will not be deleted:"/></p>						
 						<g:each in="${parentBundles}" status="i" var="parentBundlesList">
 							<ul><li>${parentBundlesList}</li></ul>
 						</g:each>
@@ -39,10 +39,10 @@ This is the standard dialog that initiates the delete action.
 				</g:if>
 				
 				<g:if test="${entityName == "CommerceObject"}">
-					<g:if test="${bundleInstance.secureProgram}">
-						<p><g:message code="default.bundle.children" default="Secure Programs will not be deleted:"/></p>						
-						<g:each in="${bundleInstance.secureProgram}" status="i" var="bundleChildren">
-							<ul><li>${bundleChildren}</li></ul>
+					<g:if test="${parentSecureProgram}">
+						<p><g:message code="default.commerceObject.parent" default="This Commerce Object is being used by the following Secure Programs that will not be deleted:"/></p>						
+						<g:each in="${parentSecureProgram}" status="i" var="parentSecureProgramList">
+							<ul><li>${parentSecureProgramList}</li></ul>
 						</g:each>
 					</g:if>
 				</g:if>
