@@ -181,8 +181,12 @@ class SecureProgramController {
 	}
 
 	def show(SecureProgram secureProgramInstance) {
-		respond secureProgramInstance
+				
+		def parentBundles = Bundle.where{secureProgram{id==secureProgramInstance.id}}.list()
+		
+		render(view:"show", model:[secureProgramInstance:secureProgramInstance, parentBundles:parentBundles])
 	}
+	
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
 		respond new SecureProgram(params)
