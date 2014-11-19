@@ -183,19 +183,18 @@ class CommerceObjectController {
 		respond commerceObjectInstance
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
-	def create() {
-		
-		
+	def create() {	
+			
+		Long lNumber =5570000001
 		 def lisbnNumber = CommerceObject.executeQuery("select max(isbnNumber) from CommerceObject where isbnNumber like '%557%' and LENGTH(isbnNumber) = 10")
-		
-		  String strISBN= lisbnNumber[0]		  
-		 Long lNumber = Long.valueOf(strISBN);		 
+		String strISBN= lisbnNumber[0]	
+		 if(strISBN!=null){
+		  lNumber = Long.valueOf(strISBN)		 
 		 if(lNumber>=5570000001)
-		 lNumber++
-		 else
-		 lNumber=5570000001		
+		 lNumber++		
+		 }		
 		 params.isbnNumber=lNumber
-		  
+		 
 		respond new CommerceObject(params)
 	}
 
