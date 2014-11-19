@@ -22,6 +22,15 @@ This is the standard dialog that initiates the delete action.
 					</g:if>
 				</g:if>
 				
+				<g:if test="${entityName == "SecureProgram"}">
+					<g:if test="${secureProgramInstance.commerceObjects}">
+						<p><g:message code="default.secureProgram.children" default="This Secure program has the following Commerce Objects that will not be deleted"/></p>						
+						<g:each in="${secureProgramInstance.commerceObjects}" status="i" var="secureProgramChildren">
+							<ul><li>${secureProgramChildren}</li></ul>
+						</g:each>
+					</g:if>
+				</g:if>
+				
 				</p>
 			</div>
 			<div class="modal-footer">
