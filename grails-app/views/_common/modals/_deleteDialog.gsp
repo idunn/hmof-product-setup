@@ -20,7 +20,8 @@ This is the standard dialog that initiates the delete action.
 							<ul><li>${bundleChildren}</li></ul>
 						</g:each>						
 					</g:if>
-					<g:else><p>This Bundle does not have any Secure Programs</p></g:else>
+					<g:else><p>This Bundle does not have any Secure Programs.</p></g:else>
+				<p><br /><g:message code="default.content.delete"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
 				</g:if>
 				
 				<g:if test="${entityName == "SecureProgram"}">					
@@ -31,16 +32,17 @@ This is the standard dialog that initiates the delete action.
 						</g:each>
 						<br />
 					</g:if>					
-					<g:else><p>This Secure Program is not being used by any Bundles</p></g:else>					
+					<g:else><p>This Secure Program is not being used by any Bundles.</p></g:else>					
 					<g:if test="${secureProgramInstance.commerceObjects}">
 						<p><g:message code="default.secureProgram.children" default="This Secure program has the following Commerce Objects that will not be deleted"/></p>						
 						<g:each in="${secureProgramInstance.commerceObjects}" status="i" var="secureProgramChildren">
 							<ul><li>${secureProgramChildren}</li></ul>
 						</g:each>
 					</g:if>
-					<g:else><p>This Secure Program does not have any Commerce Objects</p></g:else>
+					<g:else><p>This Secure Program does not have any Commerce Objects.</p></g:else>
+				<p><br /><g:message code="default.content.delete"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
 					
-				</g:if>
+				</g:if>				
 				
 				<g:if test="${entityName == "CommerceObject"}">
 					<g:if test="${parentSecureProgram}">
@@ -49,8 +51,19 @@ This is the standard dialog that initiates the delete action.
 							<ul><li>${parentSecureProgramList}</li></ul>
 						</g:each>
 					</g:if>
-					<g:else><p>This Commerce Object is not being used by any Secure Programs</p></g:else>
+					<g:else><p>This Commerce Object is not being used by any Secure Programs.</p></g:else>
+				<p><br /><g:message code="default.content.delete"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
 				</g:if>
+				
+				<g:if test="${entityName == "Program"}">
+					<g:if test="${programInstance.bundles}">
+						<p><g:message code="default.program.child" default="This Program Contains the following Bundles and cannot be deleted:"/></p>						
+						<g:each in="${programInstance.bundles}" status="i" var="childProgramList">
+							<ul><li>${childProgramList}</li></ul>
+						</g:each>
+					</g:if>
+					<g:else><p>This Program does not have any Bundles and is safe to delete!</p></g:else>
+				</g:if>				
 				
 				</p>
 			</div>
@@ -59,7 +72,13 @@ This is the standard dialog that initiates the delete action.
 					<button class="btn" data-dismiss="modal" aria-hidden="true"><g:message code="default.button.cancel.label" default="Cancel"/></button>
 					<g:hiddenField name="id" value="${item ? item.id : params.id}" />
 					<g:hiddenField name="_method" value="DELETE" />
-					<span class="button"><g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"/></span>
+					
+					<g:if test="${entityName != "Program"}">
+						<span class="button"><g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"/></span>
+					</g:if>
+					<g:elseif test="${!programInstance.bundles}">
+						<span class="button"><g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"/></span>
+					</g:elseif>					
 				</g:form>
 			</div>
 		</div>
