@@ -101,6 +101,17 @@ class BootStrap {
 				UserRole.create adminPerson, adminRole
 			}
 
+			// Admin User 2
+
+			def admin2 = User.findByUsername('idunn') ?: new User(
+					username: 'idunn',
+					password: 'EebeL7ae',
+					enabled: true).save(failOnError: true)
+
+			if (!admin2.authorities.contains(adminRole)) {
+				UserRole.create admin2, adminRole
+			}
+
 			// Anonymous user
 			def user1 = User.findByUsername('anon') ?: new User(
 					username: 'anon',
@@ -119,6 +130,28 @@ class BootStrap {
 			if (!devUser.authorities.contains(pmRole)) {
 				UserRole.create devUser, pmRole
 			}
+
+			// Stakeholders
+
+			def devUser2 = User.findByUsername('tosullivan') ?: new User(
+					username: 'tosullivan',
+					password: 'bYAw2C',
+					enabled: true).save(failOnError: true)
+
+			if (!devUser2.authorities.contains(pmRole)) {
+				UserRole.create devUser2, pmRole
+			}
+
+			def devUser3 = User.findByUsername('jgriffin') ?: new User(
+					username: 'jgriffin',
+					password: 'jooF7Xoh',
+					enabled: true).save(failOnError: true)
+
+			if (!devUser3.authorities.contains(pmRole)) {
+				UserRole.create devUser3, pmRole
+			}
+
+
 
 			// QA User
 			def qaUser = User.findByUsername('QA') ?: new User(
