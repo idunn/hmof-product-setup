@@ -49,21 +49,8 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
 				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
-				
-			</tr>
+			</tr>		
+			
 		  <tr class="prop">
 				<td valign="top" class="name"><g:message code="secureProgram.curriculumArea.label" default="Curriculum Area" /></td>
 				
@@ -315,21 +302,21 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph Id Dev" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph ID Dev" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdDev")}</td>
 				
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph Id QA" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph ID QA" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdQA")}</td>
 				
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph Id Prod" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph ID Prod" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdProd")}</td>
 				
@@ -350,7 +337,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment Cbi Time Limit" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment CBI Time Limit" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentCbiTimeLimit")}</td>
 				
@@ -362,9 +349,38 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "comments")}</td>
 				
 			</tr>
+			
+			<!-- Date Stamps here -->
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>
+				
+			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></td>
+				<td valign="top" class="name"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
+				
+			</tr>
+			
+			<!-- Added Parent Object Links -->
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.bundles.label" default="Bundles (Parent Objects)" /></td>
+				
+				<td valign="top" style="text-align: left;" class="value">
+					<ul>
+					<g:each in="${parentBundles}" var="b">
+						<li><g:link controller="bundle" action="show" id="${b.id}">${b?.encodeAsHTML()}</g:link></li>
+					</g:each>
+					</ul>
+				</td>				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects (Child Objects)" /></td>
 				
 				<td valign="top" style="text-align: left;" class="value">
 					<ul>
@@ -372,14 +388,8 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</td>
-				
-			</tr>
-			
-			
-			
-			
-			
+				</td>				
+			</tr>						
 				
 		</tbody>
 	</table>

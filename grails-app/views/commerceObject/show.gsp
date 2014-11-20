@@ -42,21 +42,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</td>
 				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></td>
-				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></td>
-				
-			</tr>
+			</tr>			
 		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.pathToCoverImage.label" default="Path To Cover Image" /></td>
@@ -129,13 +115,15 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</td>
 				
 			</tr>
-			<%--<tr class="prop">
+		<%--
+		<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.tabNavTab.label" default="TabNavTab" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "tabNavTab")}</td>
 				
-			</tr>
-		--%><tr class="prop">
+		</tr>
+		--%>
+		<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.isPremium.label" default="Is Premium" /></td>
 				
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isPremium")}</td>
@@ -147,6 +135,36 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "comments")}</td>
 				
 			</tr>
+			
+			<!-- Date Stamps -->
+			
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></td>
+				
+				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></td>
+				
+			</tr>
+			
+			<!-- Added Parent Object Links -->
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="commerceObject.secureprograms.label" default="Secure Programs (Parent Objects)" /></td>
+				
+				<td valign="top" style="text-align: left;" class="value">
+					<ul>
+					<g:each in="${parentSecureProgram}" var="s">
+						<li><g:link controller="secureProgram" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
+					</g:each>
+					</ul>
+				</td>				
+			</tr>
+			
 		</tbody>
 	</table>
 </section>

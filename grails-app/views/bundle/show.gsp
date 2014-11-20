@@ -71,14 +71,14 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.program.label" default="Program" /></td>
+				<td valign="top" class="name"><g:message code="bundle.program.label" default="Program (Parent Object)" /></td>
 				
 				<td valign="top" class="value"><g:link controller="program" action="show" id="${bundleInstance?.program?.id}">${bundleInstance?.program?.encodeAsHTML()}</g:link></td>
 				
 			</tr>
 		
 			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.secureProgram.label" default="Secure Program" /></td>
+				<td valign="top" class="name"><g:message code="bundle.secureProgram.label" default="Secure Program (Child Objects)" /></td>
 				
 				<td valign="top" style="text-align: left;" class="value">
 					<ul>
