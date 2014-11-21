@@ -79,7 +79,10 @@ class SecureProgramController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-		def instanceId = params.instanceDetail
+			def instanceDetail = params.instanceDetail
+
+		def instanceDetails = instanceDetail.split("/")
+		def instanceId = instanceDetails[0]
 		log.info("Secure Program  Detail: "+instanceId)
 		def (commerceObject) = deploymentService.getSecureProgramChildren(instanceId)
 		def childContent = commerceObject
@@ -125,8 +128,12 @@ class SecureProgramController {
 	def promote(){
 
 		final String none = "none"
-
-		def secureProgramInstance = SecureProgram.get(params.instanceToBePromoted)
+		
+		def instanceDetail = params.instanceToBePromoted
+		def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = instanceDetails[0]
+		
+		def secureProgramInstance = SecureProgram.get(instanceToBePromoted)
 		log.info("Promoting secureProgramInstance : "+secureProgramInstance.productName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
@@ -150,8 +157,8 @@ class SecureProgramController {
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
-			log.info("Job ${promotionJobInstance.jobNumber} promoted successfully")
-
+			
+			log.info("Job saved successfully")
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"

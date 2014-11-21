@@ -126,8 +126,12 @@ class CommerceObjectController {
 	def promote(){
 
 		final String none = "none"
-
-		def commerceObjectInstance = CommerceObject.get(params.instanceToBePromoted)
+		
+         def instanceDetail = params.instanceToBePromoted
+		def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = instanceDetails[0]
+		
+		def commerceObjectInstance = CommerceObject.get(instanceToBePromoted)
 		log.info("Promoting commerceObjectInstance : "+commerceObjectInstance.objectName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
@@ -150,7 +154,7 @@ class CommerceObjectController {
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
-			log.info("Job ${promotionJobInstance.jobNumber} promoted successfully")
+			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
 

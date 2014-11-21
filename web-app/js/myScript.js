@@ -32,31 +32,86 @@ function toggle(box,theId) {
 		}
 
 
-	function deploy(){				
+	function deploy(){		
+		
 		if($("input:radio[name='rad']").is(":checked")){		
 		var optionSelected = $('input[name=rad]:checked').val();				
 		var instanceDetail = document.getElementById("instanceDetail");
-		instanceDetail.value = optionSelected;		
+		instanceDetail.value = optionSelected;	
+		
+		var latestRevision = optionSelected.split("/")[1];
+		var environmentRevision = optionSelected.split("/")[2];
+		environmentRevision = environmentRevision.split(",")[2];
+		
+		if (environmentRevision != undefined) {
+			environmentRevision = environmentRevision.trim();
+		}
+		if (latestRevision == environmentRevision) {			
+		getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ?',function(result) {
+			   // Do something with result...
+
+		});
+		return false;			
+			
+		} else {				
 		var deployProgram=confirm("Are you sure you want to deploy?");
 		if(deployProgram){
 			return true;
 			}
 		else{
 			return false; 
-			}		
+			}
+		
+		}
 		}
 		else{
 				alert("Please select content to deploy!");
 				return false;
 			}
 	}
+	
+	function getConfirm(confirmMessage,callback){
+		
+	    confirmMessage = confirmMessage || '';
 
+	    $('#confirmbox').modal({show:true,
+	                            backdrop:false,
+	                            keyboard: false,
+	    });
+
+	    $('#confirmMessage').html(confirmMessage);
+	    $('#confirmFalse').click(function(){
+	        $('#confirmbox').modal('hide');
+	        if (callback) callback(false);
+
+	    });
+	    $('#confirmTrue').click(function(){
+	        $('#confirmbox').modal('hide');
+	        if (callback) callback(true);
+	    });
+	}  
 
 	function promote(){				
 		if($("input:radio[name='rad']").is(":checked")){		
 		var optionSelected = $('input[name=rad]:checked').val();				
 		var instanceToBePromoted = document.getElementById("instanceToBePromoted");
-		instanceToBePromoted.value = optionSelected;		
+		instanceToBePromoted.value = optionSelected;
+		
+		var latestRevision = optionSelected.split("/")[1];
+		var environmentRevision = optionSelected.split("/")[2];
+		environmentRevision = environmentRevision.split(",")[2];
+		
+		if (environmentRevision != undefined) {
+			environmentRevision = environmentRevision.trim();
+		}
+		if (latestRevision == environmentRevision) {
+			getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ?',function(result) {
+				   // Do something with result...
+
+			});
+			return false;		
+
+		} else {
 		var promoteProgram=confirm("Are you sure you want to promote?");
 		if(promoteProgram){
 			return true;
@@ -64,6 +119,7 @@ function toggle(box,theId) {
 		else{
 			return false; 
 			}		
+		}
 		}
 		else{
 				alert("Please select content to promote!");

@@ -1,5 +1,6 @@
 
 <%@ page import="hmof.CommerceObject" %>
+<%@ page import="hmof.DeploymentService"%>
 <!DOCTYPE html>
 <html>
 
@@ -11,6 +12,7 @@
 
 <body>
 
+    
 <sec:ifNotLoggedIn>
 		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content
 </sec:ifNotLoggedIn>
@@ -51,8 +53,9 @@
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/prod/log/"+"${commerceObjectInstance.isbnNumber}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
 			   
-			  
-				<td><input type="radio" name="rad" id="rad${i}" value="${commerceObjectInstance.id}" onclick="toggle(this,'row${i}')"/>
+			
+				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${commerceObjectInstance.id+"/"+jobdetails.getCurrentEnversRevision(commerceObjectInstance)+"/"+jobdetails.getPromotionDetails(commerceObjectInstance,jobdetails.getUserEnvironmentIdInformation())}"
+	 onclick="toggle(this,'row${i}')"/></sec:ifAnyGranted>
 				<g:link action="show" id="${commerceObjectInstance.id}">${commerceObjectInstance.id}</g:link> </td>
 			
 				<td><g:link action="show" id="${commerceObjectInstance.id}">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</g:link></td>
@@ -137,7 +140,8 @@
 	<%-- Required to pass to JavaScript --%>
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>
-		
+	<%-- Confirm dialog for Deploy/Promote  --%>
+		<g:render template="/_common/modals/confirmDialog"/>
 </g:form>
 </div>
 	<div>

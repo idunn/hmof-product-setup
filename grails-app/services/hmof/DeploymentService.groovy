@@ -190,7 +190,21 @@ class DeploymentService {
 		def envId = Environment.where{name==envName}.get()
 
 	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getUserEnvironmentIdInformation(){
 
+		// get role of user
+		def principal = springSecurityService.principal
+		def authorities = principal.authorities
+		// get role id of user
+		def roleId = Role.where{authority==authorities}.get()
+		def envName = getEnvironmentName(roleId.id)
+		def envId = Environment.where{name==envName}.get()
+		envId.id
+	}
 	/**
 	 * Helper Method If Prod User then return 2 if QA user then return 1
 	 * @param environmentId

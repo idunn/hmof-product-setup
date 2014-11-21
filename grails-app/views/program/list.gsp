@@ -1,5 +1,6 @@
 
 <%@ page import="hmof.Program" %>
+<%@ page import="hmof.DeploymentService"%>
 <!DOCTYPE html>
 <html>
 
@@ -62,7 +63,7 @@
 			   File qaLogFile = new File(qaLog)
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/prod/log/"+"${programInstance.name}_${programInstance.state}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
-				<td><input type="radio" name="rad" id="rad${i}" value="${programInstance.id}" onclick="toggle(this,'row${i}')"/>
+				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${programInstance.id+"/"+jobdetails.getCurrentEnversRevision(programInstance)+"/"+jobdetails.getPromotionDetails(programInstance,jobdetails.getUserEnvironmentIdInformation())}" onclick="toggle(this,'row${i}')"/></sec:ifAnyGranted>
 				<g:link action="show" id="${programInstance.id}">${programInstance.id}</g:link> </td>
 			
 				<td><g:link action="show" id="${programInstance.id}">${fieldValue(bean: programInstance, field: "name")}</g:link></td>
@@ -139,7 +140,8 @@
 	<%-- Required to pass to JavaScript --%>
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>
-	
+		<%-- Confirm dialog for Deploy/Promote  --%>
+		<g:render template="/_common/modals/confirmDialog"/>
 </g:form>
 </div>
 	

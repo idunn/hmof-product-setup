@@ -33,8 +33,11 @@ class ProgramController {
 	@Transactional
 	def deploy(){
 
-
-		def instanceId = params.instanceDetail
+		def instanceDetail = params.instanceDetail
+		
+		def instanceDetails = instanceDetail.split("/")
+		def instanceId = instanceDetails[0]
+		
 		log.info("Program Detail: "+instanceId)
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
@@ -93,7 +96,11 @@ class ProgramController {
 
 		final String none = "none"
 
-		def programInstance = Program.get(params.instanceToBePromoted)
+		def instanceDetail = params.instanceToBePromoted
+		def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = instanceDetails[0]
+		
+		def programInstance = Program.get(instanceToBePromoted)
 		log.info("Promoting programInstance name: "+programInstance.name)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
@@ -117,7 +124,7 @@ class ProgramController {
 
 			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
-			log.info("Job ${promotionJobInstance.jobNumber} promoted successfully")
+			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
 

@@ -64,7 +64,10 @@ class BundleController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-		def instanceId = params.instanceDetail
+			def instanceDetail = params.instanceDetail
+
+		def instanceDetails = instanceDetail.split("/")
+		def instanceId = instanceDetails[0]
 		log.info("Bundle  Detail: "+instanceId)
 		def (secureProgram, commerceObject) = deploymentService.getBundleChildren(instanceId)
 		def childContent = secureProgram + commerceObject
@@ -132,7 +135,11 @@ class BundleController {
 
 		final String none = "none"
 
-		def bundleInstance = Bundle.get(params.instanceToBePromoted)
+		def instanceDetail = params.instanceToBePromoted
+		def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = instanceDetails[0]
+		
+		def bundleInstance = Bundle.get(instanceToBePromoted)
 		log.info("Promoting bundleInstance isbn: "+bundleInstance.isbn)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
