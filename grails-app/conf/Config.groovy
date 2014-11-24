@@ -115,7 +115,7 @@ environments {
 			appenders {
 				console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
 
-				rollingFile name:'file', file: logDirectory + 'target/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+				rollingFile name:'file', file: logDirectory + '/target/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
 			}
 
 			root {
