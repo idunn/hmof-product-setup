@@ -50,7 +50,7 @@
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
-			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/review/log/"+"${secureProgramInstance.registrationIsbn}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/review/log/"+"${secureProgramInstance.registrationIsbn}"+"-review_log"+".log"
 			   File qaLogFile = new File(qaLog)
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/prod/log/"+"${secureProgramInstance.registrationIsbn}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>

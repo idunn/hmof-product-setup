@@ -103,7 +103,7 @@ environments {
 environments {
 development {
 	
-	cacheLocation="target/ProductSetup-cache/"
+	cacheLocation="target/ProductSetup-cache"
 // log4j configuration
 log4j = {
 	// Example of changing the log pattern for the default console appender:
@@ -115,7 +115,7 @@ log4j = {
 	appenders {
 		console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
 
-		rollingFile name:'file', file: logDirectory + '/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+		rollingFile name:'file', file: logDirectory + '/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
 	}
 	
 	root {
@@ -148,7 +148,7 @@ log4j = {
 
 production{
 	
-	cacheLocation="E:/ProductSetup-cache/"
+	cacheLocation="E:/ProductSetup-cache"
 	// log4j configuration
 	log4j = {
 		// Example of changing the log pattern for the default console appender:
@@ -158,7 +158,7 @@ production{
 		//}
 	
 		appenders {
-			rollingFile name:'file', file: logDirectory + '/ProductSetup-DeploymentManager.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+			rollingFile name:'file', file: logDirectory + '/logs/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
 		}
 		debug 'hmof.geb'
 		error  'org.codehaus.groovy.grails.web.servlet',        // controllers

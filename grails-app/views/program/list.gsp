@@ -59,7 +59,7 @@
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/dev/log/"+"${programInstance.name}_${programInstance.state}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
-			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/review/log/"+"${programInstance.name}_${programInstance.state}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/review/log/"+"${programInstance.name}_${programInstance.state}"+"-review_log"+".log"
 			   File qaLogFile = new File(qaLog)
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/prod/log/"+"${programInstance.name}_${programInstance.state}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>

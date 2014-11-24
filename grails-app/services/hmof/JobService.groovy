@@ -54,7 +54,7 @@ class JobService {
 			def cacheLocation = Holders.config.cacheLocation
 
 			log.debug "cacheLocation" + cacheLocation
-			log.info "The deployment Url is now##: " + deploymentUrl
+			log.debug "The deployment Url is: " + deploymentUrl
 
 			// used in external logs
 			if (!program.isEmpty()){

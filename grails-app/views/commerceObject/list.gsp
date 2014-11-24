@@ -44,13 +44,13 @@
 		<g:set var="jobdetails" bean="deploymentService"/>
 		<g:each in="${commerceObjectInstanceList}" status="i" var="commerceObjectInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/dev/log/"+"${commerceObjectInstance.isbnNumber}"+"-dev_log"+".log"
+			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/dev/log/"+"${commerceObjectInstance.isbnNumber}"+"-dev_log"+".log"
 			   
 			
 			File devLogFile = new File(devLog)
-			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/review/log/"+"${commerceObjectInstance.isbnNumber}"+"-cert_log"+".log"
+			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/review/log/"+"${commerceObjectInstance.isbnNumber}"+"-review_log"+".log"
 			   File qaLogFile = new File(qaLog)
-			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/prod/log/"+"${commerceObjectInstance.isbnNumber}"+"-prod_log"+".log"
+			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/prod/log/"+"${commerceObjectInstance.isbnNumber}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
 			   
 			
