@@ -461,7 +461,7 @@ class JobService {
 		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
 		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
 		props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
-		PropertyConfigurator.configure(props);
+		PropertyConfigurator.configure(props)
 	}
 }
 

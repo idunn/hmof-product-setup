@@ -101,119 +101,91 @@ environments {
 
 // log4j configuration
 environments {
-development {
-	
-	cacheLocation="target/ProductSetup-cache"
-// log4j configuration
-log4j = {
-	// Example of changing the log pattern for the default console appender:
-	//
-	//appenders {
-	//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-	//}
+	development {
 
-	appenders {
-		console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+		cacheLocation="target/ProductSetup-cache"
+		// log4j configuration
+		log4j = {
+			// Example of changing the log pattern for the default console appender:
+			//
+			//appenders {
+			//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+			//}
 
-		rollingFile name:'file', file: logDirectory + '/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
-	}
-	
-	root {
-		error 'stdout', 'file'
-		additivity = true
-		 }
-	debug 'hmof.geb'
-	error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-		   'org.codehaus.groovy.grails.web.pages',          // GSP
-		   'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-		   'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-		   'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-		   'org.codehaus.groovy.grails.commons',            // core / classloading
-		   'org.codehaus.groovy.grails.plugins',            // plugins
-		   'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-		   'org.springframework',
-		   'org.hibernate',
-		   'net.sf.ehcache.hibernate'
-		   
-		   
-	debug  "grails.app.controllers.hmof",
-		   "grails.app.services.hmof" ,
-		   "grails.app.domain.hmof"
-     
-	info  "grails.app.controllers.hmof",
-		   "grails.app.services.hmof" ,
-		   "grails.app.domain.hmof"
-}
-}
+			appenders {
+				console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
 
-production{
-	
-	cacheLocation="E:/ProductSetup-cache"
-	// log4j configuration
-	log4j = {
-		// Example of changing the log pattern for the default console appender:
-		//
-		//appenders {
-		//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-		//}
-	
-		appenders {
-			rollingFile name:'file', file: logDirectory + '/logs/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+				rollingFile name:'file', file: logDirectory + 'target/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+			}
+
+			root {
+				error 'stdout', 'file'
+				additivity = true
+			}
+			debug 'hmof.geb'
+			error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+					'org.codehaus.groovy.grails.web.pages',          // GSP
+					'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+					'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+					'org.codehaus.groovy.grails.web.mapping',        // URL mapping
+					'org.codehaus.groovy.grails.commons',            // core / classloading
+					'org.codehaus.groovy.grails.plugins',            // plugins
+					'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+					'org.springframework',
+					'org.hibernate',
+					'net.sf.ehcache.hibernate'
+
+
+			debug  "grails.app.controllers.hmof",
+					"grails.app.services.hmof" ,
+					"grails.app.domain.hmof"
+
+			info  "grails.app.controllers.hmof",
+					"grails.app.services.hmof" ,
+					"grails.app.domain.hmof"
 		}
-		debug 'hmof.geb'
-		error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-			   'org.codehaus.groovy.grails.web.pages',          // GSP
-			   'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-			   'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-			   'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-			   'org.codehaus.groovy.grails.commons',            // core / classloading
-			   'org.codehaus.groovy.grails.plugins',            // plugins
-			   'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-			   'org.springframework',
-			   'org.hibernate',
-			   'net.sf.ehcache.hibernate'
-			   
-			   warn 'grails.app.service'
-			   warn 'grails.app.controller'
-	     info   'grails.app.controllers.hmof',
-			'grails.app.services.hmof',
-			'grails.app.domain.hmof'
-									   
-			   root {
-				   error 'file'
-				   additivity = true
-			   }
+	}
+
+	production{
+
+		cacheLocation="E:/ProductSetup-cache"
+		// log4j configuration
+		log4j = {
+			// Example of changing the log pattern for the default console appender:
+			//
+			//appenders {
+			//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+			//}
+
+			appenders {
+				rollingFile name:'file', file: logDirectory + '/logs/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
+			}
+			debug 'hmof.geb'
+			error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+					'org.codehaus.groovy.grails.web.pages',          // GSP
+					'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+					'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+					'org.codehaus.groovy.grails.web.mapping',        // URL mapping
+					'org.codehaus.groovy.grails.commons',            // core / classloading
+					'org.codehaus.groovy.grails.plugins',            // plugins
+					'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+					'org.springframework',
+					'org.hibernate',
+					'net.sf.ehcache.hibernate'
+
+			warn 'grails.app.service'
+			warn 'grails.app.controller'
+			info   'grails.app.controllers.hmof',
+					'grails.app.services.hmof',
+					'grails.app.domain.hmof'
+
+			root {
+				error 'file'
+				additivity = true
+			}
+		}
 	}
 }
-}
-// log4j configuration
-/*log4j = {
-	// Example of changing the log pattern for the default console appender:
-	//
-	//appenders {
-	//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-	//}
-	
-	
-	debug 'hmof.geb'
-
-	error   'org.codehaus.groovy.grails.web.servlet',        // controllers
-			'org.codehaus.groovy.grails.web.pages',          // GSP
-			'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-			'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-			'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-			'org.codehaus.groovy.grails.commons',            // core / classloading
-			'org.codehaus.groovy.grails.plugins',            // plugins
-			'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-			'org.springframework',
-			'org.hibernate',
-			'net.sf.ehcache.hibernate'
-
-	info    'grails.app.controllers.hmof',
-			'grails.app.services.hmof',
-			'grails.app.domain.hmof'
-
-}*/
 
 
 // Added by the Spring Security Core plugin:
