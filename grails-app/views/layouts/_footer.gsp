@@ -9,16 +9,16 @@
 			    		<i class="glyphicon glyphicon-book"></i>
 						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/User+Guide+-+Product+Setup+App">User Guide</a>
 				</p>	</li>
-										
+						<li><p>
+			    		<i class="glyphicon glyphicon-hand-right"></i>
+						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
+					</p></li>				
 				</ul>
 			</div>
 			<div class="col-lg-4">
 				<h4>About</h4>
 				<ul class="unstyled">
-					<li><p>
-			    		<i class="glyphicon glyphicon-hand-right"></i>
-						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
-					</p></li>
+					
 					<li><p>
 						<i class="glyphicon glyphicon-hand-right"></i>
                         <a href="http://dubconf.hmhpub.com:8080/display/tool/Home">Developers</a>
