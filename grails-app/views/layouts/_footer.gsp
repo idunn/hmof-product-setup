@@ -12,8 +12,15 @@
 						<li><p>
 			    		<i class="glyphicon glyphicon-hand-right"></i>
 						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
-					</p></li>				
+					</p></li>
+						<li><p>
+			    		<i class="glyphicon glyphicon-hand-right"></i>
+						<a target="_blank" href="http://172.17.1.16:8080/SapWrapperApplication">SAP Wrapper</a>
+					</p></li>			
+				
+				
 				</ul>
+				
 			</div>
 			<div class="col-lg-4">
 				<h4>About</h4>
