@@ -248,6 +248,8 @@ class SecureProgramWork extends Page {
 		word3LocationField.value(content.securityWordLocation3?: blank)
 		log.info "Security Word Page3: "+content.securityWordPage3
 		word3PageNumberField.value(content.securityWordPage3?: blank)
+		
+		log.info"Completed adding Secure Program Data"
 
 	}
 

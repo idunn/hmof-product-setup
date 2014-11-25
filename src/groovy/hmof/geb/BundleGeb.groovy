@@ -30,7 +30,6 @@ class BundleGebWork extends Page {
 		saveButton {$("form").find("input", name: "Save")}
 		findButton(wait:33) {$("input", value: "Find").click()}
 
-
 		// Relationship building
 		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
 		addTeacherIsbn(wait:true){$("form").find("input", name: "TeacherISBN")}
@@ -41,18 +40,20 @@ class BundleGebWork extends Page {
 		includeDashboard (wait:30, required:true) {$("font", text: /Dashboard/).children()}
 		includePlanner (wait:30, required:true) {$("font", text: /ePlanner/).children()}
 
-		// object used in some language arts
+		// Object used in some language arts
 		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
 		studentEssayUnits{$("input", name:"unitsSTUDENT_ESSAYS")}
 
-		//Duration
+		// Duration
 		duration{$("select", name: "SubscrLen")}
 
 		deleteRestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
 		deleteUnrestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
 		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
 
+		// Used in Asserts
 		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
+		secureProgramSelected (wait:30, required:true) {$("input", name: /TeacherISBN/).value()}
 
 		// Modules
 		globalModule { module GebModule }
@@ -62,7 +63,7 @@ class BundleGebWork extends Page {
 	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 
 		log.info "Looking up Bundle ISBN..."
-		log.info "Bundle ISBN: "+enversInstanceToDeploy.isbn
+		log.info "Bundle ISBN: " + enversInstanceToDeploy.isbn
 		manageBundlesLink.click()
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
@@ -71,7 +72,7 @@ class BundleGebWork extends Page {
 		if(bundleExist){
 
 			log.info "Restricted Bundle ISBN Exists."
-			log.info "Deleting and recreating Restricted Bundle..."
+			log.info "Deleting and Recreating Restricted Bundle..."
 
 			withConfirm(true){deleteRestricted.click()}
 
@@ -80,7 +81,7 @@ class BundleGebWork extends Page {
 		def unrestrictedBundleExist = deleteUnrestricted
 		if(unrestrictedBundleExist){
 			log.info "UnRestricted Bundle ISBN Exists."
-			log.info "Deleting and recreating UnRestricted Bundle..."
+			log.info "Deleting and Recreating UnRestricted Bundle..."
 			withConfirm(true){deleteUnrestricted.click()}
 
 		}
@@ -109,7 +110,7 @@ class BundleGebWork extends Page {
 
 
 		mapOfChildren.each{
-			log.info "****************************************Adding Bundle Data.....****************************************\r\n"
+			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()
@@ -119,23 +120,25 @@ class BundleGebWork extends Page {
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
 			findButton
 
+			log.info"Asserting that the Secure Program has been associated to the Bundle"
+			//TODO this can be taken out later as it is time consuming
+			assert secureProgramSelected == secureProgramInstance.registrationIsbn
+
+			log.info "Secure Program is correctly associated!"
+
 			log.info"Adding Platform Commerce Objects..."
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
 			log.info"Adding Class Manager"
 			classManager.value(true)
-
 			if (secureProgramInstance.includeDashboardObject){
 				log.info"Adding Dashboard"
 				includeDashboard.value(true)
 			}
-
 			if (secureProgramInstance.includeEplannerObject){
 				log.info"Adding Planner"
 				includePlanner.value(true)
 			}
-
-
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 				log.info"Adding Custom Commerce Objects..."
@@ -153,11 +156,10 @@ class BundleGebWork extends Page {
 
 
 			globalModule.addButton.click()
-			log.info"****************************************Finished Adding Bundle Data***************************************\r\n"
+
+			log.info "Completed Adding Bundle Data"
 
 		}
-
-
 	}
 
 	/**
@@ -217,10 +219,9 @@ class BundleGebWork extends Page {
 				durationLength = "2190"
 		}
 
-		log.info "durationLength on Red Pages: " + durationLength + " days"
+		log.info "durationLength on Red Pages: ${durationLength.toInteger()/365} Year"
 
 		durationLength
-
 
 	}
 

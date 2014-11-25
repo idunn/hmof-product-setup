@@ -2,25 +2,22 @@ package hmof.geb
 import geb.*
 import geb.driver.CachingDriverFactory
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.LogManager
+import org.apache.log4j.Logger
+import org.apache.log4j.PropertyConfigurator
 
 class RedPagesDriver  {
 
 	RedPagesDriver(def url, def enversInstanceToDeploy,Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.debug "******************************************************************************"
-
-	log.debug "cachedDriver :" + cachedDriver+"\r\n"
+		log.debug "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy,log)
 	}
 
 	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren,Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.debug "******************************************************************************"
 		log.debug "cachedDriver :" + cachedDriver+"\r\n"
 		driveBrowser(url, enversInstanceToDeploy, mapOfChildren,log)
 	}
@@ -32,8 +29,8 @@ class RedPagesDriver  {
 	 * @return
 	 */
 	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null,Logger log){
-		
-		
+
+
 		log.debug "Deployment url: " + url
 		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId+"\r\n"
 
@@ -73,8 +70,8 @@ class RedPagesDriver  {
 					to BundleGebWork
 
 					lookupIsbn (enversInstanceToDeploy,log)
-					addBundleData (mapOfChildren, enversInstanceToDeploy,log)					
-					
+					addBundleData (mapOfChildren, enversInstanceToDeploy,log)
+
 					log.info"Asserting Bundle contains content"
 					confirmBundle(log)
 
@@ -86,15 +83,18 @@ class RedPagesDriver  {
 				}
 
 			}.quit() // quit is important in a multi-threaded application
+		}catch(AssertionError ex){
+
+			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
+			log.error"Exception in Geb: " + ex
+			// TODO need to improve
+			throw Exception
+
 		}catch(Exception e){
+
 			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
 			log.error"Exception in Geb: " + e
 			throw e
-
-		}finally{
-
-			log.info"###################################################################\r\n"
-			
 
 		}
 	}

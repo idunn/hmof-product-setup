@@ -123,8 +123,8 @@ class CommerceObjectWork extends Page {
 		} else {grades = ["6","7","8", "9","10","11", "12"]}
 
 		gradeLevel.value(grades)
-
-		log.info "Completed adding Commerce Object Data."
+		
+		log.info"Completed adding Commerce Object Data"		
 
 	}
 

@@ -71,10 +71,10 @@ class JobService {
 
 					initializeLogger(programName, cacheLocation,envId,1)
 					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 					}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
@@ -97,10 +97,10 @@ class JobService {
 
 					initializeLogger(bundleIsbn, cacheLocation,envId,2)
 					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 					}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
@@ -120,11 +120,11 @@ class JobService {
 
 					initializeLogger(secureIsbn, cacheLocation,envId,3)
 					if(envId==1){
-						log.info("******************************Job Creation******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
 					}else if(envId==2 || envId==3){
-						log.info("******************************Job Promotion******************************\r\n")
+						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
@@ -162,10 +162,10 @@ class JobService {
 					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
 						initializeLogger(isbn,cacheLocation,envId,4)
 						if(envId==1){
-							log.info("******************************Job Creation******************************\r\n")
+							log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 							log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 						}else if(envId==2 || envId==3){
-							log.info("******************************Job Promotion******************************\r\n")
+							log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 							log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 						}
@@ -173,9 +173,9 @@ class JobService {
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "Finished Deploying Commerce Object.\r\n"
+					log.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						log.info("******************************Status******************************\r\n")
+						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						log.debug("promotionId:"+promotionInstance.id)
 						log.info("Job Status: Success\r\n")
 
@@ -212,10 +212,10 @@ class JobService {
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "Finished Deploying Secure Program.\r\n"
+					log.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty()){
 
-						log.info("******************************Status******************************\r\n")
+						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						log.debug("promotionId:"+promotionInstance.id)
 						log.info("Job Status: Success\r\n")
 
@@ -236,7 +236,7 @@ class JobService {
 					def mapOfChildren = it.children
 					Long jobNumber = it.jobNumber
 					def enversInstanceToDeploy
-					log.info "*************************************Bundles and Associations***************************************"
+					log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
 
 
@@ -331,8 +331,8 @@ class JobService {
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
 					if(rpd){
-						log.info "Finished Deploying Bundle.\r\n"
-						log.info("******************************Status******************************\r\n")
+						log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
+						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						log.debug("promotionId:"+promotionInstance.id)
 						log.info("Job Status: Success\r\n")
 
