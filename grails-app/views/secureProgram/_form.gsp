@@ -1,5 +1,11 @@
 <%@ page import="hmof.SecureProgram" %>
 <% def year = new Date().getAt(Calendar.YEAR) %>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'ui.multiselect.css')}"
+	type="text/css">
+
+<script src="${resource(dir:'js',file:'jquery.localisation-min.js')}"></script>
+	<script src="${resource(dir:'js',file:'jquery.scrollTo-min.js')}"></script>
+	<script src="${resource(dir:'js',file:'ui.multiselect.js')}"></script>
 
  <div class="span7">
         <section>
@@ -525,8 +531,8 @@
 				<label for="commerceObjects" class="control-label col-sw-1"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></label>
 				<div class="controls">
 					<g:select class="form-control" name="commerceObjects" 
-					from="${hmof.CommerceObject.list()}" noSelection="['':'-None-']" 
-					multiple="multiple" optionKey="id" size="10"  
+					from="${hmof.CommerceObject.list()}" 
+					multiple="multiple" optionKey="id" size="10"  style="width:700px;"
 					value="${secureProgramInstance?.commerceObjects*.id}" class="many-to-many"  />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')}</span>
 				</div>
@@ -624,4 +630,6 @@ function pageonload()
 window.onload = pageonload;
 
 $(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+ $("#commerceObjects").multiselect().multiselectfilter();
 </script>

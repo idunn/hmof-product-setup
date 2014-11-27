@@ -1,6 +1,14 @@
 <%@ page import="hmof.Bundle"%>
 
-<div class="span7">
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'ui.multiselect.css')}"
+	type="text/css">
+
+<script src="${resource(dir:'js',file:'jquery.localisation-min.js')}"></script>
+	<script src="${resource(dir:'js',file:'jquery.scrollTo-min.js')}"></script>
+	<script src="${resource(dir:'js',file:'ui.multiselect.js')}"></script>
+
+	
+	<div class="span7">
 	<section>
 
 		<div
@@ -43,7 +51,7 @@
 			<label for="duration" class="control-label col-sw-1"><g:message
 					code="bundle.duration.label" default="Duration" /></label>
 			<div class="controls col-sw-4" >
-				<g:select class="form-control" name="duration"
+				<g:select class="form-control"  name="duration"
 					from="${bundleInstance.constraints.duration.inList}"
 					value="${bundleInstance?.duration}"
 					valueMessagePrefix="bundle.duration" noSelection="['': '']" data-toggle="tooltip" data-placement="right" data-container="body" title="Entitlement duration of the ISBN"  />
@@ -57,7 +65,7 @@
 					code="bundle.program.label" default="Program" /><span
 				class="required-indicator">*</span></label>
 			<div class="controls">
-				<g:select class="form-control" id="program" name="program.id"
+				<g:select class="form-control"  id="program" name="program.id"
 					from="${hmof.Program.list()}" optionKey="id" required=""
 					value="${bundleInstance?.program?.id}"   />
 				
@@ -69,8 +77,8 @@
 			<label for="secureProgram" class="control-label col-sw-1"><g:message
 					code="bundle.secureProgram.label" default="Secure Program" /></label>
 			<div class="controls">
-				<g:select class="form-control" name="secureProgram"
-					from="${hmof.SecureProgram.list()}" noSelection="['':'-None-']"
+				<g:select class="form-control multiselect" style="width:700px;" name="secureProgram"
+					from="${hmof.SecureProgram.list()}" 
 					multiple="multiple" optionKey="id" size="10"
 					value="${bundleInstance?.secureProgram*.id}" data-toggle="tooltip" data-placement="right" data-container="body" title="A Bundle can only be deployed when it is associated with a Secure Program"   />
 				
@@ -79,6 +87,12 @@
 	</section>
 </div>
 
-<script>
+
+
+        
+<script type="text/javascript">
    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+   $("#secureProgram").multiselect().multiselectfilter();
+  
 </script>
