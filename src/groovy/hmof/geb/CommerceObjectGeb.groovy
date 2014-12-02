@@ -1,12 +1,12 @@
 package hmof.geb
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 
 
 import geb.*
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-//@Log4j
+import org.apache.log4j.LogManager
+import org.apache.log4j.Logger
+import org.apache.log4j.PropertyConfigurator
+
 class CommerceObjectWork extends Page {
 	static Logger log = Logger.getLogger(CommerceObjectWork.class);
 	def initBaseUrl(def baseUrl,Logger log){
@@ -20,8 +20,8 @@ class CommerceObjectWork extends Page {
 
 	static content = {
 
-		manageCommerceObjectLink(wait:true) { $("a", text: contains("Manage Existing Commerce Object"))}
-		addCommerceObjectLink(wait:true) {$("a", text: contains("Add New Commerce Object"))}
+		manageCommerceObjectLink {waitFor(30){ $("a", text: contains("Manage Existing Commerce Object"))}}
+		addCommerceObjectLink {waitFor(30){$("a", text: contains("Add New Commerce Object"))}}
 		isbnField {$("input", name: "ISBN")}
 		searchButton{$("form").find("input", name: "search")}
 		objectName{$("input", name: "Name")}
@@ -44,7 +44,7 @@ class CommerceObjectWork extends Page {
 	}
 
 
-	void lookupIsbn(def enversInstanceToDeploy,Logger log){		
+	void lookupIsbn(def enversInstanceToDeploy,Logger log){
 		log.info "Looking up ISBN...."
 		manageCommerceObjectLink.click()
 		log.info "ISBN Number: "+enversInstanceToDeploy.isbnNumber
@@ -123,8 +123,8 @@ class CommerceObjectWork extends Page {
 		} else {grades = ["6","7","8", "9","10","11", "12"]}
 
 		gradeLevel.value(grades)
-		
-		log.info"Completed adding Commerce Object Data"		
+
+		log.info"Completed adding Commerce Object Data"
 
 	}
 

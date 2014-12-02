@@ -2,7 +2,7 @@ package hmof.geb
 
 import geb.*
 import groovy.util.logging.Log4j
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 
 class SecureProgramWork extends Page {
 
@@ -16,14 +16,14 @@ class SecureProgramWork extends Page {
 
 	static content = {
 
-		manageSecureProgram(wait:true) { $("a", text: contains("Manage Existing Secure Program"))}
-		addSecureProgramLink(wait:true) {$("a", text: contains("Add New Secure Program"))}
+		manageSecureProgram {waitFor(30){ $("a", text: contains("Manage Existing Secure Program"))}}
+		addSecureProgramLink {waitFor(30){$("a", text: contains("Add New Secure Program"))}}
 		lookupIsbnField {$("input", name: "TeacherISBN")}
 		searchButton{$("form").find("input", name: "search")}
 
 		updateButton(wait: 2, required:false){$("input", value: "Update")}
 
-		programNameField (wait: true) {$("input", name: "ProgramName")}
+		programNameField {waitFor(30) {$("input", name: "ProgramName")}}
 		teacherIsbnField {$("input", name: "TeacherEditionISBN")}
 		onlineIsbnField {$("input", name: "StudentEditionISBN")}
 		curriculumAreasField{$("select", name: "CurriculumAreas")}
@@ -248,7 +248,7 @@ class SecureProgramWork extends Page {
 		word3LocationField.value(content.securityWordLocation3?: blank)
 		log.info "Security Word Page3: "+content.securityWordPage3
 		word3PageNumberField.value(content.securityWordPage3?: blank)
-		
+
 		log.info"Completed adding Secure Program Data"
 
 	}
