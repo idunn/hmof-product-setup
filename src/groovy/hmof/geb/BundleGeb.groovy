@@ -18,42 +18,42 @@ class BundleGebWork extends Page {
 
 	static content = {
 
-		manageBundlesLink {waitFor(5){ $("a", text: contains("Manage Existing eProduct Bundles"))}}
-		addNewBundleLink {waitFor(5){ $("a", text: contains("Add New eProduct Bundle"))}}
+		manageBundlesLink(wait:true) { $("a", text: contains("Manage Existing eProduct Bundles"))}
+		addNewBundleLink(wait:true) { $("a", text: contains("Add New eProduct Bundle"))}
 
-		lookupIsbnField {$("input", name: "BndlISBN")}
-		orderEntryType {$("select", name: "OrderEntryType")}
+		lookupIsbnField{$("input", name: "BndlISBN")}
+		orderEntryType{$("select", name: "OrderEntryType")}
 		bundleTitle {$("form").find("input", name: "BndlTitle")}
 
-		lookupButton {$("form").find("input", name: "Lookup")}
+		lookupButton{$("form").find("input", name: "Lookup")}
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
-		findButton {waitFor(30){$("input", value: "Find").click()}}
+		findButton(wait:33) {$("input", value: "Find").click()}
 
 		// Relationship building
-		addSecureProgram {waitFor(30){$("form").find("input", value: "Add Secure Programs")}}
-		addTeacherIsbn {waitFor(30){$("form").find("input", name: "TeacherISBN")}}
+		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
+		addTeacherIsbn(wait:true){$("form").find("input", name: "TeacherISBN")}
 
 		// Platform Objects
-		activityManager {waitFor(60){$("input", type:"checkbox", value:"ACTIVITY_MGR")}}
-		classManager {waitFor(60){$("input", type:"checkbox", value:"CLASS_MGR")}}
-		includeDashboard {waitFor(60){$("font", text: /Dashboard/).children()}}
-		includePlanner {waitFor(60){$("font", text: /ePlanner/).children()}}
+		activityManager(wait:true, required:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
+		classManager(wait:true, required:true) {$("input", type:"checkbox", value:"CLASS_MGR")}		
+		includeDashboard (wait:30, required:true) {$("font", text: /Dashboard/).children()}
+		includePlanner (wait:30, required:true) {$("font", text: /ePlanner/).children()}
 
 		// Object used in some language arts
-		studentEssay {$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
-		studentEssayUnits {$("input", name:"unitsSTUDENT_ESSAYS")}
+		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
+		studentEssayUnits{$("input", name:"unitsSTUDENT_ESSAYS")}
 
 		// Duration
-		duration {$("select", name: "SubscrLen")}
+		duration{$("select", name: "SubscrLen")}
 
-		deleteRestricted {waitFor(5){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}}
-		deleteUnrestricted {waitFor(5){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}}
-		noBundleText {waitFor(5){$("font", text: contains("No results found with provided search criteria"))}}
+		deleteRestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
+		deleteUnrestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
+		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
 
 		// Used in Asserts
-		nonEmptyBundle {waitFor(5){$("input", type:"checkbox", name: "BndlItemId")}}
-		secureProgramSelected {waitFor(5){$("input", name: /TeacherISBN/).value()}}
+		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
+		secureProgramSelected (wait:30, required:true) {$("input", name: /TeacherISBN/).value()}
 
 		// Modules
 		globalModule { module GebModule }
@@ -108,6 +108,7 @@ class BundleGebWork extends Page {
 
 		log.info "Adding Bundle Data...\r\n"
 
+
 		mapOfChildren.each{
 			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
@@ -120,6 +121,7 @@ class BundleGebWork extends Page {
 			findButton
 
 			log.info"Asserting that the Secure Program has been associated to the Bundle"
+			//TODO this can be taken out later as it is time consuming
 			assert secureProgramSelected == secureProgramInstance.registrationIsbn
 
 			log.info "Secure Program is correctly associated!"
@@ -127,20 +129,19 @@ class BundleGebWork extends Page {
 			log.info"Adding Platform Commerce Objects..."
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
-
 			log.info"Adding Class Manager"
 			classManager.value(true)
-
 			if (secureProgramInstance.includeDashboardObject){
 				log.info"Adding Dashboard"
 				includeDashboard.value(true)
+				//waitFor(50){$("font", text: /Dashboard/).children().value(true)}
+				
 			}
-
 			if (secureProgramInstance.includeEplannerObject){
-				log.info"Adding ePlanner"
+				log.info"Adding Planner"
 				includePlanner.value(true)
+				//waitFor(50){$("font", text: /ePlanner/).children().value(true)}
 			}
-
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 				log.info"Adding Custom Commerce Objects..."
@@ -148,11 +149,14 @@ class BundleGebWork extends Page {
 				String coName = commerceObjectInstance.objectName
 				log.info"Adding Commerce Object ${coName}"
 				log.info"Adding Commerce Object isbn:"+commerceObjectInstance.isbnNumber+"\r\n"
-				waitFor(60) {$("font", text: /$coName/).children().value(true)}
+				waitFor(50) {$("font", text: /$coName/).children().value(true)}
 			}
+
 
 			def durationLength = getDuration(enversInstanceToDeploy.duration,log)
 			duration.value(durationLength)
+
+
 
 			globalModule.addButton.click()
 
