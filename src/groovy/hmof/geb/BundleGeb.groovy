@@ -106,37 +106,40 @@ class BundleGebWork extends Page {
 	 */
 	def addBundleData(def mapOfChildren, def enversInstanceToDeploy,Logger log){
 
-		log.info "Adding Bundle Data...\r\n"
-
-
+		
 		mapOfChildren.each{
 			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()
+			
+			assert title == "Add Entitlements"
+			log.info "Adding Bundle Entitlements...\r\n"
 
 			log.info"Adding Secure Program"
-			log.info"Secure Program Registration Isbn: "+secureProgramInstance.registrationIsbn
+			log.info"Secure Program Registration Isbn: " + secureProgramInstance.registrationIsbn
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
+			
 			findButton
 
-			log.info"Asserting that the Secure Program has been associated to the Bundle"
-			//TODO this can be taken out later as it is time consuming
+			log.info"Testing that the Secure Program has been associated to the Bundle"			
 			assert secureProgramSelected == secureProgramInstance.registrationIsbn
-
 			log.info "Secure Program is correctly associated!"
 
 			log.info"Adding Platform Commerce Objects..."
+			
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
 			log.info"Adding Class Manager"
 			classManager.value(true)
+			
 			if (secureProgramInstance.includeDashboardObject){
 				log.info"Adding Dashboard"
 				includeDashboard.value(true)
 				//waitFor(50){$("font", text: /Dashboard/).children().value(true)}
 				
 			}
+			
 			if (secureProgramInstance.includeEplannerObject){
 				log.info"Adding Planner"
 				includePlanner.value(true)
@@ -157,7 +160,7 @@ class BundleGebWork extends Page {
 			duration.value(durationLength)
 
 
-
+			log.info"Associations being added to the HMOF database"
 			globalModule.addButton.click()
 
 			log.info "Completed Adding Bundle Data"
@@ -170,7 +173,10 @@ class BundleGebWork extends Page {
 	 * @return
 	 */
 	def confirmBundle(Logger log){
-
+		// make sure we are back in the bundle create page and that bundles have child content
+		assert title == "Administration"
+		log.info"In Bundle Create Page"
+		
 		assert nonEmptyBundle
 		log.info "Bundle contains data!"
 
