@@ -1,6 +1,7 @@
 package hmof.geb
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
+import org.openqa.selenium.Keys
 
 import geb.*
 import groovy.util.logging.Log4j
@@ -29,6 +30,7 @@ class BundleGebWork extends Page {
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
 		findButton(wait:33) {$("input", value: "Find").click()}
+		addButton {$("input", value: "Add").click()}
 
 		// Relationship building
 		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
@@ -36,7 +38,7 @@ class BundleGebWork extends Page {
 
 		// Platform Objects
 		activityManager(wait:true, required:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
-		classManager(wait:true, required:true) {$("input", type:"checkbox", value:"CLASS_MGR")}		
+		classManager(wait:true, required:true) {$("input", type:"checkbox", value:"CLASS_MGR")}
 		includeDashboard (wait:30, required:true) {$("font", text: /Dashboard/).children()}
 		includePlanner (wait:30, required:true) {$("font", text: /ePlanner/).children()}
 
@@ -53,7 +55,7 @@ class BundleGebWork extends Page {
 
 		// Used in Asserts
 		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
-		secureProgramSelected (wait:30, required:true) {$("input", name: /TeacherISBN/).value()}
+		secureProgramSelected (wait:31, required:true) {$("input", name: /TeacherISBN/).value()}
 
 		// Modules
 		globalModule { module GebModule }
@@ -106,44 +108,44 @@ class BundleGebWork extends Page {
 	 */
 	def addBundleData(def mapOfChildren, def enversInstanceToDeploy,Logger log){
 
-		
+
 		mapOfChildren.each{
 			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()
-			
+
 			assert title == "Add Entitlements"
 			log.info "Adding Bundle Entitlements...\r\n"
 
 			log.info"Adding Secure Program"
 			log.info"Secure Program Registration Isbn: " + secureProgramInstance.registrationIsbn
 			addTeacherIsbn.value(secureProgramInstance.registrationIsbn)
-			
+
 			findButton
 
-			log.info"Testing that the Secure Program has been associated to the Bundle"			
+			log.info"Testing that the Secure Program has been associated to the Bundle"
 			assert secureProgramSelected == secureProgramInstance.registrationIsbn
 			log.info "Secure Program is correctly associated!"
 
 			log.info"Adding Platform Commerce Objects..."
-			
+
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
 			log.info"Adding Class Manager"
 			classManager.value(true)
-			
+
 			if (secureProgramInstance.includeDashboardObject){
 				log.info"Adding Dashboard"
-				includeDashboard.value(true)
-				//waitFor(50){$("font", text: /Dashboard/).children().value(true)}
-				
+				//includeDashboard.value(true)
+				waitFor(50){$("font", text: /Dashboard/).children().value(true)}
+
 			}
-			
+
 			if (secureProgramInstance.includeEplannerObject){
 				log.info"Adding Planner"
-				includePlanner.value(true)
-				//waitFor(50){$("font", text: /ePlanner/).children().value(true)}
+				//includePlanner.value(true)
+				waitFor(50){$("font", text: /ePlanner/).children().value(true)}
 			}
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
@@ -161,7 +163,17 @@ class BundleGebWork extends Page {
 
 
 			log.info"Associations being added to the HMOF database"
-			globalModule.addButton.click()
+			addButton.click()
+
+			def counter = 0
+			while(title != "Administration" && counter<=15){
+				counter++
+				log.info "Title page is: " + title
+				log.info"Retrying association: " + counter
+				waitFor(12,3){addButton}
+
+			}
+			log.info"In Bundle Create Page"
 
 			log.info "Completed Adding Bundle Data"
 
@@ -174,11 +186,14 @@ class BundleGebWork extends Page {
 	 */
 	def confirmBundle(Logger log){
 		// make sure we are back in the bundle create page and that bundles have child content
-		assert title == "Administration"
-		log.info"In Bundle Create Page"
-		
-		assert nonEmptyBundle
-		log.info "Bundle contains data!"
+		if (title == "Administration"){
+			assert nonEmptyBundle
+			log.info "Bundle contains data!"
+		} else{
+			log.error"Assertion Error Bundle not created"
+			throw AssertionError
+
+		}
 
 	}
 
