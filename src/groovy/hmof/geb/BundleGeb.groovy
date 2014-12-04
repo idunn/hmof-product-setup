@@ -161,20 +161,19 @@ class BundleGebWork extends Page {
 			duration.value(durationLength)
 
 
-			log.info"Associations being added to the HMOF database"
-			waitFor(50,3){addButton}
+			log.info"Bundle is being added to the HMOF database"
+			waitFor(50,5){addButton}
 
 			def counter = 0
 			while(title != "Administration" && counter<=15){
 				counter++
 				log.info "Title page is: " + title
-				log.info"Retrying association: " + counter
-				waitFor(12,3){addButton}
+				log.info"Attempting to save Bundle. Retry attempt: " + counter
+				waitFor(50,10){addButton}
 
 			}
-			log.info"In Bundle Create Page"
 
-			log.info "Completed Adding Bundle Data"
+			log.info "Bundle has been saved"
 
 		}
 	}
