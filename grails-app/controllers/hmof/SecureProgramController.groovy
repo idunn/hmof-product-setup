@@ -236,6 +236,7 @@ class SecureProgramController {
 
 	@Transactional
 	def update(SecureProgram secureProgramInstance) {
+	
 		if (secureProgramInstance == null) {
 			log.info "updating Secure Program Not Found"
 			notFound()
@@ -247,8 +248,16 @@ class SecureProgramController {
 			respond secureProgramInstance.errors, view:'edit'
 			return
 		}
+	
+		if(params.commerceObjects==null)
+		{			
+			secureProgramInstance.commerceObjects.clear()
+		}
+		  
+		  
 
 		secureProgramInstance.save flush:true
+		
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(secureProgramInstance)
 

@@ -20,7 +20,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'registrationIsbn', 'error-field')} required ">
 				<label for="registrationIsbn" class="control-label col-sw-1"><g:message code="secureProgram.registrationIsbn.label" default="Registration Isbn" /><span class="required-indicator">*</span></label>
 				<div class="col-md-4 margin1" >
-					<g:textField class="form-control" name="registrationIsbn" required="" value="${secureProgramInstance?.registrationIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="10-digit Print ISBN that is used in the Teacher's Edition Book"/>
+					<g:textField class="form-control" name="registrationIsbn" maxlength="10" required="" value="${secureProgramInstance?.registrationIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="10-digit Print ISBN that is used in the Teacher's Edition Book"/>
 					
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'onlineIsbn', 'error-field')} required">
 				<label for="onlineIsbn" class="control-label col-sw-1"><g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" /><span class="required-indicator">*</span></label>
 				<div class="col-md-4 margin1" >
-					<g:textField class="form-control" name="onlineIsbn" required="" value="${secureProgramInstance?.onlineIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="13-digit ISBN which is usually the Online 6-Year ISBN that is being used for Content development and MDS"/>
+					<g:textField class="form-control" name="onlineIsbn" maxlength="13" required="" value="${secureProgramInstance?.onlineIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="13-digit ISBN which is usually the Online 6-Year ISBN that is being used for Content development and MDS"/>
 					
 				</div>
 			</div>
@@ -530,9 +530,9 @@
 <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')} ">
 				<label for="commerceObjects" class="control-label col-sw-1"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></label>
 				<div class="controls">
-					<g:select class="form-control" name="commerceObjects" 
-					from="${hmof.CommerceObject.list()}" 
-					multiple="multiple" optionKey="id" size="10"  style="width:700px;"
+					<g:select class="form-control"  name="commerceObjects"  noSelection="['': '-None-']"
+					from="${hmof.CommerceObject.list().sort()}" 
+					multiple="multiple" optionKey="id" size="10"  style="width:80%;"
 					value="${secureProgramInstance?.commerceObjects*.id}" class="many-to-many"  />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')}</span>
 				</div>
@@ -632,4 +632,7 @@ window.onload = pageonload;
 $(function () { $("[data-toggle='tooltip']").tooltip(); });
 
  $("#commerceObjects").multiselect().multiselectfilter();
+ 
+ 
+
 </script>

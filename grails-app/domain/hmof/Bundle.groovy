@@ -1,6 +1,7 @@
 package hmof
 
 import java.util.Date
+import java.util.SortedSet;
 
 import org.hibernate.envers.Audited
 
@@ -15,6 +16,7 @@ class Bundle {
 	Boolean includePremiumCommerceObjects
 	ContentType contentType
 	static belongsTo = [program:Program]
+	SortedSet secureProgram
 	static hasMany = [secureProgram:SecureProgram]
 	static searchable = {
 		secureProgram component: true
@@ -24,7 +26,9 @@ class Bundle {
 	static mapping = {
 
 		sort id: "desc"
+		
 	}
+	
 	static constraints = {
 
 		isbn (blank: false, matches:/([0-9]{13})$/,unique: true)

@@ -142,6 +142,7 @@
 	<g:hiddenField name="instanceToBePromoted"/>
 		<%-- Confirm dialog for Deploy/Promote  --%>
 		<g:render template="/_common/modals/confirmDialog"/>
+		
 </g:form>
 </div>
 	

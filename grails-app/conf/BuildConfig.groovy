@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 		runtime 'mysql:mysql-connector-java:5.1.27'
 		// runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
-
+		
 		compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
 		compile "org.seleniumhq.selenium:selenium-support:2.37.0"
 		compile "org.gebish:geb-spock:0.9.2"
@@ -70,6 +70,8 @@ grails.project.dependency.resolution = {
 			'org.apache.lucene:lucene-queries:2.4.1',
 			'org.apache.lucene:lucene-snowball:2.4.1',
 			'org.apache.lucene:lucene-spellchecker:2.4.1')
+		
+		
 	}
 
 	plugins {
@@ -101,7 +103,7 @@ grails.project.dependency.resolution = {
 		
 		//Searchable
 		compile ":searchable:0.6.9"
-		
+		compile ":jquery-ui:1.10.4"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
 		//runtime ":cached-resources:1.1"

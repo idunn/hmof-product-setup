@@ -3,7 +3,7 @@ package hmof
 import org.hibernate.envers.Audited
 
 @Audited
-class CommerceObject {
+class CommerceObject implements Comparable{
 	
 	static searchable = true
 	String objectName
@@ -32,7 +32,9 @@ class CommerceObject {
 	ContentType contentType
 
 	static belongsTo = SecureProgram
-
+	int compareTo(obj) {
+		objectName.compareTo(obj.objectName)
+	}
 	static mapping = {
 
 		sort id: "desc"

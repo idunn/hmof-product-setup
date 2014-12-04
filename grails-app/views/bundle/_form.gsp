@@ -6,7 +6,7 @@
 <script src="${resource(dir:'js',file:'jquery.localisation-min.js')}"></script>
 	<script src="${resource(dir:'js',file:'jquery.scrollTo-min.js')}"></script>
 	<script src="${resource(dir:'js',file:'ui.multiselect.js')}"></script>
-
+	
 	
 	<div class="span7">
 	<section>
@@ -77,8 +77,8 @@
 			<label for="secureProgram" class="control-label col-sw-1"><g:message
 					code="bundle.secureProgram.label" default="Secure Program" /></label>
 			<div class="controls">
-				<g:select class="form-control multiselect" style="width:700px;" name="secureProgram"
-					from="${hmof.SecureProgram.list()}" 
+				<g:select class="multiselect" style="width:80%;" name="secureProgram"  noSelection="['': '-None-']"
+					from="${hmof.SecureProgram.list().sort()}" 
 					multiple="multiple" optionKey="id" size="10"
 					value="${bundleInstance?.secureProgram*.id}" data-toggle="tooltip" data-placement="right" data-container="body" title="A Bundle can only be deployed when it is associated with a Secure Program"   />
 				
@@ -86,13 +86,9 @@
 		</div>
 	</section>
 </div>
-
-
-
-        
 <script type="text/javascript">
    $(function () { $("[data-toggle='tooltip']").tooltip(); });
-
-   $("#secureProgram").multiselect().multiselectfilter();
+      
+ $("#secureProgram").multiselect().multiselectfilter();
   
 </script>

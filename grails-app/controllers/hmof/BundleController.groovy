@@ -252,7 +252,12 @@ class BundleController {
 			respond bundleInstance.errors, view:'edit'
 			return
 		}
-
+		
+		if(params.secureProgram==null)
+		{
+			bundleInstance.secureProgram.clear()
+		}
+		
 		bundleInstance.save flush:true
 
 		// update the timeStamp of its parent so that the change is reflected in Envers

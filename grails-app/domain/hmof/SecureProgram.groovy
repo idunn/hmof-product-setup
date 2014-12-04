@@ -1,12 +1,15 @@
 package hmof
 
 import java.util.Date
+import java.util.SortedSet;
+
 import org.hibernate.envers.Audited
 
 @Audited
-class SecureProgram {
+class SecureProgram implements Comparable {
 
 	String productName
+	
 	String registrationIsbn
 	String onlineIsbn
 	String copyright
@@ -69,12 +72,17 @@ class SecureProgram {
 	ContentType contentType
 
 	static belongsTo = Bundle
+	int compareTo(obj) {
+		productName.compareTo(obj.productName)
+	}
+	SortedSet commerceObjects
 	static hasMany = [commerceObjects:CommerceObject]
 	static searchable = { commerceObjects component: true }
 
 	static mapping = {
 
 		sort id: "desc"
+		
 	}
 
 	static constraints = {
