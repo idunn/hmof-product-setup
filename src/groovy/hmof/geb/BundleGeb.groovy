@@ -38,16 +38,15 @@ class BundleGebWork extends Page {
 		// Platform Objects
 		activityManager(wait:true, required:true) {$("input", type:"checkbox", value:"ACTIVITY_MGR")}
 		classManager(wait:true, required:true) {$("input", type:"checkbox", value:"CLASS_MGR")}
-		includeDashboard (wait:30, required:true) {$("font", text: /Dashboard/).children()}
-		includePlanner (wait:30, required:true) {$("font", text: /ePlanner/).children()}
 
-		// Object used in some language arts
+		// Legacy Object used in some language arts but currently not used
 		studentEssay{$("input", type:"checkbox", value:"STUDENT_ESSAYS")}
 		studentEssayUnits{$("input", name:"unitsSTUDENT_ESSAYS")}
 
 		// Duration
 		duration{$("select", name: "SubscrLen")}
 
+		// Deleting existing Bundles
 		deleteRestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bRestricted\b).*$/)}
 		deleteUnrestricted(wait: 5, required:false){$("a", href: ~/^(?=.*\bDelete\b)(?=.*\bUnrestricted\b).*$/)}
 		noBundleText(wait: 5, required:true){$("font", text: contains("No results found with provided search criteria"))}
@@ -55,9 +54,6 @@ class BundleGebWork extends Page {
 		// Used in Asserts
 		nonEmptyBundle(wait: 10, required:true){$("input", type:"checkbox", name: "BndlItemId")}
 		secureProgramSelected (wait:31, required:true) {$("input", name: /TeacherISBN/).value()}
-
-		// Modules
-		globalModule { module GebModule }
 
 	}
 
@@ -97,7 +93,7 @@ class BundleGebWork extends Page {
 		orderEntryType.value("All")
 		bundleTitle.value(enversInstanceToDeploy.title)
 
-		globalModule.addButton.click()
+		waitFor(50,5){addButton}
 
 	}
 	/**
@@ -105,10 +101,11 @@ class BundleGebWork extends Page {
 	 * @param mapOfChildren
 	 * @return
 	 */
-	def addBundleData(def mapOfChildren, def enversInstanceToDeploy,Logger log){
+	def addBundleData(def mapOfChildren, def enversInstanceToDeploy, Logger log){
 
 
 		mapOfChildren.each{
+			
 			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
 
@@ -123,7 +120,7 @@ class BundleGebWork extends Page {
 
 			findButton
 
-			log.info"Testing that the Secure Program has been associated to the Bundle"
+			log.info"Testing that the Secure Program has been added to the Bundle"
 			assert secureProgramSelected == secureProgramInstance.registrationIsbn
 			log.info "Secure Program is correctly associated!"
 
@@ -131,21 +128,20 @@ class BundleGebWork extends Page {
 
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
+			
 			log.info"Adding Class Manager"
 			classManager.value(true)
 
 			if (secureProgramInstance.includeDashboardObject){
-				log.info"Adding Dashboard"
-				//includeDashboard.value(true)
+				log.info"Adding Dashboard"				
 				waitFor(50){$("font", text: /Dashboard/).children().value(true)}
-
 			}
 
 			if (secureProgramInstance.includeEplannerObject){
-				log.info"Adding Planner"
-				//includePlanner.value(true)
+				log.info"Adding Planner"				
 				waitFor(50){$("font", text: /ePlanner/).children().value(true)}
 			}
+			
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 				log.info"Adding Custom Commerce Objects..."
