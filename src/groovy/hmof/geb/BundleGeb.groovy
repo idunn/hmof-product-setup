@@ -29,7 +29,7 @@ class BundleGebWork extends Page {
 		homeButton {$("input", value: "Home")}
 		saveButton {$("form").find("input", name: "Save")}
 		findButton(wait:33) {$("input", value: "Find").click()}
-		addButton {$("input", value: "Add").click()}
+		addButton (required:false){$("input", value: "Add").click()}
 
 		// Relationship building
 		addSecureProgram(wait:true) {$("form").find("input", value: "Add Secure Programs")}
@@ -159,13 +159,18 @@ class BundleGebWork extends Page {
 
 			log.info"Bundle is being added to the HMOF database"
 			waitFor(50,5){addButton}
-
+			
+			log.info"Title Page is currently: " + title
+			
 			def counter = 0
 			while(title != "Administration" && counter<=15){
-				counter++
-				log.info "Title page is: " + title
-				log.info"Attempting to save Bundle. Retry attempt: " + counter
-				waitFor(50,10){addButton}
+				counter++				
+				Thread.sleep(20000)
+				log.info "Title page is now: " + title
+				if (title == "Add Entitlements"){
+					log.info"Attempting to save Bundle. Retry attempt: " + counter
+					waitFor(50,10){addButton}
+				}				
 
 			}
 
