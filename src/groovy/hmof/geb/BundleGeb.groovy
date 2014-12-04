@@ -1,7 +1,6 @@
 package hmof.geb
 
 import org.apache.log4j.Logger
-import org.openqa.selenium.Keys
 
 import geb.*
 import groovy.util.logging.Log4j
@@ -163,7 +162,7 @@ class BundleGebWork extends Page {
 
 
 			log.info"Associations being added to the HMOF database"
-			addButton.click()
+			waitFor(50,3){addButton}
 
 			def counter = 0
 			while(title != "Administration" && counter<=15){
