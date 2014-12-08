@@ -238,6 +238,6 @@ class SecureProgram implements Comparable {
 	}
 
 	String toString(){
-		"${productName}"
+		"${registrationIsbn} : ${productName}"
 	}
 }

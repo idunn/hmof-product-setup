@@ -77,7 +77,7 @@
 			<label for="secureProgram" class="control-label col-sw-1"><g:message
 					code="bundle.secureProgram.label" default="Secure Program" /></label>
 			<div class="controls">
-				<g:select class="multiselect" style="width:80%;" name="secureProgram"  noSelection="['': '-None-']"
+				<g:select class="multiselect" style="width:80%;" name="secureProgram"  
 					from="${hmof.SecureProgram.list().sort()}" 
 					multiple="multiple" optionKey="id" size="10"
 					value="${bundleInstance?.secureProgram*.id}" data-toggle="tooltip" data-placement="right" data-container="body" title="A Bundle can only be deployed when it is associated with a Secure Program"   />

@@ -530,7 +530,7 @@
 <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')} ">
 				<label for="commerceObjects" class="control-label col-sw-1"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></label>
 				<div class="controls">
-					<g:select class="form-control"  name="commerceObjects"  noSelection="['': '-None-']"
+					<g:select class="form-control"  name="commerceObjects"  
 					from="${hmof.CommerceObject.list().sort()}" 
 					multiple="multiple" optionKey="id" size="10"  style="width:80%;"
 					value="${secureProgramInstance?.commerceObjects*.id}" class="many-to-many"  />
