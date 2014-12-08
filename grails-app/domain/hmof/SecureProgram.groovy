@@ -15,7 +15,7 @@ class SecureProgram implements Comparable {
 	String copyright
 	String labelForOnlineResource
 	String pathToResource
-	String pathToCoverImage = "/nsmedia/images/bc/CHANGEME.jpg"
+	String pathToCoverImage = "/nsmedia/images/bc/"
 
 	Date dateCreated
 	Date lastUpdated
@@ -25,7 +25,7 @@ class SecureProgram implements Comparable {
 	String labelForStudentAdditionalResource
 	String pathToStudentAdditionalResource
 
-	String securityWord = "CHANGEME"
+	String securityWord
 	Integer securityWordLocation = 1
 	String securityWordPage = "5"
 
@@ -98,15 +98,16 @@ class SecureProgram implements Comparable {
 
 		copyright (blank: false, nullable:true)
 		labelForOnlineResource (blank: false, nullable:true)		
-		pathToResource (shared: "globalUrl")		
-		pathToCoverImage (shared: "globalUrl")
+		pathToResource (shared: "globalUrl")			
+		//pathToCoverImage (shared: "globalUrl")
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif)$/)
 
 		labelForTeacherAdditionalResource (nullable:true)
 		pathToTeacherAdditionalResource (shared: "globalUrl")
 		labelForStudentAdditionalResource (nullable:true)
 		pathToStudentAdditionalResource (shared: "globalUrl")
 
-		securityWord (blank: false)
+		securityWord (blank: false, nullable:false)
 		securityWordLocation (blank: false,range:1..10)
 		securityWordPage (blank: false)
 		includeDashboardObject (nullable:true)
