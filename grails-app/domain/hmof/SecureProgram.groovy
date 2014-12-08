@@ -29,8 +29,8 @@ class SecureProgram implements Comparable {
 	Integer securityWordLocation = 1
 	String securityWordPage = "5"
 
-	Boolean includeDashboardObject
-	Boolean includeEplannerObject
+	Boolean includeDashboardObject = "true"
+	Boolean includeEplannerObject = "true"
 
 	Boolean knewtonProduct
 	String knowledgeGraphIdDev
