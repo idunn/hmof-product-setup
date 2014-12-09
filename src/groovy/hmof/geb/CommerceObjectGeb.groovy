@@ -35,7 +35,7 @@ class CommerceObjectWork extends Page {
 		objectType{$("select", name: "ObjectType")}
 		objectReorder{$("input", name: "rTypeOrder")}
 		subject{$("select", name: "Subject")}
-		category{$("select", name: contains("pmm"))}
+		category{$("select", name: contains("ModuleCategory"))}
 		gradeLevel{$("select", name: "GradeLevel")}
 
 		// Modules
