@@ -79,6 +79,25 @@ class CommerceObjectController {
 	}
 
 	/**
+	 * Pass in a comma separated file and update the database with new CO instances
+	 * @return
+	 */
+	def importFile(){
+
+		log.info"Importing File"
+
+		// TODO pass in dynamically
+		File file = new File("import/import.txt")
+
+		log.info"Calling Service"
+		def parseFileAndPersistData = utilityService.parseTextFile(file)
+
+		log.info"Completed import"
+		redirect(action: "list")
+
+	}
+
+	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
 	 */
@@ -126,11 +145,11 @@ class CommerceObjectController {
 	def promote(){
 
 		final String none = "none"
-		
-         def instanceDetail = params.instanceToBePromoted
+
+		def instanceDetail = params.instanceToBePromoted
 		def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = instanceDetails[0]
-		
+
 		def commerceObjectInstance = CommerceObject.get(instanceToBePromoted)
 		log.info("Promoting commerceObjectInstance : "+commerceObjectInstance.objectName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
