@@ -10,7 +10,7 @@
 				class="required-indicator">*</span></label>
 			<div class="controls">
 				<g:textField class="form-control" name="objectName" required=""
-					value="${commerceObjectInstance?.objectName}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title which is visible to the Customer and must be unique" />
+					value="${commerceObjectInstance?.objectName}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title must be unique and should be prefixed with a Program Name" />
 
 			</div>
 		</div>
@@ -22,7 +22,7 @@
 				class="required-indicator">*</span></label>
 			<div class="controls">
 				<g:textField class="form-control" maxlength="13" name="isbnNumber" required="" 
-					value="${commerceObjectInstance?.isbnNumber}" data-toggle="tooltip" data-placement="right" data-container="body" title="A 10-digit unique identifier" />
+					value="${commerceObjectInstance?.isbnNumber}" data-toggle="tooltip" data-placement="right" data-container="body" title="A unique identifier or ISBN. This auto-generated number can be used if you don't have an ISBN" />
 
 			</div>
 		</div>
@@ -47,7 +47,7 @@
 					code="commerceObject.teacherLabel.label" default="Teacher Label" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="teacherLabel"
-					value="${commerceObjectInstance?.teacherLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Teacher Url Link" />
+					value="${commerceObjectInstance?.teacherLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Teacher Url Link, which is visible to the Customer" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'teacherLabel', 'error-field')}
 				</span>
@@ -73,7 +73,7 @@
 					code="commerceObject.studentLabel.label" default="Student Label" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="studentLabel"
-					value="${commerceObjectInstance?.studentLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Student Url Link" />
+					value="${commerceObjectInstance?.studentLabel}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Student Url Link, which is visible to the Customer" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'studentLabel', 'error-field')}
 				</span>

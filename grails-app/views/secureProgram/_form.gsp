@@ -14,7 +14,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'productName', 'error-field')} required">
 				<label for="productName" class="control-label col-sw-1"><g:message code="secureProgram.productName.label" default="Product Name" /><span class="required-indicator">*</span></label>
 				<div class="controls">
-					<g:textField class="form-control" name="productName" required="" value="${secureProgramInstance?.productName}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title which is visible to the Customer"/>
+					<g:textField class="form-control" name="productName" required="" value="${secureProgramInstance?.productName}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title, which is visible to the Customer"/>
 					
 				</div>
 			</div>
@@ -30,7 +30,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'onlineIsbn', 'error-field')} required">
 				<label for="onlineIsbn" class="control-label col-sw-1"><g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" /><span class="required-indicator">*</span></label>
 				<div class="col-md-4 margin1" >
-					<g:textField class="form-control" name="onlineIsbn" maxlength="13" required="" value="${secureProgramInstance?.onlineIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="13-digit ISBN which is usually the Online 6-Year ISBN that is being used for Content development and MDS"/>
+					<g:textField class="form-control" name="onlineIsbn" maxlength="13" required="" value="${secureProgramInstance?.onlineIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="13-digit ISBN, which is usually the Online 6-Year ISBN that is being used for development, MDS and 6-Year Bundle"/>
 					
 				</div>
 			</div>

@@ -30,7 +30,7 @@
 				class="required-indicator">*</span></label>
 			<div class="controls">
 				<g:textField class="form-control" name="title" required=""
-					value="${bundleInstance?.title}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title which is not visible to the Customer but should be descriptive" />
+					value="${bundleInstance?.title}" data-toggle="tooltip" data-placement="right" data-container="body" title="Title, which is not visible to the Customer but should be descriptive" />
 				
 			</div>
 		</div>
