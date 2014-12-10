@@ -100,6 +100,7 @@
 			<div class="border: 2px solid;border-radius: 25px;">
 				<g:each var="result" in="${searchResult.results}" status="index">
 					<div class="result">
+					
 						<g:set var="className"
 							value="${ClassUtils.getShortName(result.getClass())}" />
 						<g:set var="link"
@@ -118,11 +119,15 @@
 																	<b>
 																		${result.isbn}
 																	</b>
-																
+																<g:set var="blISBN" value="${result.isbn}" />
 								</g:if> <g:if test="${className.equalsIgnoreCase("CommerceObject")}">
 									${result.objectName} - <b>${result.isbnNumber}</b>
-								</g:if> <g:if test="${className.equalsIgnoreCase("SecureProgram")}">
+									<g:set var="coISBN" value="${result.isbnNumber}" />
+								</g:if> 
+								
+								<g:if test="${className.equalsIgnoreCase("SecureProgram")}">
 									${result.productName} - <b>${result.registrationIsbn}</b>
+									<g:set var="spISBN" value="${result.registrationIsbn}" />
 								</g:if>
 
 							</a>
@@ -132,30 +137,89 @@
 							<g:if test="${result.secureProgram}">
 
 								<div class="divborder-search">
+								<g:if test="${spISBN}">
+								<g:if test="${(result.secureProgram.registrationIsbn).contains(spISBN)}">
 									<div class="divul-search">Associated Secure Programs</div>
+								</g:if>
+								<g:else>
+								
+								
+								</g:else>
+								</g:if>
+									<g:else>
+									<div class="divul-search">Associated Secure Programs</div>
+									</g:else>
 									<ul style="list-style-type: square;">
 
 										<g:each in="${result.secureProgram}"  var="b">
-											<li><g:link controller="secureProgram" action="show"
+											
+											
+											
+											
+											<g:if test="${spISBN}">
+											<g:if test="${spISBN==b.registrationIsbn}"><li><g:link controller="secureProgram" action="show"
 													id="${b.id}">													
 														<b>
 															${b.registrationIsbn}
 														</b>
 													: ${b?.encodeAsHTML()}
-												</g:link> <br /></li>
+												</g:link><br /></li></g:if></g:if>
+												<g:else>
+												<li><g:link controller="secureProgram" action="show"
+													id="${b.id}">													
+														<b>
+															${b.registrationIsbn}
+														</b>
+													: ${b?.encodeAsHTML()}
+												</g:link><br /></li>
+												</g:else>
+												
+												
+												
+												
 											<g:if test="${b.commerceObjects}">
-												<div class="divli-search">Associated Commerce Objects</div>
+											
+											<g:if test="${coISBN}">
+								<g:if test="${(b.commerceObjects.isbnNumber).contains(coISBN) }">
+									<div class="divli-search">Associated Commerce Objects</div>
+								</g:if>
+								<g:else>
+								
+								</g:else>
+								</g:if>
+									<g:else>
+									<g:if test="${!(result.secureProgram.registrationIsbn).contains(spISBN)}">
+									<div class="divli-search">Associated Commerce Objects</div>
+									</g:if>
+									</g:else>
+											
+											
+											
+												
 												<ul>
-													<g:each in="${b.commerceObjects}"  var="co">
-														
-														<li><g:link controller="CommerceObject" action="show"
+													<g:each in="${b.commerceObjects}"  var="co">														
+													
+												<g:if test="${coISBN}">
+											<g:if test="${coISBN==co.isbnNumber}"><li><g:link controller="CommerceObject" action="show"
 																id="${co.id}">																
 																	<b>
 																		${co.isbnNumber}
 																	</b>
 																 : ${co.objectName}
-															</g:link></li>
-
+															</g:link></li></g:if>
+															</g:if>
+															<g:else>
+															<g:if test="${!(result.secureProgram.registrationIsbn).contains(spISBN)}"><li>
+															
+															<g:link controller="CommerceObject" action="show"
+																id="${co.id}">																
+																	<b>
+																		${co.isbnNumber}
+																	</b>
+																 : ${co.objectName}
+															</g:link></li></g:if>
+															</g:else>
+															
 													</g:each>
 												</ul>
 											</g:if>
@@ -165,30 +229,59 @@
 								</div>
 							</g:if>
 						</g:if>
-
-						<g:if test="${className.equalsIgnoreCase("SecureProgram")}">
+<g:if test="${!blISBN}">
+						<g:if  test="${className.equalsIgnoreCase("SecureProgram") }">
 
 							<g:if test="${result.commerceObjects}">
 								<div class="divborder-search">
+											<g:if test="${coISBN}">
+											
+								<g:if test="${(result.commerceObjects.isbnNumber).contains(coISBN)}">
 									<div class="divli-search">Associated Commerce Objects</div>
+								</g:if>
+								<g:else>
+								
+								</g:else>
+								</g:if>
+									<g:else>
+									<div class="divli-search">Associated Commerce Objects</div>
+									</g:else>
+									
 									<ul>
 										<g:each in="${result.commerceObjects}"  var="c">
-
-											<li><g:link controller="CommerceObject" action="show"
-													id="${c.id}">
-													
-														<b>
-															${c.isbnNumber}
-														</b>
-													 : ${c.objectName}
-												</g:link></li>
+		                            
+		                            
+		                            <g:if test="${coISBN}">
+											<g:if test="${coISBN==c.isbnNumber}">
+											
+											<li>
+											<g:link controller="CommerceObject" action="show" id="${c.id}">																
+																	<b>
+																		${c.isbnNumber}
+																	</b>
+																 : ${c.objectName}
+											</g:link>
+											</li>
+											</g:if>
+									</g:if>
+															
+									<g:else>
+															<li><g:link controller="CommerceObject" action="show"
+																id="${c.id}">																
+																	<b>
+																		${c.isbnNumber}
+																	</b>
+																 : ${c.objectName}
+															</g:link></li>
+									</g:else>
+																				
 
 										</g:each>
 									</ul>
 								</div>
 							</g:if>
 						</g:if>
-
+</g:if>
 
 					</div>
 				</g:each>

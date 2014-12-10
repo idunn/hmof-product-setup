@@ -126,3 +126,65 @@ function toggle(box,theId) {
 				return false;
 			}
 	}
+	function pageonload()
+	{		
+		
+		var selectIds = $('#Teach2,#Teach3,#Teach4,#Student2,#Student3,#Student4');
+		$(function ($) {
+		    selectIds.on('show.bs.collapse hidden.bs.collapse', function () {
+		        $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+		    })
+		});
+
+		var knewtonProd = document.getElementById("knewtonProduct").checked;
+		
+		 if(knewtonProd){		    
+			    $("#collapseThree").show();			
+				
+			    $("#demo").show();
+				$("#demo").toggleClass('collapse');
+				
+				}
+		 
+		 if(!knewtonProd)
+			{			
+			 
+			 $("#demo").hide();		
+			}
+		 var  lar =document.getElementById("lar").value;
+			
+			if(knewtonProd && lar=="true"){		    			
+			    $("#collapseTwo").show();
+			    $("#collapseThree").show();			
+			 	
+			    $("#demo").show();
+				$('#demo').toggleClass('collapse');
+				$('#Teach2').toggleClass('collapse');
+				$('#Teach3').toggleClass('collapse');
+				$('#Teach4').toggleClass('collapse');
+				$('#Student2').toggleClass('collapse');
+				$('#Student3').toggleClass('collapse');
+				$('#Student4').toggleClass('collapse');
+				
+				}
+
+			
+			
+			 if(lar=="true" && !knewtonProd)
+				{				 
+					 			
+					    $("#collapseTwo").show();
+					 		
+					    $('#Teach2').toggleClass('collapse');
+						$('#Teach3').toggleClass('collapse');
+						$('#Teach4').toggleClass('collapse');
+						$('#Student2').toggleClass('collapse');
+						$('#Student3').toggleClass('collapse');
+						$('#Student4').toggleClass('collapse');
+					
+				 $("#demo").hide();		
+				}
+			
+
+		
+	}

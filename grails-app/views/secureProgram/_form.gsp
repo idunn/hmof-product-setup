@@ -7,6 +7,8 @@
 	<script src="${resource(dir:'js',file:'jquery.scrollTo-min.js')}"></script>
 	<script src="${resource(dir:'js',file:'ui.multiselect.js')}"></script>
 
+	
+
  <div class="span7">
         <section>
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'productName', 'error-field')} required">
@@ -146,14 +148,19 @@
 				</div>
 			</div>
 </div>
-<div class="span12">
-       <section>
-        
-			<div id="accordion">
-			
-	<h3 class="col-sw-1">Additional Security Words</h3>
-	<div id="accordion1">
-	
+
+      <div class="span12" >
+<div class="bs-example">
+    <div class="panel-group accordion-caret" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed acstyle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">&nbsp;Additional Security Words</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+     
 	
 	 <section>
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord2', 'error-field')} col-sw-5">
@@ -224,13 +231,16 @@
 </div>
 
 </section>
+</div></div></div>
+ <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" class="accordion-toggle collapsed" data-parent="#accordion" href="#collapseTwo">&nbsp;Links to Additional Resources</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">               
 
-
-
-</div>
-
-<h3 class="col-sw-1">Links to Additional Resources</h3>
-	<div id="accordion2">
 	<span  class="col-sw-3">Teacher Additional Resources</span>
 <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'labelForTeacherAdditionalResource', 'error-field')} ">
 				<label for="labelForTeacherAdditionalResource" class="control-label col-sw-1" ><g:message code="secureProgram.labelForTeacherAdditionalResource.label" default="Label For Teacher Additional Resource" /></label>
@@ -436,14 +446,17 @@
 </div>	
 	</div>		
 			
-</div>
+</div></div></div>
 
-
-		<h3 class="col-sw-1">Knewton</h3>
-	<div id="accordion3">
-	
-
-			<div class="${hasErrors(bean: secureProgramInstance, field: 'knewtonProduct', 'error-field')} ">
+<div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree">&nbsp;Knewton</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+				<div class="${hasErrors(bean: secureProgramInstance, field: 'knewtonProduct', 'error-field')} ">
 				<label for="knewtonProduct" class="control-label col-sw-1"><g:message code="secureProgram.knewtonProduct.label" default="Knewton Product" /></label>
 				<div class="controls">				
 					
@@ -509,14 +522,14 @@
 </div>
 
 
-		</div></section></div>
+		</div></div></div></div></div>
 		
 <div class="span12">
        <section>
        <div class="platformf">Comments</div><br>
 	   <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')} ">
-				<label for="comments" class="control-label col-sw-1"><g:message code="secureProgram.comments.label" default="Comments" /></label>
-				<div class="controls">
+				
+				<div >
 					<g:textArea class="form-control" name="comments" cols="80" rows="5" maxlength="255" value="${secureProgramInstance?.comments}" />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'comments', 'error-field')}</span>
 				</div>
@@ -528,12 +541,12 @@
        <section>
        <div class="platformf">Commerce Objects</div><br>
 <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')} ">
-				<label for="commerceObjects" class="control-label col-sw-1"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects" /></label>
-				<div class="controls">
-					<g:select class="form-control"  name="commerceObjects"  
+				
+				<div >
+					<g:select class="multiselect"  style="width:80%;" name="commerceObjects"  
 					from="${hmof.CommerceObject.list().sort()}" 
-					multiple="multiple" optionKey="id" size="10"  style="width:80%;"
-					value="${secureProgramInstance?.commerceObjects*.id}" class="many-to-many"  />
+					multiple="multiple" optionKey="id" size="10"  
+					value="${secureProgramInstance?.commerceObjects*.id}"   />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'commerceObjects', 'error-field')}</span>
 				</div>
 </div>
@@ -566,73 +579,9 @@
 
 <script>
 
-$( "#accordion" ).accordion({ heightStyle: "content",autoHeight: false, clearStyle: true});
+	window.onload = pageonload;
 
+	$(function () { $("[data-toggle='tooltip']").tooltip(); });
 
-function pageonload()
-{		
-	
-	var selectIds = $('#Teach2,#Teach3,#Teach4,#Student2,#Student3,#Student4');
-	$(function ($) {
-	    selectIds.on('show.bs.collapse hidden.bs.collapse', function () {
-	        $(this).prev().find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
-	    })
-	});
-	var knewtonProd = document.getElementById("knewtonProduct").checked;
-	 if(knewtonProd){
-		    $("#accordion1").hide();			
-		    $("#accordion2").hide();
-		    $("#accordion3").show();			
-			
-		    $("#demo").show();
-			$("#demo").toggleClass('collapse');
-			
-			}
-	var  lar =document.getElementById("lar").value;
-	
-	if(knewtonProd && lar=="true"){
-	    $("#accordion1").hide();			
-	    $("#accordion2").show();
-	    $("#accordion3").show();			
-	 	
-	    $("#demo").show();
-		$('#demo').toggleClass('collapse');
-		$('#Teach2').toggleClass('collapse');
-		$('#Teach3').toggleClass('collapse');
-		$('#Teach4').toggleClass('collapse');
-		$('#Student2').toggleClass('collapse');
-		$('#Student3').toggleClass('collapse');
-		$('#Student4').toggleClass('collapse');
-		
-		}
-
-	
-	
-	 if(lar=="true" && !knewtonProd)
-		{				 
-			  $("#accordion1").hide();			
-			    $("#accordion2").show();
-			    $("#accordion3").hide();			
-			    $('#Teach2').toggleClass('collapse');
-				$('#Teach3').toggleClass('collapse');
-				$('#Teach4').toggleClass('collapse');
-				$('#Student2').toggleClass('collapse');
-				$('#Student3').toggleClass('collapse');
-				$('#Student4').toggleClass('collapse');
-			
-		 $("#demo").hide();		
-		}
-
-
-	
-	}
-
-window.onload = pageonload;
-
-$(function () { $("[data-toggle='tooltip']").tooltip(); });
-
- $("#commerceObjects").multiselect().multiselectfilter();
- 
- 
-
+	 $("#commerceObjects").multiselect().multiselectfilter();
 </script>

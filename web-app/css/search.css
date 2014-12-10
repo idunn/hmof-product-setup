@@ -1,5 +1,57 @@
 @CHARSET "ISO-8859-1";
-
+.accordion-caret .accordion-toggle{
+	 text-decoration: none;
+        font-family: 'Open Sans'; 
+        font-size: 18px;
+	    color: #EB8D00;
+	    font-weight:bold;
+	
+}
+.accordion-caret .accordion-toggle:hover {
+        text-decoration: none;
+        font-family: 'Open Sans'; 
+        font-size: 18px;
+        font-weight:bold;
+	    color: #EB8D00;
+    }
+    .accordion-caret .accordion-toggle:hover span{
+   
+        text-decoration: underline;
+    }
+    .accordion-caret .accordion-toggle:hover strong {
+    
+        text-decoration: underline;
+    }
+    .accordion-caret .accordion-toggle:before {
+       
+        vertical-align: -3px;
+    }
+    .accordion-caret .accordion-toggle:not(.collapsed):before {
+   position:relative;
+top:1px;
+display:inline-block;
+font-family:'Glyphicons Halflings';
+font-style:normal;
+font-weight:normal;
+line-height:1;
+-webkit-font-smoothing:antialiased;
+        content: "\e114";
+        margin-right: 0px;
+    }
+    .accordion-caret .accordion-toggle.collapsed:before {
+    position:relative;
+top:1px;
+display:inline-block;
+font-family:'Glyphicons Halflings';
+font-style:normal;
+font-weight:normal;
+line-height:1;
+-webkit-font-smoothing:antialiased;
+        content: "\e113";              
+        margin-right: 0px;
+        
+    }
+    
 .comments{
         margin: 1em 0;           
         background-color: #EEEEEE;
@@ -621,6 +673,9 @@ LEGEND + .control-group {
 	font-family: 'Open Sans';  
 	font-size:18px;  
   }
+    .acstyle{
+	
+  }
   .margin1{
   margin-left: 7px;
   }
@@ -735,3 +790,4 @@ LEGEND + .control-group {
    float: left;
    width: 28.66666666666667%;
 }
+
