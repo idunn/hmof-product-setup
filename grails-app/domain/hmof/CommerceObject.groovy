@@ -13,7 +13,7 @@ class CommerceObject implements Comparable{
 	Date dateCreated
 	Date lastUpdated
 
-	String pathToCoverImage = "/nsmedia/images/bc/CHANGEME.jpg"
+	String pathToCoverImage = "/nsmedia/images/bc/"
 	String teacherLabel
 	String teacherUrl
 	String studentLabel
@@ -48,7 +48,7 @@ class CommerceObject implements Comparable{
 		dateCreated ()
 		lastUpdated ()
 
-		pathToCoverImage (shared: "globalUrl")
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif)$/)
 		teacherLabel (blank: false, nullable:true)
 		teacherUrl (shared: "globalUrl")
 		studentLabel (blank: false, nullable:true)
