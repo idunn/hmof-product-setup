@@ -6,9 +6,12 @@ import geb.*
 import org.apache.log4j.LogManager
 import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
+import grails.util.Holders
 
 class CommerceObjectWork extends Page {
-	static Logger log = Logger.getLogger(CommerceObjectWork.class);
+	static Logger log = Logger.getLogger(CommerceObjectWork.class)
+	def utilityService = Holders.grailsApplication.mainContext.getBean 'utilityService'
+
 	def initBaseUrl(def baseUrl,Logger log){
 		log.info "Base Url: " + baseUrl
 		url = baseUrl
@@ -110,7 +113,9 @@ class CommerceObjectWork extends Page {
 		log.info "Subject: "+content.subject
 		subject.value(content.subject?:"None")
 
-		def categoryNumber = getCategory(content.category,log)
+		def categoryNumber = utilityService.getCategory(content.category)
+		if (categoryNumber == "Other") categoryNumber = "-1"
+		log.info "category Number: " + categoryNumber
 		category.value(categoryNumber)
 		log.info "Grade Level: "+content.gradeLevel
 		def grades = []
@@ -128,57 +133,4 @@ class CommerceObjectWork extends Page {
 
 	}
 
-	/**
-	 * Helper method to return the String value of the Category	 
-	 * @param category
-	 * @return
-	 */
-	def getCategory(def category,Logger log){
-
-		def cat = category
-		log.info "Category Value: " + category
-		switch (cat) {
-			case 'Other':
-				log.debug "Other"
-				category = '-1'
-				break
-			case 'Science & Health':
-				log.debug"Science & Health"
-				category = '0'
-				break
-			case 'Social Studies':
-				log.debug"Social Studies"
-				category = '1'
-				break
-			case 'Language Arts':
-				log.debug"Language Arts"
-				category = '2'
-				break
-			case 'Mathematics':
-				log.debug"Mathematics"
-				category = '3'
-				break
-			case 'World Languages':
-				log.debug"World Languages"
-				category = '4'
-				break
-			default:
-				category = '-1'
-		}
-
-		log.info "Category Number: " + category
-
-		return category
-
-
-	}
-
 }
-
-
-
-
-
-
-
-

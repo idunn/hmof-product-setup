@@ -85,35 +85,90 @@ class UtilityService {
 	}
 
 
-	// TODO
+	/**
+	 * Parse the text file and persist the Commerce Object Data
+	 * @param commerceObjectFile
+	 * @return
+	 */
 	def parseTextFile(File commerceObjectFile){
-		
+
 		def contentType = ContentType.where{id==4}.get()
 		List errorList = new ArrayList();
 		log.info"Parsing Text file in Service" + commerceObjectFile.getClass()
 
 		commerceObjectFile.eachCsvLine { tokens ->
-			
-					CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3],
-						teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:'Language Arts', contentType:contentType,
-						objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
-						
-						if (!dom.save(flush: true)) {
-						
-							log.error "Failed to Save CommerceObject"  
-							errorList.add("<b>Object Name : "+tokens[0]+"</b>")
-							dom.errors.allErrors.each {
-								
-								errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
-								
-								}
-							errorList.add("<br>")
-						}
+
+			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3],
+			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:'Language Arts', contentType:contentType,
+			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
+
+			if (!dom.save(flush: true)) {
+
+				log.error "Failed to Save CommerceObject"
+				errorList.add("<b>Object Name : "+tokens[0]+"</b>")
+				dom.errors.allErrors.each {
+
+					errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
+
+				}
+				errorList.add("<br>")
+			}
 		}
-	
+
 		return errorList
 	}
-	
+
+	/**
+	 * Helper method to return the String value of the Category
+	 * @param category
+	 * @return
+	 */
+	def getCategory(def category){
+
+		switch (category) {
+			case 'Other':
+				category = '-1'
+				break
+			case -1:
+				category = "Other"
+				break
+			case 'Science & Health':
+				category = '0'
+				break
+			case 0:
+				category = 'Science & Health'
+				break
+			case 'Social Studies':
+				category = '1'
+				break
+			case 1:
+				category = 'Social Studies'
+				break
+			case 'Language Arts':
+				category = '2'
+				break
+			case 2:
+				category = 'Language Arts'
+				break
+			case 'Mathematics':
+				category = '3'
+				break
+			case 3:
+				category = 'Mathematics'
+				break
+			case 'World Languages':
+				category = '4'
+				break
+			case 4:
+				category = 'World Languages'
+				break
+			default:
+				category = 'Other'
+		}
+
+		return category
+	}
+
 
 }
 
