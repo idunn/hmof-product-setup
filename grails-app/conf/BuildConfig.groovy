@@ -104,6 +104,7 @@ grails.project.dependency.resolution = {
 		//Searchable
 		compile ":searchable:0.6.9"
 		compile ":jquery-ui:1.10.4"
+		compile ":csv:0.3.1"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
 		//runtime ":cached-resources:1.1"

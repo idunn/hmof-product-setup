@@ -3,7 +3,8 @@ package hmof
 import groovy.sql.Sql
 import java.sql.ResultSet
 import org.codehaus.groovy.grails.web.util.WebUtils
-
+import grails.util.Holders
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 @Transactional
@@ -88,20 +89,31 @@ class UtilityService {
 	def parseTextFile(File commerceObjectFile){
 		
 		def contentType = ContentType.where{id==4}.get()
-		
-		
+		List errorList = new ArrayList();
 		log.info"Parsing Text file in Service" + commerceObjectFile.getClass()
 
-		commerceObjectFile.eachLine() { line ->
-			def cols = line.split(",")
-
-			CommerceObject dom = new CommerceObject(objectName:cols[0],comments:cols[1],pathToCoverImage:cols[2],isbnNumber:cols[3],
-				teacherLabel:cols[4],teacherUrl:cols[5],studentLabel:cols[6],studentUrl:cols[7],category:'Language Arts', contentType:contentType,
-				objectType:cols[9],objectReorderNumber:cols[10],subject:cols[11],gradeLevel:[12])			
+		commerceObjectFile.eachCsvLine { tokens ->
 			
-			dom.save(failOnError:true)
+					CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3],
+						teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:'Language Arts', contentType:contentType,
+						objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
+						
+						if (!dom.save(flush: true)) {
+						
+							log.error "Failed to Save CommerceObject"  
+							errorList.add("<b>Object Name : "+tokens[0]+"</b>")
+							dom.errors.allErrors.each {
+								
+								errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
+								
+								}
+							errorList.add("<br>")
+						}
 		}
+	
+		return errorList
 	}
+	
 
 }
 

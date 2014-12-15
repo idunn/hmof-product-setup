@@ -25,7 +25,12 @@
 		<li class="">
 			<a href="${createLink(uri: '/user')}">
 				<i class="glyphicon glyphicon-info-sign"></i>
-				<g:message code="security.header.label"/>
+				Manage Roles			</a>
+		</li>
+		<li class="">
+			<a href="${createLink(uri: '/commerceObject/importCSV')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				CSV Import
 			</a>
 		</li>
 		</sec:ifAnyGranted>
