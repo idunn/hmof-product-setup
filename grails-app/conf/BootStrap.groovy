@@ -32,6 +32,7 @@ class BootStrap {
 
 				def p1 = new Program(name:'visualmath', state:'FL', discipline:'math', contentType:ct1).save(failOnError:true)
 				def p2 = new Program(name:'hmhcollections2017', state:'NA', discipline:'language_arts', contentType:ct1).save(failOnError:true)
+				def p3 = new Program(name:'hmhcollections2017', state:'CA', discipline:'language_arts', contentType:ct1).save(failOnError:true)
 			}
 
 
@@ -94,7 +95,31 @@ class BootStrap {
 				def b8 = new Bundle(program:p1, isbn:'9780123456794', title:'Visual Math ete, Grade 11, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp5).save(failOnError:true)
 				def b9 = new Bundle(program:p1, isbn:'9780123456795', title:'Visual Math ete, Grade 12, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 				def b10 = new Bundle(program:p1, isbn:'9780123456796', title:'Visual Math ete, Grade 12 Premium, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:true, contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
-
+				
+				// Load testing
+				
+				/*def b11 = new Bundle(program:p1, isbn:'9780123456760',title:'Visual Math load Testing, Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b12 = new Bundle(program:p1, isbn:'9780123456761',title:'Visual Math load Testing, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b17 = new Bundle(program:p1, isbn:'9780123456766',title:'Visual Math load Testing, Grade 7, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b18 = new Bundle(program:p1, isbn:'9780123456767',title:'Visual Math load Testing, Grade 7, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b19 = new Bundle(program:p1, isbn:'9780123456768',title:'Visual Math load Testing, Grade 8, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
+				def b20 = new Bundle(program:p1, isbn:'9780123456769',title:'Visual Math load Testing, Grade 8, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
+				def b21 = new Bundle(program:p1, isbn:'9780123456770',title:'Visual Math load Testing2, Grade 9, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b22 = new Bundle(program:p1, isbn:'9780123456771',title:'Visual Math load Testing2, Grade 9, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b23 = new Bundle(program:p1, isbn:'9780123456772',title:'Visual Math load Testing2, Grade 9, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b24 = new Bundle(program:p1, isbn:'9780123456773',title:'Visual Math load Testing2, Grade 9, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b25 = new Bundle(program:p1, isbn:'9780123456774',title:'Visual Math load Testing2, Grade 9, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b26 = new Bundle(program:p1, isbn:'9780123456775',title:'Visual Math load Testing2, Grade 9, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b27 = new Bundle(program:p1, isbn:'9780123456776',title:'Visual Math load Testing2, Grade 9, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b28 = new Bundle(program:p1, isbn:'9780123456777',title:'Visual Math load Testing2, Grade 9, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				def b29 = new Bundle(program:p1, isbn:'9780123456778',title:'Visual Math load Testing2, Grade 10, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
+				def b30 = new Bundle(program:p1, isbn:'9780123456779',title:'Visual Math load Testing2, Grade 10, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
+				*/
+				
 
 			}
 
