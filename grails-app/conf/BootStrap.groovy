@@ -181,7 +181,23 @@ class BootStrap {
 			def devUser10 = User.findByUsername('terryi') ?: new User(username: 'terryi',password: 'os5tkyH',email: 'ivan.terry@hmhco.com').save(failOnError: true)
 			if (!devUser10.authorities.contains(pmRole)) {UserRole.create devUser10, pmRole}
 
+			def devUser11 = User.findByUsername('gfay') ?: new User(username: 'gfay',password: '8QKcC3',email: 'geoff.fay@hmhco.com').save(failOnError: true)
+			if (!devUser11.authorities.contains(pmRole)) {UserRole.create devUser11, pmRole}
 
+
+			def devUser12 = User.findByUsername('cflanagan') ?: new User(username: 'cflanagan',password: '8mheXk',email: 'ciara.flanagan@hmhco.com').save(failOnError: true)
+			if (!devUser12.authorities.contains(pmRole)) {UserRole.create devUser12, pmRole}
+
+
+			def devUser13 = User.findByUsername('stuartb') ?: new User(username: 'stuartb',password: 'GHb4hg5',email: 'stuart.byrne@hmhco.com').save(failOnError: true)
+			if (!devUser13.authorities.contains(pmRole)) {UserRole.create devUser13, pmRole}
+
+
+			def devUser14 = User.findByUsername('bquinn') ?: new User(username: 'bquinn',password: 'qued3aFu',email: 'brian.quinn@hmhco.com').save(failOnError: true)
+			if (!devUser14.authorities.contains(pmRole)) {UserRole.create devUser14, pmRole}
+
+			def devUser15 = User.findByUsername('raswal') ?: new User(username: 'raswal',password: 'ysit8d3M',email: 'ritesh.aswal@niit.com').save(failOnError: true)
+			if (!devUser15.authorities.contains(pmRole)) {UserRole.create devUser15, pmRole}
 
 			// QA User
 			def qaUser = User.findByUsername('QA') ?: new User(
@@ -212,6 +228,13 @@ class BootStrap {
 			if (!prodUser4.authorities.contains(prodRole)) {UserRole.create prodUser4, prodRole}
 			def prodUser5 = User.findByUsername('parminders') ?: new User(username: 'parminders',password: 'uayouch',email: 'parminder.singh@niit.com').save(failOnError: true)
 			if (!prodUser5.authorities.contains(prodRole)) {UserRole.create prodUser5, prodRole}
+
+			def prodUser9 = User.findByUsername('nnandanan') ?: new User(username: 'nnandanan',password: '7ZQ6jo8q',email: 'nisha.nandanan@niit.com').save(failOnError: true)
+			if (!prodUser9.authorities.contains(prodRole)) {UserRole.create prodUser9, prodRole}
+			def prodUser10 = User.findByUsername('msaraswat') ?: new User(username: 'msaraswat',password: 'kS74TgwZ',email: 'madhup.saraswat@niit.com').save(failOnError: true)
+			if (!prodUser10.authorities.contains(prodRole)) {UserRole.create prodUser10, prodRole}
+			def prodUser11 = User.findByUsername('ogallen') ?: new User(username: 'ogallen',password: 'Shae7Shu',email: 'oran.gallen@hmhco.com').save(failOnError: true)
+			if (!prodUser11.authorities.contains(prodRole)) {UserRole.create prodUser11, prodRole}
 
 		} // end if
 
