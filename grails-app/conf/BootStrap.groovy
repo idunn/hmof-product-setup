@@ -71,7 +71,7 @@ class BootStrap {
 				onlineIsbn:'9780123456794', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456794.jpg', securityWord:'multiply', includeDashboardObject:true, includeEplannerObject:true, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054f',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).addToCommerceObjects(cob5).save(failOnError:true)
 				def sp6 = new SecureProgram (productName:'Visual Math: Teacher Edition, Grade 12', registrationIsbn:'054423884X',
 				onlineIsbn:'9780123456795', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456795.jpg', securityWord:'essay', includeDashboardObject:true, includeEplannerObject:true, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756055b',curriculumArea:'Mathematics',essayGraderPrompts:'High School', contentType:ct3).addToCommerceObjects(cob6).addToCommerceObjects(cob7).save(failOnError:true)
-				
+
 			}
 
 
@@ -95,31 +95,31 @@ class BootStrap {
 				def b8 = new Bundle(program:p1, isbn:'9780123456794', title:'Visual Math ete, Grade 11, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp5).save(failOnError:true)
 				def b9 = new Bundle(program:p1, isbn:'9780123456795', title:'Visual Math ete, Grade 12, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false, contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 				def b10 = new Bundle(program:p1, isbn:'9780123456796', title:'Visual Math ete, Grade 12 Premium, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:true, contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
-				
+
 				// Load testing
-				
+
 				/*def b11 = new Bundle(program:p1, isbn:'9780123456760',title:'Visual Math load Testing, Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b12 = new Bundle(program:p1, isbn:'9780123456761',title:'Visual Math load Testing, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b17 = new Bundle(program:p1, isbn:'9780123456766',title:'Visual Math load Testing, Grade 7, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b18 = new Bundle(program:p1, isbn:'9780123456767',title:'Visual Math load Testing, Grade 7, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				def b19 = new Bundle(program:p1, isbn:'9780123456768',title:'Visual Math load Testing, Grade 8, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
-				def b20 = new Bundle(program:p1, isbn:'9780123456769',title:'Visual Math load Testing, Grade 8, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
-				def b21 = new Bundle(program:p1, isbn:'9780123456770',title:'Visual Math load Testing2, Grade 9, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b22 = new Bundle(program:p1, isbn:'9780123456771',title:'Visual Math load Testing2, Grade 9, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b23 = new Bundle(program:p1, isbn:'9780123456772',title:'Visual Math load Testing2, Grade 9, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b24 = new Bundle(program:p1, isbn:'9780123456773',title:'Visual Math load Testing2, Grade 9, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b25 = new Bundle(program:p1, isbn:'9780123456774',title:'Visual Math load Testing2, Grade 9, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b26 = new Bundle(program:p1, isbn:'9780123456775',title:'Visual Math load Testing2, Grade 9, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b27 = new Bundle(program:p1, isbn:'9780123456776',title:'Visual Math load Testing2, Grade 9, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b28 = new Bundle(program:p1, isbn:'9780123456777',title:'Visual Math load Testing2, Grade 9, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
-				def b29 = new Bundle(program:p1, isbn:'9780123456778',title:'Visual Math load Testing2, Grade 10, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
-				def b30 = new Bundle(program:p1, isbn:'9780123456779',title:'Visual Math load Testing2, Grade 10, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
-				*/
-				
+				 def b12 = new Bundle(program:p1, isbn:'9780123456761',title:'Visual Math load Testing, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b17 = new Bundle(program:p1, isbn:'9780123456766',title:'Visual Math load Testing, Grade 7, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b18 = new Bundle(program:p1, isbn:'9780123456767',title:'Visual Math load Testing, Grade 7, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				 def b19 = new Bundle(program:p1, isbn:'9780123456768',title:'Visual Math load Testing, Grade 8, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
+				 def b20 = new Bundle(program:p1, isbn:'9780123456769',title:'Visual Math load Testing, Grade 8, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp2).save(failOnError:true)
+				 def b21 = new Bundle(program:p1, isbn:'9780123456770',title:'Visual Math load Testing2, Grade 9, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b22 = new Bundle(program:p1, isbn:'9780123456771',title:'Visual Math load Testing2, Grade 9, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b23 = new Bundle(program:p1, isbn:'9780123456772',title:'Visual Math load Testing2, Grade 9, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b24 = new Bundle(program:p1, isbn:'9780123456773',title:'Visual Math load Testing2, Grade 9, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b25 = new Bundle(program:p1, isbn:'9780123456774',title:'Visual Math load Testing2, Grade 9, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b26 = new Bundle(program:p1, isbn:'9780123456775',title:'Visual Math load Testing2, Grade 9, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b27 = new Bundle(program:p1, isbn:'9780123456776',title:'Visual Math load Testing2, Grade 9, 2016, 7Y',duration:'7-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b28 = new Bundle(program:p1, isbn:'9780123456777',title:'Visual Math load Testing2, Grade 9, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
+				 def b29 = new Bundle(program:p1, isbn:'9780123456778',title:'Visual Math load Testing2, Grade 10, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
+				 def b30 = new Bundle(program:p1, isbn:'9780123456779',title:'Visual Math load Testing2, Grade 10, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
+				 */
+
 
 			}
 
@@ -133,51 +133,34 @@ class BootStrap {
 			def userRole = Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
 
 			// Admin user.
-			def adminPerson = User.findByUsername('Admin') ?: new User(
+			def adminUser = User.findByUsername('Admin') ?: new User(
 					username: 'Admin',
-					password: 'Admin',
-					enabled: true).save(failOnError: true)
+					password: 'spr1ngt1me',
+					email: 'DublinTPDCustomDevelopment@hmhco.com').save(failOnError: true)
 
-			if (!adminPerson.authorities.contains(adminRole)) {
-				UserRole.create adminPerson, adminRole
-			}
-
-			// Admin User 2
-
-			def admin2 = User.findByUsername('idunn') ?: new User(
-					username: 'idunn',
-					password: 'EebeL7ae',
-					enabled: true).save(failOnError: true)
-
-			if (!admin2.authorities.contains(adminRole)) {
-				UserRole.create admin2, adminRole
-			}
-
-			// Anonymous user
-			def user1 = User.findByUsername('anon') ?: new User(
-					username: 'anon',
-					password: 'anon').save(failOnError: true)
-			if (!user1.authorities.contains(userRole)) {
-				UserRole.create user1, userRole
+			if (!adminUser.authorities.contains(adminRole)) {
+				UserRole.create adminUser, adminRole
 			}
 
 
-			// Dev User
+			def adminUser2 = User.findByUsername('noconnor') ?: new User(username: 'noconnor',password: 'Hs63hej',email: 'niall.oconnor@hmhco.com').save(failOnError: true)
+			if (!adminUser2.authorities.contains(adminRole)) {UserRole.create adminUser2, adminRole}
+			def adminUser3 = User.findByUsername('arollapati') ?: new User(username: 'arollapati',password: 'Ji9ahhia',email: 'aparna.r2@cognizant.com').save(failOnError: true)
+			if (!adminUser3.authorities.contains(adminRole)) {UserRole.create adminUser3, adminRole}
+
+			// Dev Users
 			def devUser = User.findByUsername('PM') ?: new User(
 					username: 'PM',
-					password: 'PM',
-					enabled: true).save(failOnError: true)
+					password: 'spr1ngt1me').save(failOnError: true)
 
 			if (!devUser.authorities.contains(pmRole)) {
 				UserRole.create devUser, pmRole
 			}
 
-			// Stakeholders
-
 			def devUser2 = User.findByUsername('tosullivan') ?: new User(
 					username: 'tosullivan',
 					password: 'bYAw2C',
-					enabled: true).save(failOnError: true)
+					email: 'terri.osullivan@hmhco.com').save(failOnError: true)
 
 			if (!devUser2.authorities.contains(pmRole)) {
 				UserRole.create devUser2, pmRole
@@ -186,33 +169,49 @@ class BootStrap {
 			def devUser3 = User.findByUsername('jgriffin') ?: new User(
 					username: 'jgriffin',
 					password: 'jooF7Xoh',
-					enabled: true).save(failOnError: true)
+					email: 'jennifer.griffin@hmhco.com').save(failOnError: true)
 
 			if (!devUser3.authorities.contains(pmRole)) {
 				UserRole.create devUser3, pmRole
 			}
+
+			def devUser9 = User.findByUsername('idunn') ?: new User(username: 'idunn',password: 'EebeL7ae',email: 'ivan.dunn@hmhco.com').save(failOnError: true)
+			if (!devUser9.authorities.contains(pmRole)) {UserRole.create devUser9, pmRole}
+
+			def devUser10 = User.findByUsername('terryi') ?: new User(username: 'terryi',password: 'os5tkyH',email: 'ivan.terry@hmhco.com').save(failOnError: true)
+			if (!devUser10.authorities.contains(pmRole)) {UserRole.create devUser10, pmRole}
 
 
 
 			// QA User
 			def qaUser = User.findByUsername('QA') ?: new User(
 					username: 'QA',
-					password: 'QA',
-					enabled: true).save(failOnError: true)
+					password: 'spr1ngt1me').save(failOnError: true)
 
 			if (!qaUser.authorities.contains(qaRole)) {
 				UserRole.create qaUser, qaRole
 			}
 
+			def qaUser2 = User.findByUsername('RE-prodrev') ?: new User(username: 'RE-prodrev',password: 'N11tRelease04',email: 'release.engineering@hmhco.com').save(failOnError: true)
+			if (!qaUser2.authorities.contains(qaRole)) {UserRole.create qaUser2, qaRole}
 
+			// Prod User
 			def prodUser = User.findByUsername('Prod') ?: new User(
 					username: 'Prod',
-					password: 'Prod',
-					enabled: true).save(failOnError: true)
+					password: 'spr1ngt1me').save(failOnError: true)
 
 			if (!prodUser.authorities.contains(prodRole)) {
 				UserRole.create prodUser, prodRole
 			}
+
+			def prodUser2 = User.findByUsername('dpant') ?: new User(username: 'dpant',password: 'hHbBM7iq',email: 'deepak.pant@niit.com').save(failOnError: true)
+			if (!prodUser2.authorities.contains(prodRole)) {UserRole.create prodUser2, prodRole}
+			def prodUser3 = User.findByUsername('pkumar1') ?: new User(username: 'pkumar1',password: 'M0MLWf1e',email: 'prabhash.kumar@niit.com').save(failOnError: true)
+			if (!prodUser3.authorities.contains(prodRole)) {UserRole.create prodUser3, prodRole}
+			def prodUser4 = User.findByUsername('rabhinav') ?: new User(username: 'rabhinav',password: 'rahN2oh',email: 'abhinav.rai@niit.com').save(failOnError: true)
+			if (!prodUser4.authorities.contains(prodRole)) {UserRole.create prodUser4, prodRole}
+			def prodUser5 = User.findByUsername('parminders') ?: new User(username: 'parminders',password: 'uayouch',email: 'parminder.singh@niit.com').save(failOnError: true)
+			if (!prodUser5.authorities.contains(prodRole)) {UserRole.create prodUser5, prodRole}
 
 		} // end if
 
