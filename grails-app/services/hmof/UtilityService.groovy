@@ -89,16 +89,17 @@ class UtilityService {
 	def parseTextFile(File commerceObjectFile){
 
 		def contentType = ContentType.where{id==4}.get()
-		List errorList = new ArrayList();
-		List gradeList = new ArrayList();
-		log.info"Parsing Text file in Service" + commerceObjectFile.getClass()
+		List errorList = new ArrayList()
+		List gradeList = new ArrayList()
+		log.info "Parsing Text file in Service"
+
 		def gradeLevel1 = ["6", "7", "8", "9", "10", "11", "12"]
 		def gradeLevel2 = ["9", "10", "11", "12"]
 		def gradeLevel3 = ["6", "7", "8"]
 
 		commerceObjectFile.eachCsvLine { tokens ->
 
-			 
+
 			def list = (tokens[12].replaceAll(","," ")).tokenize()
 
 
@@ -109,8 +110,8 @@ class UtilityService {
 			}else if(list.containsAll(gradeLevel3)){
 				tokens[12]="6-8"
 			}
-		
-			
+
+
 			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3].replaceAll('"',''),
 			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contentType,
 			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
@@ -118,7 +119,7 @@ class UtilityService {
 			if (!dom.save(flush: true)) {
 
 				log.error "Failed to Save CommerceObject"
-				errorList.add("<b>Object Name : "+tokens[0]+"</b>")
+				errorList.add("<b>Object Name : " + tokens[0] + "</b>")
 				dom.errors.allErrors.each {
 
 					errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
