@@ -61,9 +61,9 @@
 								</div>
 								<span class="help-block">
 									<ul>
-										<li> Export the Commerce objects from Red pages Data Base</li>
-										<li> While exporting select format as csv and unclick the header checkbox to avoid header row.</li>
-										<li> Import the CSV file </li>
+										<li>Export the Commerce Objects from the HMOF Production DB</li>
+										<li>Export to CSV without a header row</li>
+										<li>Browse and Select the CSV file then Click Upload</li>
 									</ul>
 								</span> <span> <g:submitButton name="importFile"
 										class="btn btn-primary" value="Upload" />
