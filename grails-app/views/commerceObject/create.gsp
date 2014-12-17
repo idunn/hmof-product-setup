@@ -8,6 +8,7 @@
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
 	<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
 	type="text/css">
+	
 </head>
 
 <body>

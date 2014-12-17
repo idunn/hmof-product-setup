@@ -87,35 +87,41 @@ class CommerceObjectController {
 	def importFile(){
 
 		log.info"Importing File"
-		 def csvfile = request.getFile('CSVfiledata')
-		 println params.CSVfiledata
-		 try {
-		 if(csvfile==null) {
-			 println csvfile
-			 flash.message = "File cannot be empty"
-			 redirect(action: "list")
-			 return
-		 } else {
-	   def filename = csvfile.getOriginalFilename()
-	   def fullPath=grailsApplication.config.uploadFolder+"/"+filename
-	   File upLoadedfile = new File(fullPath);
-	   upLoadedfile.createNewFile()
-	   FileOutputStream fos = new FileOutputStream(upLoadedfile);
-	   fos.write(csvfile.getBytes());
-	   fos.close();
-		log.info"Calling Service"
-		List parseFileAndPersistData = utilityService.parseTextFile(upLoadedfile)
-	
-	render view:'importCSV', model:[parseFileAndPersistData:parseFileAndPersistData]
-	return
-		 }
+		def csvfile = request.getFile('CSVfiledata')
+		println params.CSVfiledata
+		try {
+			if(csvfile==null) {
+				println csvfile
+				flash.message = "File cannot be empty"
+				redirect(action: "list")
+				return
+			} else {
+				def filename = csvfile.getOriginalFilename()
+				def fullPath=grailsApplication.config.uploadFolder+"/"+filename
+				File upLoadedfile = new File(fullPath);
+				upLoadedfile.createNewFile()
+				FileOutputStream fos = new FileOutputStream(upLoadedfile);
+				fos.write(csvfile.getBytes());
+				fos.close();
+				log.info"Calling Service"
+				List parseFileAndPersistData = utilityService.parseTextFile(upLoadedfile)
+				if (parseFileAndPersistData?.empty) {
+					redirect(action: "list")
+					return
+				}else
+				{
+					render view:'importCSV', model:[parseFileAndPersistData:parseFileAndPersistData]
+					return
+				}
+
+			}
 		} catch (IOException e) {
-		flash.message = "File cannot be empty / File have errors"
-		redirect(action: "importCSV")
-		return
-                }
+			flash.message = "File cannot be empty / File have errors"
+			redirect(action: "importCSV")
+			return
+		}
 		log.info"Completed import"
-		
+
 		redirect(action: "list")
 
 	}

@@ -23,24 +23,20 @@ class UtilityService {
 		def row = null
 
 		if (contentType==2){
-			row = sql.firstRow( "select * from Bundle_Aud where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision] )
-
+			row = sql.firstRow( "select * from Bundle_Aud where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision])
 		}
 
 		if (contentType==3){
-			row = sql.firstRow( "select * from SECURE_PROGRAM_AUD where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision] )
-
+			row = sql.firstRow( "select * from SECURE_PROGRAM_AUD where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision])
 		}
 
 		if (contentType==4){
-			row = sql.firstRow( "select * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision] )
-
+			row = sql.firstRow( "select * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision])
 		}
 
 
 		sql.close()
 		row
-
 	}
 
 	/**
@@ -94,12 +90,39 @@ class UtilityService {
 
 		def contentType = ContentType.where{id==4}.get()
 		List errorList = new ArrayList();
+		List gradeList = new ArrayList();
 		log.info"Parsing Text file in Service" + commerceObjectFile.getClass()
+		def gradeLevel1 = ["6", "7", "8", "9", "10", "11", "12"]
+		def gradeLevel2 = ["9", "10", "11", "12"]
+		def gradeLevel3 = ["6", "7", "8"]
 
 		commerceObjectFile.eachCsvLine { tokens ->
 
-			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3],
-			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:'Language Arts', contentType:contentType,
+			 
+			def list = (tokens[12].replaceAll(","," ")).tokenize()
+
+
+			if(list.containsAll(gradeLevel1)){
+				tokens[12]="6-12"
+			}else if(list.containsAll(gradeLevel2)) {
+				tokens[12]="9-12"
+			}else if(list.containsAll(gradeLevel3)){
+				tokens[12]="6-8"
+			}
+		
+			/*if(tokens[2]?.empty || tokens[4]?.empty || tokens[5]?.empty || tokens[6]?.empty || tokens[7]?.empty || tokens[9]?.empty || tokens[10]?.empty || tokens[11]?.empty){ println "hi"
+				 tokens[2]=""
+				 tokens[4]=""
+				 tokens[5]=""
+				  tokens[6]=""
+				   tokens[7]=""
+				    tokens[9]='Other'
+					 tokens[10]=1					 
+					  tokens[11]='None'
+					 
+					 }*/
+			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:'',isbnNumber:tokens[3].replaceAll('"',''),
+			teacherLabel:"",teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contentType,
 			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
 
 			if (!dom.save(flush: true)) {
@@ -109,7 +132,6 @@ class UtilityService {
 				dom.errors.allErrors.each {
 
 					errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
-
 				}
 				errorList.add("<br>")
 			}
@@ -129,37 +151,37 @@ class UtilityService {
 			case 'Other':
 				category = '-1'
 				break
-			case -1:
+			case '-1':
 				category = "Other"
 				break
 			case 'Science & Health':
 				category = '0'
 				break
-			case 0:
+			case '0':
 				category = 'Science & Health'
 				break
 			case 'Social Studies':
 				category = '1'
 				break
-			case 1:
+			case '1':
 				category = 'Social Studies'
 				break
 			case 'Language Arts':
 				category = '2'
 				break
-			case 2:
+			case '2':
 				category = 'Language Arts'
 				break
 			case 'Mathematics':
 				category = '3'
 				break
-			case 3:
+			case '3':
 				category = 'Mathematics'
 				break
 			case 'World Languages':
 				category = '4'
 				break
-			case 4:
+			case '4':
 				category = 'World Languages'
 				break
 			default:
@@ -168,7 +190,5 @@ class UtilityService {
 
 		return category
 	}
-
-
 }
 

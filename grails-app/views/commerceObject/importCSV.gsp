@@ -61,10 +61,9 @@
 								</div>
 								<span class="help-block">
 									<ul>
-										<li>Export CSV file from Red Pages Database</li>
-										<li>Open CSV file ,Select ISBN field right click ->
-											Select format cells -> Select number -> Change decimal places
-											to 0 -> Select 1234 -> Save the file and Import.</li>
+										<li> Export the Commerce objects from Red pages Data Base</li>
+										<li> While exporting select format as csv and unclick the header checkbox to avoid header row.</li>
+										<li> Import the CSV file </li>
 									</ul>
 								</span> <span> <g:submitButton name="importFile"
 										class="btn btn-primary" value="Upload" />
