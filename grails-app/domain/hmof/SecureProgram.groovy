@@ -99,8 +99,9 @@ class SecureProgram implements Comparable {
 		copyright (blank: false, nullable:true)
 		labelForOnlineResource (blank: false, nullable:true)		
 		pathToResource (shared: "globalUrl")			
-		//pathToCoverImage (shared: "globalUrl")
-		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif)$/)
+		//pathToCoverImage (shared: "globalUrl")		
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/)
+		
 
 		labelForTeacherAdditionalResource (nullable:true)
 		pathToTeacherAdditionalResource (shared: "globalUrl")

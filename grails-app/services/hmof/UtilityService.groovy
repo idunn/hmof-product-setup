@@ -110,19 +110,9 @@ class UtilityService {
 				tokens[12]="6-8"
 			}
 		
-			/*if(tokens[2]?.empty || tokens[4]?.empty || tokens[5]?.empty || tokens[6]?.empty || tokens[7]?.empty || tokens[9]?.empty || tokens[10]?.empty || tokens[11]?.empty){ println "hi"
-				 tokens[2]=""
-				 tokens[4]=""
-				 tokens[5]=""
-				  tokens[6]=""
-				   tokens[7]=""
-				    tokens[9]='Other'
-					 tokens[10]=1					 
-					  tokens[11]='None'
-					 
-					 }*/
-			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:'',isbnNumber:tokens[3].replaceAll('"',''),
-			teacherLabel:"",teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contentType,
+			
+			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3].replaceAll('"',''),
+			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contentType,
 			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
 
 			if (!dom.save(flush: true)) {

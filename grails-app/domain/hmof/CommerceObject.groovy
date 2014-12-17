@@ -48,13 +48,13 @@ class CommerceObject implements Comparable{
 		dateCreated ()
 		lastUpdated ()
 
-		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif)$/)
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/)
 		teacherLabel (blank: false, nullable:true)
 		teacherUrl (shared: "globalUrl")
 		studentLabel (blank: false, nullable:true)
 		studentUrl (shared: "globalUrl")
-		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab'])		
-		objectReorderNumber (range: 1..11)
+		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
+		objectReorderNumber (range: 0..12)
 		gradeLevel (inList: ['6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
 		comments (maxSize:200, nullable:true, widget: 'textarea')
 
