@@ -77,13 +77,14 @@ class CommerceObjectController {
 			secureProgram.removeFromCommerceObjects(currentInstance)
 		}
 	}
-	@Secured(['ROLE_ADMIN'])
+	@Secured(['ROLE_ADMIN'])	
 	def importCSV(Integer max) {render(view:"importCSV")}
 	/**
 	 * Pass in a comma separated file and update the database with new CO instances
 	 * @return
 	 */
-
+	
+	@Transactional
 	def importFile(){
 
 		log.info"Importing File"
