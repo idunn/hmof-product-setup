@@ -13,6 +13,7 @@ class UrlMappings {
 		"/terms"		(view:"/siteinfo/terms")
 		"/imprint"		(view:"/siteinfo/imprint")
 		"/nextSteps"	(view:"/home/nextSteps")
+		
 
 		/*
 		 * Pages with controller

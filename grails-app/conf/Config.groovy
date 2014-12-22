@@ -104,7 +104,7 @@ environments {
 	development {
 
 		cacheLocation="target/ProductSetup-cache"
-		uploadFolder = "import"
+		uploadFolder = "target/import"
 		
 		// log4j configuration
 		log4j = {
@@ -151,7 +151,7 @@ environments {
 	production{
 
 		cacheLocation="E:/ProductSetup-cache"
-		uploadFolder = "import"
+		uploadFolder = "C:/ProductSetup-cache/import"
 		// log4j configuration
 		log4j = {
 			// Example of changing the log pattern for the default console appender:
