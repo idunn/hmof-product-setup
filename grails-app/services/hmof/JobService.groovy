@@ -287,10 +287,12 @@ class JobService {
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
 
+						// Commerce Object Values example "6,8,12" or "12"
 						if (commerceObjectValue.contains(",")){
 							commerceObjectIds = commerceObjectValue.split(',')
-						}else { commerceObjectIds = commerceObjectValue.toList() }
-
+						}else {	commerceObjectIds << commerceObjectValue }
+						
+						log.info "Commerce Object IDs " + commerceObjectIds
 						log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
