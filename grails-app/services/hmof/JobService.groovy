@@ -34,9 +34,9 @@ class JobService {
 		def secureIsbn=""
 		def bundleIsbn=""
 		String programName=""
-
+		Logger new_log=null
 		try{
-
+			promotionInstance.refresh()
 			// Get the environment URL
 			def environmentInstance = Environment.where{id==promotionInstance.environmentsId}.get()
 			def envId = environmentInstance.id
@@ -69,15 +69,16 @@ class JobService {
 
 					programName = programInstance.toString()
 
-					initializeLogger(programName, cacheLocation,envId,1)
+					 new_log = initializeLogger(programName, cacheLocation,envId,1)
 					if(envId==1){
-						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 					}else if(envId==2 || envId==3){
-						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
+					if(new_log==null) new_log = log;
 				}
 			}
 
@@ -86,6 +87,7 @@ class JobService {
 			if (program.isEmpty() && !bundle.isEmpty()){
 
 				bundle.each{
+					
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 
@@ -95,15 +97,16 @@ class JobService {
 
 					bundleIsbn=bundleInstance.isbn
 
-					initializeLogger(bundleIsbn, cacheLocation,envId,2)
+					 new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
 					if(envId==1){
-						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 					}else if(envId==2 || envId==3){
-						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
+					if(new_log==null) new_log = log;
 				}
 			}
 
@@ -118,17 +121,17 @@ class JobService {
 
 					secureIsbn = secureProgramInstance.registrationIsbn
 
-					initializeLogger(secureIsbn, cacheLocation,envId,3)
+					 new_log = initializeLogger(secureIsbn, cacheLocation,envId,3)
 					if(envId==1){
-						log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
 					}else if(envId==2 || envId==3){
-						log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
-
+					if(new_log==null) new_log = log;
 				}
 			}
 
@@ -159,25 +162,26 @@ class JobService {
 						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
 						isbn=commerceObjectInstance.isbnNumber
 					}
+					
 					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						initializeLogger(isbn,cacheLocation,envId,4)
+						new_log = initializeLogger(isbn,cacheLocation,envId,4)
 						if(envId==1){
-							log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-							log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+							new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+							new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
 						}else if(envId==2 || envId==3){
-							log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-							log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+							new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 						}
 					}
-
+					if(new_log==null) new_log = log;
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
+					new_log.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-						log.debug("promotionId:"+promotionInstance.id)
-						log.info("Job Status: Success\r\n")
+						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						new_log.debug("promotionId:"+promotionInstance.id)
+						new_log.info("Job Status: Success\r\n")
 
 					}
 
@@ -211,13 +215,13 @@ class JobService {
 
 
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,log)
-					log.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
+					new_log.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty()){
 
-						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-						log.debug("promotionId:"+promotionInstance.id)
-						log.info("Job Status: Success\r\n")
+						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						new_log.debug("promotionId:"+promotionInstance.id)
+						new_log.info("Job Status: Success\r\n")
 
 					}
 				}
@@ -236,7 +240,7 @@ class JobService {
 					def mapOfChildren = it.children
 					Long jobNumber = it.jobNumber
 					def enversInstanceToDeploy
-					log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
+					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
 
 
@@ -258,7 +262,7 @@ class JobService {
 					}
 
 					Boolean includePremium = enversInstanceToDeploy.includePremiumCommerceObjects
-					log.info "Bundle is Premium: $includePremium"
+					new_log.info "Bundle is Premium: $includePremium"
 
 					def childMap = [:]
 
@@ -293,7 +297,7 @@ class JobService {
 						}else {	commerceObjectIds << commerceObjectValue }
 						
 						log.info "Commerce Object IDs " + commerceObjectIds
-						log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
+						new_log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
 
@@ -326,17 +330,17 @@ class JobService {
 						}
 
 						childMap << [(spEnversInstance):listOfCommerceObjects]
-						log.info "child Map of Objects being sent to Geb: " + childMap
+						new_log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
 
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,log)
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,new_log)
 					if(rpd){
-						log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
-						log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						new_log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
+						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						log.debug("promotionId:"+promotionInstance.id)
-						log.info("Job Status: Success\r\n")
+						new_log.info("Job Status: Success\r\n")
 
 					}
 
@@ -419,9 +423,9 @@ class JobService {
 	 * @param cacheLocation
 	 * @param envId
 	 */
-	void initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
+	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
-		log = Logger.getLogger("Thread" + Thread.currentThread().getName())
+		Logger log1 = Logger.getLogger("Thread" + Thread.currentThread().getName())
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
 		props.setProperty("log4j.appender.file.maxFileSize","100MB")
@@ -464,6 +468,7 @@ class JobService {
 		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
 		props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
 		PropertyConfigurator.configure(props)
+		return log1;
 	}
 }
 

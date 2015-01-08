@@ -2,7 +2,7 @@ package hmof
 
 class ProcessJob {
 	
-	def concurrent = false
+	def concurrent = true
 
 	def deploymentService
 
@@ -14,7 +14,7 @@ class ProcessJob {
 	def execute() {
 		def result = []
 		// execute job
-		result = deploymentService.executeJob()
+		result= deploymentService.executeJob()
 		if(result !=null){
 			println "Results of deployment/promotion: " + result
 			deploymentService.updateStatus(result)

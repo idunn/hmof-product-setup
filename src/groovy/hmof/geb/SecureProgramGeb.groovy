@@ -1,7 +1,6 @@
 package hmof.geb
 
 import geb.*
-import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 
 class SecureProgramWork extends Page {

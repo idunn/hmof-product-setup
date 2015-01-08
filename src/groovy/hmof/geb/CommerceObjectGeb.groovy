@@ -1,5 +1,4 @@
 package hmof.geb
-import org.apache.log4j.Logger
 
 
 import geb.*
@@ -9,7 +8,7 @@ import org.apache.log4j.PropertyConfigurator
 import grails.util.Holders
 
 class CommerceObjectWork extends Page {
-	static Logger log = Logger.getLogger(CommerceObjectWork.class)
+	//static Logger log = Logger.getLogger(CommerceObjectWork.class)
 	def utilityService = Holders.grailsApplication.mainContext.getBean 'utilityService'
 
 	def initBaseUrl(def baseUrl,Logger log){

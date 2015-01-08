@@ -3,9 +3,8 @@ package hmof.geb
 import org.apache.log4j.Logger
 
 import geb.*
-import groovy.util.logging.Log4j
 
-@Log4j
+
 class BundleGebWork extends Page {
 
 	def initBaseUrl(def baseUrl,Logger log){
