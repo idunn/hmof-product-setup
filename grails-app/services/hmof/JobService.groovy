@@ -6,21 +6,45 @@ import geb.*
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator
+
 import grails.util.Holders
 import hmof.security.User
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
+import static groovyx.gpars.GParsPool.withPool
 
 /**
  * JobService
  * Take the jobs and process them by pushing the content to the environment via Geb
  */
-class JobService {
+class JobService{
 
 	static transactional = false
 	def deploymentService
 	def commerceObjectService
 	def utilityService
-
+	private Thread t;
 	Logger log = Logger.getLogger(JobService.class);
+	public String deploymentUrl
+	public def benversInstanceToDeploy
+	public String childMap=[:]
+	Logger new_log1
+	public JobService(){
+	
+}
+public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMap,Logger new_log1) {
+		this.deploymentUrl = deploymentUrl
+		this.benversInstanceToDeploy = benversInstanceToDeploy
+		this.childMap = childMap
+		this.new_log1 = new_log1
+		
+	}
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
 	 * @param jobs
@@ -43,7 +67,6 @@ class JobService {
 			def deploymentUrl = environmentInstance.url
 			def envName = environmentInstance.name
 			def user_Name = User.where{id == promotionInstance.userId}.username.get()
-
 
 			// Divide out the instances
 			def program = jobs.findAll{it.contentTypeId == 1}
@@ -78,37 +101,11 @@ class JobService {
 						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
-					if(new_log==null) new_log = log;
+					if(new_log==null) new_log = log
 				}
 			}
 
 
-
-			if (program.isEmpty() && !bundle.isEmpty()){
-
-				bundle.each{
-					
-					Long instanceNumber = it.contentId
-					Long revisionNumber = it.revision
-
-					Long jobNumber = it.jobNumber
-					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
-
-					bundleIsbn=bundleInstance.isbn
-
-					 new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
-					if(envId==1){
-						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-					}else if(envId==2 || envId==3){
-						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-
-					}
-					if(new_log==null) new_log = log;
-				}
-			}
 
 			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
 
@@ -131,7 +128,7 @@ class JobService {
 						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 					}
-					if(new_log==null) new_log = log;
+					if(new_log==null) new_log = log
 				}
 			}
 
@@ -174,7 +171,7 @@ class JobService {
 
 						}
 					}
-					if(new_log==null) new_log = log;
+					if(new_log==null) new_log = log
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
 					new_log.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
@@ -233,38 +230,62 @@ class JobService {
 			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
 
-				bundle.each{
 
+Thread thread = new Thread();
+
+				bundle.each{
+									
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
 					Long jobNumber = it.jobNumber
-					def enversInstanceToDeploy
+					def benversInstanceToDeploy
+					def childMap = [:]
+					thread = new Thread()					
+					
+					thread.sleep(5000);
+			  thread.start{
 					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
 
-
+										
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
-
-					if (bundleInstance instanceof hmof.Bundle){
-
-						enversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
-						bundleName=enversInstanceToDeploy.toString()
-						bundleIsbn=bundleInstance.isbn
+					def bundleInstance //= Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+					Bundle.withTransaction{
+						 bundleInstance =Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+						if (bundleInstance instanceof hmof.Bundle){
+							
+													benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+													bundleName=benversInstanceToDeploy.toString()
+													bundleIsbn=bundleInstance.isbn
+												}
+												else{
+							
+													log.warn"Promoting deleted Bundle from Envers"
+													// Get the properties we are interested in
+													benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
+													bundleIsbn=bundleInstance.isbn
+												}
+						
+						
 					}
-					else{
+					if(program.isEmpty() && !bundle.isEmpty()){
+					new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
+					if(envId==1){
+						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+					}else if(envId==2 || envId==3){
+						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
-						log.warn"Promoting deleted Bundle from Envers"
-						// Get the properties we are interested in
-						enversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-						bundleIsbn=bundleInstance.isbn
 					}
-
-					Boolean includePremium = enversInstanceToDeploy.includePremiumCommerceObjects
+					if(new_log==null) new_log = log;
+					}
+					
+					Boolean includePremium = benversInstanceToDeploy.includePremiumCommerceObjects
 					new_log.info "Bundle is Premium: $includePremium"
 
-					def childMap = [:]
+					
 
 					// Turn map of Strings into map of content child objects
 					mapOfChildren.each{
@@ -275,8 +296,12 @@ class JobService {
 
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
+						def secureProgramInstance// = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 						def spEnversInstance
+					SecureProgram.withTransaction{
+							secureProgramInstance=SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
+						
+						
 						if (secureProgramInstance instanceof hmof.SecureProgram){
 
 							spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
@@ -287,7 +312,7 @@ class JobService {
 							def secureProgramMap = createSecureProgramMap(secureProgramInstance)
 							spEnversInstance = new SecureProgram(secureProgramMap)
 						}
-
+						}
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
 
@@ -306,9 +331,11 @@ class JobService {
 							def commerceObjectId = it
 							def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
 
-							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
+							def commerceObjectInstance// = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
 							def coEnversInstance
-
+							CommerceObject.withTransaction{
+						
+								commerceObjectInstance=CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
 							if (commerceObjectInstance instanceof hmof.CommerceObject){
 								coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 							}
@@ -325,7 +352,7 @@ class JobService {
 								listOfCommerceObjects << coEnversInstance
 
 							}
-
+							}
 
 						}
 
@@ -333,20 +360,35 @@ class JobService {
 						new_log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
-
+			
+				
+						
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy, childMap,new_log)
-					if(rpd){
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,new_log)
+					
 						new_log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
 						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						log.debug("promotionId:"+promotionInstance.id)
 						new_log.info("Job Status: Success\r\n")
 
-					}
-
+					
+					
+					
+					}//end thread
+						
+						
 				}
+				
+				
+				
 			}
 		}
+		catch(InterruptedException  e){
+			
+						log.error "Exception deploying content: " + e
+						return false
+			
+					}
 		catch(Exception e){
 
 			log.error "Exception deploying content: " + e
@@ -356,6 +398,8 @@ class JobService {
 
 		return true
 	}
+	
+
 
 	/**
 	 * Helper method to return the value of the content's revision
@@ -425,7 +469,7 @@ class JobService {
 	 */
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
-		Logger log1 = Logger.getLogger("Thread" + Thread.currentThread().getName())
+		Logger log1 = Logger.getLogger("Thread" + programISBN)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
 		props.setProperty("log4j.appender.file.maxFileSize","100MB")
@@ -466,7 +510,7 @@ class JobService {
 		props.setProperty("log4j.appender.file.Append","false");
 		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
 		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
-		props.setProperty("log4j.logger."+ "Thread" + Thread.currentThread().getName(),"INFO, file");
+		props.setProperty("log4j.logger."+ "Thread" + programISBN,"INFO, file");
 		PropertyConfigurator.configure(props)
 		return log1;
 	}
