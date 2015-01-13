@@ -231,7 +231,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 			if (!bundle.isEmpty()){
 
 
-Thread thread = new Thread();
+
 
 				bundle.each{
 									
@@ -241,10 +241,8 @@ Thread thread = new Thread();
 					Long jobNumber = it.jobNumber
 					def benversInstanceToDeploy
 					def childMap = [:]
-					thread = new Thread()					
 					
-					thread.sleep(5000);
-			  thread.start{
+					
 					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
 
@@ -373,8 +371,6 @@ Thread thread = new Thread();
 
 					
 					
-					
-					}//end thread
 						
 						
 				}
