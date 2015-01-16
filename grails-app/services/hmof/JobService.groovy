@@ -29,6 +29,8 @@ class JobService{
 	def deploymentService
 	def commerceObjectService
 	def utilityService
+	def springSecurityService
+
 	private Thread t;
 	Logger log = Logger.getLogger(JobService.class);
 	public String deploymentUrl
@@ -92,10 +94,32 @@ class JobService{
 
 					programName = programInstance.toString()
 
+
+					// checking if this Program has been pushed before to the environment TODO
+					println "#############################################1"
+					println "instanceNumber" + instanceNumber
+					println "jobNumber" + jobNumber
+					println "programName" + programName
+					println "envirnment Id" + envId
+
+					def previousJob = deploymentService.getPreviousJob(instanceNumber, jobNumber, envId)
+
+					if (!previousJob.isEmpty()){
+
+						println "A previous Job Exists"
+						println "The User will be given an opporunity to do a smart deployment..."
+						// TODO give Users a modal window to confirm the difference
+						// TODO A method is needed to compare the bundles in this job to the previous bundles
+
+					}
+
+					println "#############################################2"
+
 					new_log = initializeLogger(programName, cacheLocation,envId,1)
 					if(envId==1){
 						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+						new_log.info("TEST checking if a previous Job exists and returning its instances" + previousJob)
 					}else if(envId==2 || envId==3){
 						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")

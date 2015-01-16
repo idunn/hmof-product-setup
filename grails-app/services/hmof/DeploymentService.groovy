@@ -19,6 +19,31 @@ class DeploymentService {
 	def springSecurityService
 	def jobService
 	def sessionFactory
+	
+	
+	def testEnv(){
+		
+		def currentUsersEnvironment = getUserEnvironmentInformation().id
+		
+	}
+	
+	/**
+	 * Return a List of job instances that were previously pushed for the same Program to the Users Environment
+	 * @param programInstanceNumber
+	 * @param currentJobNumber
+	 * @return
+	 */
+	def getPreviousJob(def programInstanceNumber, def currentJobNumber, def envId){
+		
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && jobNumber < currentJobNumber }.list().jobNumber		
+		
+		def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+		
+		Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+				
+		// pass back an ArrayList of job instances that belong to the previous successful Job		
+		def lastJob = Job.where{jobNumber == theJobNumber}.list()		
+	}
 
 	/**
 	 * Get the bundles children as a map of String where the Key is the id of the SP and the value is the CO id
