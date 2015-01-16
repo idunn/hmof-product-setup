@@ -36,14 +36,14 @@ class JobService{
 	public String childMap=[:]
 	Logger new_log1
 	public JobService(){
-	
-}
-public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMap,Logger new_log1) {
+
+	}
+	public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMap,Logger new_log1) {
 		this.deploymentUrl = deploymentUrl
 		this.benversInstanceToDeploy = benversInstanceToDeploy
 		this.childMap = childMap
 		this.new_log1 = new_log1
-		
+
 	}
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
@@ -92,7 +92,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 
 					programName = programInstance.toString()
 
-					 new_log = initializeLogger(programName, cacheLocation,envId,1)
+					new_log = initializeLogger(programName, cacheLocation,envId,1)
 					if(envId==1){
 						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
@@ -118,7 +118,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 
 					secureIsbn = secureProgramInstance.registrationIsbn
 
-					 new_log = initializeLogger(secureIsbn, cacheLocation,envId,3)
+					new_log = initializeLogger(secureIsbn, cacheLocation,envId,3)
 					if(envId==1){
 						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
@@ -159,7 +159,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 						enversInstanceToDeploy = new CommerceObject(commerceObjectMap)
 						isbn=commerceObjectInstance.isbnNumber
 					}
-					
+
 					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
 						new_log = initializeLogger(isbn,cacheLocation,envId,4)
 						if(envId==1){
@@ -234,56 +234,56 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 
 
 				bundle.each{
-									
+
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
 					def mapOfChildren = it.children
 					Long jobNumber = it.jobNumber
 					def benversInstanceToDeploy
 					def childMap = [:]
-					
-					
+
+
 					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
 
-										
+
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 					def bundleInstance //= Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
 					Bundle.withTransaction{
-						 bundleInstance =Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+						bundleInstance =Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
 						if (bundleInstance instanceof hmof.Bundle){
-							
-													benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
-													bundleName=benversInstanceToDeploy.toString()
-													bundleIsbn=bundleInstance.isbn
-												}
-												else{
-							
-													log.warn"Promoting deleted Bundle from Envers"
-													// Get the properties we are interested in
-													benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-													bundleIsbn=bundleInstance.isbn
-												}
-						
-						
-					}
-					if(program.isEmpty() && !bundle.isEmpty()){
-					new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
-					if(envId==1){
-						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-					}else if(envId==2 || envId==3){
-						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+
+							benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+							bundleName=benversInstanceToDeploy.toString()
+							bundleIsbn=bundleInstance.isbn
+						}
+						else{
+
+							log.warn"Promoting deleted Bundle from Envers"
+							// Get the properties we are interested in
+							benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
+							bundleIsbn=bundleInstance.isbn
+						}
+
 
 					}
-					if(new_log==null) new_log = log;
+					if(program.isEmpty() && !bundle.isEmpty()){
+						new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
+						if(envId==1){
+							new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+							new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
+						}else if(envId==2 || envId==3){
+							new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
+
+						}
+						if(new_log==null) new_log = log;
 					}
-					
+
 					Boolean includePremium = benversInstanceToDeploy.includePremiumCommerceObjects
 					new_log.info "Bundle is Premium: $includePremium"
 
-					
+
 
 					// Turn map of Strings into map of content child objects
 					mapOfChildren.each{
@@ -296,20 +296,20 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 
 						def secureProgramInstance// = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 						def spEnversInstance
-					SecureProgram.withTransaction{
+						SecureProgram.withTransaction{
 							secureProgramInstance=SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
-						
-						
-						if (secureProgramInstance instanceof hmof.SecureProgram){
 
-							spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
-						}
 
-						else{
-							log.warn"Promoting deleted Secure Program for Bundle from Envers"
-							def secureProgramMap = createSecureProgramMap(secureProgramInstance)
-							spEnversInstance = new SecureProgram(secureProgramMap)
-						}
+							if (secureProgramInstance instanceof hmof.SecureProgram){
+
+								spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+							}
+
+							else{
+								log.warn"Promoting deleted Secure Program for Bundle from Envers"
+								def secureProgramMap = createSecureProgramMap(secureProgramInstance)
+								spEnversInstance = new SecureProgram(secureProgramMap)
+							}
 						}
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
@@ -318,7 +318,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 						if (commerceObjectValue.contains(",")){
 							commerceObjectIds = commerceObjectValue.split(',')
 						}else {	commerceObjectIds << commerceObjectValue }
-						
+
 						log.info "Commerce Object IDs " + commerceObjectIds
 						new_log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
@@ -332,24 +332,24 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 							def commerceObjectInstance// = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
 							def coEnversInstance
 							CommerceObject.withTransaction{
-						
+
 								commerceObjectInstance=CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
-							if (commerceObjectInstance instanceof hmof.CommerceObject){
-								coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-							}
+								if (commerceObjectInstance instanceof hmof.CommerceObject){
+									coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+								}
 
-							else{
-								log.warn"Promoting deleted Commerce Object for Bundle from Envers"
-								def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
-								coEnversInstance = new CommerceObject(commerceObjectMap)
-							}
+								else{
+									log.warn"Promoting deleted Commerce Object for Bundle from Envers"
+									def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
+									coEnversInstance = new CommerceObject(commerceObjectMap)
+								}
 
-							// Handle Premium Commerce Objects
-							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
+								// Handle Premium Commerce Objects
+								if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
 
-								listOfCommerceObjects << coEnversInstance
+									listOfCommerceObjects << coEnversInstance
 
-							}
+								}
 							}
 
 						}
@@ -358,33 +358,33 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 						new_log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
-			
-				
-						
+
+
+
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,new_log)
-					
-						new_log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
-						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-						log.debug("promotionId:"+promotionInstance.id)
-						new_log.info("Job Status: Success\r\n")
 
-					
-					
-						
-						
+					new_log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
+					new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+					log.debug("promotionId:"+promotionInstance.id)
+					new_log.info("Job Status: Success\r\n")
+
+
+
+
+
 				}
-				
-				
-				
+
+
+
 			}
 		}
 		catch(InterruptedException  e){
-			
-						log.error "Exception deploying content: " + e
-						return false
-			
-					}
+
+			log.error "Exception deploying content: " + e
+			return false
+
+		}
 		catch(Exception e){
 
 			log.error "Exception deploying content: " + e
@@ -394,7 +394,7 @@ public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMa
 
 		return true
 	}
-	
+
 
 
 	/**
