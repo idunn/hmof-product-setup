@@ -25,22 +25,9 @@ class JobService{
 	def utilityService
 	def springSecurityService
 
-	private Thread t;
+
 	Logger log = Logger.getLogger(JobService.class);
-	public String deploymentUrl
-	public def benversInstanceToDeploy
-	public String childMap=[:]
-	Logger new_log1
-	public JobService(){
 
-	}
-	public JobService(String deploymentUrl, def benversInstanceToDeploy, def childMap,Logger new_log1) {
-		this.deploymentUrl = deploymentUrl
-		this.benversInstanceToDeploy = benversInstanceToDeploy
-		this.childMap = childMap
-		this.new_log1 = new_log1
-
-	}
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
 	 * @param jobs
