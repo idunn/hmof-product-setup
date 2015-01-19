@@ -4,14 +4,11 @@ import hmof.deploy.*
 import hmof.geb.RedPagesDriver
 import geb.*
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 
 import grails.util.Holders
 import hmof.security.User
-
-
-
 
 /**
  * JobService
@@ -26,7 +23,7 @@ class JobService{
 	def springSecurityService
 
 
-	Logger log = Logger.getLogger(JobService.class);
+	Logger log = Logger.getLogger(JobService.class)
 
 	/**
 	 * Take the jobs and process them by pushing the content to the environment via Geb
@@ -42,9 +39,9 @@ class JobService{
 		def bundleIsbn=""
 		String programName=""
 		Logger new_log=null
-		
+
 		def bundlesToRemove = []
-		
+
 		try{
 			promotionInstance.refresh()
 			// Get the environment URL
@@ -78,7 +75,6 @@ class JobService{
 
 					programName = programInstance.toString()
 
-
 					// checking if this Program has been pushed before to the environment TODO
 					println "#############################################1"
 					println "instanceNumber" + instanceNumber
@@ -93,15 +89,15 @@ class JobService{
 						println "A previous Job Exists"
 						println "The User will be given an opporunity to do a smart deployment..."
 						// TODO give Users a modal window to confirm the difference
-						
-						
-						// TODO A method is needed to compare the bundles in this job to the previous bundles
+
+
+						// TODO compare the bundles in this job to the previous jobs bundles
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
 						println "Bundle IDs to remove: " + bundlesToRemove.contentId + "at revision: " + bundlesToRemove.revision
-						
+
 						// if User wants to be smart - uncomment for testing
 						//bundle = bundle - bundlesToRemove
-						
+
 
 					}
 
@@ -122,8 +118,6 @@ class JobService{
 					if(new_log==null) new_log = log
 				}
 			}
-
-
 
 			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
 
@@ -149,7 +143,6 @@ class JobService{
 					if(new_log==null) new_log = log
 				}
 			}
-
 
 			// Deploy Commerce Object
 			if(!commerceObject.isEmpty()){
@@ -199,7 +192,6 @@ class JobService{
 						new_log.info("Job Status: Success\r\n")
 
 					}
-
 				}
 			}
 
@@ -228,7 +220,6 @@ class JobService{
 						secureIsbn=secureProgramInstance.registrationIsbn
 					}
 
-
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
 					new_log.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
@@ -243,13 +234,8 @@ class JobService{
 			}
 
 
-
-
 			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
-
-
-
 
 				bundle.each{
 
@@ -282,8 +268,6 @@ class JobService{
 						bundleIsbn=bundleInstance.isbn
 					}
 
-
-
 					if(program.isEmpty() && !bundle.isEmpty()){
 						new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
 						if(envId==1){
@@ -294,13 +278,11 @@ class JobService{
 							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
 
 						}
-						if(new_log==null) new_log = log;
+						if(new_log==null) new_log = log
 					}
 
 					Boolean includePremium = benversInstanceToDeploy.includePremiumCommerceObjects
 					new_log.info "Bundle is Premium: $includePremium"
-
-
 
 					// Turn map of Strings into map of content child objects
 					mapOfChildren.each{
@@ -363,16 +345,12 @@ class JobService{
 								listOfCommerceObjects << coEnversInstance
 
 							}
-
-
 						}
 
 						childMap << [(spEnversInstance):listOfCommerceObjects]
 						new_log.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
-
-
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,new_log)
@@ -381,15 +359,7 @@ class JobService{
 					new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 					log.debug("promotionId:"+promotionInstance.id)
 					new_log.info("Job Status: Success\r\n")
-
-
-
-
-
 				}
-
-
-
 			}
 		}
 		catch(InterruptedException  e){
@@ -515,13 +485,13 @@ class JobService{
 				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
 			}
 		}
-		props.setProperty("log4j.appender.file.threshold","info");
-		props.setProperty("log4j.appender.file.Append","false");
-		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout");
-		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n");
-		props.setProperty("log4j.logger."+ "Thread" + programISBN,"INFO, file");
+		props.setProperty("log4j.appender.file.threshold","info")
+		props.setProperty("log4j.appender.file.Append","false")
+		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout")
+		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n")
+		props.setProperty("log4j.logger."+ "Thread" + programISBN,"INFO, file")
 		PropertyConfigurator.configure(props)
-		return log1;
+		return log1
 	}
 }
 
