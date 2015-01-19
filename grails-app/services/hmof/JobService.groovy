@@ -42,6 +42,9 @@ class JobService{
 		def bundleIsbn=""
 		String programName=""
 		Logger new_log=null
+		
+		def bundlesToRemove = []
+		
 		try{
 			promotionInstance.refresh()
 			// Get the environment URL
@@ -83,14 +86,22 @@ class JobService{
 					println "programName" + programName
 					println "envirnment Id" + envId
 
-					def previousJob = deploymentService.getPreviousJob(instanceNumber, jobNumber, envId)
+					def previousJob = deploymentService.getPreviousJob( instanceNumber, jobNumber, envId )
 
 					if (!previousJob.isEmpty()){
 
 						println "A previous Job Exists"
 						println "The User will be given an opporunity to do a smart deployment..."
 						// TODO give Users a modal window to confirm the difference
+						
+						
 						// TODO A method is needed to compare the bundles in this job to the previous bundles
+						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
+						println "Bundle IDs to remove: " + bundlesToRemove.contentId + "at revision: " + bundlesToRemove.revision
+						
+						// if User wants to be smart - uncomment for testing
+						//bundle = bundle - bundlesToRemove
+						
 
 					}
 
@@ -100,7 +111,9 @@ class JobService{
 					if(envId==1){
 						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-						new_log.info("TEST checking if a previous Job exists and returning its instances" + previousJob)
+						new_log.info("TEST1 checking if a previous Job exists and returning its job instances" + previousJob)
+						new_log.info "TEST2 Bundles to Remove " + bundlesToRemove
+						new_log.info "TEST3 Bundle IDs in current Job " + bundlesToRemove
 					}else if(envId==2 || envId==3){
 						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")

@@ -19,30 +19,51 @@ class DeploymentService {
 	def springSecurityService
 	def jobService
 	def sessionFactory
-	
-	
-	def testEnv(){
-		
-		def currentUsersEnvironment = getUserEnvironmentInformation().id
-		
-	}
-	
+
 	/**
-	 * Return a List of job instances that were previously pushed for the same Program to the Users Environment
+	 * Compare the current Bundle job instances to the previous job instances and return the current bundles that are the same	 
+	 * @param currentJobBundles
+	 * @param previousJobBundles
+	 * @return
+	 */
+	def compareJobs( def currentJobBundles, def previousJobBundles  ){
+
+		def bundlesRemoved = []
+
+		// double loop
+		currentJobBundles.each{
+			def currentJobInstance = it
+			previousJobBundles.each{
+				def previousJobInstance = it
+
+				if(currentJobInstance.contentId == previousJobInstance.contentId && currentJobInstance.revision == previousJobInstance.revision){
+
+					log.info "Bundle ID  ${currentJobInstance.contentId} is in  previous Job at the same revision: ${currentJobInstance.revision}"
+					bundlesRemoved << currentJobInstance
+				}
+			}
+		}
+
+		println "bundles to be removed: " +  bundlesRemoved.contentId
+		return bundlesRemoved
+	}
+
+	/**
+	 * Return a List of Bundle job instances that were previously pushed for the same Program to the Users Environment
 	 * @param programInstanceNumber
 	 * @param currentJobNumber
 	 * @return
 	 */
 	def getPreviousJob(def programInstanceNumber, def currentJobNumber, def envId){
-		
-		def previousJobNumbers = Job.where{contentId==programInstanceNumber && jobNumber < currentJobNumber }.list().jobNumber		
-		
+
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && jobNumber < currentJobNumber }.list().jobNumber
+
 		def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
-		
+
 		Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
-				
-		// pass back an ArrayList of job instances that belong to the previous successful Job		
-		def lastJob = Job.where{jobNumber == theJobNumber}.list()		
+
+		// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
+		def lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
 	}
 
 	/**
@@ -51,11 +72,11 @@ class DeploymentService {
 	 * @return
 	 */
 	def getChildrenMap(instanceId) {
-		
+
 		HashMap mapOfChildren = []
 
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
-		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()		
+		def secureProgramList = deployableBundle.list().secureProgram.id.flatten()
 
 		secureProgramList.each{
 
@@ -70,7 +91,7 @@ class DeploymentService {
 
 		}
 
-		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren		
+		log.info "deployableBundle: " + deployableBundle + "has Children Map: " + mapOfChildren
 		mapOfChildren
 
 	}
@@ -275,7 +296,7 @@ class DeploymentService {
 		log.debug "The Instance Number: " +  InstanceNumber
 
 		// Get the Instance that was deployed to the previous environment
-		def promoInstance = Promotion.where{id==InstanceNumber}.get()		
+		def promoInstance = Promotion.where{id==InstanceNumber}.get()
 
 		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
 			log.warn "Preventing the promotion as previous promotion was not successful!"
@@ -341,34 +362,30 @@ class DeploymentService {
 		// get first instance in pending status
 		def promotionJobInstance = Promotion.where{status == JobStatus.Pending }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
-	
-				
-									
-						
-					
+
 		def jobList = Job.where{jobNumber == promotionJobNumber}.list()
 
 		if(!promotionJobInstance.isEmpty()){
 			Long promotionJobId =  promotionJobInstance.id[0]
 			def promotionJobStatus = Promotion.findByStatus(JobStatus.Pending)
-			
+
 			//  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
-           //  This should prevent any other threads picking up the deployment anyway
-		promotionJobStatus.discard()
-        promotionJobStatus = Promotion.lock(promotionJobId)
-		
-		
+			//  This should prevent any other threads picking up the deployment anyway
+			promotionJobStatus.discard()
+			promotionJobStatus = Promotion.lock(promotionJobId)
+
+
 			def status1 = JobStatus.In_Progress
 
-			
+
 			def promotionInstance = Promotion.get(promotionJobId)
-			
+
 			promotionInstance.properties = [status: status1]
-			promotionInstance.save(failOnError: true, flush:true)			
-	
+			promotionInstance.save(failOnError: true, flush:true)
+
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
-			
-		
+
+
 			def status2 = null
 
 			if (processJobs){
@@ -381,7 +398,7 @@ class DeploymentService {
 			// return map
 			def results = [status: status2, promotionId:promotionJobInstance.id]
 		}
-		
+
 	}
 
 	/**
