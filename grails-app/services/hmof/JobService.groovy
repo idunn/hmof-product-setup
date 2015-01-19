@@ -9,15 +9,9 @@ import org.apache.log4j.PropertyConfigurator
 
 import grails.util.Holders
 import hmof.security.User
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
-import static groovyx.gpars.GParsPool.withPool
+
+
+
 
 /**
  * JobService
@@ -272,25 +266,24 @@ class JobService{
 
 
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance //= Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
-					Bundle.withTransaction{
-						bundleInstance =Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
-						if (bundleInstance instanceof hmof.Bundle){
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
 
-							benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
-							bundleName=benversInstanceToDeploy.toString()
-							bundleIsbn=bundleInstance.isbn
-						}
-						else{
+					if (bundleInstance instanceof hmof.Bundle){
 
-							log.warn"Promoting deleted Bundle from Envers"
-							// Get the properties we are interested in
-							benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-							bundleIsbn=bundleInstance.isbn
-						}
-
-
+						benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
+						bundleName=benversInstanceToDeploy.toString()
+						bundleIsbn=bundleInstance.isbn
 					}
+					else{
+
+						log.warn"Promoting deleted Bundle from Envers"
+						// Get the properties we are interested in
+						benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
+						bundleIsbn=bundleInstance.isbn
+					}
+
+
+
 					if(program.isEmpty() && !bundle.isEmpty()){
 						new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
 						if(envId==1){
@@ -318,23 +311,21 @@ class JobService{
 
 						log.debug "secureProgram Id: " + secureProgramId
 
-						def secureProgramInstance// = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
+						def secureProgramInstance= SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 						def spEnversInstance
-						SecureProgram.withTransaction{
-							secureProgramInstance=SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
 
 
-							if (secureProgramInstance instanceof hmof.SecureProgram){
+						if (secureProgramInstance instanceof hmof.SecureProgram){
 
-								spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
-							}
-
-							else{
-								log.warn"Promoting deleted Secure Program for Bundle from Envers"
-								def secureProgramMap = createSecureProgramMap(secureProgramInstance)
-								spEnversInstance = new SecureProgram(secureProgramMap)
-							}
+							spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
 						}
+
+						else{
+							log.warn"Promoting deleted Secure Program for Bundle from Envers"
+							def secureProgramMap = createSecureProgramMap(secureProgramInstance)
+							spEnversInstance = new SecureProgram(secureProgramMap)
+						}
+
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
 
@@ -353,28 +344,26 @@ class JobService{
 							def commerceObjectId = it
 							def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
 
-							def commerceObjectInstance// = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
+							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
 							def coEnversInstance
-							CommerceObject.withTransaction{
 
-								commerceObjectInstance=CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
-								if (commerceObjectInstance instanceof hmof.CommerceObject){
-									coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-								}
-
-								else{
-									log.warn"Promoting deleted Commerce Object for Bundle from Envers"
-									def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
-									coEnversInstance = new CommerceObject(commerceObjectMap)
-								}
-
-								// Handle Premium Commerce Objects
-								if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
-
-									listOfCommerceObjects << coEnversInstance
-
-								}
+							if (commerceObjectInstance instanceof hmof.CommerceObject){
+								coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 							}
+
+							else{
+								log.warn"Promoting deleted Commerce Object for Bundle from Envers"
+								def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
+								coEnversInstance = new CommerceObject(commerceObjectMap)
+							}
+
+							// Handle Premium Commerce Objects
+							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
+
+								listOfCommerceObjects << coEnversInstance
+
+							}
+
 
 						}
 
