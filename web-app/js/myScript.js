@@ -46,7 +46,16 @@ function toggle(box,theId) {
 		if (environmentRevision != undefined) {
 			environmentRevision = environmentRevision.trim();
 		}
-		if (latestRevision == environmentRevision) {			
+		
+		var doesPreviousJobExist = optionSelected.split("/")[3];
+		if (latestRevision == environmentRevision && doesPreviousJobExist) {			
+			getConfirm('A job with the same revision already exists on the environment and bundles in this job to the previous job bundles are same , Do you want to proceed with the smart deployment?',function(result) {
+				   // Do something with result...
+
+			});
+			return false;			
+				
+			} else if (latestRevision == environmentRevision && !doesPreviousJobExist) {			
 		getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ?',function(result) {
 			   // Do something with result...
 
