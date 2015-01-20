@@ -20,6 +20,32 @@ class DeploymentService {
 	def jobService
 	def sessionFactory
 
+
+	/**
+	 * Return true to detect if previous Job exists for this Program and User
+	 * @param programInstanceNumber
+	 * @param envId
+	 * @return
+	 */
+	Boolean doesPreviousJobExist(def programInstanceNumber, def envId){
+
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber }.list().jobNumber
+
+		def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+
+		Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+
+		// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
+		def lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
+
+		if (lastJob.isEmpty()){
+
+			return false
+		}
+
+		return true
+	}
+
 	/**
 	 * Compare the current Bundle job instances to the previous job instances and return the current bundles that are the same	 
 	 * @param currentJobBundles
