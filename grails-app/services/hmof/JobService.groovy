@@ -96,8 +96,7 @@ class JobService{
 						println "Bundle IDs to remove: " + bundlesToRemove.contentId + "at revision: " + bundlesToRemove.revision
 
 						// if User wants to be smart - uncomment for testing
-						//bundle = bundle - bundlesToRemove
-
+						bundle = bundle - bundlesToRemove
 
 					}
 

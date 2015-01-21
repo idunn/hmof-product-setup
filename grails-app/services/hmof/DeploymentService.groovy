@@ -1,6 +1,5 @@
 package hmof
 
-//import grails.transaction.Transactional
 import hmof.deploy.*
 import hmof.security.User
 import hmof.security.Role
@@ -10,40 +9,42 @@ import hmof.security.UserRole
  * DeploymentService
  * A service class encapsulates the core business logic of a Grails application
  */
-//@Transactional //TODO
 class DeploymentService {
 
 	static transactional = false
 
-	// inject Spring Security
+	// inject Services
 	def springSecurityService
 	def jobService
 	def sessionFactory
 
 
 	/**
-	 * Return true to detect if previous Job exists for this Program and User
+	 * Return Boolean to detect if previous Job exists for a particular Program and Current Users environment
 	 * @param programInstanceNumber
 	 * @param envId
 	 * @return
 	 */
 	Boolean doesPreviousJobExist(def programInstanceNumber, def envId){
 
+		def lastJob = []
+
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber }.list().jobNumber
 
-		def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+		// needed for MySql
+		if (!previousJobNumbers.isEmpty()){
 
-		Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 
-		// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
-		def lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
+			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
 
-		if (lastJob.isEmpty()){
+			lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
 
-			return false
+			if (lastJob.isEmpty()){	return false }
+			return true
 		}
 
-		return true
+		return false
 	}
 
 	/**
@@ -70,7 +71,7 @@ class DeploymentService {
 			}
 		}
 
-		println "bundles to be removed: " +  bundlesRemoved.contentId
+		log.info "bundles to be removed: " +  bundlesRemoved.contentId
 		return bundlesRemoved
 	}
 
@@ -80,16 +81,23 @@ class DeploymentService {
 	 * @param currentJobNumber
 	 * @return
 	 */
-	def getPreviousJob(def programInstanceNumber, def currentJobNumber, def envId){
+	def getPreviousJob( def programInstanceNumber, def currentJobNumber, def envId ){
+
+		def lastJob = []
 
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && jobNumber < currentJobNumber }.list().jobNumber
 
-		def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+		// required for mySql
+		if (!previousJobNumbers.isEmpty()){
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 
-		Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
 
-		// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
-		def lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
+			// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
+			return lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
+		}
+
+		return lastJob
 	}
 
 	/**
@@ -213,7 +221,6 @@ class DeploymentService {
 
 		// return Deployable CommerceObject
 		def (commerceObjectList) = [deployableCommerceObject]
-
 	}
 
 
@@ -289,7 +296,6 @@ class DeploymentService {
 		else if(environmentId==2L){prevEnvironment=1L}
 
 		prevEnvironment
-
 	}
 
 
@@ -331,7 +337,6 @@ class DeploymentService {
 
 			promoInstance
 		}
-
 	}
 
 
@@ -340,6 +345,7 @@ class DeploymentService {
 	 * @return
 	 */
 	def getEnvironmentName(Long roleId){
+
 		def envName
 
 		if(roleId == 2){
@@ -353,7 +359,7 @@ class DeploymentService {
 	}
 
 	/**
-	 * 
+	 * Helper method that returns the current revision number
 	 * @param deployableInstance
 	 * @return
 	 */
@@ -400,9 +406,7 @@ class DeploymentService {
 			promotionJobStatus.discard()
 			promotionJobStatus = Promotion.lock(promotionJobId)
 
-
 			def status1 = JobStatus.In_Progress
-
 
 			def promotionInstance = Promotion.get(promotionJobId)
 
@@ -411,15 +415,11 @@ class DeploymentService {
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
 
-
 			def status2 = null
 
 			if (processJobs){
-
 				status2 = JobStatus.Success
-
 			} else {status2 = JobStatus.Failed}
-
 
 			// return map
 			def results = [status: status2, promotionId:promotionJobInstance.id]
@@ -440,6 +440,4 @@ class DeploymentService {
 		promotionInstance.properties = [status:promotionUpdate.status]
 
 	}
-
-
 }
