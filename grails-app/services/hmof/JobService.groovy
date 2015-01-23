@@ -23,7 +23,7 @@ class JobService{
 	def utilityService
 	def springSecurityService
 
-	
+
 	Logger log = Logger.getLogger(JobService.class)
 
 	/**
@@ -63,62 +63,46 @@ class JobService{
 			log.debug "cacheLocation" + cacheLocation
 			log.debug "The deployment Url is: " + deploymentUrl
 
-			// used in external logs
+			// used in external logs and Smart-deploy
 			if (!program.isEmpty()){
 
 				program.each{
+
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
-
 					Long jobNumber = it.jobNumber
+
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 					def programInstance = Program.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 1)
-
 					programName = programInstance.toString()
-def smartDeploy=promotionInstance.smartDeploy
-println smartDeploy
-					// checking if this Program has been pushed before to the environment TODO
-					println "#############################################1"
-					println "instanceNumber" + instanceNumber
-					println "jobNumber" + jobNumber
-					println "programName" + programName
-					println "envirnment Id" + envId
 
-							
-					
+					// Initialize Customer Logs
+					new_log = initializeLogger(programName, cacheLocation, envId, 1)
+					if(envId==1){
+						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+						new_log.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")
+					}else if(envId==2 || envId==3){
+						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+						new_log.info("Job "+jobNumber + " was promoted by user " + user_Name + " for Environment "+envName+"\r\n")
+					}
+
+					if(new_log==null) new_log = log
+					// End Initialize Customer Logs
+
+
+					def smartDeploy = promotionInstance.smartDeploy
 					def previousJob = deploymentService.getPreviousJob( instanceNumber, jobNumber, envId )
+					new_log.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program "
 
 					if (!previousJob.isEmpty() && smartDeploy){
 
-						println "A previous Job Exists"
-						println "The User will be given an opporunity to do a smart deployment..."
-						// TODO give Users a modal window to confirm the difference
-
-
-						// TODO compare the bundles in this job to the previous jobs bundles
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
-						println "Bundle IDs to remove: " + bundlesToRemove.contentId + "at revision: " + bundlesToRemove.revision
-
-						// if User wants to be smart - uncomment for testing
+						new_log.info "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
+						new_log.info "${bundlesToRemove.size()} from a total of ${bundle.size()} Bundles will not be redeployed in this Job" +"\r\n"
+						// removes bundles from current job
 						bundle = bundle - bundlesToRemove
 
 					}
-
-					println "#############################################2"
-
-					new_log = initializeLogger(programName, cacheLocation,envId,1)
-					if(envId==1){
-						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-						new_log.info("TEST1 checking if a previous Job exists and returning its job instances" + previousJob)
-						new_log.info "TEST2 Bundles to Remove " + bundlesToRemove
-						new_log.info "TEST3 Bundle IDs in current Job " + bundlesToRemove
-					}else if(envId==2 || envId==3){
-						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-
-					}
-					if(new_log==null) new_log = log
 				}
 			}
 
@@ -164,7 +148,6 @@ println smartDeploy
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 						cObjectName=enversInstanceToDeploy.toString()
 						isbn=commerceObjectInstance.isbnNumber
-
 					}
 
 					else{
@@ -182,7 +165,6 @@ println smartDeploy
 						}else if(envId==2 || envId==3){
 							new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
 							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-
 						}
 					}
 					if(new_log==null) new_log = log
@@ -231,7 +213,6 @@ println smartDeploy
 						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 						new_log.debug("promotionId:"+promotionInstance.id)
 						new_log.info("Job Status: Success\r\n")
-
 					}
 				}
 			}
@@ -249,10 +230,8 @@ println smartDeploy
 					def benversInstanceToDeploy
 					def childMap = [:]
 
-
 					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
-
 
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
@@ -292,7 +271,6 @@ println smartDeploy
 
 						def secureProgramId = it.key
 						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
-
 
 						log.debug "secureProgram Id: " + secureProgramId
 
