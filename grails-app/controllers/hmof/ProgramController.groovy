@@ -34,7 +34,7 @@ class ProgramController {
 	def deploy(){
 
 		def instanceDetail = params.instanceDetail
-		
+	
 		def instanceDetails = instanceDetail.split("/")
 		def instanceId = instanceDetails[0]
 		
@@ -48,6 +48,13 @@ class ProgramController {
 		log.info("deploymentJobNumber: "+deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
+		
+		def doesPreviousJobExist1 =params.doesPreviousJobExist1
+		boolean previousJobExist=false
+		if(doesPreviousJobExist1!=null){		
+		previousJobExist=true
+		}
+		
 		log.info("userId: "+userId)
 		log.info("contentId: "+programInstance.id)
 		log.info("contentTypeId: "+programInstance.contentType.contentId)
@@ -79,7 +86,7 @@ class ProgramController {
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
 
-		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
+		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")

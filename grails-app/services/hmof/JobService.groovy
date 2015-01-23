@@ -10,6 +10,7 @@ import org.apache.log4j.PropertyConfigurator
 import grails.util.Holders
 import hmof.security.User
 
+
 /**
  * JobService
  * Take the jobs and process them by pushing the content to the environment via Geb
@@ -22,7 +23,7 @@ class JobService{
 	def utilityService
 	def springSecurityService
 
-
+	
 	Logger log = Logger.getLogger(JobService.class)
 
 	/**
@@ -74,7 +75,8 @@ class JobService{
 					def programInstance = Program.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 1)
 
 					programName = programInstance.toString()
-
+def smartDeploy=promotionInstance.smartDeploy
+println smartDeploy
 					// checking if this Program has been pushed before to the environment TODO
 					println "#############################################1"
 					println "instanceNumber" + instanceNumber
@@ -82,9 +84,11 @@ class JobService{
 					println "programName" + programName
 					println "envirnment Id" + envId
 
+							
+					
 					def previousJob = deploymentService.getPreviousJob( instanceNumber, jobNumber, envId )
 
-					if (!previousJob.isEmpty()){
+					if (!previousJob.isEmpty() && smartDeploy){
 
 						println "A previous Job Exists"
 						println "The User will be given an opporunity to do a smart deployment..."

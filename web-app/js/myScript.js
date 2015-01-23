@@ -47,29 +47,28 @@ function toggle(box,theId) {
 			environmentRevision = environmentRevision.trim();
 		}
 		
-		var doesPreviousJobExist = optionSelected.split("/")[3];
-		if (latestRevision == environmentRevision && doesPreviousJobExist) {			
-			getConfirm('A job with the same revision already exists on the environment and bundles in this job to the previous job bundles are same , Do you want to proceed with the smart deployment?',function(result) {
-				   // Do something with result...
-
-			});
-			return false;			
-				
-			} else if (latestRevision == environmentRevision && !doesPreviousJobExist) {			
-		getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ?',function(result) {
+		
+	 if (latestRevision == environmentRevision) {	
+		 
+		getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?  ",function(result) {
 			   // Do something with result...
 
 		});
 		return false;			
 			
-		} else {				
-		var deployProgram=confirm("Are you sure you want to deploy?");
+		} else {	
+			getConfirm("Are you sure you want to deploy ?",function(result) {
+				   // Do something with result...
+
+			});
+			return false;
+		/*var deployProgram=confirm("Are you sure you want to deploy?");
 		if(deployProgram){
 			return true;
 			}
 		else{
 			return false; 
-			}
+			}*/
 		
 		}
 		}
@@ -82,7 +81,7 @@ function toggle(box,theId) {
 	function getConfirm(confirmMessage,callback){
 		
 	    confirmMessage = confirmMessage || '';
-
+	    
 	    $('#confirmbox').modal({show:true,
 	                            backdrop:false,
 	                            keyboard: false,

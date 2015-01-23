@@ -166,7 +166,7 @@ class CommerceObjectController {
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
-		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId]
+		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
@@ -208,7 +208,7 @@ class CommerceObjectController {
 
 		if(promotionJobInstance==none){
 
-			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
+			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 

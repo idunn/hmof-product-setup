@@ -11,7 +11,7 @@ class Promotion {
 
 	String  status
 	Long 	jobNumber
-
+    boolean smartDeploy
 	Date	dateCreated
 	Date	lastUpdated
 
