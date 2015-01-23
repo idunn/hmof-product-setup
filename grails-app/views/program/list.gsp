@@ -76,7 +76,7 @@
 			<div class="modal-body">
 				<p id="confirmMessage">Any confirmation message?</p>				
 				<g:if test="${(jobdetails.doesPreviousJobExist(programInstance.id,jobdetails.getUserEnvironmentIdInformation()))==true}">
-				<p id="confirmMessage1"><input type="checkbox" name="doesPreviousJobExist1" value="true"/> Bundles in this job to the previous job bundles are Same,Do you want to proceed with the Smart Deployment ? </p>
+				<p id="confirmMessage1"> Bundles in this job to the previous job bundles are Same,Do you want to proceed with the Smart Deployment ? <input type="checkbox" name="doesPreviousJobExist1" value="true" checked/></p>
 				</g:if>
 			</div>
 			<div class="modal-footer">
