@@ -11,9 +11,10 @@ class Promotion {
 
 	String  status
 	Long 	jobNumber
-    boolean smartDeploy
+    Boolean smartDeploy
 	Date	dateCreated
 	Date	lastUpdated
+	
 
 	static belongsTo	= [job: Job,user: User,environments: Environment]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 
