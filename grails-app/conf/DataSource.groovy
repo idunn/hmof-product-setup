@@ -32,12 +32,11 @@ environments {
 		dataSource {
 			pooled = true
 			driverClassName = "com.mysql.jdbc.Driver"
-			dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
-			username = "root"
-			password = "root"
+			username = "productsetup"
+			password = "products3tup!"
 			dbCreate = "update" // create-drop or update
-			url = "jdbc:mysql://localhost:3306/productsetup"			
-			//dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+			url = "jdbc:mysql://127.0.0.1:3306/productsetup"
+			dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 			properties {
 				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
 				maxActive = -1
@@ -51,5 +50,5 @@ environments {
 
 			}
 		}
-	}	
+	}
 }
