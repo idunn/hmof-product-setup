@@ -8,18 +8,18 @@ import org.apache.log4j.PropertyConfigurator
 
 class RedPagesDriver  {
 
-	RedPagesDriver(def url, def enversInstanceToDeploy,Logger log){
+	RedPagesDriver(def url, def enversInstanceToDeploy, Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.debug "cachedDriver :" + cachedDriver+"\r\n"
-		driveBrowser(url, enversInstanceToDeploy,log)
+		log.debug "cachedDriver :" + cachedDriver + "\r\n"
+		driveBrowser(url, enversInstanceToDeploy, log)
 	}
 
-	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren,Logger log){
+	RedPagesDriver(def url, def enversInstanceToDeploy, def mapOfChildren, Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.debug "cachedDriver :" + cachedDriver+"\r\n"
-		driveBrowser(url, enversInstanceToDeploy, mapOfChildren,log)
+		log.debug "cachedDriver :" + cachedDriver + "\r\n"
+		driveBrowser(url, enversInstanceToDeploy, mapOfChildren, log)
 	}
 
 	/**
@@ -28,58 +28,58 @@ class RedPagesDriver  {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def driveBrowser(def url, def enversInstanceToDeploy, def mapOfChildren = null,Logger log){
+	def driveBrowser(def url, def contentInstance, def mapOfChildren = null, Logger log){
 
 
-		log.debug "Deployment url: " + url
-		log.debug "EnversInstanceToDeploy " + enversInstanceToDeploy + " " + enversInstanceToDeploy.contentTypeId+"\r\n"
+		log.debug "Deployment url: ${url}"
 
-		// This url allows us to bypass the login
+		// This URL allows us to bypass the login
 		String bypassLogin = url + "/hrw/ecom/admin_hub.jsp"
-		try{
 
+		try{
 			Browser.drive{
 
-				if(enversInstanceToDeploy.contentTypeId==4){
+				if(contentInstance.contentTypeId==4){
 
 					log.info "Starting Geb Automation for CommerceObject\r\n"
 
 					CommerceObjectWork cow = new CommerceObjectWork()
-					cow.initBaseUrl(bypassLogin,log)
+					cow.initBaseUrl(bypassLogin, log)
 					to CommerceObjectWork
-					lookupIsbn (enversInstanceToDeploy,log)
+					lookupIsbn (contentInstance, log)
 
-					log.info "Completed Geb Automation of CommerceObject\r\n"
+					log.info "Completed Geb Automation for CommerceObject\r\n"
 
-				} else if (enversInstanceToDeploy.contentTypeId==3){
+				} else if (contentInstance.contentTypeId==3){
 
 					log.info "Starting Geb Automation for SecureProgram\r\n"
 
 					SecureProgramWork spw = new SecureProgramWork()
-					spw.initBaseUrl(bypassLogin,log)
+					spw.initBaseUrl(bypassLogin, log)
 					to SecureProgramWork
-					lookupIsbn (enversInstanceToDeploy,log)
+					lookupIsbn (contentInstance, log)
+
 					log.info "Completed Geb Automation of SecureProgram\r\n"
-				}else if (enversInstanceToDeploy.contentTypeId==2){
+
+				}else if (contentInstance.contentTypeId==2){
 
 					log.info "Starting Geb Automation for Bundle\r\n"
 
 					BundleGebWork bundle = new BundleGebWork()
-					bundle.initBaseUrl(bypassLogin,log)
-
+					bundle.initBaseUrl(bypassLogin, log)
 					to BundleGebWork
 
-					lookupIsbn (enversInstanceToDeploy,log)
-					addBundleData (mapOfChildren, enversInstanceToDeploy,log)
+					lookupIsbn (contentInstance, log)
+					addBundleData (mapOfChildren, contentInstance, log)
 
-					log.info"Testing that Bundle contains content..."
+					log.info "Testing that Bundle contains content..."
 					confirmBundle(log)
 
 					log.info "Completed Geb Automation of Bundle\r\n"
 
 
-				}else{ log.error "Content Type not supported!"
-
+				}else{
+					log.error "Content Type not supported!"
 				}
 
 			}.quit() // quit is important in a multi-threaded application
