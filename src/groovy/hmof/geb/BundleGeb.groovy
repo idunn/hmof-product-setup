@@ -1,16 +1,14 @@
 package hmof.geb
 
 import org.apache.log4j.Logger
-
 import geb.*
 
 
 class BundleGebWork extends Page {
 
-	def initBaseUrl(def baseUrl,Logger log){
+	def initBaseUrl(def baseUrl, Logger log){
 		log.info "Base Url: " + baseUrl
 		url = baseUrl
-
 	}
 
 	static url
@@ -56,10 +54,10 @@ class BundleGebWork extends Page {
 
 	}
 
-	void lookupIsbn(def enversInstanceToDeploy,Logger log){
+	void lookupIsbn(def enversInstanceToDeploy, Logger log){
 
-		log.info "Looking up Bundle ISBN..."
-		log.info "Bundle ISBN: " + enversInstanceToDeploy.isbn
+
+		log.info "Looking up Bundle ISBN: ${enversInstanceToDeploy.isbn}"
 		manageBundlesLink.click()
 		lookupIsbnField.value(enversInstanceToDeploy.isbn)
 		lookupButton.click()
@@ -67,21 +65,19 @@ class BundleGebWork extends Page {
 		def bundleExist = deleteRestricted
 		if(bundleExist){
 
-			log.info "Restricted Bundle ISBN Exists."
-			log.info "Deleting and Recreating Restricted Bundle..."
+			log.debug "Restricted Bundle ISBN Exists."
+			log.info "Deleting and Recreating Restricted Bundle"
 
 			withConfirm(true){deleteRestricted.click()}
-
 		}
 
 		def unrestrictedBundleExist = deleteUnrestricted
 		if(unrestrictedBundleExist){
-			log.info "UnRestricted Bundle ISBN Exists."
-			log.info "Deleting and Recreating UnRestricted Bundle..."
+			log.debug "UnRestricted Bundle ISBN Exists."
+			log.info "Deleting and Recreating UnRestricted Bundle"
 			withConfirm(true){deleteUnrestricted.click()}
 
 		}
-
 
 		log.info"Creating New Bundle..."
 		assert noBundleText
@@ -104,14 +100,14 @@ class BundleGebWork extends Page {
 
 
 		mapOfChildren.each{
-			
+
 			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()
 
 			assert title == "Add Entitlements"
-			log.info "Adding Bundle Entitlements...\r\n"
+			log.info "Adding Bundle Content...\r\n"
 
 			log.info"Adding Secure Program"
 			log.info"Secure Program Registration Isbn: " + secureProgramInstance.registrationIsbn
@@ -127,27 +123,27 @@ class BundleGebWork extends Page {
 
 			log.info"Adding Activity Manager"
 			activityManager.value(true)
-			
+
 			log.info"Adding Class Manager"
 			classManager.value(true)
 
 			if (secureProgramInstance.includeDashboardObject){
-				log.info"Adding Dashboard"				
+				log.info"Adding Dashboard"
 				waitFor(50){$("font", text: /Dashboard/).children().value(true)}
 			}
 
 			if (secureProgramInstance.includeEplannerObject){
-				log.info"Adding Planner"				
+				log.info"Adding Planner"
 				waitFor(50){$("font", text: /ePlanner/).children().value(true)}
 			}
-			
+
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 				log.info"Adding Custom Commerce Objects..."
 				def commerceObjectInstance = it
 				String coName = commerceObjectInstance.objectName
 				log.info"Adding Commerce Object ${coName}"
-				log.info"Adding Commerce Object isbn:"+commerceObjectInstance.isbnNumber+"\r\n"
+				log.info"Adding Commerce Object isbn:" + commerceObjectInstance.isbnNumber+"\r\n"
 				waitFor(50) {$("font", text: /$coName/).children().value(true)}
 			}
 
@@ -156,20 +152,20 @@ class BundleGebWork extends Page {
 			duration.value(durationLength)
 
 
-			log.info"Bundle is being added to the HMOF database"
+			log.info "Bundle is being added to the HMOF database"
 			waitFor(50,5){addButton}
-			
-			log.info"Title Page is currently: " + title
-			
+
+			log.info "Title Page is currently: " + title
+
 			def counter = 0
 			while(title != "Administration" && counter<=15){
-				counter++				
+				counter++
 				Thread.sleep(20000)
 				log.info "Title page is now: " + title
 				if (title == "Add Entitlements"){
 					log.info"Attempting to save Bundle. Retry attempt: " + counter
 					waitFor(50,10){addButton}
-				}				
+				}
 
 			}
 
@@ -192,7 +188,6 @@ class BundleGebWork extends Page {
 			throw AssertionError
 
 		}
-
 	}
 
 	/**
@@ -246,5 +241,4 @@ class BundleGebWork extends Page {
 		durationLength
 
 	}
-
 }
