@@ -8,17 +8,14 @@ import org.apache.log4j.PropertyConfigurator
 import grails.util.Holders
 
 class CommerceObjectWork extends Page {
-	//static Logger log = Logger.getLogger(CommerceObjectWork.class)
 	def utilityService = Holders.grailsApplication.mainContext.getBean 'utilityService'
 
-	def initBaseUrl(def baseUrl,Logger log){
+	def initBaseUrl(def baseUrl, Logger log){
 		log.info "Base Url: " + baseUrl
 		url = baseUrl
-
 	}
 
 	static url
-
 
 	static content = {
 
@@ -46,11 +43,12 @@ class CommerceObjectWork extends Page {
 	}
 
 
-	void lookupIsbn(def enversInstanceToDeploy,Logger log){
-		log.info "Looking up ISBN...."
+	void lookupIsbn(def contentInstance, Logger log){
+		log.debug "Looking up ISBN...."
+
 		manageCommerceObjectLink.click()
-		log.info "ISBN Number: "+enversInstanceToDeploy.isbnNumber
-		isbnField.value enversInstanceToDeploy.isbnNumber
+		log.info "Looking up ISBN Number: ${contentInstance.isbnNumber}"
+		isbnField.value contentInstance.isbnNumber
 
 		searchButton.click()
 
@@ -61,15 +59,15 @@ class CommerceObjectWork extends Page {
 			waitFor(25) {globalModule.updateLink.click()}
 
 			log.info "Updating Existing Commerce Object"
-			addCommerceObjectData(enversInstanceToDeploy,log)
+			addCommerceObjectData(contentInstance, log)
 			globalModule.updateButton.click()
 
 		} else{
 			globalModule.homeButton.click()
 			addCommerceObjectLink.click()
 
-			log.info "Adding New CommerceObject"
-			addCommerceObjectData(enversInstanceToDeploy,log)
+			log.info "Adding New Commerce Object"
+			addCommerceObjectData(contentInstance, log)
 			globalModule.addButton.click()
 
 		}
@@ -80,44 +78,46 @@ class CommerceObjectWork extends Page {
 	 * @param enversInstanceToDeploy
 	 * @return
 	 */
-	def addCommerceObjectData(def content,Logger log){
+	def addCommerceObjectData(def content, Logger log){
 
 		log.info "Adding Commerce Object Data..."
 
 		String blank = ""
-		log.info "Object Name: "+content.objectName
+		log.info "Object Name: " + content.objectName
 		objectName.value(content.objectName)
-		log.info "Comments: "+content.comments
+
 		globalModule.description.value(content.comments?:"Data entered using the Product Setup Web Application")
-		log.info "Path To Cover Image: "+content.pathToCoverImage
+
+		log.debug "Path To Cover Image: "  + content.pathToCoverImage
 		pathToCoverImage.value(content.pathToCoverImage?: blank)
-		log.info "Hub Page Selected: true"
+
 		hubPageSelect.value(true)
-		log.info "ISBN Field value: "+content.isbnNumber
+		log.debug "ISBN Field value: "+content.isbnNumber
 		isbnField.value(content.isbnNumber)
-		log.info "Secure Program Dependent: true"
+
 		secureProgramDependent.value(true)
-		log.info "Teacher Label: "+content.teacherLabel
+
 		teacherLabel.value(content.teacherLabel?: blank)
-		log.info "Teacher URL: "+content.teacherUrl
+
 		teacherUrl.value(content.teacherUrl?: blank)
-		log.info "Student Label: "+content.studentLabel
+
 		studentLabel.value(content.studentLabel?: blank)
-		log.info "Student URL: "+content.studentUrl
+
 		studentUrl.value(content.studentUrl?: blank)
-		log.info "Object Type: "+content.objectType
+
 		objectType.value(content.objectType)
-		log.info "Object Reorder: "+content.objectReorderNumber
+
 		objectReorder.value(content.objectReorderNumber)
-		log.info "Subject: "+content.subject
+
 		subject.value(content.subject?:"None")
 
 		def categoryNumber = utilityService.getCategory(content.category)
 		if (categoryNumber == "Other") categoryNumber = "-1"
-		log.info "category Number: " + categoryNumber
+		log.debug "category Number: " + categoryNumber
 		category.value(categoryNumber)
-		log.info "Grade Level: "+content.gradeLevel
+		log.debug "Grade Level: " + content.gradeLevel
 		def grades = []
+
 		if (!content.gradeLevel.contains("-")){
 			grades = content.gradeLevel
 		} else if(content.gradeLevel.equals("6-8")){
@@ -129,7 +129,5 @@ class CommerceObjectWork extends Page {
 		gradeLevel.value(grades)
 
 		log.info"Completed adding Commerce Object Data"
-
 	}
-
 }
