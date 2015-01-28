@@ -42,26 +42,48 @@ function toggle(box,theId) {
 		var latestRevision = optionSelected.split("/")[1];
 		var environmentRevision = optionSelected.split("/")[2];
 		environmentRevision = environmentRevision.split(",")[2];
+		var doesPJobExists = optionSelected.split("/")[3];
 		
 		if (environmentRevision != undefined) {
 			environmentRevision = environmentRevision.trim();
 		}
 		
-		
-	 if (latestRevision == environmentRevision) {	
-		 
-		getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?  ",function(result) {
+	 if (latestRevision == environmentRevision  ) {	
+	
+		 if(doesPJobExists=="true"){
+		getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?<br><br> Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/>  <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>",function(result) {
 			   // Do something with result...
 
-		});
-		return false;			
-			
-		} else {	
-			getConfirm("Are you sure you want to deploy ?",function(result) {
+		});		
+		return false;	
+		 }else if(doesPJobExists=="false")
+			 {
+			 
+			 getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ? ",function(result) {
 				   // Do something with result...
 
 			});
-			return false;
+			return false;	
+			 
+			 }
+			
+		} else if(latestRevision != environmentRevision && doesPJobExists=="true")
+		{	
+			getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?<br><br> Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>",function(result) {
+				   // Do something with result...
+
+			});		
+			return false;	
+			
+		}
+		
+		else {	
+					getConfirm("Are you sure you want to deploy ? ",function(result) {
+						   // Do something with result...
+
+					});
+					return false;
+					
 		/*var deployProgram=confirm("Are you sure you want to deploy?");
 		if(deployProgram){
 			return true;
@@ -108,25 +130,51 @@ function toggle(box,theId) {
 		var latestRevision = optionSelected.split("/")[1];
 		var environmentRevision = optionSelected.split("/")[2];
 		environmentRevision = environmentRevision.split(",")[2];
-		
+		var doesPJobExists = optionSelected.split("/")[3];
+		alert(doesPJobExists);
 		if (environmentRevision != undefined) {
 			environmentRevision = environmentRevision.trim();
 		}
 		if (latestRevision == environmentRevision) {
-			getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ?',function(result) {
+			if(doesPJobExists=="true"){
+			getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ? <br><br>Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>',function(result) {
 				   // Do something with result...
 
 			});
 			return false;		
+			}else
+				{
+				getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ? ',function(result) {
+					   // Do something with result...
 
-		} else {
-		var promoteProgram=confirm("Are you sure you want to promote?");
+				});
+				
+				
+				}
+		}else if(latestRevision != environmentRevision && doesPJobExists=="true")
+		{			
+				
+				getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ? <br><br> Execute as a Smart Deployment? <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>',function(result) {
+					   // Do something with result...
+
+				});
+				return false;		
+								
+			
+		}else {
+		
+			getConfirm("Are you sure you want to promote ? ",function(result) {
+				   // Do something with result...
+
+			});
+			return false;
+	/*	var promoteProgram=confirm("Are you sure you want to promote?");
 		if(promoteProgram){
 			return true;
 			}
 		else{
 			return false; 
-			}		
+			}*/		
 		}
 		}
 		else{
@@ -134,6 +182,7 @@ function toggle(box,theId) {
 				return false;
 			}
 	}
+	$("a.my-tool-tip").tooltip();
 	function pageonload()
 	{		
 		

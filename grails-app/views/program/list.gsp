@@ -64,38 +64,10 @@
 			   File qaLogFile = new File(qaLog)
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Programs"+"/${programInstance.name}_${programInstance.state}"+"/prod/log/"+"${programInstance.name}_${programInstance.state}"+"-prod_log"+".log"
 			   File prodLogFile = new File(prodLog) %>
-				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${programInstance.id+"/"+jobdetails.getCurrentEnversRevision(programInstance)+"/"+jobdetails.getPromotionDetails(programInstance,jobdetails.getUserEnvironmentIdInformation())}" onclick="toggle(this,'row${i}')"/>
-				<div id="confirmbox" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Confirmation</h4>
-			</div>
-			<div class="modal-body">
-				<p id="confirmMessage">Any confirmation message?</p>				
-				<g:if test="${(jobdetails.doesPreviousJobExist(programInstance.id,jobdetails.getUserEnvironmentIdInformation()))==true}">
-				<p id="confirmMessage1"> Bundles in this job to the previous job bundles are Same,Do you want to proceed with the Smart Deployment ? <input type="checkbox" name="doesPreviousJobExist1" value="true" checked/></p>
-				</g:if>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" id="confirmFalse">Cancel</button>
-<sec:ifAnyGranted roles="ROLE_PM">
-				<g:actionSubmit class="btn btn-primary" id="confirmTrue"
-					value="Deploy" onClick="return true;" />
-</sec:ifAnyGranted>
-
-<sec:ifAnyGranted roles="ROLE_QA, ROLE_PROD">
-	<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="return true;"/>
-</sec:ifAnyGranted>
-
-			</div>
-		</div>
-	</div>
-</div>
+				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${programInstance.id+"/"+jobdetails.getCurrentEnversRevision(programInstance)+"/"+jobdetails.getPromotionDetails(programInstance,jobdetails.getUserEnvironmentIdInformation())+"/"+jobdetails.doesPreviousJobExist(programInstance.id,jobdetails.getUserEnvironmentIdInformation())}" onclick="toggle(this,'row${i}')"/>
 				
-				
+				<%-- Confirm dialog for Deploy/Promote  --%>
+		<g:render template="/_common/modals/confirmDialog"/>
 				</sec:ifAnyGranted>
 				<g:link action="show" id="${programInstance.id}">${programInstance.id}</g:link> </td>
 			

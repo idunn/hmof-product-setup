@@ -56,7 +56,7 @@
 			   File prodLogFile = new File(prodLog) %>
 				
 				
-				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id+"/"+jobdetails.getCurrentEnversRevision(secureProgramInstance)+"/"+jobdetails.getPromotionDetails(secureProgramInstance,jobdetails.getUserEnvironmentIdInformation())}" onclick="toggle(this,'row${i}')"/>
+				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id+"/"+jobdetails.getCurrentEnversRevision(secureProgramInstance)+"/"+jobdetails.getPromotionDetails(secureProgramInstance,jobdetails.getUserEnvironmentIdInformation())+"/false"}" onclick="toggle(this,'row${i}')"/>
 				</sec:ifAnyGranted>
 				<g:link action="show" id="${secureProgramInstance.id}">${secureProgramInstance.id}</g:link> </td>
 			

@@ -50,6 +50,7 @@ class ProgramController {
 		def userId = User.where{id==user}.get()
 		
 		def doesPreviousJobExist1 =params.doesPreviousJobExist1
+		
 		boolean previousJobExist=false
 		if(doesPreviousJobExist1!=null){		
 		previousJobExist=true
@@ -122,14 +123,19 @@ class ProgramController {
 			redirect(action: "list")
 			return
 		}
-
+		def doesPreviousJobExist1 =params.doesPreviousJobExist1
+		
+		boolean previousJobExist=false
+		if(doesPreviousJobExist1!=null){
+		previousJobExist=true
+		}
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 		log.info("jobNumber:"+promotionInstance.getJobNumber())
 		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
 
 		if(promotionJobInstance==none){
 
-			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId]
+			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 

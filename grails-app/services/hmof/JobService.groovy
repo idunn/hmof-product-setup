@@ -23,7 +23,7 @@ class JobService{
 	def utilityService
 	def springSecurityService
 
-
+	
 	Logger log = Logger.getLogger(JobService.class)
 
 	/**
@@ -39,7 +39,7 @@ class JobService{
 		def secureIsbn=""
 		def bundleIsbn=""
 		String programName=""
-		Logger new_log=null
+		Logger customerLog=null
 
 		def bundlesToRemove = []
 
@@ -63,48 +63,79 @@ class JobService{
 			log.debug "cacheLocation" + cacheLocation
 			log.debug "The deployment Url is: " + deploymentUrl
 
-			// used in external logs and Smart-deploy
+			// used in external logs
 			if (!program.isEmpty()){
 
 				program.each{
-
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
-					Long jobNumber = it.jobNumber
 
+					Long jobNumber = it.jobNumber
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 					def programInstance = Program.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 1)
+
 					programName = programInstance.toString()
+                    def smartDeploy=promotionInstance.smartDeploy
 
-					// Initialize Customer Logs
-					new_log = initializeLogger(programName, cacheLocation, envId, 1)
-					if(envId==1){
-						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						new_log.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")
-					}else if(envId==2 || envId==3){
-						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber + " was promoted by user " + user_Name + " for Environment "+envName+"\r\n")
-					}
+					// checking if this Program has been pushed before to the environment TODO
+					println "#############################################1"
+					println "instanceNumber" + instanceNumber
+					println "jobNumber" + jobNumber
+					println "programName" + programName
+					println "envirnment Id" + envId
 
-					if(new_log==null) new_log = log
-					// End Initialize Customer Logs
-
-
-					def smartDeploy = promotionInstance.smartDeploy
+							
+					
 					def previousJob = deploymentService.getPreviousJob( instanceNumber, jobNumber, envId )
-					new_log.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program "
 
 					if (!previousJob.isEmpty() && smartDeploy){
 
+						println "A previous Job Exists"
+						println "The User will be given an opporunity to do a smart deployment..."
+						// TODO give Users a modal window to confirm the difference
+
+
+						// TODO compare the bundles in this job to the previous jobs bundles
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
-						new_log.info "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
-						new_log.info "${bundlesToRemove.size()} from a total of ${bundle.size()} Bundles will not be redeployed in this Job" +"\r\n"
-						// removes bundles from current job
+						println "Bundle IDs to remove: " + bundlesToRemove.contentId + "at revision: " + bundlesToRemove.revision
+
+						// if User wants to be smart - uncomment for testing
 						bundle = bundle - bundlesToRemove
 
 					}
+
+					println "#############################################2"
+
+					customerLog = initializeLogger(programName, cacheLocation,envId,1)
+					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					if(envId==1){						
+						customerLog.info("TEST1 checking if a previous Job exists and returning its job instances" + previousJob)
+						customerLog.info "TEST2 Bundles to Remove " + bundlesToRemove
+						customerLog.info "TEST3 Bundle IDs in current Job " + bundlesToRemove
+					}
 				}
 			}
+			
+			if (program.isEmpty() && !bundle.isEmpty()){
+				
+					bundle.each{
+
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+					def mapOfChildren = it.children
+					Long jobNumber = it.jobNumber
+					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+                     bundleIsbn=bundleInstance.isbn
+					
+					
+						customerLog = initializeLogger(bundleIsbn, cacheLocation,envId,2)
+						customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					
+
+							}
+					}
+						
+			
 
 			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
 
@@ -117,17 +148,8 @@ class JobService{
 
 					secureIsbn = secureProgramInstance.registrationIsbn
 
-					new_log = initializeLogger(secureIsbn, cacheLocation,envId,3)
-					if(envId==1){
-						new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-						//log.info("Job "+idCreatedOrPromoted+" was created with ID="+idCreatedOrPromoted+" by user \n")
-					}else if(envId==2 || envId==3){
-						new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-						new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-
-					}
-					if(new_log==null) new_log = log
+					customerLog = initializeLogger(secureIsbn, cacheLocation,envId,3)
+					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 				}
 			}
 
@@ -148,6 +170,7 @@ class JobService{
 						enversInstanceToDeploy = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
 						cObjectName=enversInstanceToDeploy.toString()
 						isbn=commerceObjectInstance.isbnNumber
+
 					}
 
 					else{
@@ -158,23 +181,16 @@ class JobService{
 					}
 
 					if (program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						new_log = initializeLogger(isbn,cacheLocation,envId,4)
-						if(envId==1){
-							new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-							new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-						}else if(envId==2 || envId==3){
-							new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-						}
+						customerLog = initializeLogger(isbn,cacheLocation,envId,4)
+					    customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 					}
-					if(new_log==null) new_log = log
+					
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
-					new_log.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,customerLog)
+					customerLog.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-						new_log.debug("promotionId:"+promotionInstance.id)
-						new_log.info("Job Status: Success\r\n")
+						customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"						
+						customerLog.info("Job Status: Success\r\n")
 
 					}
 				}
@@ -206,13 +222,14 @@ class JobService{
 					}
 
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,new_log)
-					new_log.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,customerLog)
+					customerLog.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty()){
 
-						new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-						new_log.debug("promotionId:"+promotionInstance.id)
-						new_log.info("Job Status: Success\r\n")
+						customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						customerLog.debug("promotionId:"+promotionInstance.id)
+						customerLog.info("Job Status: Success\r\n")
+
 					}
 				}
 			}
@@ -230,8 +247,10 @@ class JobService{
 					def benversInstanceToDeploy
 					def childMap = [:]
 
-					new_log.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
+
+					customerLog.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
 					log.debug "Map Of Children: " + mapOfChildren
+
 
 					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
@@ -250,27 +269,17 @@ class JobService{
 						bundleIsbn=bundleInstance.isbn
 					}
 
-					if(program.isEmpty() && !bundle.isEmpty()){
-						new_log = initializeLogger(bundleIsbn, cacheLocation,envId,2)
-						if(envId==1){
-							new_log.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
-							new_log.info("Job "+jobNumber+" was created by user "+user_Name+" for Environment "+envName+"\r\n")
-						}else if(envId==2 || envId==3){
-							new_log.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
-							new_log.info("Job "+jobNumber+" was promoted by user "+user_Name+" for Environment "+envName+"\r\n")
-
-						}
-						if(new_log==null) new_log = log
-					}
+					
 
 					Boolean includePremium = benversInstanceToDeploy.includePremiumCommerceObjects
-					new_log.info "Bundle is Premium: $includePremium"
+					customerLog.info "Bundle is Premium: $includePremium"
 
 					// Turn map of Strings into map of content child objects
 					mapOfChildren.each{
 
 						def secureProgramId = it.key
 						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
+
 
 						log.debug "secureProgram Id: " + secureProgramId
 
@@ -298,7 +307,7 @@ class JobService{
 						}else {	commerceObjectIds << commerceObjectValue }
 
 						log.info "Commerce Object IDs " + commerceObjectIds
-						new_log.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
+						customerLog.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
 
@@ -329,17 +338,17 @@ class JobService{
 						}
 
 						childMap << [(spEnversInstance):listOfCommerceObjects]
-						new_log.info "child Map of Objects being sent to Geb: " + childMap
+						customerLog.info "child Map of Objects being sent to Geb: " + childMap
 
 					}
 
 					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,new_log)
+					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,customerLog)
 
-					new_log.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
-					new_log.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+					customerLog.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
+					customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
 					log.debug("promotionId:"+promotionInstance.id)
-					new_log.info("Job Status: Success\r\n")
+					customerLog.info("Job Status: Success\r\n")
 				}
 			}
 		}
@@ -359,7 +368,18 @@ class JobService{
 		return true
 	}
 
-
+	Logger getLogHeader(Logger customerLogs, def envId, def jobNumber, def user_Name, envName ){
+		println envId
+		if(envId==1){
+		customerLogs.info"${'*'.multiply(40)} Job CreationXXX ${'*'.multiply(40)}\r\n"
+		customerLogs.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")
+		} else if(envId==2 || envId==3){
+		customerLogs.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+		customerLogs.info("Job "+jobNumber + " was promoted by user " + user_Name + " for Environment "+envName+"\r\n")
+		}
+		if(customerLogs==null) customerLogs = log
+		return customerLogs
+		}
 
 	/**
 	 * Helper method to return the value of the content's revision
