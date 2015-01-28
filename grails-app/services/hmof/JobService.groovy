@@ -2,6 +2,7 @@ package hmof
 
 import hmof.deploy.*
 import hmof.geb.RedPagesDriver
+import hmof.geb.verify.VerifyDriver
 import geb.*
 
 import org.apache.log4j.Logger
@@ -327,6 +328,26 @@ class JobService{
 					customerLog.info("Job Status: Success\r\n")
 				}
 			}
+			
+			// Confirm that the Bundles not re-deployed are still on Red-Pages TODO
+			if(!bundlesToRemove.isEmpty()){
+				
+				println bundlesToRemove.getClass()
+				
+				def bundleIsbnsToCheck = []
+				bundlesToRemove.each{
+					
+					def bundleId = it.contentId
+					def bundleInstance = Bundle.where{id==bundleId}.get()
+					bundleIsbnsToCheck << bundleInstance.isbn
+					
+				}
+				 
+				customerLog.info "Confirming the following Bundles are still on Red-Pages ${bundleIsbnsToCheck}"
+				
+				VerifyDriver verifyObjects = new VerifyDriver(deploymentUrl, bundleIsbnsToCheck, customerLog)
+				customerLog.info "Verified Job Complete!"
+			} // end smart verification
 		}
 		catch(InterruptedException  e){
 
