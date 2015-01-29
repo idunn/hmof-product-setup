@@ -277,17 +277,20 @@ class JobService{
 
 						def commerceObjectValue = it.value
 						List commerceObjectIds = []
-
 						// Commerce Object Values example "6,8,12" or "12"
-						if (commerceObjectValue.contains(",")){
-							commerceObjectIds = commerceObjectValue.split(',')
-						}else {	commerceObjectIds << commerceObjectValue }
-
+						if (commerceObjectValue.contains(",")){							
+							commerceObjectIds = commerceObjectValue.split(',')							
+						}else {					
+							commerceObjectIds << commerceObjectValue
+							 }
+						
 						log.info "Commerce Object IDs " + commerceObjectIds
 						customerLog.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
 
 						def listOfCommerceObjects = []
-
+						
+						customerLog.info commerceObjectValue!=""
+						if(commerceObjectValue!=""){
 						commerceObjectIds.each{
 
 							def commerceObjectId = it
@@ -313,12 +316,15 @@ class JobService{
 
 							}
 						}
-
+						}
 						childMap << [(spEnversInstance):listOfCommerceObjects]
 						customerLog.info "child Map of Objects being sent to Geb: " + childMap
 
-					}
+						}
+						
 
+					
+					
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,customerLog)
 
@@ -369,7 +375,7 @@ class JobService{
 	 * Helper method to create Log file Header
 	 */
 	Logger getLogHeader(Logger customerLogs, def envId, def jobNumber, def user_Name, envName ){
-		println envId
+		
 		if(envId==1){
 			customerLogs.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 			customerLogs.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")

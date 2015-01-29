@@ -43,7 +43,7 @@ function toggle(box,theId) {
 		var environmentRevision = optionSelected.split("/")[2];
 		environmentRevision = environmentRevision.split(",")[2];
 		var doesPJobExists = optionSelected.split("/")[3];
-		
+	
 		if (environmentRevision != undefined) {
 			environmentRevision = environmentRevision.trim();
 		}
@@ -51,7 +51,7 @@ function toggle(box,theId) {
 	 if (latestRevision == environmentRevision  ) {	
 	
 		 if(doesPJobExists=="true"){
-		getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?<br><br> Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/>  <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>",function(result) {
+		getConfirm("A job with the same revision already exists on the environment. <br><br> Execute as a Smart Deployment  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/>  <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"A Smart Deployment will only deploy bundles which have not previously been deployed. Choosing this option will improve the deployment time of your job. This option is recommended.\"><i class=\"glyphicon glyphicon-info-sign\"></i></a><br><br> Do you want to proceed ? ",function(result) {
 			   // Do something with result...
 
 		});		
@@ -69,7 +69,7 @@ function toggle(box,theId) {
 			
 		} else if(latestRevision != environmentRevision && doesPJobExists=="true")
 		{	
-			getConfirm("A job with the same revision already exists on the environment, Do you want to proceed ?<br><br> Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>",function(result) {
+			getConfirm("A job with the same revision already exists on the environment.<br><br> Execute as a Smart Deployment   <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"A Smart Deployment will only deploy bundles which have not previously been deployed. Choosing this option will improve the deployment time of your job. This option is recommended.\"><i class=\"glyphicon glyphicon-info-sign\"></i></a> <br><br>Do you want to proceed ?",function(result) {
 				   // Do something with result...
 
 			});		
@@ -131,13 +131,13 @@ function toggle(box,theId) {
 		var environmentRevision = optionSelected.split("/")[2];
 		environmentRevision = environmentRevision.split(",")[2];
 		var doesPJobExists = optionSelected.split("/")[3];
-		alert(doesPJobExists);
+	
 		if (environmentRevision != undefined) {
 			environmentRevision = environmentRevision.trim();
 		}
 		if (latestRevision == environmentRevision) {
 			if(doesPJobExists=="true"){
-			getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ? <br><br>Execute as a Smart Deployment?  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>',function(result) {
+			getConfirm('A job with the same revision already exists on the environment. <br><br>Execute as a Smart Deployment  <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"A Smart Deployment will only deploy bundles which have not previously been deployed. Choosing this option will improve the deployment time of your job. This option is recommended.\"><i class=\"glyphicon glyphicon-info-sign\"></i></a><br><br> Do you want to proceed ?',function(result) {
 				   // Do something with result...
 
 			});
@@ -154,7 +154,7 @@ function toggle(box,theId) {
 		}else if(latestRevision != environmentRevision && doesPJobExists=="true")
 		{			
 				
-				getConfirm('A job with the same revision already exists on the environment, Do you want to proceed ? <br><br> Execute as a Smart Deployment? <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"Execute as a Smart Deployment?\"><i class=\"glyphicon glyphicon-info-sign\"></i></a>',function(result) {
+				getConfirm('A job with the same revision already exists on the environment .<br><br> Execute as a Smart Deployment <input type=\"checkbox\" name=\"doesPreviousJobExist1\" value=\"true\" checked/> <a class=\"my-tool-tip\" data-toggle=\"tooltip\" data-placement=\"left\" data-container=\"body\" title=\"A Smart Deployment will only deploy bundles which have not previously been deployed. Choosing this option will improve the deployment time of your job. This option is recommended.\"><i class=\"glyphicon glyphicon-info-sign\"></i></a><br><br>Do you want to proceed ?',function(result) {
 					   // Do something with result...
 
 				});
