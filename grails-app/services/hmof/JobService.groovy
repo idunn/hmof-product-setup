@@ -336,23 +336,23 @@ class JobService{
 			}
 			
 			// Confirm that the Bundles not re-deployed are still on Red-Pages TODO
-			if(!bundlesToRemove.isEmpty()){
-				
-				println bundlesToRemove.getClass()
+			if(!bundlesToRemove.isEmpty()){				
 				
 				def bundleIsbnsToCheck = []
 				bundlesToRemove.each{
 					
 					def bundleId = it.contentId
+					// TODO what if we deleted locally
 					def bundleInstance = Bundle.where{id==bundleId}.get()
 					bundleIsbnsToCheck << bundleInstance.isbn
 					
 				}
 				 
+				customerLog.info "${'*'.multiply(30)} Smart-Deploy Bundle Verification ${'*'.multiply(30)}\r\n"
 				customerLog.info "Confirming the following Bundles are still on Red-Pages ${bundleIsbnsToCheck}"
 				
 				VerifyDriver verifyObjects = new VerifyDriver(deploymentUrl, bundleIsbnsToCheck, customerLog)
-				customerLog.info "Verified Job Complete!"
+				customerLog.info "Job Complete!"
 			} // end smart verification
 		}
 		catch(InterruptedException  e){

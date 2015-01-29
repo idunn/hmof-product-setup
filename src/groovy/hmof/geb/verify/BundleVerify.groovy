@@ -21,20 +21,32 @@ class BundleVerifyWork extends Page {
 	static content = {
 
 		manageBundlesLink(wait:true) { $("a", text: contains("Manage Existing eProduct Bundles"))}
-
-
+		lookupIsbnField{$("input", name: "BndlISBN")}
+		lookupButton{$("form").find("input", name: "Lookup")}
+		noBundleText(wait: 5, required:false){$("font", text: contains("No results found with provided search criteria"))}
+		homeButton {$("input", value: "Home")}
 	}
-	
-	
+
+
 	void lookupIsbn(def bundleList, Logger log){
-		
-		
-		log.info "About to Click"
-		manageBundlesLink.click()
-		
-		log.info bundleList
-		
-		log.info "Verified!"
+
+		bundleList.each{ bundleIsbn ->
+			log.debug "Checking if ${bundleIsbn} exists on Red-Pages"
+			manageBundlesLink.click()
+			lookupIsbnField.value(bundleIsbn)
+			lookupButton.click()
+
+			if (noBundleText){
+				log.error "Error - Bundle ISBN: ${bundleIsbn} has been deleted manually from Red-Pages"
+			}
+			else{
+				log.info "Success - Bundle ISBN: ${bundleIsbn} exists on Red-Pages"
+			}
+
+			homeButton.click()
+		}
+
+		log.info "Smart-Deploy Bundle verification has been completed."
 	}
 
 }

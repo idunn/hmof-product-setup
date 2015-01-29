@@ -34,10 +34,10 @@ class ProgramController {
 	def deploy(){
 
 		def instanceDetail = params.instanceDetail
-	
+
 		def instanceDetails = instanceDetail.split("/")
 		def instanceId = instanceDetails[0]
-		
+
 		log.info("Program Detail: "+instanceId)
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
@@ -48,14 +48,14 @@ class ProgramController {
 		log.info("deploymentJobNumber: "+deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
-		
+
 		def doesPreviousJobExist1 =params.doesPreviousJobExist1
-		
+
 		boolean previousJobExist=false
-		if(doesPreviousJobExist1!=null){		
-		previousJobExist=true
+		if(doesPreviousJobExist1!=null){
+			previousJobExist=true
 		}
-		
+
 		log.info("userId: "+userId)
 		log.info("contentId: "+programInstance.id)
 		log.info("contentTypeId: "+programInstance.contentType.contentId)
@@ -107,7 +107,7 @@ class ProgramController {
 		def instanceDetail = params.instanceToBePromoted
 		def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = instanceDetails[0]
-		
+
 		def programInstance = Program.get(instanceToBePromoted)
 		log.info("Promoting programInstance name: "+programInstance.name)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -124,11 +124,12 @@ class ProgramController {
 			return
 		}
 		def doesPreviousJobExist1 =params.doesPreviousJobExist1
-		
+
 		boolean previousJobExist=false
 		if(doesPreviousJobExist1!=null){
-		previousJobExist=true
+			previousJobExist=true
 		}
+
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 		log.info("jobNumber:"+promotionInstance.getJobNumber())
 		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
@@ -150,7 +151,7 @@ class ProgramController {
 			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending]
+			promotionJobInstance.properties = [status:JobStatus.Pending, smartDeploy:previousJobExist]
 
 		}
 

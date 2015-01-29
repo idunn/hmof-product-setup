@@ -17,7 +17,7 @@ class VerifyDriver {
 
 
     /**
-     * Start an instance of PhantomJs
+     * Start an instance of PhantomJs and verify the Bundles are on Red-Pages
      * @param url
      * @param objectsToVerify
      * @param log
@@ -25,8 +25,7 @@ class VerifyDriver {
      */
 	def driveBrowser(def url, def objectsToVerify, Logger log){
 
-		String directUrl = url + "/hrw/ecom/admin_hub.jsp"
-		println directUrl
+		String directUrl = url + "/hrw/ecom/admin_hub.jsp"		
 
 		try{
 			Browser.drive{				
@@ -41,11 +40,8 @@ class VerifyDriver {
 		}catch(Exception e){
 
 			def cachedDriver = CachingDriverFactory.clearCacheAndQuitDriver()
-			println "Exception in Geb: " + e
+			log.error "Exception in Geb: " + e
 			throw e
-
 		}
-
 	}
-
 }
