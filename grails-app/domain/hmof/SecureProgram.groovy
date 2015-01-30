@@ -87,7 +87,7 @@ class SecureProgram implements Comparable {
 
 		productName (blank:false,nullable:false)
 
-		registrationIsbn (blank: false,nullable:false, unique: true)
+		registrationIsbn (blank: false,nullable:false,matches:/(97(8|9))[0-9]{10}|\d{9}(\d|X)$/, unique: true)
 		onlineIsbn (blank: false,nullable:false)
 
 		dateCreated ()

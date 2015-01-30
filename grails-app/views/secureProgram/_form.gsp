@@ -22,7 +22,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'registrationIsbn', 'error-field')} required ">
 				<label for="registrationIsbn" class="control-label col-sw-1"><g:message code="secureProgram.registrationIsbn.label" default="Registration Isbn" /><span class="required-indicator">*</span></label>
 				<div class="col-md-4 margin1" >
-					<g:textField class="form-control" name="registrationIsbn" maxlength="10" required="" value="${secureProgramInstance?.registrationIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="10-digit Print ISBN that is used in the Teacher's Edition Book"/>
+					<g:textField class="form-control" name="registrationIsbn" maxlength="13" required="" value="${secureProgramInstance?.registrationIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="10-digit Print ISBN  or 13-digit ISBN that is used in the Teacher's Edition Book"/>
 					
 				</div>
 			</div>
