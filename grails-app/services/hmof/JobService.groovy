@@ -88,9 +88,11 @@ class JobService{
 					if (!previousJob.isEmpty() && smartDeploy){
 
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
-						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program "
-						customerLog.info "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
-						customerLog.debug "${bundlesToRemove.size()} from a total of ${bundle.size()} Bundles will not be redeployed in this Job" +"\r\n"
+						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program"						
+						customerLog.info "There are a total of: ${bundle.size()} Bundles in this Job"
+						customerLog.info "There are a total of: ${bundlesToRemove.size()} Bundles that will not be redeployed as part of this Smart-Deployment \r\n"
+						customerLog.debug "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
+						
 
 						// removes bundles from current job
 						bundle = bundle - bundlesToRemove

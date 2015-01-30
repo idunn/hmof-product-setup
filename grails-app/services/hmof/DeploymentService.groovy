@@ -33,11 +33,12 @@ class DeploymentService {
 		// needed for MySql
 		if (!previousJobNumbers.isEmpty()){
 
-			// There needs to be more than one successful promotion Instance to guarantee a previous Job for any Environment
-			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()
-
-			if (promotionList.size()>1){return true}
-			return false
+			// If the environment has 1 or more promotion instance it has a previous Job
+			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()			
+			
+			if(promotionList.size()>=1)	{ return true }
+			
+			return false			
 		}
 
 		return false
