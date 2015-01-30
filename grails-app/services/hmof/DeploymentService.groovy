@@ -27,21 +27,17 @@ class DeploymentService {
 	 */
 	Boolean doesPreviousJobExist(def programInstanceNumber, def envId){
 
-		def lastJob = []
-
+		// get all Job Numbers from the Job Table for this Program
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 }.list().jobNumber
 
 		// needed for MySql
 		if (!previousJobNumbers.isEmpty()){
 
-			def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			// There needs to be more than one successful promotion Instance to guarantee a previous Job for any Environment
+			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()
 
-			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
-
-			lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
-
-			if (lastJob.isEmpty()){	return false }
-			return true
+			if (promotionList.size()>1){return true}
+			return false
 		}
 
 		return false
@@ -77,6 +73,7 @@ class DeploymentService {
 
 	/**
 	 * Return a List of Bundle job instances that were previously pushed for the same Program to the Users Environment
+	 * Will only be called if doesPreviousJobExist() method returns true
 	 * @param programInstanceNumber
 	 * @param currentJobNumber
 	 * @return
@@ -85,11 +82,11 @@ class DeploymentService {
 
 		def lastJob = []
 
-		def previousJobNumbers = Job.where{contentId==programInstanceNumber && jobNumber < currentJobNumber }.list().jobNumber
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 && jobNumber < currentJobNumber}.list().jobNumber
 
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
-			def theJob = Promotion.where{jobNumber in previousJobNumbers && status=='Success' &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 
 			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
 
