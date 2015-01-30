@@ -29,7 +29,7 @@ class DeploymentService {
 
 		def lastJob = []
 
-		def previousJobNumbers = Job.where{contentId==programInstanceNumber }.list().jobNumber
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 }.list().jobNumber
 
 		// needed for MySql
 		if (!previousJobNumbers.isEmpty()){
