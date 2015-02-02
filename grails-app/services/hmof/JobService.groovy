@@ -34,8 +34,7 @@ class JobService{
 	 */
 	Boolean processJobs(def jobs, def promotionInstance) {
 		String cObjectName=""
-		String spProductName=""
-		String bundleName=""
+		String spProductName=""		
 		def isbn=""
 		def secureIsbn=""
 		def bundleIsbn=""
@@ -64,7 +63,7 @@ class JobService{
 			log.debug "cacheLocation" + cacheLocation
 			log.debug "The deployment Url is: " + deploymentUrl
 
-			// used in external logs
+			// used in external logs and smart-deploy
 			if (!program.isEmpty()){
 
 				program.each{
@@ -88,18 +87,19 @@ class JobService{
 					if (!previousJob.isEmpty() && smartDeploy){
 
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
-						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program"						
+						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program"
 						customerLog.info "There are a total of: ${bundle.size()} Bundles in this Job"
 						customerLog.info "There are a total of: ${bundlesToRemove.size()} Bundles that will not be redeployed as part of this Smart-Deployment \r\n"
 						customerLog.debug "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
-						
+
 
 						// removes bundles from current job
 						bundle = bundle - bundlesToRemove
 					}
 				}
-			}
+			} //end Program
 
+			// used only to initialize logs
 			if (program.isEmpty() && !bundle.isEmpty()){
 
 				bundle.each{
@@ -114,8 +114,9 @@ class JobService{
 					customerLog = initializeLogger(bundleIsbn, cacheLocation,envId,2)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 				}
-			}
+			} // end bundle log initializer
 
+			// used only to initialize SP logs
 			if (program.isEmpty() && bundle.isEmpty() && !secureProgram.isEmpty()){
 
 				secureProgram.each{
@@ -130,7 +131,7 @@ class JobService{
 					customerLog = initializeLogger(secureIsbn, cacheLocation,envId,3)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 				}
-			}
+			}// end SP log initializer
 
 			// Deployment Logic
 			if(!commerceObject.isEmpty()){
@@ -217,143 +218,27 @@ class JobService{
 			// Deploy Bundle with its child associations
 			if (!bundle.isEmpty()){
 
-				bundle.each{
-
-					Long instanceNumber = it.contentId
-					Long revisionNumber = it.revision
-					def mapOfChildren = it.children
-					Long jobNumber = it.jobNumber
-					def benversInstanceToDeploy
-					def childMap = [:]
-
-
-					customerLog.info"${'*'.multiply(40)} Bundles and Associations ${'*'.multiply(40)}\r\n"
-					log.debug "Map Of Children: " + mapOfChildren
-
-
-					// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
-					def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
-
-					if (bundleInstance instanceof hmof.Bundle){
-
-						benversInstanceToDeploy = bundleInstance.findAtRevision(revisionNumber.toInteger())
-						bundleName=benversInstanceToDeploy.toString()
-						bundleIsbn=bundleInstance.isbn
-					}
-					else{
-
-						log.warn"Promoting deleted Bundle from Envers"
-						// Get the properties we are interested in
-						benversInstanceToDeploy = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-						bundleIsbn=bundleInstance.isbn
-					}
-
-
-
-					Boolean includePremium = benversInstanceToDeploy.includePremiumCommerceObjects
-					customerLog.info "Bundle is Premium: $includePremium"
-
-					// Turn map of Strings into map of content child objects
-					mapOfChildren.each{
-
-						def secureProgramId = it.key
-						def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
-
-
-						log.debug "secureProgram Id: " + secureProgramId
-
-						def secureProgramInstance= SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
-						def spEnversInstance
-
-
-						if (secureProgramInstance instanceof hmof.SecureProgram){
-
-							spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
-						}
-
-						else{
-							log.warn"Promoting deleted Secure Program for Bundle from Envers"
-							def secureProgramMap = createSecureProgramMap(secureProgramInstance)
-							spEnversInstance = new SecureProgram(secureProgramMap)
-						}
-
-						def commerceObjectValue = it.value
-						List commerceObjectIds = []
-						// Commerce Object Values example "6,8,12" or "12"
-						if (commerceObjectValue.contains(",")){							
-							commerceObjectIds = commerceObjectValue.split(',')							
-						}else {					
-							commerceObjectIds << commerceObjectValue
-							 }
-						
-						log.info "Commerce Object IDs " + commerceObjectIds
-						customerLog.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
-
-						def listOfCommerceObjects = []
-						
-						customerLog.info commerceObjectValue!=""
-						if(commerceObjectValue!=""){
-						commerceObjectIds.each{
-
-							def commerceObjectId = it
-							def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
-
-							def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
-							def coEnversInstance
-
-							if (commerceObjectInstance instanceof hmof.CommerceObject){
-								coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
-							}
-
-							else{
-								log.warn"Promoting deleted Commerce Object for Bundle from Envers"
-								def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
-								coEnversInstance = new CommerceObject(commerceObjectMap)
-							}
-
-							// Handle Premium Commerce Objects
-							if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
-
-								listOfCommerceObjects << coEnversInstance
-
-							}
-						}
-						}
-						childMap << [(spEnversInstance):listOfCommerceObjects]
-						customerLog.info "child Map of Objects being sent to Geb: " + childMap
-
-						}
-						
-
-					
-					
-					// Pass data to Geb
-					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, benversInstanceToDeploy, childMap,customerLog)
-
-					customerLog.info "${'*'.multiply(40)} Finished Deploying Bundle ${'*'.multiply(40)}\r\n"
-					customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
-					log.debug("promotionId:"+promotionInstance.id)
-					customerLog.info("Job Status: Success\r\n")
-				}
+				deployBundles(bundle, customerLog, secureProgram, commerceObject, deploymentUrl )
 			}
-			
+
 			// Confirm that the Bundles not re-deployed are still on Red-Pages TODO
-			if(!bundlesToRemove.isEmpty()){				
-				
-				def bundleIsbnsToCheck = []
-				bundlesToRemove.each{
-					
-					def bundleId = it.contentId
-					// TODO what if we deleted locally
-					def bundleInstance = Bundle.where{id==bundleId}.get()
-					bundleIsbnsToCheck << bundleInstance.isbn
-					
-				}
-				 
+			if(!bundlesToRemove.isEmpty()){
+
 				customerLog.info "${'*'.multiply(30)} Smart-Deploy Bundle Verification ${'*'.multiply(30)}\r\n"
-				customerLog.info "Confirming the following Bundles are still on Red-Pages ${bundleIsbnsToCheck}"
-				
-				VerifyDriver verifyObjects = new VerifyDriver(deploymentUrl, bundleIsbnsToCheck, customerLog)
+
+				// Send in jobs
+				def verifyObjects = new VerifyDriver(deploymentUrl, bundlesToRemove, customerLog)
+
+				def redeployBundles = verifyObjects.bundlesToRedeploy
+
+				if (!redeployBundles.isEmpty()){
+
+					customerLog.info "Manually Deleted  Bundles are being recreated in Red-Pages..."
+
+					deployBundles(redeployBundles, customerLog, secureProgram, commerceObject, deploymentUrl)
+
+				}
+
 				customerLog.info "Job Complete!"
 			} // end smart verification
 		}
@@ -373,11 +258,126 @@ class JobService{
 		return true
 	}
 
+
+	/**
+	 * Helper Method to deploy the Bundles via Geb Browser 
+	 */
+	def deployBundles(def bundleList, Logger customerLog, def secureProgram, def commerceObject, def deploymentUrl){
+
+		bundleList.each{			
+
+			Long instanceNumber = it.contentId
+			Long revisionNumber = it.revision
+			def mapOfChildren = it.children
+			Long jobNumber = it.jobNumber
+			def bundleContent
+			def childMap = [:]
+
+			customerLog.info"${'*'.multiply(30)} Bundles and Associations ${'*'.multiply(30)}\r\n"
+			log.debug "Map Of Children: " + mapOfChildren
+
+
+			// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
+			def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
+
+			if (bundleInstance instanceof hmof.Bundle){
+
+				bundleContent = bundleInstance.findAtRevision(revisionNumber.toInteger())				
+			}
+			else{
+
+				log.warn"Promoting deleted Bundle from Envers"
+				// Get the properties we are interested in
+				bundleContent = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
+				
+			}
+
+			Boolean includePremium = bundleContent.includePremiumCommerceObjects
+			customerLog.info "Bundle is Premium: $includePremium"
+
+			// Turn map of Strings into map of content child objects
+			mapOfChildren.each{
+
+				def secureProgramId = it.key
+				def secureProgramRev = getRevisionNumber(secureProgramId, secureProgram)
+
+				log.debug "secureProgram Id: " + secureProgramId
+
+				def secureProgramInstance = SecureProgram.where{id==secureProgramId}.get()?: utilityService.getDeletedObject(secureProgramId, secureProgramRev, 3)
+				def spEnversInstance
+
+				if (secureProgramInstance instanceof hmof.SecureProgram){
+
+					spEnversInstance = secureProgramInstance.findAtRevision(revisionNumber.toInteger())
+				}
+
+				else{
+					log.warn"Promoting deleted Secure Program for Bundle from Envers"
+					def secureProgramMap = createSecureProgramMap(secureProgramInstance)
+					spEnversInstance = new SecureProgram(secureProgramMap)
+				}
+
+				def commerceObjectValue = it.value
+				List commerceObjectIds = []
+				// Commerce Object Values example "6,8,12" or "12"
+				if (commerceObjectValue.contains(",")){
+					commerceObjectIds = commerceObjectValue.split(',')
+				}else {
+					commerceObjectIds << commerceObjectValue
+				}
+
+				log.info "Commerce Object IDs " + commerceObjectIds
+				customerLog.info "Total Number of Custom Commerce Objects: " +  commerceObjectIds.size()
+
+				def listOfCommerceObjects = []
+
+				customerLog.info commerceObjectValue!=""
+				if(commerceObjectValue!=""){
+					commerceObjectIds.each{
+
+						def commerceObjectId = it
+						def commerceObjectRev = getRevisionNumber(commerceObjectId, commerceObject)
+
+						def commerceObjectInstance = CommerceObject.where{id==commerceObjectId}.get()?: utilityService.getDeletedObject(commerceObjectId, commerceObjectRev, 4)
+						def coEnversInstance
+
+						if (commerceObjectInstance instanceof hmof.CommerceObject){
+							coEnversInstance = commerceObjectInstance.findAtRevision(revisionNumber.toInteger())
+						}
+
+						else{
+							log.warn"Promoting deleted Commerce Object for Bundle from Envers"
+							def commerceObjectMap = createCommerceObjectMap(commerceObjectInstance)
+							coEnversInstance = new CommerceObject(commerceObjectMap)
+						}
+
+						// Handle Premium Commerce Objects
+						if (!coEnversInstance.isPremium || coEnversInstance.isPremium && includePremium){
+
+							listOfCommerceObjects << coEnversInstance
+						}
+					}
+				}
+				
+				childMap << [(spEnversInstance):listOfCommerceObjects]
+				customerLog.info "child Map of Objects being sent to Geb: " + childMap
+			}
+			
+			// Pass data to Geb
+			RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, bundleContent, childMap,customerLog)
+
+			customerLog.info "${'*'.multiply(30)} Finished Deploying Bundle ${'*'.multiply(30)}\r\n"
+			customerLog.info"${'*'.multiply(30)} Status ${'*'.multiply(30)}\r\n"			
+			customerLog.info("Job Status: Success\r\n")
+		}
+	}
+
+
 	/**
 	 * Helper method to create Log file Header
 	 */
 	Logger getLogHeader(Logger customerLogs, def envId, def jobNumber, def user_Name, envName ){
-		
+
 		if(envId==1){
 			customerLogs.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
 			customerLogs.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")

@@ -7,33 +7,36 @@ import org.apache.log4j.Logger
 
 class VerifyDriver {
 
+	def bundlesToRedeploy = []
+
 
 	VerifyDriver(def url, def objectsToVerify, Logger log){
 
 		def cachedDriver = CachingDriverFactory.clearCache()
-		log.debug "cachedDriver :" + cachedDriver + "\r\n"		
+		log.debug "cachedDriver :" + cachedDriver + "\r\n"
 		driveBrowser(url, objectsToVerify, log)
 	}
 
 
-    /**
-     * Start an instance of PhantomJs and verify the Bundles are on Red-Pages
-     * @param url
-     * @param objectsToVerify
-     * @param log
-     * @return
-     */
+	/**
+	 * Start an instance of PhantomJs and verify the Bundles are on Red-Pages
+	 * @param url
+	 * @param objectsToVerify
+	 * @param log
+	 * @return
+	 */
 	def driveBrowser(def url, def objectsToVerify, Logger log){
 
-		String directUrl = url + "/hrw/ecom/admin_hub.jsp"		
+		String directUrl = url + "/hrw/ecom/admin_hub.jsp"
 
 		try{
-			Browser.drive{				
+			Browser.drive{
 
 				BundleVerifyWork bvw = new BundleVerifyWork()
-				bvw.initBaseUrl(directUrl, log)				
+				bvw.initBaseUrl(directUrl, log)
 				to BundleVerifyWork
-				lookupIsbn (objectsToVerify, log)
+				bundlesToRedeploy = lookupIsbn (objectsToVerify, log)
+
 
 			}.quit() // quit is important in a multi-threaded application
 

@@ -3,6 +3,7 @@ package hmof.geb.verify
 import org.apache.log4j.Logger
 import geb.*
 import geb.Page
+import hmof.*
 
 /**
  * Class that Uses Geb to verify that the Bundles exist
@@ -27,26 +28,41 @@ class BundleVerifyWork extends Page {
 		homeButton {$("input", value: "Home")}
 	}
 
+	/**
+	 * Return the list of Bundles that have been manually deleted
+	 * @param bundleList
+	 * @param log
+	 * @return
+	 */
+	def lookupIsbn(def bundleList, Logger log){
 
-	void lookupIsbn(def bundleList, Logger log){
+		def bundlesToRedeploy = []
 
-		bundleList.each{ bundleIsbn ->
-			log.debug "Checking if ${bundleIsbn} exists on Red-Pages"
+		bundleList.each{
+
+			def bundleId = it.contentId
+			// TODO what if we deleted locally
+			def bundleInstance = Bundle.where{id==bundleId}.get()
+
+			log.debug "Checking if ${bundleInstance.isbn} exists on Red-Pages"
 			manageBundlesLink.click()
-			lookupIsbnField.value(bundleIsbn)
+			lookupIsbnField.value(bundleInstance.isbn)
 			lookupButton.click()
 
 			if (noBundleText){
-				log.error "Error - Bundle ISBN: ${bundleIsbn} has been deleted manually from Red-Pages"
+				log.error "Error - Bundle ISBN: ${bundleInstance.isbn} has been deleted manually from Red-Pages"
+				bundlesToRedeploy << it
 			}
 			else{
-				log.info "Success - Bundle ISBN: ${bundleIsbn} exists on Red-Pages"
+				log.info "Success - Bundle ISBN: ${bundleInstance.isbn} exists on Red-Pages"
 			}
 
 			homeButton.click()
 		}
 
 		log.info "Smart-Deploy Bundle verification has been completed."
+
+		return bundlesToRedeploy
 	}
 
 }
