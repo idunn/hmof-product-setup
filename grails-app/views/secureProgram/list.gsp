@@ -36,11 +36,7 @@
 			
 				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
 				
-				<th>${'Dev'}</th>
-				
-				<th>${'QA'}</th>
-				
-				<th>${'Prod'}</th>
+			  <g:render template="/_common/templates/headerEnv"/>
 			
 			</tr>
 		</thead>
@@ -128,15 +124,16 @@
 		</g:each>
 		</tbody>
 	</table>
-	
+	<g:if test="${jobdetails.getUserEnvironmentInformation()==1}">
 	<sec:ifAnyGranted roles="ROLE_PM">
 	<g:actionSubmit style="color: #ffffff;background-color: #428bca;border-color: #357ebd;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;" value="Deploy" onClick="return deploy()"/>
 	</sec:ifAnyGranted>
-	
+	</g:if>
+	<g:if test="${jobdetails.getUserEnvironmentInformation()==2 || jobdetails.getUserEnvironmentInformation()==3}">
 	<sec:ifAnyGranted roles="ROLE_QA, ROLE_PROD">
 	<g:actionSubmit style="color: #ffffff;background-color: #428bca;border-color: #357ebd;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;" value="Promote" onClick="return promote()"/>
 	</sec:ifAnyGranted>
-	
+	</g:if>
 	<%-- Required to pass to JavaScript --%>
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>

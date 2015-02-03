@@ -27,9 +27,10 @@ class DeploymentService {
 	 */
 	Boolean doesPreviousJobExist(def programInstanceNumber, def envId){
 
+
 		// get all Job Numbers from the Job Table for this Program
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 }.list().jobNumber
-
+	
 		// needed for MySql
 		if (!previousJobNumbers.isEmpty()){
 
@@ -43,7 +44,7 @@ class DeploymentService {
 
 		return false
 	}
-
+	
 	/**
 	 * Compare the current Bundle job instances to the previous job instances and return the current bundles that are the same	 
 	 * @param currentJobBundles
@@ -258,14 +259,39 @@ class DeploymentService {
 	 */
 	def getUserEnvironmentInformation(){
 
-		// get role of user
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
+	
+	
+		def authStr = authorities.toString().replace("[","")
+		def authStr1 = authStr.replace("]","")
+		def authStr2 = authStr1.replace(", ",",")
+		
+		
+	    String[] authString = authStr2.split(",")	
+		List<String> authList = Arrays.asList(authString); 
+		
+		def roleList = []
 		// get role id of user
-		def roleId = Role.where{authority==authorities}.get()
-		def envName = getEnvironmentName(roleId.id)
-		def envId = Environment.where{name==envName}.get()
-
+		 roleList = Role.where{authority in authList}.list()
+		List<String> arr = new ArrayList<String>();
+		for (Role temp : roleList) {							
+			def envName = getEnvironmentName(temp.id)			
+			if(envName!=null){			
+			arr.add(envName);
+			}
+			
+		}
+		if(arr.contains("Dev")){		
+		def envId = Environment.where{name=="Dev"}.get()		
+		envId.id
+		}else if(arr.contains("QA")){		
+		def envId = Environment.where{name=="QA"}.get()		
+		envId.id
+		}else if(arr.contains("Production")){
+		def envId = Environment.where{name=="Production"}.get()		
+		envId.id
+		}
 	}
 	/**
 	 * Get the Environment associated with the User
@@ -276,11 +302,38 @@ class DeploymentService {
 		// get role of user
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
+	
+	
+		def authStr = authorities.toString().replace("[","")
+		def authStr1 = authStr.replace("]","")
+		def authStr2 = authStr1.replace(", ",",")
+		
+		
+	    String[] authString = authStr2.split(",")	
+		List<String> authList = Arrays.asList(authString); 
+		
+		def roleList = []
 		// get role id of user
-		def roleId = Role.where{authority==authorities}.get()
-		def envName = getEnvironmentName(roleId.id)
-		def envId = Environment.where{name==envName}.get()
+		 roleList = Role.where{authority in authList}.list()
+		List<String> arr = new ArrayList<String>();
+		for (Role temp : roleList) {							
+			def envName = getEnvironmentName(temp.id)			
+			if(envName!=null){			
+			arr.add(envName);
+			}
+			
+		}
+		if(arr.contains("Dev")){		
+		def envId = Environment.where{name=="Dev"}.get()		
 		envId.id
+		}else if(arr.contains("QA")){		
+		def envId = Environment.where{name=="QA"}.get()		
+		envId.id
+		}else if(arr.contains("Production")){
+		def envId = Environment.where{name=="Production"}.get()		
+		envId.id
+		}
+		
 	}
 	/**
 	 * Helper Method If Prod User then return 2 if QA user then return 1
@@ -305,7 +358,7 @@ class DeploymentService {
 	 */
 	def getDeployedInstance(instanceId, environment) {
 
-		def environmentToCheck = getPreviousEnvironment(environment.id)
+		def environmentToCheck = getPreviousEnvironment(environment)
 		def previousEnvironment = Environment.where{id==environmentToCheck}.get()
 		log.info "Previous Environment: " +  previousEnvironment
 

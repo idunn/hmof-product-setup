@@ -151,7 +151,7 @@ class SecureProgramController {
 
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 		log.info("jobNumber:"+promotionInstance.getJobNumber())
-		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
+		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId}}.get()?:none
 
 		if(promotionJobInstance==none){
 

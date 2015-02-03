@@ -114,6 +114,7 @@ class ProgramController {
 
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("User Id: "+userId+",envId:"+envId)
+	
 		def promotionInstance = deploymentService.getDeployedInstance(programInstance, envId)
 
 		if(promotionInstance==null){
@@ -132,7 +133,7 @@ class ProgramController {
 
 		def jobInstance = Job.where{id == promotionInstance.jobId}.get()
 		log.info("jobNumber:"+promotionInstance.getJobNumber())
-		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId.id}}.get()?:none
+		def promotionJobInstance = Promotion.where{jobNumber==promotionInstance.getJobNumber() && environments{id == envId}}.get()?:none
 
 		if(promotionJobInstance==none){
 
