@@ -53,12 +53,11 @@ class BundleVerifyWork extends Page {
 				
 				bundleContent = bundleInstance.findAtRevision(revisionNumber.toInteger())
 			}
-			else{
-
-				log.warn"Promoting deleted Bundle from Envers"
+			else{				
 				// Get the properties we are interested in
 				bundleContent = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-			}
+				log.warn"Retrieving deleted Bundle: ${bundleContent.isbn} from the Bundle Audit Table"
+				}
 
 			log.debug "Checking if ${bundleContent.isbn} exists on Red-Pages"
 			manageBundlesLink.click()
@@ -66,7 +65,7 @@ class BundleVerifyWork extends Page {
 			lookupButton.click()
 
 			if (noBundleText){
-				log.error "Error - Bundle ISBN: ${bundleContent.isbn} has been deleted manually from Red-Pages"
+				log.error "Warning - Bundle ISBN: ${bundleContent.isbn} has been deleted manually from Red-Pages"
 				bundlesToRedeploy << it
 			}
 			else{
