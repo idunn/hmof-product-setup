@@ -4,6 +4,7 @@ import org.apache.log4j.Logger
 import geb.*
 import geb.Page
 import hmof.*
+import grails.util.Holders
 
 /**
  * Class that Uses Geb to verify that the Bundles exist
@@ -11,6 +12,8 @@ import hmof.*
  *
  */
 class BundleVerifyWork extends Page {
+
+	def utilityService = Holders.grailsApplication.mainContext.getBean 'utilityService'
 
 	def initBaseUrl(def baseUrl, Logger log){
 		log.info "Base Url: " + baseUrl
@@ -40,21 +43,34 @@ class BundleVerifyWork extends Page {
 
 		bundleList.each{
 
-			def bundleId = it.contentId
-			// TODO what if we deleted locally
-			def bundleInstance = Bundle.where{id==bundleId}.get()
+			Long bundleId = it.contentId
+			Long revisionNumber = it.revision
+			def bundleContent
 
-			log.debug "Checking if ${bundleInstance.isbn} exists on Red-Pages"
+			def bundleInstance = Bundle.where{id==bundleId}.get()?: utilityService.getDeletedObject(bundleId, revisionNumber, 2)
+
+			if (bundleInstance instanceof hmof.Bundle){
+				
+				bundleContent = bundleInstance.findAtRevision(revisionNumber.toInteger())
+			}
+			else{
+
+				log.warn"Promoting deleted Bundle from Envers"
+				// Get the properties we are interested in
+				bundleContent = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
+			}
+
+			log.debug "Checking if ${bundleContent.isbn} exists on Red-Pages"
 			manageBundlesLink.click()
-			lookupIsbnField.value(bundleInstance.isbn)
+			lookupIsbnField.value(bundleContent.isbn)
 			lookupButton.click()
 
 			if (noBundleText){
-				log.error "Error - Bundle ISBN: ${bundleInstance.isbn} has been deleted manually from Red-Pages"
+				log.error "Error - Bundle ISBN: ${bundleContent.isbn} has been deleted manually from Red-Pages"
 				bundlesToRedeploy << it
 			}
 			else{
-				log.info "Success - Bundle ISBN: ${bundleInstance.isbn} exists on Red-Pages"
+				log.info "Success - Bundle ISBN: ${bundleContent.isbn} exists on Red-Pages"
 			}
 
 			homeButton.click()

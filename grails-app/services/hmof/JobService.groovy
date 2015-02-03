@@ -221,7 +221,7 @@ class JobService{
 				deployBundles(bundle, customerLog, secureProgram, commerceObject, deploymentUrl )
 			}
 
-			// Confirm that the Bundles not re-deployed are still on Red-Pages TODO
+			// Verify that the Bundles we did not deploy are still on Red-Pages
 			if(!bundlesToRemove.isEmpty()){
 
 				customerLog.info "${'*'.multiply(30)} Smart-Deploy Bundle Verification ${'*'.multiply(30)}\r\n"
@@ -233,14 +233,14 @@ class JobService{
 
 				if (!redeployBundles.isEmpty()){
 
-					customerLog.info "Manually Deleted  Bundles are being recreated in Red-Pages..."
+					customerLog.info "Manually Deleted Bundles are being recreated in Red-Pages..."
 
 					deployBundles(redeployBundles, customerLog, secureProgram, commerceObject, deploymentUrl)
 
 				}
 
 				customerLog.info "Job Complete!"
-			} // end smart verification
+			} // end Smart-Deploy Verification
 		}
 		catch(InterruptedException  e){
 
