@@ -2,10 +2,12 @@ package hmof
 
 public enum JobStatus {
 	Pending("Pending"),
+	Pending_Repromote("Pending_Repromote"),
 	In_Progress("In_Progress"),
 	Success("Success"),
 	Failed("Failed"),
-	Failure("Failure") // TODO remove
+	Repromoting("Repromoting"),
+	//Failure("Failure") // TODO remove
 
 	String status
 

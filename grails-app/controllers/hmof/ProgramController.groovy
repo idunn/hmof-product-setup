@@ -141,7 +141,8 @@ class ProgramController {
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString()){
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString() || 
+		promotionJobInstance.status == JobStatus.Pending_Repromote.toString() || promotionJobInstance.status == JobStatus.Repromoting.toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
@@ -152,7 +153,7 @@ class ProgramController {
 			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending, smartDeploy:previousJobExist]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote, smartDeploy:previousJobExist]
 
 		}
 

@@ -88,7 +88,7 @@ class DeploymentService {
 
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
-			def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success || status==JobStatus.Repromoting &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 
 			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
 
@@ -443,37 +443,46 @@ class DeploymentService {
 	def executeJob(){
 
 		// get first instance in pending status
-		def promotionJobInstance = Promotion.where{status == JobStatus.Pending }.list(max:1)
+		def promotionJobInstance = Promotion.where{status == JobStatus.Pending || status == JobStatus.Pending_Repromote }.list(max:1)
+		println "promotionJobInstance" + promotionJobInstance
 		def promotionJobNumber =  promotionJobInstance.jobNumber
+		
+		println "promotionJobNumber" + promotionJobNumber
 
 		def jobList = Job.where{jobNumber == promotionJobNumber}.list()
 
 		if(!promotionJobInstance.isEmpty()){
-			Long promotionJobId =  promotionJobInstance.id[0]
-			def promotionJobStatus = Promotion.findByStatus(JobStatus.Pending)
-
-			//  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
-			//  This should prevent any other threads picking up the deployment anyway
+			Long promotionJobId =  promotionJobInstance.id[0]			
+			
+			/*def promotionJobStatus = Promotion.findByStatus(JobStatus.Pending)			
+				//  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
+				//  This should prevent any other threads picking up the deployment anyway
 			promotionJobStatus.discard()
-			promotionJobStatus = Promotion.lock(promotionJobId)
-
-			def status1 = JobStatus.In_Progress
-
+			promotionJobStatus = Promotion.lock(promotionJobId)	*/		
+			
 			def promotionInstance = Promotion.get(promotionJobId)
+			promotionInstance.discard()
+			promotionInstance.lock()
+			
+			def statusStart = null			
+			
+			if (promotionInstance.status==JobStatus.Pending_Repromote.toString()){				
+				statusStart = JobStatus.Repromoting				
+			}else { statusStart = JobStatus.In_Progress	}
 
-			promotionInstance.properties = [status: status1]
-			promotionInstance.save(failOnError: true, flush:true)
+			promotionInstance.properties = [status: statusStart]
+			promotionInstance.save(failOnError: true, flush:true)			
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
 
-			def status2 = null
+			def statusFinish = null
 
 			if (processJobs){
-				status2 = JobStatus.Success
-			} else {status2 = JobStatus.Failed}
+				statusFinish = JobStatus.Success
+			} else {statusFinish = JobStatus.Failed}
 
 			// return map
-			def results = [status: status2, promotionId:promotionJobInstance.id]
+			def results = [status: statusFinish, promotionId:promotionJobInstance.id]
 		}
 
 	}
