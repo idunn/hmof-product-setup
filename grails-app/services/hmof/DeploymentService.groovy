@@ -83,20 +83,28 @@ class DeploymentService {
 	def getPreviousJob( def programInstanceNumber, def currentJobNumber, def envId ){
 
 		def lastJob = []
-
-		// changed to <=current Job
+		// TODO
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 && jobNumber <= currentJobNumber}.list().jobNumber
+		log.info "previous Job Numbers: ${previousJobNumbers}"
 
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
-			def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success || status==JobStatus.Repromoting &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
-
+			def test = Promotion.where {jobNumber in previousJobNumbers}.list()
+			log.info"Test##########################1: ${test}"
+			
+			//def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success || status==JobStatus.Repromoting &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && (status==JobStatus.Success || status==JobStatus.Repromoting) &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			
 			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+			
+			println "Current Job is: ${currentJobNumber} and is being compared to ${theJobNumber}"
+			log.info"Current Job is: ${currentJobNumber} and is being compared to ${theJobNumber}"
 
 			// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
 			return lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 2}.list()
-		}
-
+		}		
+		
 		return lastJob
 	}
 
