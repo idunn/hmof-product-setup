@@ -25,7 +25,7 @@ class Promotion {
 
 	static constraints = {
 		
-		smartDeploy nullable:true
+		smartDeploy nullable:false
 	}
 
 	public String toString() {
