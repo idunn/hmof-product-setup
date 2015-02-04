@@ -41,11 +41,11 @@ class ProgramController {
 		log.info("Program Detail: "+instanceId)
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
-		log.info("childContent: "+childContent)
+		log.debug("childContent: "+childContent)
 		def programInstance = Program.get(instanceId)
-		log.info("Deploying programInstance name: "+programInstance.name)
+		log.debug("Deploying programInstance name: "+programInstance.name)
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-		log.info("deploymentJobNumber: "+deploymentJobNumber)
+		log.debug("deploymentJobNumber: "+deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
 
@@ -56,15 +56,15 @@ class ProgramController {
 			previousJobExist=true
 		}
 
-		log.info("userId: "+userId)
-		log.info("contentId: "+programInstance.id)
-		log.info("contentTypeId: "+programInstance.contentType.contentId)
+		log.debug("userId: "+userId)
+		log.debug("contentId: "+programInstance.id)
+		log.debug("contentTypeId: "+programInstance.contentType.contentId)
 		// Create a map of job data to persist
 		def job = [contentId: programInstance.id, revision: deploymentService.getCurrentEnversRevision(programInstance), contentTypeId: programInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
 		// Add Program instance to Job
 		Job j1 = new Job(job).save(failOnError:true)
-		log.info("Successfully added Program Instance to job : "+programInstance.name)
+		log.debug("Successfully added Program Instance to job : "+programInstance.name)
 		childContent.each{
 			log.info("Adding child content to job content id"+it.id+",revision"+deploymentService.getCurrentEnversRevision(it)+",contentTypeId"+it.contentType.contentId+",jobNumber"+j1.getJobNumber())
 			def content = [contentId: it.id, revision: deploymentService.getCurrentEnversRevision(it), contentTypeId: it.contentType.contentId, jobNumber: j1.getJobNumber(), user: userId]

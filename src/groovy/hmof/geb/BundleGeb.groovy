@@ -236,7 +236,7 @@ class BundleGebWork extends Page {
 				durationLength = "2190"
 		}
 
-		log.info "durationLength on Red Pages: ${durationLength.toInteger()/365} Year"
+		log.info "Duration Length on Red Pages: ${durationLength.toInteger()/365} Year"
 
 		durationLength
 

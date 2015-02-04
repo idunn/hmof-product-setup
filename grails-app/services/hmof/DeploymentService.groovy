@@ -30,21 +30,21 @@ class DeploymentService {
 
 		// get all Job Numbers from the Job Table for this Program
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 }.list().jobNumber
-	
+
 		// needed for MySql
 		if (!previousJobNumbers.isEmpty()){
 
 			// If the environment has 1 or more promotion instance it has a previous Job
-			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()			
-			
+			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()
+
 			if(promotionList.size()>=1)	{ return true }
-			
-			return false			
+
+			return false
 		}
 
 		return false
 	}
-	
+
 	/**
 	 * Compare the current Bundle job instances to the previous job instances and return the current bundles that are the same	 
 	 * @param currentJobBundles
@@ -84,7 +84,8 @@ class DeploymentService {
 
 		def lastJob = []
 
-		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 && jobNumber < currentJobNumber}.list().jobNumber
+		// changed to <=current Job
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 && jobNumber <= currentJobNumber}.list().jobNumber
 
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
@@ -114,7 +115,7 @@ class DeploymentService {
 		secureProgramList.each{
 
 			String secureProgramId = it
-			println "secureProgramId: " + secureProgramId
+			log.debug "secureProgramId: " + secureProgramId
 			def sp = SecureProgram.where{id==secureProgramId}.get()
 			def commerceObjectIds = sp.commerceObjects.id
 			String coIds = commerceObjectIds.join(',')
@@ -261,75 +262,75 @@ class DeploymentService {
 
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
-	
-	
+
+
 		def authStr = authorities.toString().replace("[","").replace("]","")
-		List<String> authList = Arrays.asList(authStr.split(", ")); 
-		
+		List<String> authList = Arrays.asList(authStr.split(", "));
+
 		def roleList = []
 		// get role id of user
 		roleList = Role.where{authority in authList}.list()
 		List<String> arr = new ArrayList<String>();
-		for (Role temp : roleList) {							
+		for (Role temp : roleList) {
 			def envName = getEnvironmentName(temp.id)
-			if(envName!=null){			
-			arr.add(envName);
+			if(envName!=null){
+				arr.add(envName);
 			}
-			
+
 		}
-		if(arr.contains("Dev")){		
-		def envId = Environment.where{name=="Dev"}.get()		
-		envId.id
-		}else if(arr.contains("QA")){		
-		def envId = Environment.where{name=="QA"}.get()		
-		envId.id
+		if(arr.contains("Dev")){
+			def envId = Environment.where{name=="Dev"}.get()
+			envId.id
+		}else if(arr.contains("QA")){
+			def envId = Environment.where{name=="QA"}.get()
+			envId.id
 		}else if(arr.contains("Production")){
-		def envId = Environment.where{name=="Production"}.get()		
-		envId.id
+			def envId = Environment.where{name=="Production"}.get()
+			envId.id
 		}
 	}
 	/**
 	 * Get the Environment associated with the User
 	 * @return
 	 */
-	@Deprecated 
+	@Deprecated
 	def getUserEnvironmentIdInformation(){
 
 		// get role of user
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
-	
-	
+
+
 		def authStr = authorities.toString().replace("[","")
 		def authStr1 = authStr.replace("]","")
 		def authStr2 = authStr1.replace(", ",",")
-		
-		
-	    String[] authString = authStr2.split(",")	
-		List<String> authList = Arrays.asList(authString); 
-		
+
+
+		String[] authString = authStr2.split(",")
+		List<String> authList = Arrays.asList(authString);
+
 		def roleList = []
 		// get role id of user
-		 roleList = Role.where{authority in authList}.list()
+		roleList = Role.where{authority in authList}.list()
 		List<String> arr = new ArrayList<String>();
-		for (Role temp : roleList) {							
-			def envName = getEnvironmentName(temp.id)			
-			if(envName!=null){			
-			arr.add(envName);
+		for (Role temp : roleList) {
+			def envName = getEnvironmentName(temp.id)
+			if(envName!=null){
+				arr.add(envName);
 			}
-			
+
 		}
-		if(arr.contains("Dev")){		
-		def envId = Environment.where{name=="Dev"}.get()		
-		envId.id
-		}else if(arr.contains("QA")){		
-		def envId = Environment.where{name=="QA"}.get()		
-		envId.id
+		if(arr.contains("Dev")){
+			def envId = Environment.where{name=="Dev"}.get()
+			envId.id
+		}else if(arr.contains("QA")){
+			def envId = Environment.where{name=="QA"}.get()
+			envId.id
 		}else if(arr.contains("Production")){
-		def envId = Environment.where{name=="Production"}.get()		
-		envId.id
+			def envId = Environment.where{name=="Production"}.get()
+			envId.id
 		}
-		
+
 	}
 	/**
 	 * Helper Method If Prod User then return 2 if QA user then return 1
@@ -433,41 +434,38 @@ class DeploymentService {
 	}
 
 	/**
-	 * Deploy or Promote Jobs in Pending Status	
+	 * Deploy or Promote Jobs in Pending or Pending_Repromote Status	
 	 * @return
 	 */
 	def executeJob(){
 
 		// get first instance in pending status
 		def promotionJobInstance = Promotion.where{status == JobStatus.Pending || status == JobStatus.Pending_Repromote }.list(max:1)
-		println "promotionJobInstance" + promotionJobInstance
 		def promotionJobNumber =  promotionJobInstance.jobNumber
-		
-		println "promotionJobNumber" + promotionJobNumber
-
-		def jobList = Job.where{jobNumber == promotionJobNumber}.list()
 
 		if(!promotionJobInstance.isEmpty()){
-			Long promotionJobId =  promotionJobInstance.id[0]			
-			
+
+			def jobList = Job.where{jobNumber == promotionJobNumber}.list()
+			Long promotionJobId =  promotionJobInstance.id[0]
+
 			/*def promotionJobStatus = Promotion.findByStatus(JobStatus.Pending)			
-				//  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
-				//  This should prevent any other threads picking up the deployment anyway
-			promotionJobStatus.discard()
-			promotionJobStatus = Promotion.lock(promotionJobId)	*/		
-			
+			 //  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
+			 //  This should prevent any other threads picking up the deployment anyway
+			 promotionJobStatus.discard()
+			 promotionJobStatus = Promotion.lock(promotionJobId)*/		
+
 			def promotionInstance = Promotion.get(promotionJobId)
 			promotionInstance.discard()
 			promotionInstance.lock()
-			
-			def statusStart = null			
-			
-			if (promotionInstance.status==JobStatus.Pending_Repromote.toString()){				
-				statusStart = JobStatus.Repromoting				
+
+			def statusStart = null
+
+			if (promotionInstance.status==JobStatus.Pending_Repromote.toString()){
+				statusStart = JobStatus.Repromoting
 			}else { statusStart = JobStatus.In_Progress	}
 
 			promotionInstance.properties = [status: statusStart]
-			promotionInstance.save(failOnError: true, flush:true)			
+			promotionInstance.save(failOnError: true, flush:true)
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
 
