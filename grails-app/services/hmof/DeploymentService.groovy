@@ -263,20 +263,15 @@ class DeploymentService {
 		def authorities = principal.authorities
 	
 	
-		def authStr = authorities.toString().replace("[","")
-		def authStr1 = authStr.replace("]","")
-		def authStr2 = authStr1.replace(", ",",")
-		
-		
-	    String[] authString = authStr2.split(",")	
-		List<String> authList = Arrays.asList(authString); 
+		def authStr = authorities.toString().replace("[","").replace("]","")
+		List<String> authList = Arrays.asList(authStr.split(", ")); 
 		
 		def roleList = []
 		// get role id of user
-		 roleList = Role.where{authority in authList}.list()
+		roleList = Role.where{authority in authList}.list()
 		List<String> arr = new ArrayList<String>();
 		for (Role temp : roleList) {							
-			def envName = getEnvironmentName(temp.id)			
+			def envName = getEnvironmentName(temp.id)
 			if(envName!=null){			
 			arr.add(envName);
 			}
@@ -297,6 +292,7 @@ class DeploymentService {
 	 * Get the Environment associated with the User
 	 * @return
 	 */
+	@Deprecated 
 	def getUserEnvironmentIdInformation(){
 
 		// get role of user
