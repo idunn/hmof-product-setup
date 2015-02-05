@@ -83,16 +83,12 @@ class DeploymentService {
 	def getPreviousJob( def programInstanceNumber, def currentJobNumber, def envId ){
 
 		def lastJob = []
-		// TODO
+		
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 && jobNumber <= currentJobNumber}.list().jobNumber
 		log.info "previous Job Numbers: ${previousJobNumbers}"
 
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
-			def test = Promotion.where {jobNumber in previousJobNumbers}.list()
-			log.info"Test##########################1: ${test}"
-			
-			//def theJob = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success || status==JobStatus.Repromoting &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 			
 			def theJob = Promotion.where{jobNumber in previousJobNumbers && (status==JobStatus.Success || status==JobStatus.Repromoting) &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 			
