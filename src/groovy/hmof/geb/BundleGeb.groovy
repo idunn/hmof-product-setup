@@ -101,7 +101,7 @@ class BundleGebWork extends Page {
 
 		mapOfChildren.each{
 
-			log.info "${'*'.multiply(40)} Adding Bundle Data ${'*'.multiply(40)}\r\n"
+			log.info "${'*'.multiply(5)} Adding Bundle Data ${'*'.multiply(5)}\r\n"
 			def secureProgramInstance = it.key
 
 			addSecureProgram.click()

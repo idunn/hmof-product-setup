@@ -89,7 +89,7 @@ class JobService{
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
 						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program"
 						customerLog.info "There are a total of: ${bundle.size()} Bundles in this Job"
-						customerLog.info "There are a total of: ${bundlesToRemove.size()} Bundles that will not be redeployed as part of this Smart-Deployment \r\n"
+						customerLog.info "Smart-Deployment has detected that ${bundlesToRemove.size()} Bundle(s) do not need to be redeployed as part of this Job"
 						customerLog.debug "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
 
 
@@ -167,9 +167,9 @@ class JobService{
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,customerLog)
-					customerLog.info "${'*'.multiply(40)} Finished Deploying Commerce Object ${'*'.multiply(40)}\r\n"
+					customerLog.info "${'*'.multiply(5)} Finished Deploying Commerce Object ${'*'.multiply(5)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty() && secureProgram.isEmpty()){
-						customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 						customerLog.info("Job Status: Success\r\n")
 
 					}
@@ -203,10 +203,10 @@ class JobService{
 
 					// Pass data to Geb
 					RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, enversInstanceToDeploy,customerLog)
-					customerLog.info "${'*'.multiply(40)} Finished Deploying Secure Program ${'*'.multiply(40)}\r\n"
+					customerLog.info "${'*'.multiply(5)} Finished Deploying Secure Program ${'*'.multiply(5)}\r\n"
 					if(rpd && program.isEmpty() && bundle.isEmpty()){
 
-						customerLog.info"${'*'.multiply(40)} Status ${'*'.multiply(40)}\r\n"
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 						customerLog.debug("promotionId:"+promotionInstance.id)
 						customerLog.info("Job Status: Success\r\n")
 
@@ -224,7 +224,7 @@ class JobService{
 			// Verify that the Bundles we did not deploy are still on Red-Pages
 			if(!bundlesToRemove.isEmpty()){
 
-				customerLog.info "${'*'.multiply(30)} Smart-Deploy Bundle Verification ${'*'.multiply(30)}\r\n"
+				customerLog.info "${'*'.multiply(5)} Smart-Deploy Bundle Verification ${'*'.multiply(5)}\r\n"
 
 				// Send in jobs
 				def verifyObjects = new VerifyDriver(deploymentUrl, bundlesToRemove, customerLog)
@@ -273,7 +273,7 @@ class JobService{
 			def bundleContent
 			def childMap = [:]
 
-			customerLog.info"${'*'.multiply(30)} Bundles and Associations ${'*'.multiply(30)}\r\n"
+			customerLog.info"${'*'.multiply(5)} Bundles and Associations ${'*'.multiply(5)}\r\n"
 			log.debug "Map Of Children: " + mapOfChildren
 
 
@@ -331,7 +331,7 @@ class JobService{
 
 				def listOfCommerceObjects = []
 
-				customerLog.info commerceObjectValue!=""
+				customerLog.debug commerceObjectValue!=""
 				if(commerceObjectValue!=""){
 					commerceObjectIds.each{
 
@@ -366,8 +366,8 @@ class JobService{
 			// Pass data to Geb
 			RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, bundleContent, childMap,customerLog)
 
-			customerLog.info "${'*'.multiply(30)} Finished Deploying Bundle ${'*'.multiply(30)}\r\n"
-			customerLog.info"${'*'.multiply(30)} Status ${'*'.multiply(30)}\r\n"			
+			customerLog.info "${'*'.multiply(5)} Finished Deploying Bundle ${'*'.multiply(5)}\r\n"
+			customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"			
 			customerLog.info("Job Status: Success\r\n")
 		}
 	}
@@ -379,10 +379,10 @@ class JobService{
 	Logger getLogHeader(Logger customerLogs, def envId, def jobNumber, def user_Name, envName ){
 
 		if(envId==1){
-			customerLogs.info"${'*'.multiply(40)} Job Creation ${'*'.multiply(40)}\r\n"
+			customerLogs.info"${'*'.multiply(5)} Job Creation ${'*'.multiply(5)}\r\n"
 			customerLogs.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")
 		} else if(envId==2 || envId==3){
-			customerLogs.info"${'*'.multiply(40)} Job Promotion ${'*'.multiply(40)}\r\n"
+			customerLogs.info"${'*'.multiply(5)} Job Promotion ${'*'.multiply(5)}\r\n"
 			customerLogs.info("Job "+jobNumber + " was promoted by user " + user_Name + " for Environment "+envName+"\r\n")
 		}
 		if(customerLogs==null) customerLogs = log

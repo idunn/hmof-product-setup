@@ -83,7 +83,7 @@ class CommerceObjectWork extends Page {
 		log.info "Adding Commerce Object Data..."
 
 		String blank = ""
-		log.info "Object Name: " + content.objectName
+		log.info "Product Name: " + content.objectName
 		objectName.value(content.objectName)
 
 		globalModule.description.value(content.comments?:"Data entered using the Product Setup Web Application")
