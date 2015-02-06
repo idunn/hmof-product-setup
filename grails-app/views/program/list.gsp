@@ -65,7 +65,7 @@
 			   File prodLogFile = new File(prodLog) %>
 				<td>
 				
-				<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${programInstance.id+"/"+jobdetails.getCurrentEnversRevision(programInstance)+"/"+jobdetails.getPromotionDetails(programInstance,jobdetails.getUserEnvironmentInformation())+"/"+jobdetails.doesPreviousJobExist(programInstance.id,jobdetails.getUserEnvironmentInformation())}" onclick="toggle(this,'row${i}')"/>
+				<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${programInstance.id+"/"+jobdetails.getCurrentEnversRevision(programInstance)+"/"+jobdetails.getPromotionDetails(programInstance,jobdetails.getUserEnvironmentInformation())+"/"+jobdetails.doesPreviousJobExist(programInstance.id,jobdetails.getUserEnvironmentInformation())+"/"+jobdetails.isLowerEnvironmentEqual(programInstance,jobdetails.getUserEnvironmentInformation())}" onclick="toggle(this,'row${i}')"/>
 				
 				<%-- Confirm dialog for Deploy/Promote  --%>
 	        	<g:render template="/_common/modals/confirmDialog"/>

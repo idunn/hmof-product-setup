@@ -12,15 +12,18 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" id="confirmFalse">Cancel</button>
+				
+				<g:if test="${jobdetails.getUserEnvironmentInformation()==1}">
 <sec:ifAnyGranted roles="ROLE_PM">
 				<g:actionSubmit class="btn btn-primary" id="confirmTrue"
 					value="Deploy" onClick="return true;" />
 </sec:ifAnyGranted>
-
+</g:if>
+<g:if test="${jobdetails.getUserEnvironmentInformation()==2 || jobdetails.getUserEnvironmentInformation()==3}">
 <sec:ifAnyGranted roles="ROLE_QA, ROLE_PROD">
 	<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="return true;"/>
 </sec:ifAnyGranted>
-
+</g:if>
 			</div>
 		</div>
 	</div>

@@ -204,6 +204,7 @@ class DeploymentService {
 		def (secureProgramList, commerceObjectList) = [deployableSecureProgram, deployableCommerceObject]
 
 	}
+	
 
 
 	/**
@@ -226,37 +227,34 @@ class DeploymentService {
 		// return Deployable CommerceObject
 		def (commerceObjectList) = [deployableCommerceObject]
 	}
-
 	/**
 	 * Return true if the lower environment contains the same Job Number or Revision
 	 * @param instanceId
-	 * @param usersEnvironment
+	 * @param environmentId
 	 * @return
 	 */
-	def isLowerEnvironmentEqual(def instanceId, def usersEnvironment){
-
+	def isLowerEnvironmentEqual(instanceId, environmentId) {
 		// return zero if current environment is Dev/1
-		def lowerEnvironment = getPreviousEnvironment(usersEnvironment)?:0
+		def lowerEnvironment = getPreviousEnvironment(environmentId)?:0	
 		def currentRevision = getCurrentEnversRevision(instanceId)
-
+		
 		// All job numbers for this Content Instance
 		def jobNumbers = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.jobNumber.list()
-		println "Job Numbers" + jobNumbers
-
+		
 
 		def promoInstanceUserEnvironment = []
 		def promoInstanceLowerEnvironment = []
 
 		if(!jobNumbers.isEmpty()){
 			// Iterate through the Job Numbers where the environment ID matches and return the latest promotion instance
-			promoInstanceUserEnvironment = Promotion.where{jobNumber in jobNumbers && environments{id==usersEnvironment} }.list(max:1, sort:"dateCreated", order:"desc")
+			promoInstanceUserEnvironment = Promotion.where{jobNumber in jobNumbers && environments{id==environmentId} }.list(max:1, sort:"dateCreated", order:"desc")
 			promoInstanceLowerEnvironment = Promotion.where{jobNumber in jobNumbers && environments{id==lowerEnvironment} }.list(max:1, sort:"dateCreated", order:"desc")
 
 			// Job Number for Users Environment
 			def currentJobNumber = promoInstanceUserEnvironment.jobNumber[0]
-			println "current Job Number: " + currentJobNumber
+			
 			def lowerJobNumber = promoInstanceLowerEnvironment.jobNumber[0]?:0
-			println "lower Job Number: " + lowerJobNumber
+			
 
 			if(currentJobNumber == lowerJobNumber )	{ return true }
 		}
@@ -266,13 +264,17 @@ class DeploymentService {
 
 			def revisionNumber = Job.where{jobNumber == promoInstanceUserEnvironment.jobNumber && contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.revision.get()
 			if (currentRevision == revisionNumber) {
-				println "Revisions are the same"
+				
 				return true
 			}
 		}
 
 		return false
+		
+
 	}
+	
+
 
 
 	/**
