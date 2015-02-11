@@ -181,5 +181,104 @@ class UtilityService {
 
 		return category
 	}
+	/**
+	 *
+	 * @param program revision
+	 * @return
+	 */
+	def getLastUpdatedUserName(def revision){
+		def sql = new Sql(dataSource)
+		def row
+		def userName
+		try{
+			row = sql.rows("select user_updating_program from program_aud where rev=?",[revision])
+			userName = row.get(0).get("user_updating_program")
+			log.info("userName:"+userName)
+		}
+		catch(Exception e){
+			log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
+			log.error("exception in getLastUpdatedUserName method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		userName
+	}
+	/**
+	 *
+	 * @param CommerceObject revision
+	 * @return
+	 */
+	def getLastUpdatedUserNameForCO(def revision){
+		def sql = new Sql(dataSource)
+		def row
+		def userName
+		try{
+			
+			row = sql.rows("select user_updatingco from commerce_object_aud where rev=?",[revision])
+			userName = row.get(0).get("user_updatingco")
+			log.info("userName:"+userName)
+		}
+		catch(Exception e){
+			log.error("exception in getLastUpdatedUserNameForCO method is: "+e.getMessage())
+			log.error("exception in getLastUpdatedUserNameForCO method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		userName
+	}
+	/**
+	 *
+	 * @param Secure Program revision
+	 * @return
+	 */
+	def getLastUpdatedUserNameForSP(def revision){
+		def sql = new Sql(dataSource)
+		def row
+		
+		def userName
+		try{
+			
+			row = sql.rows("select user_updatingsprogram from secure_program_aud where rev=?",[revision])
+			userName = row.get(0).get("user_updatingsprogram")
+			log.info("userName:"+userName)
+		}
+		catch(Exception e){
+			log.error("exception in getLastUpdatedUserNameForSP method is: "+e.getMessage())
+			log.error("exception in getLastUpdatedUserNameForSP method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		userName
+	}
+	/**
+	 *
+	 * @param Bundle revision
+	 * @return
+	 */
+	def getLastUpdatedUserNameForBundle(def revision){
+		def sql = new Sql(dataSource)
+		def row
+		
+		def userName
+		try{
+			row = sql.rows("select user_updating_bundle from bundle_aud where rev=?",[revision])
+			userName = row.get(0).get("user_updating_bundle")
+			log.info("userName:"+userName)
+		}
+		catch(Exception e){
+			log.error("exception in getLastUpdatedUserNameForBundle method is: "+e.getMessage())
+			log.error("exception in getLastUpdatedUserNameForBundle method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		userName
+	}
+		
+	
+	
 }
 

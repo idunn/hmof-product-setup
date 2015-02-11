@@ -1,6 +1,7 @@
 
 <%@ page import="hmof.SecureProgram" %>
 <%@ page import="hmof.DeploymentService"%>
+<%@ page import="hmof.UtilityService"%>
 <!DOCTYPE html>
 <html>
 
@@ -42,6 +43,7 @@
 		</thead>
 		<tbody>
 		<g:set var="jobdetails" bean="deploymentService"/>
+		<g:set var="userdetail" bean="utilityService"/>
 		<g:each in="${secureProgramInstanceList}" status="i" var="secureProgramInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
@@ -58,7 +60,7 @@
 			
 				<td><g:link action="show" id="${secureProgramInstance.id}">${fieldValue(bean: secureProgramInstance, field: "productName")}</g:link></td>
 				
-				<td>${jobdetails.getCurrentEnversRevision(secureProgramInstance)}</td>
+				<td>Revision: ${jobdetails.getCurrentEnversRevision(secureProgramInstance)}<br>Last updated by: ${userdetail.getLastUpdatedUserNameForSP(jobdetails.getCurrentEnversRevision(secureProgramInstance))}</td>
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "registrationIsbn")}</td>
 			

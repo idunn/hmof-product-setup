@@ -36,7 +36,7 @@ class BundleController {
 		def bundle = Bundle.where{id==currentInstance.id}.get()
 		// get parent of current Instance
 		def ProgramToUpdate = bundle.program
-		ProgramToUpdate.properties = [lastUpdated: new Date()]
+		ProgramToUpdate.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 
 	}
 
@@ -205,6 +205,7 @@ class BundleController {
 	def save() {
 
 		def contentType = ContentType.where{id==2}.get()
+		params.userUpdatingBundle = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def bundleInstance = new Bundle(params)
 
@@ -258,7 +259,7 @@ class BundleController {
 		{
 			bundleInstance.secureProgram.clear()
 		}
-		
+		bundleInstance.userUpdatingBundle = springSecurityService?.currentUser?.username
 		bundleInstance.save flush:true
 
 		// update the timeStamp of its parent so that the change is reflected in Envers

@@ -66,7 +66,7 @@ class SecureProgram implements Comparable {
 	String securityWord3
 	Integer securityWordLocation3
 	String securityWordPage3	
-
+	String userUpdatingSProgram
 	ContentType contentType
 
 	static belongsTo = Bundle

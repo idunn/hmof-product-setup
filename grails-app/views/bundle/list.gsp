@@ -1,6 +1,7 @@
 
 <%@ page import="hmof.Bundle" %>
 <%@ page import="hmof.DeploymentService"%>
+<%@ page import="hmof.UtilityService"%>
 
 <!DOCTYPE html>
 <html>
@@ -43,6 +44,7 @@
 		</thead>
 		<tbody>
 		<g:set var="jobdetails" bean="deploymentService"/>
+		<g:set var="userdetail" bean="utilityService"/>
 		<g:each in="${bundleInstanceList}" status="i" var="bundleInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Bundles"+"/${bundleInstance.isbn}"+"/dev/log/"+"${bundleInstance.isbn}"+"-dev_log"+".log"
@@ -56,7 +58,7 @@
 			
 				<td><g:link action="show" id="${bundleInstance.id}">${fieldValue(bean: bundleInstance, field: "isbn")}</g:link></td>
 				
-				<td>${jobdetails.getCurrentEnversRevision(bundleInstance)}</td>
+				<td>Revision: ${jobdetails.getCurrentEnversRevision(bundleInstance)}<br>Last updated by: ${userdetail.getLastUpdatedUserNameForBundle(jobdetails.getCurrentEnversRevision(bundleInstance))}</td>
 			
 				<td>${fieldValue(bean: bundleInstance, field: "title")}</td>
 			

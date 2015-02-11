@@ -1,6 +1,8 @@
 
 <%@ page import="hmof.CommerceObject" %>
 <%@ page import="hmof.DeploymentService"%>
+<%@ page import="hmof.UtilityService"%>
+
 <!DOCTYPE html>
 <html>
 
@@ -38,6 +40,7 @@
 		</thead>
 		<tbody>
 		<g:set var="jobdetails" bean="deploymentService"/>
+		<g:set var="userdetail" bean="utilityService"/>
 		<g:each in="${commerceObjectInstanceList}" status="i" var="commerceObjectInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Commerce Objects"+"/${commerceObjectInstance.isbnNumber}"+"/dev/log/"+"${commerceObjectInstance.isbnNumber}"+"-dev_log"+".log"
@@ -56,7 +59,7 @@
 			
 				<td><g:link action="show" id="${commerceObjectInstance.id}">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</g:link></td>
 				
-				<td>${jobdetails.getCurrentEnversRevision(commerceObjectInstance)}</td>
+				<td>Revision: ${jobdetails.getCurrentEnversRevision(commerceObjectInstance)}<br>Last updated by: ${userdetail.getLastUpdatedUserNameForCO(jobdetails.getCurrentEnversRevision(commerceObjectInstance))}</td>
 			
 				<td>${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</td>				
 				

@@ -14,6 +14,7 @@ class Bundle {
 	Date dateCreated
 	Date lastUpdated
 	Boolean includePremiumCommerceObjects
+	String userUpdatingBundle
 	ContentType contentType
 	static belongsTo = [program:Program]
 	SortedSet secureProgram

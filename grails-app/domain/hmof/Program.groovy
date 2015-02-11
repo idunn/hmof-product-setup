@@ -10,7 +10,8 @@ class Program {
 	String state
 	Date dateCreated
 	Date lastUpdated
-
+	String userUpdatingProgram
+	
 	ContentType contentType
 
 	static hasMany = [bundles:Bundle]

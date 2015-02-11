@@ -182,6 +182,7 @@ class ProgramController {
 	def save() {
 
 		def contentType = ContentType.where{id==1}.get()
+		params.userUpdatingProgram = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def programInstance = new Program(params)
 
@@ -202,7 +203,8 @@ class ProgramController {
 		request.withFormat {
 			form {
 				flash.message = message(code: 'default.created.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
-				redirect programInstance
+				//redirect programInstance
+				redirect(action: "show", id: 1)
 			}
 			'*' { respond programInstance, [status: CREATED] }
 		}
@@ -226,13 +228,14 @@ class ProgramController {
 			respond programInstance.errors, view:'edit'
 			return
 		}
-
+		programInstance.userUpdatingProgram = springSecurityService?.currentUser?.username
 		programInstance.save flush:true
 
 		request.withFormat {
 			form {
-				flash.message = message(code: 'default.updated.message', args: [message(code: 'Program.label', default: 'Program'), programInstance.id])
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
 				redirect programInstance
+				//redirect(action: "show", id: 1)
 			}
 			'*'{ respond programInstance, [status: OK] }
 		}

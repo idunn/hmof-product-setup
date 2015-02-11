@@ -29,9 +29,9 @@ class SecureProgramController {
 	def updateParent(def currentInstance){
 
 		def bundleInstances = Bundle.where{secureProgram{id==currentInstance.id}}.list()
-
-		bundleInstances.each{
-			it.properties = [lastUpdated: new Date()]
+	
+		bundleInstances.each{			
+			it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
 		}
 
 		def programInstances = []
@@ -41,7 +41,7 @@ class SecureProgramController {
 		}
 
 		programInstances.each{
-			it.properties = [lastUpdated: new Date()]
+			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
 
 	}
@@ -203,6 +203,7 @@ class SecureProgramController {
 	@Transactional
 	def save() {
 		def contentType = ContentType.where{id==3}.get()
+		params.userUpdatingSProgram = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def secureProgramInstance = new SecureProgram(params)
 		if (secureProgramInstance == null) {
@@ -255,7 +256,7 @@ class SecureProgramController {
 			secureProgramInstance.commerceObjects.clear()
 		}
 		  
-		  
+		secureProgramInstance.userUpdatingSProgram = springSecurityService?.currentUser?.username
 
 		secureProgramInstance.save flush:true
 		

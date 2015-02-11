@@ -1,7 +1,7 @@
 
 <%@ page import="hmof.Program" %>
 <%@ page import="hmof.DeploymentService"%>
-
+<%@ page import="hmof.UtilityService"%>
 
 <!DOCTYPE html>
 <html>
@@ -53,7 +53,7 @@
 		<tbody>
 		
 		<g:set var="jobdetails" bean="deploymentService"/>
-	
+	<g:set var="userdetail" bean="utilityService"/>
 		<g:each in="${programInstanceList}" status="i" var="programInstance">
 	
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
@@ -74,7 +74,7 @@
 			
 				<td><g:link action="show" id="${programInstance.id}">${fieldValue(bean: programInstance, field: "name")}</g:link></td>
 				
-				<td>${jobdetails.getCurrentEnversRevision(programInstance)}</td>
+				<td>Revision: ${jobdetails.getCurrentEnversRevision(programInstance)}<br>Last updated by: ${userdetail.getLastUpdatedUserName(jobdetails.getCurrentEnversRevision(programInstance))}</td>
 				
 				<td>${fieldValue(bean: programInstance, field: "state")}</td>	
 			

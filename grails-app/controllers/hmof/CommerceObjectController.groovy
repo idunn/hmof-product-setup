@@ -35,7 +35,7 @@ class CommerceObjectController {
 		def secureProgramInstances = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
 
 		secureProgramInstances.each{
-			it.properties = [lastUpdated: new Date()]
+			it.properties = [lastUpdated: new Date(),userUpdatingSProgram: springSecurityService?.currentUser?.username]
 		}
 
 		def bundleInstances = []
@@ -45,7 +45,7 @@ class CommerceObjectController {
 		}
 
 		bundleInstances.each{
-			it.properties = [lastUpdated: new Date()]
+			it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
 		}
 
 		def programInstances = []
@@ -55,7 +55,7 @@ class CommerceObjectController {
 		}
 
 		programInstances.each{
-			it.properties = [lastUpdated: new Date()]
+			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
 
 	}
@@ -240,7 +240,8 @@ class CommerceObjectController {
 		respond CommerceObject.list(params), model:[commerceObjectInstanceCount: CommerceObject.count()]
 	}
 
-	def show(CommerceObject commerceObjectInstance) {
+	def show(CommerceObject commerceObjectInstance)
+	{
 		def parentSecureProgram = SecureProgram.where{commerceObjects{id==commerceObjectInstance.id}}.list()
 		render(view:"show", model:[commerceObjectInstance:commerceObjectInstance, parentSecureProgram:parentSecureProgram ])
 	}
@@ -264,6 +265,7 @@ class CommerceObjectController {
 	def save() {
 
 		def contentType = ContentType.where{id==4}.get()
+		params.userUpdatingCO = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def commerceObjectInstance = new CommerceObject(params)
 
@@ -311,7 +313,7 @@ class CommerceObjectController {
 			respond commerceObjectInstance.errors, view:'edit'
 			return
 		}
-
+		commerceObjectInstance.userUpdatingCO = springSecurityService?.currentUser?.username
 		commerceObjectInstance.save flush:true
 		// update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(commerceObjectInstance)

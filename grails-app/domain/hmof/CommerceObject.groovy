@@ -26,7 +26,7 @@ class CommerceObject implements Comparable{
 	Boolean tabNavTab
 	Boolean isPremium
 	String comments = (new Date().format('dd/MM/yy'))
-
+	String userUpdatingCO
 
 
 	ContentType contentType
