@@ -278,7 +278,29 @@ class UtilityService {
 		userName
 	}
 		
-	
+	/**
+	 *
+	 * @param Bundle revision
+	 * @return
+	 */
+	def getStruckedJobs(){
+		def sql = new Sql(dataSource)
+		def row
+		
+		try{			
+			
+			row = sql.rows("SELECT id FROM promotion WHERE (hour(SYSDATE) - hour(date_created))>2  AND status = 'In_Progress'")
+			log.info("row:"+row)
+		}
+		catch(Exception e){
+			log.error("exception in getStruckedJobs method is: "+e.getMessage())
+			log.error("exception in getStruckedJobs method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		row
+	}
 	
 }
 
