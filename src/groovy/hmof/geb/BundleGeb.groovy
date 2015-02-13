@@ -136,7 +136,11 @@ class BundleGebWork extends Page {
 				log.info"Adding Planner"
 				waitFor(50){$("font", text: /ePlanner/).children().value(true)}
 			}
-
+			
+			if (secureProgramInstance.includeNotebookObject){
+				log.info"Adding NoteBook"
+				waitFor(50){$("font", text: /myNotebook/).children().value(true)}
+			}
 			def commerceObjectMap = it.value
 			commerceObjectMap.each{
 				log.info"Adding Custom Commerce Objects..."

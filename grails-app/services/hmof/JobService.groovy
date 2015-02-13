@@ -274,9 +274,8 @@ class JobService{
 			def childMap = [:]
 
 			customerLog.info"${'*'.multiply(5)} Bundles and Associations ${'*'.multiply(5)}\r\n"
-			log.debug "Map Of Children: " + mapOfChildren
 
-
+			customerLog.info "Map Of Children: " + mapOfChildren
 			// If instance has been deleted return a GroovyRowResult object from the Envers Audit table
 			def bundleInstance = Bundle.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 2)
 
@@ -419,7 +418,7 @@ class JobService{
 			pathToResource:sp.PATH_TO_RESOURCE, pathToCoverImage:sp.PATH_TO_COVER_IMAGE, labelForTeacherAdditionalResource:sp.LABEL_FOR_TEACHER_ADDITIONAL_RESOURCE,
 			pathToTeacherAdditionalResource:sp.PATH_TO_TEACHER_ADDITIONAL_RESOURCE,labelForStudentAdditionalResource:sp.LABEL_FOR_STUDENT_ADDITIONAL_RESOURCE,
 			pathToStudentAdditionalResource:sp.PATH_TO_STUDENT_ADDITIONAL_RESOURCE,securityWord:sp.SECURITY_WORD, securityWordLocation:sp.SECURITY_WORD_LOCATION,
-			securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT, includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT,
+			securityWordPage:sp.SECURITY_WORD_PAGE, includeDashboardObject:sp.INCLUDE_DASHBOARD_OBJECT, includeEplannerObject:sp.INCLUDE_EPLANNER_OBJECT, includeNotebookObject:sp.INCLUDE_NOTEBOOK_OBJECT, knewtonProduct:sp.KNEWTON_PRODUCT,
 			knowledgeGraphIdDev:sp.KNOWLEDGE_GRAPH_ID_DEV, knowledgeGraphIdQA:sp.KNOWLEDGE_GRAPH_IDQA, knowledgeGraphIdProd:sp.KNOWLEDGE_GRAPH_ID_PROD,
 			knowledgeGraphWarmUpTimeLimit:sp.KNOWLEDGE_GRAPH_WARM_UP_TIME_LIMIT, knowledgeGraphEnrichmentTimeLimit:sp.KNOWLEDGE_GRAPH_ENRICHMENT_TIME_LIMIT,
 			knowledgeGraphEnrichmentCbiTimeLimit:sp.KNOWLEDGE_GRAPH_ENRICHMENT_CBI_TIME_LIMIT,comments:sp.COMMENTS, curriculumArea:sp.CURRICULUM_AREA,
@@ -433,6 +432,8 @@ class JobService{
 			securityWordPage2:sp.SECURITY_WORD_PAGE2,	 securityWord3:sp.SECURITY_WORD3,securityWordLocation3:sp.SECURITY_WORD_LOCATION3, securityWordPage3:sp.SECURITY_WORD_PAGE3,
 			contentType:sp.CONTENT_TYPE_ID]
 
+		
+		
 	}
 
 	/**

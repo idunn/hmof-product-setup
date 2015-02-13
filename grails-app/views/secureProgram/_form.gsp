@@ -118,6 +118,14 @@
 				</div>
 			</div>
 			
+			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')} ">
+				<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></label>
+				<div class="controls">
+					<bs:checkBox name="includeNotebookObject" value="${secureProgramInstance?.includeNotebookObject}"  />
+					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')}</span>
+				</div>
+			</div>
+			
 	</div>
 			
 

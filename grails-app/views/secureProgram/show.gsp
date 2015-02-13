@@ -97,6 +97,12 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeEplannerObject}" /></td>
 				
 			</tr>
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></td>
+				
+				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeNotebookObject}" /></td>
+				
+			</tr>
 			
 			
 			<tr class="prop">

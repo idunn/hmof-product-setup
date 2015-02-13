@@ -31,7 +31,7 @@ class SecureProgram implements Comparable {
 
 	Boolean includeDashboardObject = "true"
 	Boolean includeEplannerObject = "true"
-
+	Boolean includeNotebookObject= "true"
 	Boolean knewtonProduct
 	String knowledgeGraphIdDev
 	String knowledgeGraphIdQA
@@ -110,7 +110,8 @@ class SecureProgram implements Comparable {
 		securityWordPage (blank: false)
 		includeDashboardObject (nullable:true)
 		includeEplannerObject (nullable:true)
-
+		includeNotebookObject (nullable:true)
+		
 		knewtonProduct (nullable:true)
 		knowledgeGraphIdDev (nullable:true,validator: { val, obj ->
 			if(obj.knewtonProduct!=null && obj.knewtonProduct)

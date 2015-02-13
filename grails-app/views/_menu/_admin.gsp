@@ -33,6 +33,12 @@
 				CSV Import
 			</a>
 		</li>
+		<li class="">
+			<a href="${createLink(uri: '/quartz/list')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				Quartz Monitoring Settings
+			</a>
+		</li>
 		</sec:ifAnyGranted>
 	</ul>
 </li>
