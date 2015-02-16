@@ -815,3 +815,9 @@ input[readonly] {
   background-color: white !important;
   cursor: text !important;
 }
+
+.show-style{
+	
+	padding-top:5px;
+
+}

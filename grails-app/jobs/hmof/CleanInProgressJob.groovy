@@ -7,7 +7,7 @@ import hmof.deploy.*
  *
  */
 
-class CleanStruckedJob {
+class CleanInProgressJob {
 		
 	def concurrent = true
 	def group = "scheduled"
