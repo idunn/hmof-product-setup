@@ -27,146 +27,140 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 		<div class="widget-content">
 <section id="show-commerceObject" class="first">
 
-	<table class="table">
-		<tbody>
+	<div class="span7 form-horizontal">
+
+	<section>
+<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectName.label" default="Object Name" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</div></div>
+				
+				<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.isbnNumber.label" default="Isbn" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.objectName.label" default="Object Name" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.pathToCoverImage.label" default="Path To Cover Image" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "pathToCoverImage")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.isbnNumber.label" default="Isbn" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.teacherLabel.label" default="Teacher Label" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isbnNumber")}</td>
-				
-			</tr>			
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "teacherLabel")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.pathToCoverImage.label" default="Path To Cover Image" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.teacherUrl.label" default="Teacher Url" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "pathToCoverImage")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "teacherUrl")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.teacherLabel.label" default="Teacher Label" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.studentLabel.label" default="Student Label" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "teacherLabel")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "studentLabel")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.teacherUrl.label" default="Teacher Url" /></td>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.studentUrl.label" default="Student Url" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "teacherUrl")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "studentUrl")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.studentLabel.label" default="Student Label" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "studentLabel")}</td>
-				
-			</tr>
+		</section>
+		</div>
+		<div class="span5 form-horizontal">
+	<section>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.studentUrl.label" default="Student Url" /></td>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.category.label" default="Category" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "studentUrl")}</td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "category")}</div></div>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectType.label" default="Object Type" /></label>
 				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.category.label" default="Category" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "category")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.objectType.label" default="Object Type" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.objectReorderNumber.label" default="Object Reorder Number" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectReorderNumber.label" default="Object Reorder Number" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "objectReorderNumber")}</td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectReorderNumber")}</div></div>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.subject.label" default="Subject" /></label>
 				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.subject.label" default="Subject" /></td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "subject")}</div></div>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.gradeLevel.label" default="Grade Level" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "subject")}</td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "gradeLevel")}</div></div>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectType.label" default="Object Type" /></label>
 				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.gradeLevel.label" default="Grade Level" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "gradeLevel")}</td>
-				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.objectType.label" default="Object Type" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</div></div>
 		<%--
 		<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.tabNavTab.label" default="TabNavTab" /></td>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "tabNavTab")}</td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "tabNavTab")}</td>
 				
 		</tr>
 		--%>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.isPremium.label" default="Is Premium" /></td>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.isPremium.label" default="Is Premium" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "isPremium")}</td>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "isPremium")}</div></div>
+			
+			</section>
+		</div>
+<div class="span9 form-horizontal">
+	<section>	
+			
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.comments.label" default="Comments" /></label>
 				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.comments.label" default="Comments" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: commerceObjectInstance, field: "comments")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "comments")}</div></div>
 			
 			<!-- Date Stamps -->
 			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.dateCreated.label" default="Date Created" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></td>
-				
-			</tr>
+				<div class="controls show-style"><g:formatDate date="${commerceObjectInstance?.dateCreated}" /></div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.lastUpdated.label" default="Last Updated" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></td>
-				
-			</tr>
+				<div class="controls show-style"><g:formatDate date="${commerceObjectInstance?.lastUpdated}" /></div></div>
 			
 			<!-- Added Parent Object Links -->
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="commerceObject.secureprograms.label" default="Secure Programs (Parent Objects)" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.secureprograms.label" default="Secure Programs (Parent Objects)" /></label>
 				
-				<td valign="top" style="text-align: left;" class="value">
+				<div class="controls show-style" style="text-align: left;" >
 					<ul>
 					<g:each in="${parentSecureProgram}" var="s">
 						<li><g:link controller="secureProgram" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</td>				
-			</tr>
-			
-		</tbody>
-	</table>
+				</div></div>
+			</section>
+		</div>
 </section>
 </div>
 </div>

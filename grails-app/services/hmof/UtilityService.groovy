@@ -11,7 +11,7 @@ import grails.transaction.Transactional
 class UtilityService {
 
 	def dataSource
-
+	def springSecurityService
 	def getDeletedObject(instanceId, revision, contentType){
 
 		log.info "Deleted Objects instanceId: " +  instanceId
@@ -114,7 +114,7 @@ class UtilityService {
 
 			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3].replaceAll('"',''),
 			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contentType,
-			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12])
+			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12],userUpdatingCO:springSecurityService?.currentUser?.username)
 
 			if (!dom.save(flush: true)) {
 

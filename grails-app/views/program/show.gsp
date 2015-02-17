@@ -28,7 +28,106 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 		<div class="widget-content">
 	<section id="show-program" class="first">
 
-		<table class="table">
+	<div class="span9 form-horizontal">
+
+<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message
+							code="program.name.label" default="Name" /></label>
+	<div class="controls show-style">
+		${fieldValue(bean: programInstance, field: "name")}
+	</div>
+</div>
+
+<div
+	class="control-group">
+	<label for="state" class="control-label col-sw-1"><g:message
+							code="program.state.label" default="State" /></label>
+
+					<div class="controls show-style">
+		${fieldValue(bean: programInstance, field: "state")}
+	</div>
+</div>
+
+		<div
+	class="control-group">
+	<label for="discipline" class="control-label col-sw-1"><g:message
+							code="program.discipline.label" default="Discipline" /></label>
+
+			<div class="controls show-style">
+		${fieldValue(bean: programInstance, field: "discipline")}
+	</div>
+</div>				
+
+				
+		<div
+	class="control-group">
+	<label for="bundles" class="control-label col-sw-1"><g:message
+							code="program.bundles.label" default="Bundles" /></label>
+
+					<div class="controls show-style">
+						<!-- Add new Template --> <g:render template="addBundle" /> <!-- Added new table -->
+						<table class="table table-bordered margin-top-medium">
+							<thead>
+								<tr>
+									<th>
+										${'List'}
+									</th>
+									<th>
+										${'View'}
+									</th>
+									<th>
+										${'Edit'}
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<g:each in="${programInstance.bundles}" status="i" var="b">
+
+									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+										<td><g:link controller="bundle" action="show"
+												id="${b.id}">
+												${b?.encodeAsHTML()}
+											</g:link></td>
+										<td><g:link controller="bundle" action="show"
+												id="${b.id}">
+												${"View"}
+											</g:link></td>
+										<td><g:link controller="bundle" action="edit"
+												id="${b.id}">
+												${"Edit"}
+											</g:link></td>
+									</tr>
+								</g:each>
+
+							</tbody>
+						</table>
+					</div>
+						
+				<div
+	class="control-group">
+	<label for="dateCreated" class="control-label col-sw-1"><g:message
+							code="program.dateCreated.label" default="Date Created" /></label>
+
+					<div class="controls show-style"><g:formatDate
+							date="${programInstance?.dateCreated}" />
+							</div>
+							</div>
+
+				<div
+	class="control-group">
+	<label for="lastUpdated" class="control-label col-sw-1"><g:message
+							code="program.lastUpdated.label" default="Last Updated" /></label>
+
+					<div class="controls show-style"><g:formatDate
+							date="${programInstance?.lastUpdated}" />
+					</div>
+					</div>
+
+			</div>			
+				
+				
+		<%--<table class="table">
 			<tbody>
 
 				<tr class="prop">
@@ -125,6 +224,9 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 
 			</tbody>
 		</table>
+	--%>
+	
+	</div>
 	</section>
 </div>
 </div>

@@ -27,71 +27,73 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 		<div class="widget-content">
 <section id="show-bundle" class="first">
 
-	<table class="table">
-		<tbody>
+
+<div class="span9 form-horizontal">
+
+<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.isbn.label" default="Isbn" /></label>
+	<div class="controls show-style">
+		${fieldValue(bean: bundleInstance, field: "isbn")}
+	</div>
+</div>
+
+
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.isbn.label" default="Isbn" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.title.label" default="Title" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "isbn")}</td>
+				<div class="controls show-style">${fieldValue(bean: bundleInstance, field: "title")}</div>
+				</div>
+		<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.includePremiumCommerceObjects.label" default="Include Premium Commerce Objects" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: bundleInstance, field: "includePremiumCommerceObjects")}</div>
+				</div>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.duration.label" default="Duration" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: bundleInstance, field: "duration")}</div>
+				</div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.title.label" default="Title" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.dateCreated.label" default="Date Created" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "title")}</td>
-				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.includePremiumCommerceObjects.label" default="Include Premium Commerce Objects" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "includePremiumCommerceObjects")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.duration.label" default="Duration" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: bundleInstance, field: "duration")}</td>
-				
-			</tr>
+				<div class="controls show-style"><g:formatDate date="${bundleInstance?.dateCreated}" /></div>
+				</div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.dateCreated.label" default="Date Created" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.lastUpdated.label" default="Last Updated" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.dateCreated}" /></td>
-				
-			</tr>
+				<div class="controls show-style"><g:formatDate date="${bundleInstance?.lastUpdated}" /></div>
+				</div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.lastUpdated.label" default="Last Updated" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.program.label" default="Program (Parent Object)" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${bundleInstance?.lastUpdated}" /></td>
-				
-			</tr>
+				<div class="controls show-style"><g:link controller="program" action="show" id="${bundleInstance?.program?.id}">${bundleInstance?.program?.encodeAsHTML()}</g:link></div>
+				</div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.program.label" default="Program (Parent Object)" /></td>
+			<div
+	class="control-group">
+	<label for="name" class="control-label col-sw-1"><g:message code="bundle.secureProgram.label" default="Secure Program (Child Objects)" /></label>
 				
-				<td valign="top" class="value"><g:link controller="program" action="show" id="${bundleInstance?.program?.id}">${bundleInstance?.program?.encodeAsHTML()}</g:link></td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="bundle.secureProgram.label" default="Secure Program (Child Objects)" /></td>
-				
-				<td valign="top" style="text-align: left;" class="value">
+				<div class="controls show-style" style="text-align: left;">
 					<ul>
 					<g:each in="${bundleInstance.secureProgram}" var="s">
 						<li><g:link controller="secureProgram" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</td>
-				
-			</tr>
+				</div>
+				</div>
 		
-		</tbody>
-	</table>
+		</div>
 </section>
 </div>
 </div>

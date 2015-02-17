@@ -22,388 +22,444 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
      url('../../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
 } 
 </style>
-<div class="row">
+<div class="row" >
 	<div class="widget stacked ">
 		<div class="widget-content">
-<section id="show-secureProgram" class="first">
+<section id="show-secureProgram" class="first"  >
+<div class="span12 form-horizontal">
 
-	<table class="table">
-		<tbody>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.productName.label" default="Product Name" /></td>
+			<div
+	class="control-group">
+	<label for="productName" class="control-label col-sw-1"><g:message code="secureProgram.productName.label" default="Product Name" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "productName")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "productName")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.registrationIsbn.label" default="Registration Isbn" /></td>
+			<div
+	class="control-group">
+	<label for="registrationIsbn" class="control-label col-sw-1"><g:message code="secureProgram.registrationIsbn.label" default="Registration Isbn" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "registrationIsbn")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "registrationIsbn")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" /></td>
+			<div
+	class="control-group">
+	<label for="onlineIsbn" class="control-label col-sw-1"><g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</div></div>
+		  <div
+	class="control-group">
+	<label for="curriculumArea" class="control-label col-sw-1"><g:message code="secureProgram.curriculumArea.label" default="Curriculum Area" /></label>
 				
-			</tr>		
-			
-		  <tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.curriculumArea.label" default="Curriculum Area" /></td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "curriculumArea")}</div></div>
+			<div
+	class="control-group">
+	<label for="copyright" class="control-label col-sw-1"><g:message code="secureProgram.copyright.label" default="Copyright" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "curriculumArea")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.copyright.label" default="Copyright" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "copyright")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></td>
+			<div
+	class="control-group">
+	<label for="labelForOnlineResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForOnlineResource")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForOnlineResource")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToResource.label" default="Path To Resource" /></td>
+			<div
+	class="control-group">
+	<label for="pathToResource" class="control-label col-sw-1"><g:message code="secureProgram.pathToResource.label" default="Path To Resource" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToResource")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToResource")}</div></div>
+			<div
+	class="control-group">
+	<label for="pathToCoverImage" class="control-label col-sw-1"><g:message code="secureProgram.pathToCoverImage.label" default="Path To Cover Image" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToCoverImage")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToCoverImage.label" default="Path To Cover Image" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToCoverImage")}</td>
-				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.includeDashboardObject.label" default="Include Dashboard Object" /></td>
-				
-				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeDashboardObject}" /></td>
-				
-			</tr>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.includeEplannerObject.label" default="Include Eplanner Object" /></td>
+		<div
+	class="control-group">
+	<label for="essayGraderPrompts" class="control-label col-sw-1"><g:message code="secureProgram.essayGraderPrompts.label" default="Essay Grader Prompts" /></label>
 				
-				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeEplannerObject}" /></td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "essayGraderPrompts")}</div></div>
+		
+		
+		<div class="platformf">Platform Features</div><br>
+		
+		<div
+	class="control-group">
+	<label for="includeDashboardObject" class="control-label col-sw-1"><g:message code="secureProgram.includeDashboardObject.label" default="Include Dashboard Object" /></label>
 				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></td>
+				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeDashboardObject}" /></div></div>
+		
+			<div
+	class="control-group">
+	<label for="includeEplannerObject" class="control-label col-sw-1"><g:message code="secureProgram.includeEplannerObject.label" default="Include Eplanner Object" /></label>
 				
-				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.includeNotebookObject}" /></td>
+				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeEplannerObject}" /></div></div>
+			<div
+	class="control-group">
+	<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></label>
 				
-			</tr>
+				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeNotebookObject}" /></div></div>
 			
 			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.essayGraderPrompts.label" default="Essay Grader Prompts" /></td>
+	
+		  <div class="platformf">Security Words</div><br>
+			<div
+	class="control-group">
+	<label for="securityWord" class="control-label col-sw-1"><g:message code="secureProgram.securityWord.label" default="Security Word" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "essayGraderPrompts")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForTeacherAdditionalResource.label" default="Label For Teacher Additional Resource" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWord")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToTeacherAdditionalResource.label" default="Path To Teacher Additional Resource" /></td>
+			<div
+	class="control-group">
+	<label for="securityWordLocation" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation.label" default="Security Word Location" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource")}</td>
-				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForTeacherAdditionalResource2.label" default="Label For Teacher Additional Resource2" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource2")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToTeacherAdditionalResource2.label" default="Path To Teacher Additional Resource2" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource2")}</td>
-				
-			</tr>
-			
-			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForTeacherAdditionalResource3.label" default="Label For Teacher Additional Resource3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource3")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToTeacherAdditionalResource3.label" default="Path To Teacher Additional Resource3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource3")}</td>
-				
-			</tr>
-			
-			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForTeacherAdditionalResource4.label" default="Label For Teacher Additional Resource4" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource4")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToTeacherAdditionalResource4.label" default="Path To Teacher Additional Resource4" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource4")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource.label" default="Label For Student Additional Resource" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource.label" default="Path To Student Additional Resource" /></td>
+			<div
+	class="control-group">
+	<label for="securityWordPage" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage.label" default="Security Word Page" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource")}</td>
-				
-			</tr>
-			
-			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource.label" default="Label For Student Additional Resource" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource.label" default="Path To Student Additional Resource" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource2.label" default="Label For Student Additional Resource2" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource2")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource2.label" default="Path To Student Additional Resource2" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource2")}</td>
-				
-			</tr>
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource3.label" default="Label For Student Additional Resource3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource3")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource3.label" default="Path To Student Additional Resource3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource3")}</td>
-				
-			</tr>
-			
-				<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.labelForStudentAdditionalResource4.label" default="Label For Student Additional Resource4" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource4")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.pathToStudentAdditionalResource4.label" default="Path To Student Additional Resource4" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource4")}</td>
-				
-			</tr>
-			
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWord.label" default="Security Word" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWord")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordLocation.label" default="Security Word Location" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation")}</td>
-				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordPage.label" default="Security Word Page" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordPage")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordPage")}</div></div>
 		
 						
 			
+    
+<div class="bs-example">
+    <div class="panel-group accordion-caret" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed acstyle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">&nbsp;Additional Security Words</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+     
+	
+	 <section>
 			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWord2.label" default="Security Word2" /></td>
+		<div
+	class="col-sw-5">
+	<label for="securityWord2" class="control-label col-sw-1"><g:message code="secureProgram.securityWord2.label" default="Security Word2" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWord2")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWord2")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location2" /></td>
+			<div
+	class="col-sw-7">
+	<label for="securityWordLocation2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location2" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation2")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation2")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordPage2.label" default="Security Word Page2" /></td>
+			
+			
+			<div
+	class="col-sw-5">
+	<label for="securityWordPage2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage2.label" default="Security Word Page2" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordPage2")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordPage2")}</div></div>
+		</section>
+			<section>
+		<div
+	class="col-sw-5">
+	<label for="securityWord3" class="control-label col-sw-1"><g:message code="secureProgram.securityWord3.label" default="Security Word3" /></label>
 				
-			</tr>
-		<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWord3.label" default="Security Word3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWord3")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWord3")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location3" /></td>
+			<div
+	class="col-sw-7">
+	<label for="securityWordLocation3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location3" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation3")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation3")}</div></div>
+					
+			
+			<div
+	class="col-sw-5">
+	<label for="securityWordPage3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage3.label" default="Security Word Page3" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordPage3")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.securityWordPage3.label" default="Security Word Page3" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "securityWordPage3")}</td>
-				
-			</tr>
+		</section>
 		
+		</div></div></div>
+ <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" class="accordion-toggle collapsed" data-parent="#accordion" href="#collapseTwo">&nbsp;Links to Additional Resources</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">               
+
+	<span  class="col-sw-3">Teacher Additional Resources</span>
+				
+			<div
+	class="control-group">
+	<label for="labelForTeacherAdditionalResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForTeacherAdditionalResource.label" default="Label For Teacher Additional Resource" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knewtonProduct.label" default="Knewton Product" /></td>
+			<div
+	class="control-group">
+	<label for="pathToTeacherAdditionalResource" class="control-label col-sw-1"><g:message code="secureProgram.pathToTeacherAdditionalResource.label" default="Path To Teacher Additional Resource" /></label>
 				
-				<td valign="top" class="value"><g:formatBoolean boolean="${secureProgramInstance?.knewtonProduct}" /></td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource")}</div></div>
+	
+<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Teach2" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource2</span></a>
+    </li>
+  </ul> 
+<div id="Teach2" class="collapse">
+<br>
+				<div
+	class="control-group">
+	<label for="labelForTeacherAdditionalResource2" class="control-label col-sw-1"><g:message code="secureProgram.labelForTeacherAdditionalResource2.label" default="Label For Teacher Additional Resource2" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource2")}</div></div>
+			<div
+	class="control-group">
+	<label for="pathToTeacherAdditionalResource2" class="control-label col-sw-1"><g:message code="secureProgram.pathToTeacherAdditionalResource2.label" default="Path To Teacher Additional Resource2" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource2")}</div></div>
+		</div>	
+	
+	<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Teach3" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource3</span></a>
+    </li>
+         </ul>   
+<div id="Teach3" class="collapse">
+<br>		
+			<div
+	class="control-group">
+	<label for="labelForTeacherAdditionalResource3" class="control-label col-sw-1"><g:message code="secureProgram.labelForTeacherAdditionalResource3.label" default="Label For Teacher Additional Resource3" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource3")}</div></div>
+			<div
+	class="control-group">
+	<label for="pathToTeacherAdditionalResource3" class="control-label col-sw-1"><g:message code="secureProgram.pathToTeacherAdditionalResource3.label" default="Path To Teacher Additional Resource3" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource3")}</div></div>
+			
+			</div>
+<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Teach4" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource4</span></a>
+    </li>
+         </ul> 
+<div id="Teach4" class="collapse">
+<div>
+<br>
+			<div
+	class="control-group">
+	<label for="labelForTeacherAdditionalResource4" class="control-label col-sw-1"><g:message code="secureProgram.labelForTeacherAdditionalResource4.label" default="Label For Teacher Additional Resource4" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForTeacherAdditionalResource4")}</div></div>
+			<div
+	class="control-group">
+	<label for="pathToTeacherAdditionalResource4" class="control-label col-sw-1"><g:message code="secureProgram.pathToTeacherAdditionalResource4.label" default="Path To Teacher Additional Resource4" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToTeacherAdditionalResource4")}</div></div>
+		</div>
+		</div>	
+			
+		<span  class="col-sw-3">Student Additional Resources</span>	
+			<div
+	class="control-group">
+	<label for="labelForStudentAdditionalResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForStudentAdditionalResource.label" default="Label For Student Additional Resource" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph ID Dev" /></td>
+			<div
+	class="control-group">
+	<label for="pathToStudentAdditionalResource" class="control-label col-sw-1"><g:message code="secureProgram.pathToStudentAdditionalResource.label" default="Path To Student Additional Resource" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdDev")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource")}</div></div>
+			
+<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Student2" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource2</span></a>
+    </li>
+  </ul> 
+<div id="Student2" class="collapse">
+<br>
+			
+			<div
+	class="control-group">
+	<label for="labelForStudentAdditionalResource2" class="control-label col-sw-1"><g:message code="secureProgram.labelForStudentAdditionalResource2.label" default="Label For Student Additional Resource2" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource2")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph ID QA" /></td>
+			<div
+	class="control-group">
+	<label for="pathToStudentAdditionalResource2" class="control-label col-sw-1"><g:message code="secureProgram.pathToStudentAdditionalResource2.label" default="Path To Student Additional Resource2" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdQA")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource2")}</div></div>
+		</div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph ID Prod" /></td>
+			<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Student3" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource3</span></a>
+    </li>
+         </ul>   
+<div id="Student3" class="collapse">
+<br>	
+	<div
+	class="control-group">
+	<label for="labelForStudentAdditionalResource3" class="control-label col-sw-1"><g:message code="secureProgram.labelForStudentAdditionalResource3.label" default="Label For Student Additional Resource3" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdProd")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource3")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphWarmUpTimeLimit.label" default="Knowledge Graph Warm Up Time Limit" /></td>
+			<div
+	class="control-group">
+	<label for="pathToStudentAdditionalResource3" class="control-label col-sw-1"><g:message code="secureProgram.pathToStudentAdditionalResource3.label" default="Path To Student Additional Resource3" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphWarmUpTimeLimit")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource3")}</div></div>
+			
+			</div>
+			
+	<ul id="Menu" class="nav nav-pills margin-top-small">
+<li class="active">
+       <a data-toggle="collapse" data-target="#Student4" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource4</span></a>
+    </li>
+         </ul> 
+<div id="Student4" class="collapse">
+<div>
+<br>		
+			
+				<div
+	class="control-group">
+	<label for="labelForStudentAdditionalResource4" class="control-label col-sw-1"><g:message code="secureProgram.labelForStudentAdditionalResource4.label" default="Label For Student Additional Resource4" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "labelForStudentAdditionalResource4")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentTimeLimit.label" default="Knowledge Graph Enrichment Time Limit" /></td>
+			<div
+	class="control-group">
+	<label for="pathToStudentAdditionalResource4" class="control-label col-sw-1"><g:message code="secureProgram.pathToStudentAdditionalResource4.label" default="Path To Student Additional Resource4" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentTimeLimit")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "pathToStudentAdditionalResource4")}</div></div>
+			
+	</div>		
+			
+</div></div></div>
+	
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree">&nbsp;Knewton</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+			<div
+	class="control-group">
+	<label for="knewtonProduct" class="control-label col-sw-1"><g:message code="secureProgram.knewtonProduct.label" default="Knewton Product" /></label>
 				
-			</tr>
+				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.knewtonProduct}" /></div></div>
+
+			<div
+	class="control-group">
+	<label for="knowledgeGraphIdDev" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph ID Dev" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdDev")}</div></div>
+			<div
+	class="control-group">
+	<label for="knowledgeGraphIdQA" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphIdQA.label" default="Knowledge Graph ID QA" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdQA")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment CBI Time Limit" /></td>
+			<div
+	class="control-group">
+	<label for="knowledgeGraphIdProd" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphIdProd.label" default="Knowledge Graph ID Prod" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentCbiTimeLimit")}</td>
-				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphIdProd")}</div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.comments.label" default="Comments" /></td>
+			<div
+	class="control-group">
+	<label for="knowledgeGraphWarmUpTimeLimit" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphWarmUpTimeLimit.label" default="Knowledge Graph Warm Up Time Limit" /></label>
 				
-				<td valign="top" class="value">${fieldValue(bean: secureProgramInstance, field: "comments")}</td>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphWarmUpTimeLimit")}</div></div>
+		
+			<div class="control-group">
+	<label for="knowledgeGraphEnrichmentTimeLimit" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphEnrichmentTimeLimit.label" default="Knowledge Graph Enrichment Time Limit" /></label>
 				
-			</tr>
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentTimeLimit")}</div></div>
+		
+			<div
+	class="control-group">
+	<label for="knowledgeGraphEnrichmentCbiTimeLimit" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphEnrichmentCbiTimeLimit.label" default="Knowledge Graph Enrichment CBI Time Limit" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "knowledgeGraphEnrichmentCbiTimeLimit")}
+			</div>
+			</div>
+		</div>
+</div>
+</div>
+
+
+		</div></div>
+		<br>
+		<div class="platformf">Comments</div><br>
+			<div
+	class="control-group">
+	<label for="comments" class="control-label col-sw-1"><g:message code="secureProgram.comments.label" default="Comments" /></label>
+				
+				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "comments")}</div></div>
 			
 			<!-- Date Stamps here -->
 			
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></td>
+			<div
+	class="control-group">
+	<label for="dateCreated" class="control-label col-sw-1"><g:message code="secureProgram.dateCreated.label" default="Date Created" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></td>
-				
-			</tr>
+				<div class="controls show-style"><g:formatDate date="${secureProgramInstance?.dateCreated}" /></div></div>
 		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></td>
+			<div
+	class="control-group">
+	<label for="lastUpdated" class="control-label col-sw-1"><g:message code="secureProgram.lastUpdated.label" default="Last Updated" /></label>
 				
-				<td valign="top" class="value"><g:formatDate date="${secureProgramInstance?.lastUpdated}" /></td>
-				
-			</tr>
-			
+				<div class="controls show-style"><g:formatDate date="${secureProgramInstance?.lastUpdated}" />
+				</div>
+				</div>
+			<div class="platformf">Bundles</div><br>
 			<!-- Added Parent Object Links -->
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.bundles.label" default="Bundles (Parent Objects)" /></td>
+			<div
+	class="control-group">
+	<label for="bundles" class="control-label col-sw-1"><g:message code="secureProgram.bundles.label" default="Bundles (Parent Objects)" /></label>
 				
-				<td valign="top" style="text-align: left;" class="value">
+				<div class="controls show-style" style="text-align: left;">
 					<ul>
 					<g:each in="${parentBundles}" var="b">
 						<li><g:link controller="bundle" action="show" id="${b.id}">${b?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</td>				
-			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects (Child Objects)" /></td>
+				</div></div>
+		<div class="platformf">Commerce Objects</div><br>
+			<div
+	class="control-group">
+	<label for="commerceObjects" class="control-label col-sw-1"><g:message code="secureProgram.commerceObjects.label" default="Commerce Objects (Child Objects)" /></label>
 				
-				<td valign="top" style="text-align: left;" class="value">
+			<div class="controls show-style" style="text-align: left;">	
 					<ul>
 					<g:each in="${secureProgramInstance.commerceObjects}" var="c">
 						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</td>				
-			</tr>						
+				</div></div>					
+			</div>
 				
-		</tbody>
-	</table>
-</section>
+		
+	</section>
 </div>
 </div>
 </div>
+<script>
+
+	window.onload = pageonload;
+
+</script>
 </body>
 
-			
+</html>
 				
