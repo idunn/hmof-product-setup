@@ -193,7 +193,7 @@ class UtilityService {
 		try{
 			row = sql.rows("select user_updating_program from program_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updating_program")
-			log.info("userName:"+userName)
+			
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
@@ -217,7 +217,7 @@ class UtilityService {
 			
 			row = sql.rows("select user_updatingco from commerce_object_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updatingco")
-			log.info("userName:"+userName)
+			
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForCO method is: "+e.getMessage())
@@ -242,7 +242,7 @@ class UtilityService {
 			
 			row = sql.rows("select user_updatingsprogram from secure_program_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updatingsprogram")
-			log.info("userName:"+userName)
+			
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForSP method is: "+e.getMessage())
@@ -266,7 +266,7 @@ class UtilityService {
 		try{
 			row = sql.rows("select user_updating_bundle from bundle_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updating_bundle")
-			log.info("userName:"+userName)
+			
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForBundle method is: "+e.getMessage())
@@ -283,7 +283,7 @@ class UtilityService {
 	 * @param Bundle revision
 	 * @return
 	 */
-	def getInProgressJobs(){
+	def getJobsStuckInProgress(){
 		def sql = new Sql(dataSource)
 		def row
 		
@@ -293,8 +293,8 @@ class UtilityService {
 			log.info("row:"+row)
 		}
 		catch(Exception e){
-			log.error("exception in getInProgressJobs method is: "+e.getMessage())
-			log.error("exception in getInProgressJobs method is: "+e.getStackTrace())
+			log.error("exception in getJobsStuckInProgress method is: "+e.getMessage())
+			log.error("exception in getJobsStuckInProgress method is: "+e.getStackTrace())
 		}
 		finally{
 			sql.close();

@@ -144,12 +144,7 @@ class BootStrap {
 
 			
 			
-			def adminUser4 = User.findByUsername('arollapati') ?: new User(username: 'arollapati',password: 'Ji9ahhia',email: 'aparna.r2@cognizant.com').save(failOnError: true)
-			if (!adminUser4.authorities.contains(pmRole)) {UserRole.create adminUser4, pmRole}
-			def adminUser5 = User.findByUsername('arollapati') ?: new User(username: 'arollapati',password: 'Ji9ahhia',email: 'aparna.r2@cognizant.com').save(failOnError: true)
-			if (!adminUser5.authorities.contains(qaRole)) {UserRole.create adminUser5, qaRole}
-			def adminUser6 = User.findByUsername('arollapati') ?: new User(username: 'arollapati',password: 'Ji9ahhia',email: 'aparna.r2@cognizant.com').save(failOnError: true)
-			if (!adminUser6.authorities.contains(prodRole)) {UserRole.create adminUser6, prodRole}
+		
 			// Dev Users
 			def devUser = User.findByUsername('PM') ?: new User(username: 'PM',	password: 'spr1ngt1me').save(failOnError: true)
 			if (!devUser.authorities.contains(pmRole)) {UserRole.create devUser, pmRole	}
