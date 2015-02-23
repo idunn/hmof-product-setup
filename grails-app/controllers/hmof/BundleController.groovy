@@ -64,7 +64,7 @@ class BundleController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-			def instanceDetail = params.instanceDetail
+		def instanceDetail = params.instanceDetail
 
 		def instanceDetails = instanceDetail.split("/")
 		def instanceId = instanceDetails[0]
@@ -138,7 +138,7 @@ class BundleController {
 		def instanceDetail = params.instanceToBePromoted
 		def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = instanceDetails[0]
-		
+
 		def bundleInstance = Bundle.get(instanceToBePromoted)
 		log.info("Promoting bundleInstance isbn: "+bundleInstance.isbn)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -165,7 +165,7 @@ class BundleController {
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
@@ -189,7 +189,7 @@ class BundleController {
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 100, 200)
-		log.info "Bundle count:"+Bundle.count()
+		log.debug "Bundle count:" + Bundle.count()
 		respond Bundle.list(params), model:[bundleInstanceCount: Bundle.count()]
 	}
 
@@ -254,7 +254,7 @@ class BundleController {
 			respond bundleInstance.errors, view:'edit'
 			return
 		}
-		
+
 		if(params.secureProgram==null)
 		{
 			bundleInstance.secureProgram.clear()
@@ -285,7 +285,7 @@ class BundleController {
 			return
 		}
 
-		log.info "Removing Secure Program associations from the Bundle that is being deleted"		
+		log.info "Removing Secure Program associations from the Bundle that is being deleted"
 		removeAssociations(bundleInstance)
 
 		log.info "Started deleting Bundle ISBN: " + bundleInstance.isbn

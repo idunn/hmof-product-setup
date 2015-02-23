@@ -29,8 +29,8 @@ class SecureProgramController {
 	def updateParent(def currentInstance){
 
 		def bundleInstances = Bundle.where{secureProgram{id==currentInstance.id}}.list()
-	
-		bundleInstances.each{			
+
+		bundleInstances.each{
 			it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
 		}
 
@@ -79,7 +79,7 @@ class SecureProgramController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-			def instanceDetail = params.instanceDetail
+		def instanceDetail = params.instanceDetail
 
 		def instanceDetails = instanceDetail.split("/")
 		def instanceId = instanceDetails[0]
@@ -128,11 +128,11 @@ class SecureProgramController {
 	def promote(){
 
 		final String none = "none"
-		
+
 		def instanceDetail = params.instanceToBePromoted
 		def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = instanceDetails[0]
-		
+
 		def secureProgramInstance = SecureProgram.get(instanceToBePromoted)
 		log.info("Promoting secureProgramInstance : "+secureProgramInstance.productName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
@@ -157,9 +157,9 @@ class SecureProgramController {
 
 			def promote = [status: JobStatus.Pending.getStatus(), job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
-			
+
 			log.info("Job saved successfully")
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
@@ -184,17 +184,17 @@ class SecureProgramController {
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 100, 200)
-		log.info "Secure Program count:"+SecureProgram.count()
+		log.debug "Secure Program count:" + SecureProgram.count()
 		respond SecureProgram.list(params), model:[secureProgramInstanceCount: SecureProgram.count()]
 	}
 
 	def show(SecureProgram secureProgramInstance) {
-				
+
 		def parentBundles = Bundle.where{secureProgram{id==secureProgramInstance.id}}.list()
-		
+
 		render(view:"show", model:[secureProgramInstance:secureProgramInstance, parentBundles:parentBundles])
 	}
-	
+
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
 		respond new SecureProgram(params)
@@ -238,7 +238,7 @@ class SecureProgramController {
 
 	@Transactional
 	def update(SecureProgram secureProgramInstance) {
-	
+
 		if (secureProgramInstance == null) {
 			log.info "updating Secure Program Not Found"
 			notFound()
@@ -250,16 +250,16 @@ class SecureProgramController {
 			respond secureProgramInstance.errors, view:'edit'
 			return
 		}
-	
+
 		if(params.commerceObjects==null)
-		{			
+		{
 			secureProgramInstance.commerceObjects.clear()
 		}
-		  
+
 		secureProgramInstance.userUpdatingSProgram = springSecurityService?.currentUser?.username
 
 		secureProgramInstance.save flush:true
-		
+
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(secureProgramInstance)
 

@@ -240,7 +240,7 @@ class CommerceObjectController {
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 100, 200)
-		log.info "Commerce Object count:"+CommerceObject.count()
+		log.debug "Commerce Object count:" + CommerceObject.count()
 		respond CommerceObject.list(params), model:[commerceObjectInstanceCount: CommerceObject.count()]
 	}
 

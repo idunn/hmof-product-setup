@@ -11,7 +11,7 @@ import hmof.security.UserRole
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import grails.plugin.springsecurity.annotation.Secured
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 /**
  * ProgramController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
@@ -114,7 +114,7 @@ class ProgramController {
 
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("User Id: "+userId+",envId:"+envId)
-	
+
 		def promotionInstance = deploymentService.getDeployedInstance(programInstance, envId)
 
 		if(promotionInstance==null){
@@ -141,7 +141,7 @@ class ProgramController {
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
@@ -166,7 +166,7 @@ class ProgramController {
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 50, 100)
-		log.info "Program count:"+Program.count()
+		log.debug "Program count:" + Program.count()
 		respond Program.list(params), model:[programInstanceCount: Program.count()]
 	}
 
@@ -204,7 +204,7 @@ class ProgramController {
 			form {
 				flash.message = message(code: 'default.created.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
 				redirect programInstance
-				
+
 			}
 			'*' { respond programInstance, [status: CREATED] }
 		}
@@ -235,7 +235,7 @@ class ProgramController {
 			form {
 				flash.message = message(code: 'default.updated.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
 				redirect programInstance
-				
+
 			}
 			'*'{ respond programInstance, [status: OK] }
 		}
