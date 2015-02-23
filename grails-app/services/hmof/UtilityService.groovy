@@ -283,7 +283,7 @@ class UtilityService {
 	 * @param Bundle revision
 	 * @return
 	 */
-	def getStruckedJobs(){
+	def getInProgressJobs(){
 		def sql = new Sql(dataSource)
 		def row
 		
@@ -293,8 +293,8 @@ class UtilityService {
 			log.info("row:"+row)
 		}
 		catch(Exception e){
-			log.error("exception in getStruckedJobs method is: "+e.getMessage())
-			log.error("exception in getStruckedJobs method is: "+e.getStackTrace())
+			log.error("exception in getInProgressJobs method is: "+e.getMessage())
+			log.error("exception in getInProgressJobs method is: "+e.getStackTrace())
 		}
 		finally{
 			sql.close();

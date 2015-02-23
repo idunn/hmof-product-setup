@@ -33,7 +33,7 @@ class Bundle {
 	static constraints = {
 
 		isbn (blank: false, matches:/([0-9]{13})$/,unique: true)
-		title (blank: false)
+		title (blank: false,maxSize:125)
 		includePremiumCommerceObjects(nullable: true)
 		duration (inList: ["1-Year", "2-Year", "3-Year", "4-Year", "5-Year", "6-Year", "7-Year", "8-Year"], nullable:false)
 		program()

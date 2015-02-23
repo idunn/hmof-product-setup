@@ -19,14 +19,14 @@ class CleanInProgressJob {
 	}
 
 	def execute() {		
-	def promotionJobInstanceList =UtilityService.getStruckedJobs()
+	def promotionJobInstanceList =UtilityService.getInProgressJobs()
 		if(!promotionJobInstanceList.isEmpty())
 		{
 			promotionJobInstanceList.each{
 				def promotionJobStruckInstance=it
 				Long promotionJobId =  promotionJobStruckInstance.id
 				def promotionSInstance = Promotion.get(promotionJobId)
-				promotionSInstance.properties = [status: JobStatus.Failed]
+				promotionSInstance.properties = [status: JobStatus.FailedbyAdmin.getStatus()]
 				promotionSInstance.save(failOnError: true, flush:true)
 			}
 		}

@@ -85,7 +85,7 @@ class SecureProgram implements Comparable {
 
 	static constraints = {
 
-		productName (blank:false,nullable:false)
+		productName (blank:false,nullable:false,maxSize:125)
 
 		registrationIsbn (blank: false,nullable:false,matches:/(97(8|9))[0-9]{10}|\d{9}(\d|X)$/, unique: true)
 		onlineIsbn (blank: false,nullable:false)
@@ -95,19 +95,19 @@ class SecureProgram implements Comparable {
 
 
 		copyright (blank: false, nullable:true)
-		labelForOnlineResource (blank: false, nullable:true)		
-		pathToResource (shared: "globalUrl")				
-		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/)
+		labelForOnlineResource (blank: false, nullable:true,maxSize:100)		
+		pathToResource (shared: "globalUrl",maxSize:200)				
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
 		
 
-		labelForTeacherAdditionalResource (nullable:true)
-		pathToTeacherAdditionalResource (shared: "globalUrl")
-		labelForStudentAdditionalResource (nullable:true)
-		pathToStudentAdditionalResource (shared: "globalUrl")
+		labelForTeacherAdditionalResource (nullable:true,maxSize:100)
+		pathToTeacherAdditionalResource (shared: "globalUrl",maxSize:200)
+		labelForStudentAdditionalResource (nullable:true,maxSize:100)
+		pathToStudentAdditionalResource (shared: "globalUrl",maxSize:200)
 
-		securityWord (blank: false, nullable:false)
+		securityWord (blank: false, nullable:false,maxSize:25)
 		securityWordLocation (blank: false,range:1..10)
-		securityWordPage (blank: false)
+		securityWordPage (blank: false,maxSize:20)
 		includeDashboardObject (nullable:true)
 		includeEplannerObject (nullable:true)
 		includeNotebookObject (nullable:true)
@@ -211,28 +211,28 @@ class SecureProgram implements Comparable {
 
 		essayGraderPrompts(inList: ["Not Required", "Middle School", "High School"], nullable:false)
 
-		labelForTeacherAdditionalResource2(nullable:true)
-		pathToTeacherAdditionalResource2 (shared: "globalUrl")
-		labelForStudentAdditionalResource2(nullable:true)
-		pathToStudentAdditionalResource2 (shared: "globalUrl")
+		labelForTeacherAdditionalResource2(nullable:true,maxSize:100)
+		pathToTeacherAdditionalResource2 (shared: "globalUrl",maxSize:200)
+		labelForStudentAdditionalResource2(nullable:true,maxSize:100)
+		pathToStudentAdditionalResource2 (shared: "globalUrl",maxSize:200)
 
-		labelForTeacherAdditionalResource3(nullable:true)
-		pathToTeacherAdditionalResource3(shared: "globalUrl")
-		labelForStudentAdditionalResource3(nullable:true)
-		pathToStudentAdditionalResource3(shared: "globalUrl")
+		labelForTeacherAdditionalResource3(nullable:true,maxSize:100)
+		pathToTeacherAdditionalResource3(shared: "globalUrl",maxSize:200)
+		labelForStudentAdditionalResource3(nullable:true,maxSize:100)
+		pathToStudentAdditionalResource3(shared: "globalUrl",maxSize:200)
 
-		labelForTeacherAdditionalResource4(nullable:true)
-		pathToTeacherAdditionalResource4(shared: "globalUrl")
-		labelForStudentAdditionalResource4(nullable:true)
-		pathToStudentAdditionalResource4(shared: "globalUrl")
+		labelForTeacherAdditionalResource4(nullable:true,maxSize:100)
+		pathToTeacherAdditionalResource4(shared: "globalUrl",maxSize:200)
+		labelForStudentAdditionalResource4(nullable:true,maxSize:100)
+		pathToStudentAdditionalResource4(shared: "globalUrl",maxSize:200)
 
-		securityWord2(nullable:true)
+		securityWord2(nullable:true,maxSize:25)
 		securityWordLocation2(nullable:true,range:1..10)
-		securityWordPage2(nullable:true)
+		securityWordPage2(nullable:true,maxSize:20)
 
-		securityWord3(nullable:true)
+		securityWord3(nullable:true,maxSize:25)
 		securityWordLocation3(nullable:true,range:1..10)
-		securityWordPage3(nullable:true)
+		securityWordPage3(nullable:true,maxSize:20)
 		//TT-3979 changes ends
 
 	}

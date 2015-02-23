@@ -35,7 +35,7 @@ class DeploymentService {
 		if (!previousJobNumbers.isEmpty()){
 
 			// If the environment has 1 or more promotion instance it has a previous Job
-			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success &&  environments{id == envId }}.list()
+			def promotionList = Promotion.where{jobNumber in previousJobNumbers && status==JobStatus.Success.getStatus() &&  environments{id == envId }}.list()
 
 			if(promotionList.size()>=1)	{ return true }
 
@@ -90,7 +90,7 @@ class DeploymentService {
 		// required for mySql
 		if (!previousJobNumbers.isEmpty()){
 
-			def theJob = Promotion.where{jobNumber in previousJobNumbers && (status==JobStatus.Success || status==JobStatus.Repromoting) &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && (status==JobStatus.Success.getStatus() || status==JobStatus.Repromoting.getStatus()) &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
 
 			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
 
@@ -315,8 +315,7 @@ class DeploymentService {
 
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
-
-
+		
 		def authStr = authorities.toString().replace("[","").replace("]","")
 		List<String> authList = Arrays.asList(authStr.split(", "));
 
@@ -431,7 +430,7 @@ class DeploymentService {
 		// Get the Instance that was deployed to the previous environment
 		def promoInstance = Promotion.where{id==InstanceNumber}.get()
 
-		if(promoInstance == null || promoInstance.status !=JobStatus.Success.toString()){
+		if(promoInstance == null || promoInstance.status !=JobStatus.Success.getStatus().toString()){
 			log.warn "Preventing the promotion as previous promotion was not successful!"
 
 		}else{
@@ -493,7 +492,7 @@ class DeploymentService {
 	def executeJob(){
 
 		// get first instance in pending status
-		def promotionJobInstance = Promotion.where{status == JobStatus.Pending || status == JobStatus.Pending_Repromote }.list(max:1)
+		def promotionJobInstance = Promotion.where{status == JobStatus.Pending.getStatus() || status == JobStatus.Pending_Repromote.getStatus() }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
 
 		if(!promotionJobInstance.isEmpty()){
@@ -513,9 +512,9 @@ class DeploymentService {
 
 			def statusStart = null
 
-			if (promotionInstance.status==JobStatus.Pending_Repromote.toString()){
-				statusStart = JobStatus.Repromoting
-			}else { statusStart = JobStatus.In_Progress	}
+			if (promotionInstance.status==JobStatus.Pending_Repromote.getStatus().toString()){
+				statusStart = JobStatus.Repromoting.getStatus()
+			}else { statusStart = JobStatus.In_Progress.getStatus()	}
 
 			promotionInstance.properties = [status: statusStart]
 			promotionInstance.save(failOnError: true, flush:true)
@@ -525,8 +524,8 @@ class DeploymentService {
 			def statusFinish = null
 
 			if (processJobs){
-				statusFinish = JobStatus.Success
-			} else {statusFinish = JobStatus.Failed}
+				statusFinish = JobStatus.Success.getStatus()
+			} else {statusFinish = JobStatus.Failed.getStatus()}
 
 			// return map
 			def results = [status: statusFinish, promotionId:promotionJobInstance.id]

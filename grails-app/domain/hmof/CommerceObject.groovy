@@ -42,17 +42,17 @@ class CommerceObject implements Comparable{
 
 	static constraints = {
 
-		objectName (blank: false, unique: true)
-		isbnNumber (blank: false,matches:/([0-9]{10}|[0-9]{13})$/,unique: true)
+		objectName (blank: false, unique: true,maxSize:100)
+		isbnNumber (blank: false,matches:/([0-9]{10}|[0-9]{13})$/,unique: true,maxSize:100)
 
 		dateCreated ()
 		lastUpdated ()
 
-		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/)
-		teacherLabel (blank: false, nullable:true)
-		teacherUrl (shared: "globalUrl")
-		studentLabel (blank: false, nullable:true)
-		studentUrl (shared: "globalUrl")
+		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
+		teacherLabel (blank: false, nullable:true,maxSize:50)
+		teacherUrl (shared: "globalUrl",maxSize:200)
+		studentLabel (blank: false, nullable:true,maxSize:50)
+		studentUrl (shared: "globalUrl",maxSize:200)
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
 		objectReorderNumber (range: 0..12)
 		gradeLevel (inList: ['6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )

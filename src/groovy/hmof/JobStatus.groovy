@@ -7,14 +7,18 @@ public enum JobStatus {
 	Success("Success"),
 	Failed("Failed"),
 	Repromoting("Repromoting"),
+	FailedbyAdmin("Failed - by Admin cleanup process"),
 	//Failure("Failure") // TODO remove
 
 	String status
-
+	
 	JobStatus(String status) {
-		this.status = status
+	   this.status = status
 	}
-
+	String getStatus() {
+	   return this.status
+	}
+		
 	static JobStatus byId(String id) {
 		values().find { it.status == id }
 	}

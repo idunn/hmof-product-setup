@@ -117,8 +117,8 @@ class BundleController {
 
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("Environment ID:"+envId)
-		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
-		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
+		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending.getStatus())
+		def promote = [status: JobStatus.Pending.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
@@ -161,12 +161,12 @@ class BundleController {
 
 		if(promotionJobInstance==none){
 
-			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
+			def promote = [status: JobStatus.Pending.getStatus(), job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString() || 
-		promotionJobInstance.status == JobStatus.Pending_Repromote.toString() || promotionJobInstance.status == JobStatus.Repromoting.toString()){
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
@@ -177,7 +177,7 @@ class BundleController {
 			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus()]
 
 		}
 

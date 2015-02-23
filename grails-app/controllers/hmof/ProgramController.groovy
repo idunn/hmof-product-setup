@@ -85,9 +85,9 @@ class ProgramController {
 
 		def envId = deploymentService.getUserEnvironmentInformation()
 		log.info("Environment ID:"+envId)
-		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending)
+		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending.getStatus())
 
-		def promote = [status: JobStatus.Pending, job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
+		def promote = [status: JobStatus.Pending.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
@@ -137,12 +137,12 @@ class ProgramController {
 
 		if(promotionJobInstance==none){
 
-			def promote = [status: JobStatus.Pending, job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
+			def promote = [status: JobStatus.Pending.getStatus(), job: jobInstance, jobNumber: promotionInstance.getJobNumber(), user: userId, environments: envId,smartDeploy:previousJobExist]
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.toString() || promotionJobInstance.status == JobStatus.Pending.toString() || 
-		promotionJobInstance.status == JobStatus.Pending_Repromote.toString() || promotionJobInstance.status == JobStatus.Repromoting.toString()){
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
@@ -153,7 +153,7 @@ class ProgramController {
 			// If job has failed or is successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote, smartDeploy:previousJobExist]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), smartDeploy:previousJobExist]
 
 		}
 
@@ -203,8 +203,8 @@ class ProgramController {
 		request.withFormat {
 			form {
 				flash.message = message(code: 'default.created.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
-				//redirect programInstance
-				redirect(action: "show", id: 1)
+				redirect programInstance
+				
 			}
 			'*' { respond programInstance, [status: CREATED] }
 		}
@@ -235,7 +235,7 @@ class ProgramController {
 			form {
 				flash.message = message(code: 'default.updated.message', args: [message(code: 'programInstance.label', default: 'Program'), programInstance.id])
 				redirect programInstance
-				//redirect(action: "show", id: 1)
+				
 			}
 			'*'{ respond programInstance, [status: OK] }
 		}
