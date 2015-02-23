@@ -103,16 +103,11 @@ environments {
 environments {
 	development {
 
-		def cacheLocation="target/ProductSetup-cache"
-		uploadFolder = "${cacheLocation}/import"
-		
+		cacheLocation="target/ProductSetup-cache"
+		uploadFolder="target/ProductSetup-cache/import"
+
 		// log4j configuration
 		log4j = {
-			// Example of changing the log pattern for the default console appender:
-			//
-			//appenders {
-			//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-			//}
 
 			appenders {
 				console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
@@ -124,8 +119,8 @@ environments {
 				error 'stdout', 'file'
 				additivity = true
 			}
-			debug 'hmof.geb'
-			error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+			debug   'hmof.geb'
+			error   'org.codehaus.groovy.grails.web.servlet',        // controllers
 					'org.codehaus.groovy.grails.web.pages',          // GSP
 					'org.codehaus.groovy.grails.web.sitemesh',       // layouts
 					'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -138,11 +133,11 @@ environments {
 					'net.sf.ehcache.hibernate'
 
 
-			debug  "grails.app.controllers.hmof",
+			debug   "grails.app.controllers.hmof",
 					"grails.app.services.hmof" ,
 					"grails.app.domain.hmof"
 
-			info  "grails.app.controllers.hmof",
+			info    "grails.app.controllers.hmof",
 					"grails.app.services.hmof" ,
 					"grails.app.domain.hmof"
 		}
@@ -150,21 +145,17 @@ environments {
 
 	production{
 
-		def cacheLocation="E:/ProductSetup-cache"
-		uploadFolder = "${cacheLocation}/import"
+		cacheLocation="E:/ProductSetup-cache"
+		uploadFolder="E:/ProductSetup-cache/import"
+
 		// log4j configuration
 		log4j = {
-			// Example of changing the log pattern for the default console appender:
-			//
-			//appenders {
-			//    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-			//}
 
 			appenders {
 				rollingFile name:'file', file: logDirectory + '/logs/ProductSetupLogs/ProductSetup.log', threshold: org.apache.log4j.Level.INFO, maxFileSize:"1MB", maxBackupIndex: 10, 'append':true
 			}
-			debug 'hmof.geb'
-			error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+			debug   'hmof.geb'
+			error   'org.codehaus.groovy.grails.web.servlet',        // controllers
 					'org.codehaus.groovy.grails.web.pages',          // GSP
 					'org.codehaus.groovy.grails.web.sitemesh',       // layouts
 					'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -176,9 +167,9 @@ environments {
 					'org.hibernate',
 					'net.sf.ehcache.hibernate'
 
-			warn 'grails.app.service'
-			warn 'grails.app.controller'
-			info   'grails.app.controllers.hmof',
+			warn    'grails.app.service'
+			warn    'grails.app.controller'
+			info    'grails.app.controllers.hmof',
 					'grails.app.services.hmof',
 					'grails.app.domain.hmof'
 
