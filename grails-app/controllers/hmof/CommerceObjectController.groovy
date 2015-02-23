@@ -77,43 +77,46 @@ class CommerceObjectController {
 			secureProgram.removeFromCommerceObjects(currentInstance)
 		}
 	}
-	@Secured(['ROLE_ADMIN'])	
+	@Secured(['ROLE_ADMIN'])
 	def importCSV(Integer max) {render(view:"importCSV")}
 	/**
 	 * Pass in a comma separated file and update the database with new CO instances
 	 * @return
 	 */
-	
+
 	@Transactional
 	def importFile(){
 
-		log.info"Importing File"
+		log.info"Importing File..."
 		def csvfile = request.getFile('CSVfiledata')
-		
+
 		try {
 			if(csvfile==null) {
-				
-				flash.message = "File cannot be empty"
+
+				flash.message = "Import File cannot be empty"
 				redirect(action: "list")
 				return
 			} else {
 				def filename = csvfile.getOriginalFilename()
-				def fullPath=grailsApplication.config.uploadFolder
-				
-				File upLoadedfileDir = new File(fullPath);
-				if (!upLoadedfileDir.exists()) {					
-					upLoadedfileDir.mkdir()						
+				String fullPath=grailsApplication.config.uploadFolder
+
+				File upLoadedfileDir = new File(fullPath)
+				if (!upLoadedfileDir.exists()) {
+					upLoadedfileDir.mkdirs()
+					log.info "Upload directory: ${upLoadedfileDir.getAbsolutePath()}"
 				}
-				
-				def upLoadedfile= new File(fullPath, filename)
-			   	upLoadedfile.createNewFile() //if it doesn't already exist
-				FileOutputStream fos = new FileOutputStream(upLoadedfile);
-				fos.write(csvfile.getBytes());
-				fos.close();
-				log.info"Calling Service"
+
+				def upLoadedfile = new File(fullPath, filename)
+				upLoadedfile.createNewFile() //if it doesn't already exist
+				FileOutputStream fos = new FileOutputStream(upLoadedfile)
+				fos.write(csvfile.getBytes())
+				fos.close()
+
+				log.info"Calling Service to import Commerce Objects"
+
 				List parseFileAndPersistData = utilityService.parseTextFile(upLoadedfile)
 				if (parseFileAndPersistData?.empty) {
-					upLoadedfile.delete()						
+					upLoadedfile.delete()
 					redirect(action: "list")
 					return
 				}else
@@ -124,7 +127,8 @@ class CommerceObjectController {
 
 			}
 		} catch (IOException e) {
-			flash.message = "File cannot be empty / File have errors"
+			flash.message = "There were errors when importing the Commerce Objects"
+			log.error "There were errors when importing the Commerce Objects" + e
 			redirect(action: "importCSV")
 			return
 		}
@@ -212,7 +216,7 @@ class CommerceObjectController {
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 			log.info("Job saved successfully")
 
-		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() || 
+		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
