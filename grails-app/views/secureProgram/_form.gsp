@@ -100,10 +100,10 @@
 </div>
 </section></div>
 <div class="span12" >
-<div class="platformf">Platform Features</div><br>
+<div class="platformf">Include Platform Features</div><br>
 				
 		<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeDashboardObject', 'error-field')} ">
-				<label for="includeDashboardObject" class="control-label col-sw-1"><g:message code="secureProgram.includeDashboardObject.label" default="Include Dashboard Object" /></label>
+				<label for="includeDashboardObject" class="control-label col-sw-1"><g:message code="secureProgram.includeDashboardObject.label" default="Dashboard" /></label>
 				<div class="controls">
 					<bs:checkBox name="includeDashboardObject" value="${secureProgramInstance?.includeDashboardObject}" />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeDashboardObject', 'error-field')}</span>
@@ -111,7 +111,7 @@
 			</div>
 
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeEplannerObject', 'error-field')} ">
-				<label for="includeEplannerObject" class="control-label col-sw-1"><g:message code="secureProgram.includeEplannerObject.label" default="Include Eplanner Object" /></label>
+				<label for="includeEplannerObject" class="control-label col-sw-1"><g:message code="secureProgram.includeEplannerObject.label" default="ePlanner" /></label>
 				<div class="controls">
 					<bs:checkBox name="includeEplannerObject" value="${secureProgramInstance?.includeEplannerObject}"  />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeEplannerObject', 'error-field')}</span>
@@ -119,7 +119,7 @@
 			</div>
 			
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')} ">
-				<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></label>
+				<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="myNotebook" /></label>
 				<div class="controls">
 					<bs:checkBox name="includeNotebookObject" value="${secureProgramInstance?.includeNotebookObject}"  />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')}</span>
