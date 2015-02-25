@@ -146,8 +146,8 @@ environments {
 	production{
 
 		cacheLocation="E:/ProductSetup-cache"
-		uploadFolder="${cacheLocation}/import"
-		javamelody.'storage-directory' = '${cacheLocation}/PS_Monitoring/PS_javamelody'
+		uploadFolder="E:/ProductSetup-cache/import"
+		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
 
