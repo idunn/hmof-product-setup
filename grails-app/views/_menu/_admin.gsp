@@ -39,6 +39,12 @@
 				Quartz Monitoring Settings
 			</a>
 		</li>
+		<li class="">
+			<a href="${createLink(uri: '/monitoring')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				Java Melody Monitoring
+			</a>
+		</li>
 		</sec:ifAnyGranted>
 	</ul>
 </li>
