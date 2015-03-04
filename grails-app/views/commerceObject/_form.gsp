@@ -179,9 +179,10 @@
 
 			</label>
 			<div class="controls">
-				<g:checkBox name="isPremium"
+			<bs:checkBox name="isPremium" value="${commerceObjectInstance?.isPremium}" data-toggle="tooltip" data-placement="right" data-container="body" title="Viewable to Customers who buy Premium Bundles" />
+				<%--<g:checkBox name="isPremium"
 					value="${commerceObjectInstance?.isPremium}" data-toggle="tooltip" data-placement="right" data-container="body" title="Viewable to Customers who buy Premium Bundles"/>
-			</div>
+			--%></div>
 		</div>
 
 	</section>

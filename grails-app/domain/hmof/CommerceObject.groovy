@@ -24,7 +24,7 @@ class CommerceObject implements Comparable{
 	String subject
 	String gradeLevel
 	Boolean tabNavTab
-	Boolean isPremium
+	Boolean isPremium=false
 	String comments = (new Date().format('dd/MM/yy'))
 	String userUpdatingCO
 
@@ -55,7 +55,7 @@ class CommerceObject implements Comparable{
 		studentUrl (shared: "globalUrl",maxSize:200)
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
 		objectReorderNumber (range: 0..12)
-		gradeLevel (inList: ['6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
+		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
 		comments (maxSize:200, nullable:true, widget: 'textarea')
 
 		category (inList: ['Other','Science & Health','Social Studies','Language Arts','Mathematics','World Languages'])

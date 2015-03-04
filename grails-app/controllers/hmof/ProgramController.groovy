@@ -171,7 +171,20 @@ class ProgramController {
 	}
 
 	def show(Program programInstance) {
-		respond programInstance
+		def bundleList = Bundle.where{program{ id==programInstance.id}}.list()		
+		def undeployableBundle = Bundle.where{ program{ id==programInstance.id} && secureProgram.size()==0 }.list()
+		
+	   def unDeployableBundleMap=[:]
+
+	   if(!undeployableBundle.isEmpty()){
+	   undeployableBundle.each {
+
+	   unDeployableBundleMap.put(it.id,it.toString())
+		}
+	}
+		
+		render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap])
+		
 	}
 	@Secured(['ROLE_ADMIN'])
 	def create() {

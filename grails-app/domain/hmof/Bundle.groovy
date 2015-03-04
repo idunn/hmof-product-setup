@@ -13,7 +13,7 @@ class Bundle {
 	String duration
 	Date dateCreated
 	Date lastUpdated
-	Boolean includePremiumCommerceObjects
+	Boolean includePremiumCommerceObjects=false
 	String userUpdatingBundle
 	ContentType contentType
 	static belongsTo = [program:Program]

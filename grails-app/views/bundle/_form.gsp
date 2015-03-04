@@ -42,9 +42,10 @@
 
 			</label>
 			<div class="controls">
-			<g:checkBox name="includePremiumCommerceObjects"
+			<bs:checkBox name="includePremiumCommerceObjects" value="${bundleInstance?.includePremiumCommerceObjects}" data-toggle="tooltip" data-placement="right" data-container="body" title="Allows Premium Commerce Objects to be associated with the Bundle" />
+			<%--<g:checkBox name="includePremiumCommerceObjects"
 				value="${bundleInstance?.includePremiumCommerceObjects}" data-toggle="tooltip" data-placement="right" data-container="body" title="Allows Premium Commerce Objects to be associated with the Bundle" />
-				</div>
+				--%></div>
 		</div>
 		<div
 			class="control-group fieldcontain ${hasErrors(bean: bundleInstance, field: 'duration', 'error-field')} ">

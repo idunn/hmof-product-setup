@@ -23,6 +23,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
      url('../../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
 } 
 </style>
+<g:set var="jobdetails" bean="deploymentService"/>
 <div class="row">
 	<div class="widget stacked ">
 		<div class="widget-content">
@@ -59,6 +60,35 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	</div>
 </div>				
 
+
+		<div
+	class="control-group">
+	<label for="bundlecount" class="control-label col-sw-1"><g:message
+							code="program.bundlecount.label" default="Bundle Count" /></label>
+
+			<div class="controls show-style">
+		${bundleCount}
+	</div>
+</div>	
+
+		<div
+	class="control-group">
+	<label for="nondeployablebundles" class="control-label col-sw-1"><g:message
+							code="program.bundlecount.label" default="Non Deployable Bundles" /></label>
+
+			<div class="controls show-style">
+			
+		<g:if test="${unDeployableBundleMap}">
+				 
+					<ul>
+					<g:each var="unDeployableBundleMap1" in="${unDeployableBundleMap}"> 
+					
+					<li><g:link controller="Bundle" action="show" id="${unDeployableBundleMap1.key}">${unDeployableBundleMap1.value}</g:link></li>      
+                    </g:each>
+                    </ul>
+                    </g:if>
+	</div>
+</div>	
 				
 		<div
 	class="control-group">

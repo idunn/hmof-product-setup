@@ -96,12 +96,11 @@ class UtilityService {
 		def gradeLevel1 = ["6", "7", "8", "9", "10", "11", "12"]
 		def gradeLevel2 = ["9", "10", "11", "12"]
 		def gradeLevel3 = ["6", "7", "8"]
-
+		
 		commerceObjectFile.eachCsvLine { tokens ->
 
 
 			def list = (tokens[12].replaceAll(","," ")).tokenize()
-
 
 			if(list.containsAll(gradeLevel1)){
 				tokens[12]="6-12"
@@ -109,6 +108,8 @@ class UtilityService {
 				tokens[12]="9-12"
 			}else if(list.containsAll(gradeLevel3)){
 				tokens[12]="6-8"
+			}else if(list.contains("K") ||list.contains("1") ||list.contains("2") ||list.contains("3") || list.contains("4") || list.contains("5")  ){
+				tokens[12]="6"
 			}
 
 
@@ -302,5 +303,8 @@ class UtilityService {
 		row
 	}
 	
+
+	
+
 }
 

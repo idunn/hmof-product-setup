@@ -118,13 +118,17 @@ class CommerceObjectWork extends Page {
 		log.debug "Grade Level: " + content.gradeLevel
 		def grades = []
 
-		if (!content.gradeLevel.contains("-")){
+        if(content.gradeLevel.equals("K") || content.gradeLevel.equals("1") || content.gradeLevel.equals("2") ||content.gradeLevel.equals("3") || content.gradeLevel.equals("4") || content.gradeLevel.equals("5")){
+		    grades = ["6"]
+	    }else if (!content.gradeLevel.contains("-")){
 			grades = content.gradeLevel
 		} else if(content.gradeLevel.equals("6-8")){
 			grades = ["6","7","8"]
 		}else if(content.gradeLevel.equals("9-12")){
 			grades = ["9","10","11", "12"]
-		} else {grades = ["6","7","8", "9","10","11", "12"]}
+		} else {
+		grades = ["6","7","8", "9","10","11", "12"]
+		}
 
 		gradeLevel.value(grades)
 
