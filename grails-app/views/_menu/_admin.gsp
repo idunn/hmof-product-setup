@@ -28,9 +28,15 @@
 				Manage Roles			</a>
 		</li>
 		<li class="">
+			<a href="${createLink(uri: '/secureProgram/importCSV')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				Secure Programs CSV Import
+			</a>
+		</li>
+		<li class="">
 			<a href="${createLink(uri: '/commerceObject/importCSV')}">
 				<i class="glyphicon glyphicon-info-sign"></i>
-				CSV Import
+				Commerce Objects CSV Import
 			</a>
 		</li>
 		<li class="">

@@ -91,32 +91,11 @@ class CommerceObjectController {
 		def csvfile = request.getFile('CSVfiledata')
 
 		try {
-			if(csvfile==null) {
+	
 
-				flash.message = "Import File cannot be empty"
-				redirect(action: "list")
-				return
-			} else {
-				def filename = csvfile.getOriginalFilename()
-				String fullPath=grailsApplication.config.uploadFolder
-
-				File upLoadedfileDir = new File(fullPath)
-				if (!upLoadedfileDir.exists()) {
-					upLoadedfileDir.mkdirs()
-					log.info "Upload directory: ${upLoadedfileDir.getAbsolutePath()}"
-				}
-
-				def upLoadedfile = new File(fullPath, filename)
-				upLoadedfile.createNewFile() //if it doesn't already exist
-				FileOutputStream fos = new FileOutputStream(upLoadedfile)
-				fos.write(csvfile.getBytes())
-				fos.close()
-
-				log.info"Calling Service to import Commerce Objects"
-
-				List parseFileAndPersistData = utilityService.parseTextFile(upLoadedfile)
+				List parseFileAndPersistData = utilityService.parseTextFile(csvfile,4)
 				if (parseFileAndPersistData?.empty) {
-					upLoadedfile.delete()
+					
 					redirect(action: "list")
 					return
 				}else
@@ -126,7 +105,7 @@ class CommerceObjectController {
 				}
 
 			}
-		} catch (IOException e) {
+		 catch (IOException e) {
 			flash.message = "There were errors when importing the Commerce Objects"
 			log.error "There were errors when importing the Commerce Objects" + e
 			redirect(action: "importCSV")

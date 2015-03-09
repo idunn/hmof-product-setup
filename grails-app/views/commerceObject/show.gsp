@@ -52,25 +52,25 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.teacherLabel.label" default="Teacher Label" /></label>
 				
-				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "teacherLabel")}</div></div>
+				<div class="controls show-style wordwrap">${fieldValue(bean: commerceObjectInstance, field: "teacherLabel")}</div></div>
 		
 			<div
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.teacherUrl.label" default="Teacher Url" /></label>
 				
-				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "teacherUrl")}</div></div>
+				<div class="controls show-style wordwrap" >${fieldValue(bean: commerceObjectInstance, field: "teacherUrl")}</div></div>
 		
 			<div
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.studentLabel.label" default="Student Label" /></label>
 				
-				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "studentLabel")}</div></div>
+				<div class="controls show-style wordwrap">${fieldValue(bean: commerceObjectInstance, field: "studentLabel")}</div></div>
 		
 		<div
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.studentUrl.label" default="Student Url" /></label>
 				
-				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "studentUrl")}</div></div>
+				<div class="controls show-style wordwrap">${fieldValue(bean: commerceObjectInstance, field: "studentUrl")}</div></div>
 		
 		</section>
 		</div>

@@ -9,6 +9,7 @@ import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
 import grails.plugin.springsecurity.annotation.Secured
+
 import org.apache.log4j.Logger
 
 @Transactional(readOnly = true)
@@ -316,5 +317,44 @@ class SecureProgramController {
 	 */
 	def download() {
 		utilityService.getLogFile(params.logFile)
+	}
+	@Secured(['ROLE_ADMIN'])
+	def importCSV(Integer max) {render(view:"importCSV")}
+	/**
+	 * Pass in a comma separated file and update the database with new CO instances
+	 * @return
+	 */
+
+	@Transactional
+	def importFile(){
+
+		log.info"Importing File..."
+		def csvfile = request.getFile('CSVfiledata')
+
+		try {
+	
+
+				List parseFileAndPersistData = utilityService.parseTextFile(csvfile,3)
+				if (parseFileAndPersistData?.empty) {
+					
+					redirect(action: "list")
+					return
+				}else
+				{
+					render view:'importCSV', model:[parseFileAndPersistData:parseFileAndPersistData]
+					return
+				}
+
+			}
+		 catch (IOException e) {
+			flash.message = "There were errors when importing the Commerce Objects"
+			log.error "There were errors when importing the Commerce Objects" + e
+			redirect(action: "importCSV")
+			return
+		}
+		log.info"Completed import"
+
+		redirect(action: "list")
+
 	}
 }

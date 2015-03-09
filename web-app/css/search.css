@@ -821,3 +821,6 @@ input[readonly] {
 	padding-top:5px;
 
 }
+.wordwrap{
+	word-wrap: break-word;
+}

@@ -6,6 +6,7 @@
 <html>
 
 <head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'secureProgram.label', default: 'SecureProgram')}" />
 	<title><g:message code="default.list.label" args="[entityName]" /></title>

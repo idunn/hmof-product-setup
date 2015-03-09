@@ -20,7 +20,7 @@ class CleanInProgressJob {
 
 	def execute() {		
 	def promotionJobInstanceList =UtilityService.getJobsStuckInProgress()
-		if(!promotionJobInstanceList.isEmpty())
+		if(null!=promotionJobInstanceList && !promotionJobInstanceList.isEmpty())
 		{
 			promotionJobInstanceList.each{
 				def promotionJobStruckInstance=it
