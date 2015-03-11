@@ -27,7 +27,7 @@ class Program {
 
 	static constraints = {
 
-		name (matches: /[A-Za-z0-9]+/, nullable:false, unique:['state'], blank:false)		
+		name (matches: /[A-Za-z0-9_]+/, nullable:false, unique:['state'], blank:false)		
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'Other'], nullable:false, blank:false)
 		state(nullable:false)
 		contentType ()

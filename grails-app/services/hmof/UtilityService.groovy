@@ -14,7 +14,7 @@ class UtilityService {
 	def dataSource
 	def springSecurityService
 	def grailsApplication
-	
+
 	def getDeletedObject(instanceId, revision, contentType){
 
 		log.info "Deleted Objects instanceId: " +  instanceId
@@ -89,7 +89,7 @@ class UtilityService {
 	 * @param commerceObjectFile
 	 * @return
 	 */
-	
+
 	def parseTextFile(csvfile,contenttype){
 
 		//def contentType = ContentType.where{id==contenttype}.get()
@@ -97,194 +97,194 @@ class UtilityService {
 		List errorList = new ArrayList()
 		List gradeList = new ArrayList()
 		try {
-					
-		if(csvfile==null) {			
-							flash.message = "Import File cannot be empty"
-							if(contenttype==4){
-							redirect(controller:"CommerceObject",action: "list")
-							}
-							else{
-								redirect(controller:"SecureProgram",action: "list")
-							}
-							return
-						} else {
-							def filename = csvfile.getOriginalFilename()
-						
-							String fullPath=grailsApplication.config.uploadFolder
-				
-							File upLoadedfileDir = new File(fullPath)
-							if (!upLoadedfileDir.exists()) {
-								upLoadedfileDir.mkdirs()
-								log.info "Upload directory: ${upLoadedfileDir.getAbsolutePath()}"
-							}
-			
-							 uploadFile = new File(fullPath, filename)
-							uploadFile.createNewFile() //if it doesn't already exist
-							FileOutputStream fos = new FileOutputStream(uploadFile)
-							fos.write(csvfile.getBytes())
-							fos.close()
-			
-							log.info"Calling Service to import Commerce Objects"
-						
-						}
-		
-				
-		
-		log.info "Parsing Text file in Service"
 
-		if(contenttype==4){
-		def gradeLevel1 = ["6", "7", "8", "9", "10", "11", "12"]
-		def gradeLevel2 = ["9", "10", "11", "12"]
-		def gradeLevel3 = ["6", "7", "8"]
-		
-		uploadFile.eachCsvLine { tokens ->
-
-
-			def list = (tokens[12].replaceAll(","," ")).tokenize()
-
-			if(list.containsAll(gradeLevel1)){
-				tokens[12]="6-12"
-			}else if(list.containsAll(gradeLevel2)) {
-				tokens[12]="9-12"
-			}else if(list.containsAll(gradeLevel3)){
-				tokens[12]="6-8"
-			}else if(list.contains("K") ||list.contains("1") ||list.contains("2") ||list.contains("3") || list.contains("4") || list.contains("5")  ){
-				tokens[12]="6"
-			}
-
-
-			CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3].replaceAll('"',''),
-			teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contenttype,
-			objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12],userUpdatingCO:springSecurityService?.currentUser?.username)
-
-		
-			if (!dom.save(flush: true)) {
-
-				log.error "Failed to Save CommerceObject"
-				errorList.add("<b>Object Name : " + tokens[0] + "</b>")
-				dom.errors.allErrors.each {
-
-					errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
+			if(csvfile==null) {
+				flash.message = "Import File cannot be empty"
+				if(contenttype==4){
+					redirect(controller:"CommerceObject",action: "list")
 				}
-				errorList.add("<br>")
+				else{
+					redirect(controller:"SecureProgram",action: "list")
+				}
+				return
+			} else {
+				def filename = csvfile.getOriginalFilename()
+
+				String fullPath=grailsApplication.config.uploadFolder
+
+				File upLoadedfileDir = new File(fullPath)
+				if (!upLoadedfileDir.exists()) {
+					upLoadedfileDir.mkdirs()
+					log.info "Upload directory: ${upLoadedfileDir.getAbsolutePath()}"
+				}
+
+				uploadFile = new File(fullPath, filename)
+				uploadFile.createNewFile() //if it doesn't already exist
+				FileOutputStream fos = new FileOutputStream(uploadFile)
+				fos.write(csvfile.getBytes())
+				fos.close()
+
+				log.info"Calling Service to import Commerce Objects"
+
 			}
-		}
-		}else{
-		uploadFile.eachCsvLine { tokens ->
-			
-			println tokens[0]
-	
-			    
-			       def knewtonProductVal
-				   def secureWordStr1
-				   def secureWordStr2
-				   def secureWordStr3
-				   def secureWordLocStr1
-				   def secureWordLocStr2
-				   def secureWordLocStr3
-				   def secureWordPageNumStr1
-				   def secureWordPageNumStr2
-				   def secureWordPageNumStr3
-				
-						if(tokens[10]!=null && tokens[10]!="")
+
+
+
+			log.info "Parsing Text file in Service"
+
+			if(contenttype==4){
+				def gradeLevel1 = ["6", "7", "8", "9", "10", "11", "12"]
+				def gradeLevel2 = ["9", "10", "11", "12"]
+				def gradeLevel3 = ["6", "7", "8"]
+
+				uploadFile.eachCsvLine { tokens ->
+
+
+					def list = (tokens[12].replaceAll(","," ")).tokenize()
+
+					if(list.containsAll(gradeLevel1)){
+						tokens[12]="6-12"
+					}else if(list.containsAll(gradeLevel2)) {
+						tokens[12]="9-12"
+					}else if(list.containsAll(gradeLevel3)){
+						tokens[12]="6-8"
+					}else if(list.contains("K") ||list.contains("1") ||list.contains("2") ||list.contains("3") || list.contains("4") || list.contains("5")  ){
+						tokens[12]="6"
+					}
+
+
+					CommerceObject dom=	new CommerceObject(objectName:tokens[0],comments:tokens[1],pathToCoverImage:tokens[2],isbnNumber:tokens[3].replaceAll('"',''),
+					teacherLabel:tokens[4],teacherUrl:tokens[5],studentLabel:tokens[6],studentUrl:tokens[7],category:getCategory(tokens[8]), contentType:contenttype,
+					objectType:tokens[9],objectReorderNumber:tokens[10],subject:tokens[11],gradeLevel:tokens[12],userUpdatingCO:springSecurityService?.currentUser?.username)
+
+
+					if (!dom.save(flush: true)) {
+
+						log.error "Failed to Save CommerceObject"
+						errorList.add("<b>Object Name : " + tokens[0] + "</b>")
+						dom.errors.allErrors.each {
+
+							errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
+						}
+						errorList.add("<br>")
+					}
+				}
+			}else{
+				uploadFile.eachCsvLine { tokens ->
+
+					println tokens[0]
+
+
+					def knewtonProductVal
+					def secureWordStr1
+					def secureWordStr2
+					def secureWordStr3
+					def secureWordLocStr1
+					def secureWordLocStr2
+					def secureWordLocStr3
+					def secureWordPageNumStr1
+					def secureWordPageNumStr2
+					def secureWordPageNumStr3
+
+					if(tokens[10]!=null && tokens[10]!="")
 						knewtonProductVal=true
-						else
+					else
 						knewtonProductVal=false
-						
-					
-						def secureWordStrs=tokens[30]
+
+
+					def secureWordStrs=tokens[30]
 
 					if(secureWordStrs!=null){
 						if(secureWordStrs.contains(',')){
-						def secureWordStr=secureWordStrs.split(',')
-						secureWordStr1=secureWordStr[0]
-						if(secureWordStr[1]!=null)
-						secureWordStr2=secureWordStr[1]
-						if(secureWordStr[2]!=null)
-						secureWordStr3=secureWordStr[2]
-					}else
-				    {
-					secureWordStr1=tokens[30]				
-						
-					  }
+							def secureWordStr=secureWordStrs.split(',')
+							secureWordStr1=secureWordStr[0]
+							if(secureWordStr[1]!=null)
+								secureWordStr2=secureWordStr[1]
+							if(secureWordStr[2]!=null)
+								secureWordStr3=secureWordStr[2]
+						}else
+						{
+							secureWordStr1=tokens[30]
+
+						}
 					}
 					def secureWordLocStrs=tokens[31]
 					if(secureWordLocStrs!=null){
 						if(secureWordLocStrs.contains(',')){
-						def secureWordLocStr=secureWordLocStrs.split(',')
-						secureWordLocStr1=secureWordLocStr[0]
-						if(secureWordLocStr[1]!=null)
-						secureWordLocStr2=secureWordLocStr[1]
-						if(secureWordLocStr[2]!=null)
-						secureWordLocStr3=secureWordLocStr[2]
+							def secureWordLocStr=secureWordLocStrs.split(',')
+							secureWordLocStr1=secureWordLocStr[0]
+							if(secureWordLocStr[1]!=null)
+								secureWordLocStr2=secureWordLocStr[1]
+							if(secureWordLocStr[2]!=null)
+								secureWordLocStr3=secureWordLocStr[2]
 						}else{
-						secureWordLocStr1=tokens[31]
-						
+							secureWordLocStr1=tokens[31]
+
 						}
-						
-					
-					  }
+
+
+					}
 					def secureWordPageNumStrs=tokens[32]
 					if(secureWordPageNumStrs!=null){
 						if(secureWordPageNumStrs.contains(',')){
-						def secureWordPageNumStr=secureWordPageNumStrs.split(',')
-						secureWordPageNumStr1=secureWordPageNumStr[0]
-						if(secureWordPageNumStr[1]!=null)
-						secureWordPageNumStr2=secureWordPageNumStr[1]
-						if(secureWordPageNumStr[2]!=null)
-						secureWordPageNumStr3=secureWordPageNumStr[2]
+							def secureWordPageNumStr=secureWordPageNumStrs.split(',')
+							secureWordPageNumStr1=secureWordPageNumStr[0]
+							if(secureWordPageNumStr[1]!=null)
+								secureWordPageNumStr2=secureWordPageNumStr[1]
+							if(secureWordPageNumStr[2]!=null)
+								secureWordPageNumStr3=secureWordPageNumStr[2]
 						}else{
-						secureWordPageNumStr1=tokens[32]
+							secureWordPageNumStr1=tokens[32]
 						}
-						
-						
-					  }
-			
-						
-						SecureProgram dom=new SecureProgram (productName:tokens[0], registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
-							onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:tokens[8], pathToCoverImage:tokens[9],
-							knewtonProduct:knewtonProductVal,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
-							labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
-							labelForTeacherAdditionalResource2:tokens[16],pathToTeacherAdditionalResource2:tokens[17],
-							labelForTeacherAdditionalResource3:tokens[18],pathToTeacherAdditionalResource3:tokens[19],
-							labelForTeacherAdditionalResource4:tokens[20],pathToTeacherAdditionalResource4:tokens[21],
-							labelForStudentAdditionalResource:tokens[22],pathToStudentAdditionalResource:tokens[23],
-							labelForStudentAdditionalResource2:tokens[24],pathToStudentAdditionalResource2:tokens[25],
-							labelForStudentAdditionalResource3:tokens[26],pathToStudentAdditionalResource3:tokens[27],
-                            labelForStudentAdditionalResource4:tokens[28],pathToStudentAdditionalResource4:tokens[29],
-                            securityWord:secureWordStr1, securityWordLocation:secureWordLocStr1,securityWordPage:secureWordPageNumStr1,
-							securityWord2:secureWordStr2, securityWordLocation2:secureWordLocStr2,securityWordPage2:secureWordPageNumStr2,
-							securityWord3:secureWordStr3,securityWordLocation3:secureWordLocStr3,securityWordPage3:secureWordPageNumStr3,
-							includeDashboardObject:true,includeEplannerObject:true,includeNotebookObject:false,
-							userUpdatingSProgram:springSecurityService?.currentUser?.username,contentType:contenttype,)
-					
-						if (!dom.save(flush: true)) {
-			
-							log.error "Failed to Save CommerceObject"
-							errorList.add("<b>Program Name : " + tokens[0] + "</b>")
-							dom.errors.allErrors.each {
-			
-								errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
-							}
-							errorList.add("<br>")
-						}
+
+
 					}
-		
-		}
-		
-		if(errorList?.empty)
-		{
-			uploadFile.delete()
-		}
+
+
+					SecureProgram dom=new SecureProgram (productName:tokens[0], registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
+					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:tokens[8], pathToCoverImage:tokens[9],
+					knewtonProduct:knewtonProductVal,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
+					labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
+					labelForTeacherAdditionalResource2:tokens[16],pathToTeacherAdditionalResource2:tokens[17],
+					labelForTeacherAdditionalResource3:tokens[18],pathToTeacherAdditionalResource3:tokens[19],
+					labelForTeacherAdditionalResource4:tokens[20],pathToTeacherAdditionalResource4:tokens[21],
+					labelForStudentAdditionalResource:tokens[22],pathToStudentAdditionalResource:tokens[23],
+					labelForStudentAdditionalResource2:tokens[24],pathToStudentAdditionalResource2:tokens[25],
+					labelForStudentAdditionalResource3:tokens[26],pathToStudentAdditionalResource3:tokens[27],
+					labelForStudentAdditionalResource4:tokens[28],pathToStudentAdditionalResource4:tokens[29],
+					securityWord:secureWordStr1, securityWordLocation:secureWordLocStr1,securityWordPage:secureWordPageNumStr1,
+					securityWord2:secureWordStr2, securityWordLocation2:secureWordLocStr2,securityWordPage2:secureWordPageNumStr2,
+					securityWord3:secureWordStr3,securityWordLocation3:secureWordLocStr3,securityWordPage3:secureWordPageNumStr3,
+					includeDashboardObject:true,includeEplannerObject:true,includeNotebookObject:false,
+					userUpdatingSProgram:springSecurityService?.currentUser?.username,contentType:contenttype,)
+
+					if (!dom.save(flush: true)) {
+
+						log.error "Failed to Save CommerceObject"
+						errorList.add("<b>Program Name : " + tokens[0] + "</b>")
+						dom.errors.allErrors.each {
+
+							errorList.add(Holders.getGrailsApplication().mainContext.messageSource.getMessage(it, null))
+						}
+						errorList.add("<br>")
+					}
+				}
+
+			}
+
+			if(errorList?.empty)
+			{
+				uploadFile.delete()
+			}
 		}catch (IOException e) {
 			flash.message = "There were errors when importing the Commerce Objects"
-			log.error "There were errors when importing the Commerce Objects" + e		
+			log.error "There were errors when importing the Commerce Objects" + e
 			if(contenttype==4){
 				redirect(controller:"CommerceObject",action: "importCSV")
-				}
-				else{
-					redirect(controller:"SecureProgram",action: "importCSV")
-				}
+			}
+			else{
+				redirect(controller:"SecureProgram",action: "importCSV")
+			}
 			return
 		}
 		return errorList
@@ -352,7 +352,7 @@ class UtilityService {
 		try{
 			row = sql.rows("select user_updating_program from program_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updating_program")
-			
+
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
@@ -373,10 +373,10 @@ class UtilityService {
 		def row
 		def userName
 		try{
-			
+
 			row = sql.rows("select user_updatingco from commerce_object_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updatingco")
-			
+
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForCO method is: "+e.getMessage())
@@ -395,13 +395,13 @@ class UtilityService {
 	def getLastUpdatedUserNameForSP(def revision){
 		def sql = new Sql(dataSource)
 		def row
-		
+
 		def userName
 		try{
-			
+
 			row = sql.rows("select user_updatingsprogram from secure_program_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updatingsprogram")
-			
+
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForSP method is: "+e.getMessage())
@@ -420,12 +420,12 @@ class UtilityService {
 	def getLastUpdatedUserNameForBundle(def revision){
 		def sql = new Sql(dataSource)
 		def row
-		
+
 		def userName
 		try{
 			row = sql.rows("select user_updating_bundle from bundle_aud where rev=?",[revision])
 			userName = row.get(0).get("user_updating_bundle")
-			
+
 		}
 		catch(Exception e){
 			log.error("exception in getLastUpdatedUserNameForBundle method is: "+e.getMessage())
@@ -436,7 +436,7 @@ class UtilityService {
 		}
 		userName
 	}
-		
+
 	/**
 	 *
 	 * @param Bundle revision
@@ -445,9 +445,9 @@ class UtilityService {
 	def getJobsStuckInProgress(){
 		def sql = new Sql(dataSource)
 		def row
-		
-		try{			
-			
+
+		try{
+
 			row = sql.rows("SELECT id FROM promotion WHERE (hour(SYSDATE) - hour(date_created))>2  AND status = 'In_Progress'")
 			log.info("row:"+row)
 		}
@@ -460,9 +460,9 @@ class UtilityService {
 		}
 		row
 	}
-	
 
-	
+
+
 
 }
 

@@ -63,6 +63,7 @@
 									<ul>
 										<li>Export the Secure Programs from the HMOF Production DB</li>
 										<li>Export to CSV without a header row</li>
+										<li>Manually Convert Copyright symbols '©' to its HTML Entity Number: &amp;#169;</li>										
 										<li>Browse and Select the CSV file then Click Upload</li>
 									</ul>
 								</span> <span> <g:submitButton name="importFile"
