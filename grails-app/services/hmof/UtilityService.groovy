@@ -241,7 +241,7 @@ class UtilityService {
 					}
 
 
-					SecureProgram dom=new SecureProgram (productName:tokens[0], registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
+					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', '©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
 					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:tokens[8], pathToCoverImage:tokens[9],
 					knewtonProduct:knewtonProductVal,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
 					labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
