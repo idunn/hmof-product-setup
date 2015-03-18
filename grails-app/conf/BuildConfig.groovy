@@ -108,8 +108,9 @@ grails.project.dependency.resolution = {
 		compile ":searchable:0.6.9"
 		compile ":jquery-ui:1.10.4"
 		compile ":csv:0.3.1"
-	
+		
 		compile ":grails-melody:1.54.0"
+		compile ":wslite:0.7.2.0"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
 		//runtime ":cached-resources:1.1"

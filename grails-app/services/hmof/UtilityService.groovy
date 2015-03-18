@@ -241,7 +241,7 @@ class UtilityService {
 					}
 
 
-					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', '©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
+					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', 'ï¿½'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
 					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:tokens[8], pathToCoverImage:tokens[9],
 					knewtonProduct:knewtonProductVal,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
 					labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
@@ -460,7 +460,93 @@ class UtilityService {
 		}
 		row
 	}
+	/**
+	 * Get ISBN product details
+	 * @param isbnNumber
+	 * @return sapResults
+	 */
+	def getIsbnRecords(List isbnNumber){
+		def sapResultsMap = [:]
+		try{
+		
+		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
+		def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
+		withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
+			def res = send {
+				body {
+					getMaterialDetailRequest(xmlns: nameSpace) {
+						materialKeyList(xmlns: nameSpace) {
+							isbnNumber.each{
+								isbn(xmlns:nameSpace,it.trim())
+							}
+						}
+					}
+				}
+			}
+			getmaterialDetailResponse(res)
+		}
+	
+	}catch(Exception e){
+	log.error("exception in getIsbnRecord method is: "+e.getMessage())
+	log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
+	sapResultsMap.put("error", e.getMessage())
+	sapResultsMap
+}
+	
+	}
+	/**
+	 * Get ISBN product details
+	 * @param isbnNumber
+	 * @return sapResults
+	 */
+	def getIsbnRecord(String isbnNumber){
+		def sapResultsMap = [:]
+		try{			
+			
+		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
+		def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
+		withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
+			def res = send {
+				body {
+					getMaterialDetailRequest(xmlns: nameSpace) {
+						materialKeyList(xmlns: nameSpace) {							
+								isbn(xmlns:nameSpace,isbnNumber.trim())							
+						}
+					}
+				}
+			}
+			getmaterialDetailResponse(res)			
+		}
+				
+		}catch(Exception e){
+		log.error("exception in getIsbnRecord method is: "+e.getMessage())
+		log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
+		sapResultsMap.put("error", e.getMessage())
+		sapResultsMap
+	}
+	}
+	
+	/**
+	 * Return the required data
+	 * @param res
+	 * @return
+	 */
+	def getmaterialDetailResponse(def res){
+		def sapResultsMap = [:]
+		try{
+		res.materialDetailList.materialDetail.each{
+		
+			sapResultsMap.put( it.isbn13.text(),it.materialStatusDescription.text())
+		}
+	
+		}catch(Exception e){
+			log.error("exception in getmaterialDetailResponse method is: "+e.getMessage())
+			log.error("exception in getmaterialDetailResponse method is: "+e.getStackTrace())
+			sapResultsMap.put("error", e.getMessage())
+		}
 
+		sapResultsMap
+	}
 
 
 

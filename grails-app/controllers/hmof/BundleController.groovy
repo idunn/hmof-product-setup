@@ -194,7 +194,11 @@ class BundleController {
 	}
 
 	def show(Bundle bundleInstance) {
-		respond bundleInstance
+		
+		def sapResultsList=Sap.list()
+		
+		 render(view:"show", model:[bundleInstance:bundleInstance,sapResultsList:sapResultsList])
+			
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
@@ -225,7 +229,44 @@ class BundleController {
 		if (!bundleInstance.save(flush: true)) {
 			render(view: "create", model: [bundleInstance: bundleInstance])
 			return
-		}
+		}else
+	{
+
+		InetAddress address = InetAddress.getByName("172.17.101.75");
+		boolean reachable = address.isReachable(5000);
+	if(reachable){
+		
+		log.info("SAP Service Reachable")
+		def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
+		if(!sapResultsMap.isEmpty()){
+			sapResultsMap.each {			
+				String sapIsbn=it.key			
+			def sapStatus = Sap.where{isbn==sapIsbn}.list()			
+			if(!sapStatus.isEmpty()){
+				Sap sap = Sap.where{isbn==sapIsbn}.get()
+			sap.properties = [status: it.value]
+			}else		
+		    {
+				Sap sap = new Sap(isbn: it.key, status: it.value)
+				sap.save(flush:true)
+				
+		    }			
+				
+			 }
+		 }else
+	 {
+		 Sap sap = new Sap(isbn: bundleInstance.isbn, status: " ")
+		 sap.save(flush:true)
+	 }
+		
+	}else
+    {
+		Sap sap = new Sap(isbn: bundleInstance.isbn, status: " ")
+		sap.save(flush:true)
+	
+	log.error("SAP Service not Reachable")	
+	}
+	}
 
 		request.withFormat {
 			form {

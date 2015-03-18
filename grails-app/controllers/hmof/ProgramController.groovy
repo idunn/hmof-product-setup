@@ -182,8 +182,9 @@ class ProgramController {
 	   unDeployableBundleMap.put(it.id,it.toString())
 		}
 	}
-		
-		render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap])
+
+	 def sapResultsList=Sap.list()		   
+    render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
 		
 	}
 	@Secured(['ROLE_ADMIN'])

@@ -46,12 +46,26 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 				
 				<div class="controls show-style">${fieldValue(bean: bundleInstance, field: "title")}</div>
 				</div>
+					<div
+	class="control-group">
+	<label for="sapstatus" class="control-label col-sw-1"><g:message code="bundle.sapstatus.label" default="Sap Status" /></label>
+				
+				<div class="controls show-style"><g:each in="${sapResultsList}" status="j" var="c">										
+											<g:if test="${c.isbn!=null &&  (c.isbn).equals(bundleInstance?.isbn)}"> 											
+											${c.status}
+										     </g:if>
+											</g:each></div>
+				</div>
 		<div
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="bundle.includePremiumCommerceObjects.label" default="Include Premium Commerce Objects" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: bundleInstance, field: "includePremiumCommerceObjects")}</div>
 				</div>
+				
+			
+				
+				
 			<div
 	class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="bundle.duration.label" default="Duration" /></label>

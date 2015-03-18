@@ -24,12 +24,13 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 } 
 </style>
 <g:set var="jobdetails" bean="deploymentService"/>
+<g:set var="isbnWebService" bean="utilityService"/>
 <div class="row">
 	<div class="widget stacked ">
 		<div class="widget-content">
 	<section id="show-program" class="first">
 
-	<div class="span9 form-horizontal">
+	<div class="span12 form-horizontal">
 
 <div
 	class="control-group">
@@ -109,16 +110,19 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 									<th>
 										${'Edit'}
 									</th>
+									<th>
+										${'SAP Status'}
+									</th>
 								</tr>
 							</thead>
 							<tbody>
 								<g:each in="${programInstance.bundles}" status="i" var="b">
-
+							       
 									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 										<td><g:link controller="bundle" action="show"
 												id="${b.id}">
 												${b?.encodeAsHTML()}
-											</g:link></td>
+											</g:link> </td>
 										<td><g:link controller="bundle" action="show"
 												id="${b.id}">
 												${"View"}
@@ -127,7 +131,17 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 												id="${b.id}">
 												${"Edit"}
 											</g:link></td>
+											
+											<td>
+											<g:each in="${sapResultsList}" status="j" var="c">										
+											<g:if test="${c.isbn!=null &&  (c.isbn).equals(b.isbn) }"> 											
+											${c.status}
+										     </g:if>
+											</g:each>
+											</td>
+											
 									</tr>
+									
 								</g:each>
 
 							</tbody>
@@ -157,104 +171,6 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			</div>			
 				
 				
-		<%--<table class="table">
-			<tbody>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.name.label" default="Name" /></td>
-
-					<td valign="top" class="value">
-						${fieldValue(bean: programInstance, field: "name")}
-					</td>
-
-				</tr>
-				
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.state.label" default="State" /></td>
-
-					<td valign="top" class="value">
-						${fieldValue(bean: programInstance, field: "state")}
-					</td>
-
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.discipline.label" default="Discipline" /></td>
-
-					<td valign="top" class="value">
-						${fieldValue(bean: programInstance, field: "discipline")}
-					</td>
-
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.bundles.label" default="Bundles" /></td>
-
-					<td valign="top" style="text-align: left;" class="value">
-						<!-- Add new Template --> <g:render template="addBundle" /> <!-- Added new table -->
-						<table class="table table-bordered margin-top-medium">
-							<thead>
-								<tr>
-									<th>
-										${'List'}
-									</th>
-									<th>
-										${'View'}
-									</th>
-									<th>
-										${'Edit'}
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								<g:each in="${programInstance.bundles}" status="i" var="b">
-
-									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-										<td><g:link controller="bundle" action="show"
-												id="${b.id}">
-												${b?.encodeAsHTML()}
-											</g:link></td>
-										<td><g:link controller="bundle" action="show"
-												id="${b.id}">
-												${"View"}
-											</g:link></td>
-										<td><g:link controller="bundle" action="edit"
-												id="${b.id}">
-												${"Edit"}
-											</g:link></td>
-									</tr>
-								</g:each>
-
-							</tbody>
-						</table>
-					</td>
-
-				</tr>
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.dateCreated.label" default="Date Created" /></td>
-
-					<td valign="top" class="value"><g:formatDate
-							date="${programInstance?.dateCreated}" /></td>
-
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name"><g:message
-							code="program.lastUpdated.label" default="Last Updated" /></td>
-
-					<td valign="top" class="value"><g:formatDate
-							date="${programInstance?.lastUpdated}" /></td>
-
-				</tr>				
-
-			</tbody>
-		</table>
-	--%>
 	
 	</div>
 	</section>

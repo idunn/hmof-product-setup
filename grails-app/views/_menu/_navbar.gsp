@@ -26,8 +26,10 @@
 		</ul>
     	--%>
 			<ul class="nav navbar-nav navbar-right">
-				<g:render template="/_menu/search" />
+			
+				<g:render template="/_menu/search" />				
 				<sec:ifAnyGranted roles="ROLE_ADMIN">
+				
 					<g:render template="/_menu/admin" />
 				</sec:ifAnyGranted>
 				<!-- <g:render template="/_menu/info" />-->
