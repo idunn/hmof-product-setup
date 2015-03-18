@@ -264,7 +264,7 @@ def eGrades
 					securityWord2:secureWordStr2, securityWordLocation2:secureWordLocStr2,securityWordPage2:secureWordPageNumStr2,
 					securityWord3:secureWordStr3,securityWordLocation3:secureWordLocStr3,securityWordPage3:secureWordPageNumStr3,
 					includeDashboardObject:true,includeEplannerObject:true,includeNotebookObject:false,
-					userUpdatingSProgram:springSecurityService?.currentUser?.username,contentType:contenttype,)
+					userUpdatingSProgram:springSecurityService?.currentUser?.username,contentType:contenttype)
 
 					if (!dom.save(flush: true)) {
 
