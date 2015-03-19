@@ -212,7 +212,8 @@ class BundleController {
 		params.userUpdatingBundle = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def bundleInstance = new Bundle(params)
-
+		
+		
 		if (bundleInstance == null) {
 			log.info "Creating Bundle Not Found"
 			notFound()
@@ -224,49 +225,37 @@ class BundleController {
 			respond bundleInstance.errors, view:'create'
 			return
 		}
-
-		//bundleInstance.save flush:true
-		if (!bundleInstance.save(flush: true)) {
-			render(view: "create", model: [bundleInstance: bundleInstance])
-			return
-		}else
-	{
-
-		InetAddress address = InetAddress.getByName("172.17.101.75");
-		boolean reachable = address.isReachable(5000);
+			
+		
+	InetAddress address = InetAddress.getByName("172.17.101.75");
+	boolean reachable = address.isReachable(5000);
 	if(reachable){
 		
 		log.info("SAP Service Reachable")
 		def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
-		if(!sapResultsMap.isEmpty()){
-			sapResultsMap.each {			
-				String sapIsbn=it.key			
-			def sapStatus = Sap.where{isbn==sapIsbn}.list()			
-			if(!sapStatus.isEmpty()){
-				Sap sap = Sap.where{isbn==sapIsbn}.get()
-			sap.properties = [status: it.value]
-			}else		
-		    {
-				Sap sap = new Sap(isbn: it.key, status: it.value)
-				sap.save(flush:true)
-				
-		    }			
+		if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
+			sapResultsMap.each {
+				String sapIsbn=it.key
+			bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value,dateCreated:new Date())
 				
 			 }
 		 }else
 	 {
-		 Sap sap = new Sap(isbn: bundleInstance.isbn, status: " ")
-		 sap.save(flush:true)
+		 bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
 	 }
 		
 	}else
-    {
-		Sap sap = new Sap(isbn: bundleInstance.isbn, status: " ")
-		sap.save(flush:true)
-	
-	log.error("SAP Service not Reachable")	
+	{
+		bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())	
+	   log.error("SAP Service not Reachable")
 	}
-	}
+		
+		
+		
+		if (!bundleInstance.save(flush: true)) {
+			render(view: "create", model: [bundleInstance: bundleInstance])
+			return
+		}
 
 		request.withFormat {
 			form {

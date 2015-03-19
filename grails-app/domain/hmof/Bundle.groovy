@@ -19,6 +19,7 @@ class Bundle {
 	static belongsTo = [program:Program]
 	SortedSet secureProgram
 	static hasMany = [secureProgram:SecureProgram]
+	static hasOne = [sap: Sap]
 	static searchable = {
 		secureProgram component: true
 
@@ -37,6 +38,7 @@ class Bundle {
 		includePremiumCommerceObjects(nullable: true)
 		duration (inList: ["1-Year", "2-Year", "3-Year", "4-Year", "5-Year", "6-Year", "7-Year", "8-Year"], nullable:false)
 		program()
+		sap(nullable:true)
 	}
 
 	String toString(){

@@ -18,16 +18,27 @@ class SapStatusJob {
 		def bundleListISBN = Bundle.list().isbn
 		InetAddress address = InetAddress.getByName("172.17.101.75")
 		boolean reachable = address.isReachable(5000)
+	
 	if(reachable){
+		logger.info("SAP service Reachable")
 		def sapResultsMap= UtilityService.getIsbnRecords(bundleListISBN)	
-		if(!sapResultsMap.isEmpty()){
-		sapResultsMap.each {				
-			String isbnId = it.key	
+		
+		
+		if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
+		sapResultsMap.each {			
+			String isbnId = it.key		
+			def sapInstance = Sap.where{isbn==isbnId}.get()
+			def bundleInstance = Bundle.where{isbn==isbnId}.get()
+			if(bundleInstance!=null && sapInstance!=null){
 			
-			Sap sap = Sap.where{isbn==isbnId}.get()
-			sap.properties = [status: it.value]
-			
-			
+			bundleInstance.sap.status = it.value			
+			bundleInstance.sap.lastUpdated=new Date()
+			bundleInstance.save(flush: true)
+			}else
+		   {
+			   bundleInstance.sap = new Sap(isbn: isbnId,bundle: bundleInstance, status:it.value,dateCreated:new Date())
+			   bundleInstance.save(flush: true)
+	    	}
 		}	
 		}
 	}else

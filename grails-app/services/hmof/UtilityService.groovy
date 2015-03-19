@@ -474,7 +474,6 @@ def eGrades
 	 * @return sapResults
 	 */
 	def getIsbnRecords(List isbnNumber){
-		def sapResultsMap = [:]
 		try{
 		
 		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
@@ -495,10 +494,9 @@ def eGrades
 		}
 	
 	}catch(Exception e){
-	log.error("exception in getIsbnRecord method is: "+e.getMessage())
-	log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
-	sapResultsMap.put("error", e.getMessage())
-	sapResultsMap
+	log.error("exception in getIsbnRecords method is: "+e.getMessage())
+	log.error("exception in getIsbnRecords method is: "+e.getStackTrace())
+	
 }
 	
 	}
@@ -507,8 +505,7 @@ def eGrades
 	 * @param isbnNumber
 	 * @return sapResults
 	 */
-	def getIsbnRecord(String isbnNumber){
-		def sapResultsMap = [:]
+	def getIsbnRecord(String isbnNumber){		
 		try{			
 			
 		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
@@ -529,8 +526,7 @@ def eGrades
 		}catch(Exception e){
 		log.error("exception in getIsbnRecord method is: "+e.getMessage())
 		log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
-		sapResultsMap.put("error", e.getMessage())
-		sapResultsMap
+	
 	}
 	}
 	
@@ -550,7 +546,7 @@ def eGrades
 		}catch(Exception e){
 			log.error("exception in getmaterialDetailResponse method is: "+e.getMessage())
 			log.error("exception in getmaterialDetailResponse method is: "+e.getStackTrace())
-			sapResultsMap.put("error", e.getMessage())
+			
 		}
 
 		sapResultsMap
