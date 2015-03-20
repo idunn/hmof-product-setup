@@ -251,11 +251,23 @@ class SecureProgramController {
 			respond secureProgramInstance.errors, view:'edit'
 			return
 		}
-
+		List<CommerceObject> commerceObjectList=[]
 		if(params.commerceObjects==null)
 		{
 			secureProgramInstance.commerceObjects.clear()
+		}else{			
+		
+		for (CommerceObject modelListdata : secureProgramInstance.commerceObjects) {
+			for (String prevListdata : params.list('commerceObjects')*.toLong()) {
+						
+			if(modelListdata.id==Integer.parseInt(prevListdata))	{				
+				commerceObjectList.add(modelListdata)
+				}
+			}
 		}
+		secureProgramInstance.commerceObjects=new TreeSet<CommerceObject>(commerceObjectList)
+		}
+			
 
 		secureProgramInstance.userUpdatingSProgram = springSecurityService?.currentUser?.username
 

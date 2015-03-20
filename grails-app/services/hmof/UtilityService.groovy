@@ -186,10 +186,7 @@ class UtilityService {
 					def secureWordPageNumStr2
 					def secureWordPageNumStr3
 
-					if(tokens[10]!=null && tokens[10]!="")
-						knewtonProductVal=true
-					else
-						knewtonProductVal=false
+					
 
 
 					def secureWordStrs=tokens[30]
@@ -239,7 +236,7 @@ class UtilityService {
 
 
 					}
-def eGrades
+                  def eGrades
 
 					
 					if(tokens[8]!=null && tokens[8]!="" ){
@@ -251,7 +248,7 @@ def eGrades
 
 					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', '©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
 					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:eGrades, pathToCoverImage:tokens[9],
-					knewtonProduct:knewtonProductVal,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
+					knewtonProduct:false,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
 					labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
 					labelForTeacherAdditionalResource2:tokens[16],pathToTeacherAdditionalResource2:tokens[17],
 					labelForTeacherAdditionalResource3:tokens[18],pathToTeacherAdditionalResource3:tokens[19],

@@ -279,7 +279,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			
 <ul id="Menu" class="nav nav-pills margin-top-small">
 <li class="active">
-       <a data-toggle="collapse" data-target="#Student2" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource2</span></a>
+       <a data-toggle="collapse" data-target="#Student2" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Student Additional Resource2</span></a>
     </li>
   </ul> 
 <div id="Student2" class="collapse">
@@ -300,7 +300,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 		
 			<ul id="Menu" class="nav nav-pills margin-top-small">
 <li class="active">
-       <a data-toggle="collapse" data-target="#Student3" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource3</span></a>
+       <a data-toggle="collapse" data-target="#Student3" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Student Additional Resource3</span></a>
     </li>
          </ul>   
 <div id="Student3" class="collapse">
@@ -321,7 +321,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			
 	<ul id="Menu" class="nav nav-pills margin-top-small">
 <li class="active">
-       <a data-toggle="collapse" data-target="#Student4" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Teacher Additional Resource4</span></a>
+       <a data-toggle="collapse" data-target="#Student4" ><i class="glyphicon glyphicon-minus"></i><span class="col-sw-1">Add Student Additional Resource4</span></a>
     </li>
          </ul> 
 <div id="Student4" class="collapse">

@@ -284,10 +284,21 @@ class BundleController {
 			respond bundleInstance.errors, view:'edit'
 			return
 		}
-
+		List<SecureProgram> secureProgList=[]
 		if(params.secureProgram==null)
 		{
 			bundleInstance.secureProgram.clear()
+		}else{			
+		
+		for (SecureProgram modelListdata : bundleInstance.secureProgram) {
+			for (String prevListdata : params.list('secureProgram')*.toLong()) {
+						
+			if(modelListdata.id==Integer.parseInt(prevListdata))	{				
+				secureProgList.add(modelListdata)
+				}
+			}
+		}
+		bundleInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
 		}
 		bundleInstance.userUpdatingBundle = springSecurityService?.currentUser?.username
 		bundleInstance.save flush:true

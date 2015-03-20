@@ -103,11 +103,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.gradeLevel.label" default="Grade Level" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "gradeLevel")}</div></div>
-		<div
-	class="control-group">
-	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectType.label" default="Object Type" /></label>
-				
-				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectType")}</div></div>
+		
 		<%--
 		<tr class="prop">
 				<td valign="top" class="name"><g:message code="commerceObject.tabNavTab.label" default="TabNavTab" /></td>
