@@ -54,7 +54,7 @@ class CommerceObject implements Comparable{
 		studentLabel (blank: false, nullable:true,maxSize:50)
 		studentUrl (shared: "globalUrl",maxSize:200)
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
-		objectReorderNumber (range: 0..12)
+		objectReorderNumber (range: 1..12)
 		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
 		comments (maxSize:200, nullable:true, widget: 'textarea')
 
