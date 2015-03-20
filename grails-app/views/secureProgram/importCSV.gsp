@@ -60,12 +60,27 @@
 
 								</div>
 								<span class="help-block">
-									<ul>
-										<li>Export the Secure Programs from the HMOF Production DB</li>
-										<li>Export to CSV without a header row</li>
-										<li>Manually Convert Copyright symbols '©' to its HTML Entity Number: &amp;#169;</li>										
-										<li>Browse and Select the CSV file then Click Upload</li>
-									</ul>
+									<dl>
+  										<ul> 
+											  <li>Database Export:
+												    <ul>
+												    <li>Export the Secure Programs from the HMOF Production DB</li>
+												    <li>Export to CSV without a header row</li>
+												    </ul>
+											  </li>											
+											 <li>Before Import:
+												    <ul>    
+												    <li>Manually Convert Copyright symbols '©' to its HTML Entity Number: &amp;#169;</li>
+												    </ul>
+											  </li>
+											
+											 <li>After Import:
+												    <ul>
+												    <li>Set the Platform Commerce Objects, e.g. turn off Dashboard for legacy products</li>
+												    <li>If product is Knewton then enable the Knewton checkbox and enter the non-production id fields</li>
+												    </ul>
+											  </li>										  
+										</ul>
 								</span> <span> <g:submitButton name="importFile"
 										class="btn btn-primary" value="Upload" />
 								</span>
