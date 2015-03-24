@@ -2,6 +2,9 @@ package hmof
 
 import java.util.Date;
 
+import org.hibernate.envers.Audited;
+
+@Audited
 class Sap {
 
 	String isbn

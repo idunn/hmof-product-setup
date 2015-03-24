@@ -4,6 +4,8 @@ import java.util.List;
 import hmof.deploy.*
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import grails.transaction.Transactional
+@Transactional(readOnly = true)
 class SapStatusJob {
 	def concurrent = true
 	def group = "scheduled"	
@@ -14,6 +16,7 @@ class SapStatusJob {
 		
 	}
 
+	@Transactional
 	def execute() {
 		def bundleListISBN = Bundle.list().isbn
 		InetAddress address = InetAddress.getByName("172.17.101.75")
