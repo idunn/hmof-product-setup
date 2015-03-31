@@ -202,4 +202,6 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.securityConfigType = "Annotation"
-grails.gorm.default.constraints = {	globalUrl(blank: false, nullable: true, matches:/^(http:\/\/|https:\/\/|\/|javascript:)[\w:\.\/\s';"()=-?&]+/) }
+//grails.gorm.default.constraints = {	globalUrl(blank: false, nullable: true, matches:/^(http:\/\/|https:\/\/|\/|javascript:)[\w:\.\/\s';"()=?&-]+/) }
+// relaxed URL input match
+grails.gorm.default.constraints = {	globalUrl(blank: false, nullable: true, matches:/^(http:\/\/|https:\/\/|\/|javascript:)[\w\W]+/) }

@@ -172,9 +172,6 @@ class UtilityService {
 			}else{
 				uploadFile.eachCsvLine { tokens ->
 
-					
-
-
 					def knewtonProductVal
 					def secureWordStr1
 					def secureWordStr2
@@ -185,9 +182,6 @@ class UtilityService {
 					def secureWordPageNumStr1
 					def secureWordPageNumStr2
 					def secureWordPageNumStr3
-
-					
-
 
 					def secureWordStrs=tokens[30]
 
@@ -236,15 +230,19 @@ class UtilityService {
 
 
 					}
-                  def eGrades
+					def eGrades
 
-					
-					if(tokens[8]!=null && tokens[8]!="" ){
-						eGrades==tokens[8]
+					if( tokens[8]!=null || tokens[8]!="" ){
+						eGrades=tokens[8]
 					}else
-				{
-					eGrades="Not Required"
-				}
+					{
+						eGrades="Not Required"
+					}
+
+					// zero values need to be null
+					if (tokens[11]=='0'){tokens[11]=null}
+					if (tokens[12]=='0'){tokens[12]=null}
+					if (tokens[13]=='0'){tokens[13]=null}
 
 					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', '©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
 					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:eGrades, pathToCoverImage:tokens[9],
@@ -472,61 +470,61 @@ class UtilityService {
 	 */
 	def getIsbnRecords(List isbnNumber){
 		try{
-		
-		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
-		def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
-		withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
-			def res = send {
-				body {
-					getMaterialDetailRequest(xmlns: nameSpace) {
-						materialKeyList(xmlns: nameSpace) {
-							isbnNumber.each{
-								isbn(xmlns:nameSpace,it.trim())
+
+			def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
+			def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
+			withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
+				def res = send {
+					body {
+						getMaterialDetailRequest(xmlns: nameSpace) {
+							materialKeyList(xmlns: nameSpace) {
+								isbnNumber.each{
+									isbn(xmlns:nameSpace,it.trim())
+								}
 							}
 						}
 					}
 				}
+				getmaterialDetailResponse(res)
 			}
-			getmaterialDetailResponse(res)
+
+		}catch(Exception e){
+			log.error("exception in getIsbnRecords method is: "+e.getMessage())
+			log.error("exception in getIsbnRecords method is: "+e.getStackTrace())
+
 		}
-	
-	}catch(Exception e){
-	log.error("exception in getIsbnRecords method is: "+e.getMessage())
-	log.error("exception in getIsbnRecords method is: "+e.getStackTrace())
-	
-}
-	
+
 	}
 	/**
 	 * Get ISBN product details
 	 * @param isbnNumber
 	 * @return sapResults
 	 */
-	def getIsbnRecord(String isbnNumber){		
-		try{			
-			
-		def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
-		def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
-		withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
-			def res = send {
-				body {
-					getMaterialDetailRequest(xmlns: nameSpace) {
-						materialKeyList(xmlns: nameSpace) {							
-								isbn(xmlns:nameSpace,isbnNumber.trim())							
+	def getIsbnRecord(String isbnNumber){
+		try{
+
+			def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
+			def nameSpace = "http://www.hmco.com/EAI/OTS/MaterialNew"
+			withSoap( serviceURL:endpoint,sslTrustAllCerts:true ) {
+				def res = send {
+					body {
+						getMaterialDetailRequest(xmlns: nameSpace) {
+							materialKeyList(xmlns: nameSpace) {
+								isbn(xmlns:nameSpace,isbnNumber.trim())
+							}
 						}
 					}
 				}
+				getmaterialDetailResponse(res)
 			}
-			getmaterialDetailResponse(res)			
-		}
-				
+
 		}catch(Exception e){
-		log.error("exception in getIsbnRecord method is: "+e.getMessage())
-		log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
-	
+			log.error("exception in getIsbnRecord method is: "+e.getMessage())
+			log.error("exception in getIsbnRecord method is: "+e.getStackTrace())
+
+		}
 	}
-	}
-	
+
 	/**
 	 * Return the required data
 	 * @param res
@@ -535,15 +533,15 @@ class UtilityService {
 	def getmaterialDetailResponse(def res){
 		def sapResultsMap = [:]
 		try{
-		res.materialDetailList.materialDetail.each{
-		
-			sapResultsMap.put( it.isbn13.text(),it.materialStatusDescription.text())
-		}
-	
+			res.materialDetailList.materialDetail.each{
+
+				sapResultsMap.put( it.isbn13.text(),it.materialStatusDescription.text())
+			}
+
 		}catch(Exception e){
 			log.error("exception in getmaterialDetailResponse method is: "+e.getMessage())
 			log.error("exception in getmaterialDetailResponse method is: "+e.getStackTrace())
-			
+
 		}
 
 		sapResultsMap
