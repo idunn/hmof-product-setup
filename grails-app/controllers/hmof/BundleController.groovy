@@ -8,6 +8,7 @@ import hmof.deploy.Promotion
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import org.apache.log4j.Logger
 import java.util.Properties
@@ -360,5 +361,80 @@ class BundleController {
 	def download() {
 		log.debug "Downloading log for Bundle deployment"
 		utilityService.getLogFile(params.logFile)
+	}
+	/**
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
+	 * @return
+	 */
+	def getDashboardBundleChildren() {
+		def instanceId=params.instanceId
+	
+		// deployable content A has a SecureProgram
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
+
+		// deployment logic for SP
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list(max:1)
+		}
+
+		
+		//deployableSecureProgram
+		def jsonCODetails
+		if(deployableSecureProgram.size()>0){
+		jsonCODetails = [name:deployableSecureProgram.productName,count:deployableSecureProgram.size()]
+		log.debug "jsonCODetails:"+jsonCODetails
+		}else{
+		jsonCODetails = [:]
+		}
+	
+		render jsonCODetails as JSON
+	}
+	
+	/**
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
+	 * @return
+	 */
+	def getDashboardSecureProgramChildren() {
+		
+		def instanceId=params.instanceId
+		// deployable content A has a SecureProgram
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
+
+		// deployment logic for SP
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list()
+		}
+
+		// get a unique listing of CO belonging to the SP being deployed
+		Set uniqueCommerceObject = deployableSecureProgram.commerceObjects.id.flatten()
+
+		// deployment logic for CO
+		def deployableCommerceObject = []
+		if(!uniqueCommerceObject.isEmpty()){
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list(sort:'objectReorderNumber', order:'asc')
+		}
+		deployableCommerceObject
+		def jsonCODetails
+		if(deployableCommerceObject.size()>0){
+		jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,teacherLabel:deployableCommerceObject.teacherLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
+		log.debug "jsonCODetails:"+jsonCODetails
+		}else{
+		jsonCODetails = [:]
+		}
+		
+		render jsonCODetails as JSON
+		
 	}
 }

@@ -228,6 +228,36 @@ class DeploymentService {
 		def (commerceObjectList) = [deployableCommerceObject]
 	}
 	/**
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
+	 * @return
+	 */
+	def isDashboardSecureProgram(instanceId) {
+        def isDashboardSP=false
+		// deployable content A has a SecureProgram
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
+
+		// deployment logic for SP
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list()
+		}
+		
+		if(deployableSecureProgram.size()>0)
+		{
+			isDashboardSP=true
+		}
+		
+		isDashboardSP
+	}
+
+
+	
+	/**
 	 * Return true if the lower environment contains the same Job Number or Revision
 	 * @param instanceId
 	 * @param environmentId
@@ -274,8 +304,6 @@ class DeploymentService {
 
 	}
 	
-
-
 
 	/**
 	 * get Job/Promotion details for the Instance being passed in based on its environment id

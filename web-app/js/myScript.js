@@ -103,6 +103,8 @@ function toggle(box,theId) {
 	    });
 
 	    $('#confirmMessage').html(confirmMessage);
+	    
+	    
 	    $('#confirmFalse').click(function(){
 	        $('#confirmbox').modal('hide');
 	        if (callback) callback(false);
@@ -113,7 +115,8 @@ function toggle(box,theId) {
 	        if (callback) callback(true);
 	    });
 	}  
-
+	
+	
 	function promote(){				
 		if($("input:radio[name='rad']").is(":checked")){		
 		var optionSelected = $('input[name=rad]:checked').val();				
@@ -243,3 +246,7 @@ function toggle(box,theId) {
 
 		
 	}
+	
+	
+	
+
