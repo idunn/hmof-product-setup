@@ -65,12 +65,7 @@
 				
 					
 				
-				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id+"/"+jobdetails.getCurrentEnversRevision(bundleInstance)+"/"+jobdetails.getPromotionDetails(bundleInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/>
-				<%-- Confirm dialog for Deploy/Promote  --%>
-		<g:render template="/_common/modals/confirmDialog"/>
-				
-				</sec:ifAnyGranted>
-				<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link> </td>
+				<td style="width:5%;"><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id+"/"+jobdetails.getCurrentEnversRevision(bundleInstance)+"/"+jobdetails.getPromotionDetails(bundleInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/><%-- Confirm dialog for Deploy/Promote  --%><g:render template="/_common/modals/confirmDialog"/></sec:ifAnyGranted>&nbsp;<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link></td>
 			    <td>
 				<g:if test="${jobdetails.isDashboardSecureProgram(bundleInstance.id)==true}">	
 			
