@@ -1,25 +1,12 @@
 
-
-<script>
-$(document).ready(function() {
-	$('#myCarousel').carousel({	
-		interval: false
-	})
-    
-    $('#myCarousel').on('slid.bs.carousel', function() {
-    	//alert("slid");
-	});
-    
-    
-});
-
-</script>
+<script src="${resource(dir:'js',file:'carouselslider.js')}"></script>
+<input type="hidden" name="coverimagelen" id="coverimagelen"/>
 <div id="scrollModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true" >
 	<div class="modal-dialog" style="width:65%">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>					
+					aria-hidden="true" onclick="javascript:closePreview()">&times;</button>					
 					<h4 style="color:#666;font-size:14px;font-weight:bold;">Preview : <span id="bundleName"></span></h4>
 					<div style="background-color:#DEE7F2;height:35px;">
 					<span style="color:#305DA6;font-family: 'Lato',sans-serif; font-size: 26px;line-height: 1;">Resources</span>
@@ -60,57 +47,62 @@ $(document).ready(function() {
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
- 							
-		</div>                    <!--/item--> 
-            		<div class="item">          
+		                    <!--/row-->   
+		                          		<div class="item">          
 		<div class="row">                        
 		<div id="result3"></div>
      	
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
- 							
-		</div>                    <!--/item-->   
-		        		<div class="item">          
+		                    <!--/row--> 
+		                       	<div class="item">          
 		<div class="row">                        
 		<div id="result4"></div>
      	
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
- 							
-		</div>                    <!--/item-->   
-		<div class="item">          
+		                    <!--/row-->  
+		                    <div class="item">          
 		<div class="row">                        
 		<div id="result5"></div>
      	
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
- 							
-		</div>                    <!--/item-->   
-		<div class="item">          
+		                    <!--/row-->  
+		                    <div class="item">          
 		<div class="row">                        
 		<div id="result6"></div>
      	
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
- 							
-		</div>                    <!--/item-->   
-		<div class="item">          
+		                    <!--/row--> 
+		                    <div class="item">          
 		<div class="row">                        
 		<div id="result7"></div>
      	
 		 
 		</div>    
 		</div>  
-		                    <!--/row-->     
+		                    <!--/row-->       
+ 							
+		</div>                    <!--/item--> 
+         
+ 							
+		</div>                    <!--/item-->   
+		        	  
+ 							
+		</div>                    <!--/item-->   
+		 
+ 							
+		</div>                    <!--/item-->   
+		   
+ 							
+		</div>                    <!--/item-->   
+		  
  							
 		</div>                    <!--/item-->   
 	<!--/row-->            

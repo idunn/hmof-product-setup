@@ -11,4 +11,4 @@ display: inline-block; width:5%;border: none;}
        .coverimage{position:relative;min-height:1px;padding-right:1px;padding-left:15px;float:left;width:13.66666667%}
         .coverimage1{position:relative;min-height:1px;padding-right:1px;padding-left:20px;float:left;width:13.66666667%}
        .teacherLable{color:#666;font-size:11px;font-weight:bold;}
-       .previewlink{color: #428bca;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;}
+       .previewlink{color: #428bca;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;border:0px;}

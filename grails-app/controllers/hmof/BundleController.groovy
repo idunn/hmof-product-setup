@@ -406,7 +406,11 @@ class BundleController {
 		def instanceId=params.instanceId
 		// deployable content A has a SecureProgram
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
-
+def bundleIsPremium
+		
+		 deployableBundle.each{
+	bundleIsPremium=it.includePremiumCommerceObjects
+}
 		// get a unique listing of Content B belonging to the deployable Content A
 		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
 
@@ -414,7 +418,7 @@ class BundleController {
 		def deployableSecureProgram = []
 		// Needed for MySql database
 		if(!uniqueSecureProgram.isEmpty()){
-			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list()
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list(max:1)
 		}
 
 		// get a unique listing of CO belonging to the SP being deployed
@@ -423,9 +427,23 @@ class BundleController {
 		// deployment logic for CO
 		def deployableCommerceObject = []
 		if(!uniqueCommerceObject.isEmpty()){
-			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.list(sort:'objectReorderNumber', order:'asc')
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.order("objectReorderNumber", "asc").order("teacherLabel", "asc").list()
 		}
-		deployableCommerceObject
+		def removeisPremiumCommerceObject = []
+		
+		deployableCommerceObject.each{
+			log.debug "ispremium commerce Objects:"+it
+					
+			if(!bundleIsPremium && it.isPremium)
+			{
+			
+			removeisPremiumCommerceObject.add(it)
+			}
+		}
+		
+		deployableCommerceObject.removeAll(removeisPremiumCommerceObject)
+		
+		
 		def jsonCODetails
 		if(deployableCommerceObject.size()>0){
 		jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,teacherLabel:deployableCommerceObject.teacherLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
@@ -434,6 +452,65 @@ class BundleController {
 		jsonCODetails = [:]
 		}
 		
+		render jsonCODetails as JSON
+		
+	}
+	/**
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
+	 * @return
+	 */
+	def getDashboardSecureProgramStuChildren() {
+		
+		def instanceId=params.instanceId
+		// deployable content A has a SecureProgram
+		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
+		def bundleIsPremium
+		
+		 deployableBundle.each{
+	bundleIsPremium=it.includePremiumCommerceObjects
+}
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
+
+		// deployment logic for SP
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list(max:1)
+		}
+
+		// get a unique listing of CO belonging to the SP being deployed
+		Set uniqueCommerceObject = deployableSecureProgram.commerceObjects.id.flatten()
+
+		// deployment logic for CO
+		def deployableCommerceObject = []
+		if(!uniqueCommerceObject.isEmpty()){
+			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject && studentUrl!=null}.order("objectReorderNumber", "asc").order("teacherLabel", "asc").list()
+		}
+		
+	def removeisPremiumCommerceObject = []
+	
+		deployableCommerceObject.each{
+			log.debug "ispremium commerce Objects:"+it
+			
+			if(!bundleIsPremium && it.isPremium)
+			{
+			
+			removeisPremiumCommerceObject.add(it)
+			}
+		}
+	
+		deployableCommerceObject.removeAll(removeisPremiumCommerceObject)
+			
+		def jsonCODetails
+		if(deployableCommerceObject.size()>0){
+		jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,studentLabel:deployableCommerceObject.studentLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
+		log.debug "jsonCODetails:"+jsonCODetails
+		}else{
+		jsonCODetails = [:]
+		}
+	
 		render jsonCODetails as JSON
 		
 	}
