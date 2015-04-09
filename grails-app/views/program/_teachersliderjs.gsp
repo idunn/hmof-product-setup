@@ -60,16 +60,9 @@
 		            	            		 if(teacherLabel[c]==null){
 		            	                    	   teacherLabel[c]="";
 		            	                       }
-			            	            		   var img = new Image();
-			            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c];
-           	                       		            	                                  	
-		            	            		if(img.height == 0 && coverimage[c]!=undefined)
-			            	            		{			            	            		
-		            	            		codata+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c]+"</span></div>";  
-			            	            		}else if(img.height > 0 && coverimage[c]!=undefined)
-				            	            		{
+		            	            		 if(coverimage[c]!=undefined) 		
 			            	            	codata+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c]+"</span></div>";  
-				            	            		}
+				            	            		
 
 			            	            	}  		            	            	
 		            	            	
@@ -80,16 +73,9 @@
                             		 if(teacherLabel[c2]==null){
           	                    	   teacherLabel[c2]="";
           	                           }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c2];
- 	                       		            	                                  	
-          	            		if(img.height == 0 && coverimage[c2]!=undefined)
-	            	            		{			            	            		
-          	            		codata2+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c2]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c2]!=undefined)
-		            	            		{
+                            		 if(coverimage[c2]!=undefined) 		
 	            	            	codata2+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c2]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c2]+"</span></div>";  
-		            	            		}
+		            	            		
 
 			            	            	}  
 		            	            
@@ -101,16 +87,9 @@
                             		 if(teacherLabel[c3]==null){
           	                    	   teacherLabel[c3]="";
           	                       }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c3];
- 	                       		            	                                  	
-          	            		if(img.height == 0 && coverimage[c3]!=undefined)
-	            	            		{			            	            		
-          	            		codata3+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c3]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c3]!=undefined)
-		            	            		{
+                            		 if(coverimage[c3]!=undefined) 		
 	            	            	codata3+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c3]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c3]+"</span></div>";  
-		            	            		}
+		            	            		
 		            	            	}  
 
                              $("#result3").html(codata3);
@@ -120,16 +99,9 @@
                             	 if(teacherLabel[c4]==null){
         	                    	   teacherLabel[c4]="";
         	                       }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c4];
-	                       		            	                                  	
-        	            		if(img.height == 0 && coverimage[c4]!=undefined)
-	            	            		{			            	            		
-        	            		codata4+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c4]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c4]!=undefined)
-		            	            		{
+                            	 if(coverimage[c4]!=undefined) 		
 	            	            	codata4+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c4]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c4]+"</span></div>";  
-		            	            		}
+		            	            		
 		            	            	}  
 
                             $("#result4").html(codata4);
@@ -139,16 +111,9 @@
                             	if(teacherLabel[c5]==null){
        	                    	   teacherLabel[c5]="";
        	                       }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c5];
-	                       		            	                                  	
-       	            		if(img.height == 0 && coverimage[c5]!=undefined)
-	            	            		{			            	            		
-       	            		codata5+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c5]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c5]!=undefined)
-		            	            		{
+                            	 if(coverimage[c5]!=undefined) 		
 	            	            	codata5+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c5]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c5]+"</span></div>";  
-		            	            		}
+		            	            		
 		            	            	} 
                             $("#result5").html(codata5);
                             var codata6="";
@@ -156,16 +121,9 @@
                             	if(teacherLabel[c6]==null){
        	                    	   teacherLabel[c6]="";
        	                       }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c6];
-	                       		            	                                  	
-       	            		if(img.height == 0 && coverimage[c6]!=undefined)
-	            	            		{			            	            		
-       	            		codata6+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c6]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c6]!=undefined)
-		            	            		{
+                            	 if(coverimage[c6]!=undefined) 		
 	            	            	codata6+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c6]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c6]+"</span></div>";  
-		            	            		}
+		            	            		
 		            	            	} 
                             $("#result6").html(codata6);
                             var codata7="";
@@ -173,16 +131,9 @@
                             	if(teacherLabel[c7]==null){
        	                    	   teacherLabel[c7]="";
        	                       }
-	            	            		   var img = new Image();
-	            	                       img.src ="https://my-review-cert.hrw.com"+coverimage[c7];
-	                       		            	                                  	
-       	            		if(img.height == 0 && coverimage[c7]!=undefined)
-	            	            		{			            	            		
-       	            		codata7+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"../images/noimage.png\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c7]+"</span></div>";  
-	            	            		}else if(img.height > 0 && coverimage[c7]!=undefined)
-		            	            		{
+                            	 if(coverimage[c7]!=undefined) 		 
 	            	            	codata7+="<div class=\"coverimage1\"><a href=\"#x\"><img src=\"https://my-review-cert.hrw.com"+coverimage[c7]+"\" alt=\"Image\" class=\"img-responsive\" ></a><span style=\"color:#666;font-size:11px;font-weight:bold;\">"+teacherLabel[c7]+"</span></div>";  
-		            	            		}
+		            	            		
 		            	            	}  
 
                            $("#result7").html(codata7);
@@ -215,8 +166,6 @@
 		            	            	$("#navigation").html(navdata);
 		            	            
 		            	            	$("#coverimagelen").val(coverimage.length);
-		            	            	
-		            	            	
 		            	            	
 
 			        	}       			       

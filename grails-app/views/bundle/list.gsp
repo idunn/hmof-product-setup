@@ -34,7 +34,7 @@
 			<tr>
 			
 				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" />
-			<th>Preview</th>
+			
 				<g:sortableColumn property="isbn" title="${message(code: 'bundle.isbn.label', default: 'Isbn')}" />
 				
 				<th>${'Current Revision'}</th>
@@ -43,7 +43,7 @@
 			
 				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />
 				<g:sortableColumn property="program" title="${message(code: 'bundle.program.label', default: 'Program')}" />
-				
+				<th >Preview</th>
 												
 				
 				<g:render template="/_common/templates/headerEnv"/>
@@ -65,14 +65,8 @@
 				
 					
 				
-				<td style="width:5%;"><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id+"/"+jobdetails.getCurrentEnversRevision(bundleInstance)+"/"+jobdetails.getPromotionDetails(bundleInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/><%-- Confirm dialog for Deploy/Promote  --%><g:render template="/_common/modals/confirmDialog"/></sec:ifAnyGranted>&nbsp;<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link></td>
-			    <td>
-				<g:if test="${jobdetails.isDashboardSecureProgram(bundleInstance.id)==true}">	
-			
-<a href="#"  class="previewlink"  onclick="return teacherPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Teacher</a>|&nbsp;<a href="#"  class="previewlink"  onclick="return studentPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Student</a>
-
-				</g:if>
-				</td>
+				<td ><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id+"/"+jobdetails.getCurrentEnversRevision(bundleInstance)+"/"+jobdetails.getPromotionDetails(bundleInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/><%-- Confirm dialog for Deploy/Promote  --%><g:render template="/_common/modals/confirmDialog"/></sec:ifAnyGranted>&nbsp;<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link></td>
+			   
 				<td><g:link action="show" id="${bundleInstance.id}">${fieldValue(bean: bundleInstance, field: "isbn")}</g:link> 
 				
 				
@@ -83,7 +77,13 @@
 				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>
 				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>
 									
-				
+				 <td  >
+				<g:if test="${jobdetails.isDashboardSecureProgram(bundleInstance.id)==true}">	
+			<ul style="margin: 0; padding: 13px;">
+<li><a href="#"  class="previewlink"  onclick="return teacherPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Teacher</a></li><li><a href="#"  class="previewlink"  onclick="return studentPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Student</a></li>
+</ul>
+				</g:if>
+				</td>
 				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(bundleInstance,1)}" />
 						
 				<td>	
