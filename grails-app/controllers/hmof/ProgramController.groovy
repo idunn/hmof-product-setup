@@ -142,17 +142,27 @@ class ProgramController {
 			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
-		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
+		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString() ||
+		promotionJobInstance.status == JobStatus.Pending_Retry.getStatus().toString() || promotionJobInstance.status == JobStatus.Retrying.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
 		}
 
+		else if(promotionJobInstance.status == JobStatus.Failed.getStatus().toString()){
+
+			// If job has failed and the user want to retry
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus(), smartDeploy:previousJobExist]
+
+		}
+
 		else{
 
-			// If job has failed or is successful and user want to re-promote
-			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
-			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
+			// If job was previously successful and user want to re-promote
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
 			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), smartDeploy:previousJobExist]
 
 		}
@@ -171,21 +181,21 @@ class ProgramController {
 	}
 
 	def show(Program programInstance) {
-		def bundleList = Bundle.where{program{ id==programInstance.id}}.list()		
+		def bundleList = Bundle.where{program{ id==programInstance.id}}.list()
 		def undeployableBundle = Bundle.where{ program{ id==programInstance.id} && secureProgram.size()==0 }.list()
-		
-	   def unDeployableBundleMap=[:]
 
-	   if(!undeployableBundle.isEmpty()){
-	   undeployableBundle.each {
+		def unDeployableBundleMap=[:]
 
-	   unDeployableBundleMap.put(it.id,it.toString())
+		if(!undeployableBundle.isEmpty()){
+			undeployableBundle.each {
+
+				unDeployableBundleMap.put(it.id,it.toString())
+			}
 		}
-	}
 
-	 def sapResultsList=Sap.list()		   
-    render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
-		
+		def sapResultsList=Sap.list()
+		render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
+
 	}
 	@Secured(['ROLE_ADMIN'])
 	def create() {

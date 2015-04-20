@@ -167,17 +167,27 @@ class BundleController {
 			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
-		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
+		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString() ||
+		promotionJobInstance.status == JobStatus.Pending_Retry.getStatus().toString() || promotionJobInstance.status == JobStatus.Retrying.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
 		}
 
+		else if(promotionJobInstance.status == JobStatus.Failed.getStatus().toString()){
+
+			// If job has failed and the user want to retry
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus()]
+
+		}
+
 		else{
 
-			// If job has failed or is successful and user want to re-promote
-			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
-			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
+			// If job was previously successful and user want to re-promote
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
 			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus()]
 
 		}
@@ -195,11 +205,11 @@ class BundleController {
 	}
 
 	def show(Bundle bundleInstance) {
-		
+
 		def sapResultsList=Sap.list()
-		
-		 render(view:"show", model:[bundleInstance:bundleInstance,sapResultsList:sapResultsList])
-			
+
+		render(view:"show", model:[bundleInstance:bundleInstance,sapResultsList:sapResultsList])
+
 	}
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def create() {
@@ -213,8 +223,8 @@ class BundleController {
 		params.userUpdatingBundle = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def bundleInstance = new Bundle(params)
-		
-		
+
+
 		if (bundleInstance == null) {
 			log.info "Creating Bundle Not Found"
 			notFound()
@@ -226,33 +236,33 @@ class BundleController {
 			respond bundleInstance.errors, view:'create'
 			return
 		}
-			
-		
-	InetAddress address = InetAddress.getByName("172.17.101.75");
-	boolean reachable = address.isReachable(5000);
-	if(reachable){
-		
-		log.info("SAP Service Reachable")
-		def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
-		if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
-			sapResultsMap.each {
-				String sapIsbn=it.key
-			bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value,dateCreated:new Date())
-				
-			 }
-		 }else
-	 {
-		 bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
-	 }
-		
-	}else
-	{
-		bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())	
-	   log.error("SAP Service not Reachable")
-	}
-		
-		
-		
+
+
+		InetAddress address = InetAddress.getByName("172.17.101.75");
+		boolean reachable = address.isReachable(5000);
+		if(reachable){
+
+			log.info("SAP Service Reachable")
+			def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
+			if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
+				sapResultsMap.each {
+					String sapIsbn=it.key
+					bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value,dateCreated:new Date())
+
+				}
+			}else
+			{
+				bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
+			}
+
+		}else
+		{
+			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
+			log.error("SAP Service not Reachable")
+		}
+
+
+
 		if (!bundleInstance.save(flush: true)) {
 			render(view: "create", model: [bundleInstance: bundleInstance])
 			return
@@ -289,17 +299,17 @@ class BundleController {
 		if(params.secureProgram==null)
 		{
 			bundleInstance.secureProgram.clear()
-		}else{			
-		
-		for (SecureProgram modelListdata : bundleInstance.secureProgram) {
-			for (String prevListdata : params.list('secureProgram')*.toLong()) {
-						
-			if(modelListdata.id==Integer.parseInt(prevListdata))	{				
-				secureProgList.add(modelListdata)
+		}else{
+
+			for (SecureProgram modelListdata : bundleInstance.secureProgram) {
+				for (String prevListdata : params.list('secureProgram')*.toLong()) {
+
+					if(modelListdata.id==Integer.parseInt(prevListdata))	{
+						secureProgList.add(modelListdata)
+					}
 				}
 			}
-		}
-		bundleInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
+			bundleInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
 		}
 		bundleInstance.userUpdatingBundle = springSecurityService?.currentUser?.username
 		bundleInstance.save flush:true
@@ -369,7 +379,7 @@ class BundleController {
 	 */
 	def getDashboardBundleChildren() {
 		def instanceId=params.instanceId
-	
+
 		// deployable content A has a SecureProgram
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
 
@@ -383,34 +393,34 @@ class BundleController {
 			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list(max:1)
 		}
 
-		
+
 		//deployableSecureProgram
 		def jsonCODetails
 		if(deployableSecureProgram.size()>0){
-		jsonCODetails = [name:deployableSecureProgram.productName,count:deployableSecureProgram.size()]
-		log.debug "jsonCODetails:"+jsonCODetails
+			jsonCODetails = [name:deployableSecureProgram.productName,count:deployableSecureProgram.size()]
+			log.debug "jsonCODetails:"+jsonCODetails
 		}else{
-		jsonCODetails = [:]
+			jsonCODetails = [:]
 		}
-	
+
 		render jsonCODetails as JSON
 	}
-	
+
 	/**
 	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
 	 * @param instanceId
 	 * @return
 	 */
 	def getDashboardSecureProgramChildren() {
-		
+
 		def instanceId=params.instanceId
 		// deployable content A has a SecureProgram
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
-def bundleIsPremium
-		
-		 deployableBundle.each{
-	bundleIsPremium=it.includePremiumCommerceObjects
-}
+		def bundleIsPremium
+
+		deployableBundle.each{
+			bundleIsPremium=it.includePremiumCommerceObjects
+		}
 		// get a unique listing of Content B belonging to the deployable Content A
 		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
 
@@ -430,30 +440,30 @@ def bundleIsPremium
 			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject}.order("objectReorderNumber", "asc").order("teacherLabel", "asc").list()
 		}
 		def removeisPremiumCommerceObject = []
-		
+
 		deployableCommerceObject.each{
 			log.debug "ispremium commerce Objects:"+it
-					
+
 			if(!bundleIsPremium && it.isPremium)
 			{
-			
-			removeisPremiumCommerceObject.add(it)
+
+				removeisPremiumCommerceObject.add(it)
 			}
 		}
-		
+
 		deployableCommerceObject.removeAll(removeisPremiumCommerceObject)
-		
-		
+
+
 		def jsonCODetails
 		if(deployableCommerceObject.size()>0){
-		jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,teacherLabel:deployableCommerceObject.teacherLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
-		log.debug "jsonCODetails:"+jsonCODetails
+			jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,teacherLabel:deployableCommerceObject.teacherLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
+			log.debug "jsonCODetails:"+jsonCODetails
 		}else{
-		jsonCODetails = [:]
+			jsonCODetails = [:]
 		}
-		
+
 		render jsonCODetails as JSON
-		
+
 	}
 	/**
 	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
@@ -461,15 +471,15 @@ def bundleIsPremium
 	 * @return
 	 */
 	def getDashboardSecureProgramStuChildren() {
-		
+
 		def instanceId=params.instanceId
 		// deployable content A has a SecureProgram
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
 		def bundleIsPremium
-		
-		 deployableBundle.each{
-	bundleIsPremium=it.includePremiumCommerceObjects
-}
+
+		deployableBundle.each{
+			bundleIsPremium=it.includePremiumCommerceObjects
+		}
 		// get a unique listing of Content B belonging to the deployable Content A
 		Set uniqueSecureProgram = deployableBundle.list().secureProgram.id.flatten()
 
@@ -488,30 +498,30 @@ def bundleIsPremium
 		if(!uniqueCommerceObject.isEmpty()){
 			deployableCommerceObject = CommerceObject.where{id in uniqueCommerceObject && studentUrl!=null}.order("objectReorderNumber", "asc").order("teacherLabel", "asc").list()
 		}
-		
-	def removeisPremiumCommerceObject = []
-	
+
+		def removeisPremiumCommerceObject = []
+
 		deployableCommerceObject.each{
 			log.debug "ispremium commerce Objects:"+it
-			
+
 			if(!bundleIsPremium && it.isPremium)
 			{
-			
-			removeisPremiumCommerceObject.add(it)
+
+				removeisPremiumCommerceObject.add(it)
 			}
 		}
-	
+
 		deployableCommerceObject.removeAll(removeisPremiumCommerceObject)
-			
+
 		def jsonCODetails
 		if(deployableCommerceObject.size()>0){
-		jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,studentLabel:deployableCommerceObject.studentLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
-		log.debug "jsonCODetails:"+jsonCODetails
+			jsonCODetails = [coverimage:deployableCommerceObject.pathToCoverImage,studentLabel:deployableCommerceObject.studentLabel,count:deployableCommerceObject.size(),ordernum:deployableCommerceObject.objectReorderNumber]
+			log.debug "jsonCODetails:"+jsonCODetails
 		}else{
-		jsonCODetails = [:]
+			jsonCODetails = [:]
 		}
-	
+
 		render jsonCODetails as JSON
-		
+
 	}
 }

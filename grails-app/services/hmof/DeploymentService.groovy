@@ -204,7 +204,7 @@ class DeploymentService {
 		def (secureProgramList, commerceObjectList) = [deployableSecureProgram, deployableCommerceObject]
 
 	}
-	
+
 
 
 	/**
@@ -233,7 +233,7 @@ class DeploymentService {
 	 * @return
 	 */
 	def isDashboardSecureProgram(instanceId) {
-        def isDashboardSP=false
+		def isDashboardSP=false
 		// deployable content A has a SecureProgram
 		def deployableBundle = Bundle.where{ id==instanceId && secureProgram{}}
 
@@ -246,17 +246,17 @@ class DeploymentService {
 		if(!uniqueSecureProgram.isEmpty()){
 			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram && includeDashboardObject==true}.list()
 		}
-		
+
 		if(deployableSecureProgram.size()>0)
 		{
 			isDashboardSP=true
 		}
-		
+
 		isDashboardSP
 	}
 
 
-	
+
 	/**
 	 * Return true if the lower environment contains the same Job Number or Revision
 	 * @param instanceId
@@ -265,12 +265,12 @@ class DeploymentService {
 	 */
 	def isLowerEnvironmentEqual(instanceId, environmentId) {
 		// return zero if current environment is Dev/1
-		def lowerEnvironment = getPreviousEnvironment(environmentId)?:0	
+		def lowerEnvironment = getPreviousEnvironment(environmentId)?:0
 		def currentRevision = getCurrentEnversRevision(instanceId)
-		
+
 		// All job numbers for this Content Instance
 		def jobNumbers = Job.where{contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.jobNumber.list()
-		
+
 
 		def promoInstanceUserEnvironment = []
 		def promoInstanceLowerEnvironment = []
@@ -282,9 +282,9 @@ class DeploymentService {
 
 			// Job Number for Users Environment
 			def currentJobNumber = promoInstanceUserEnvironment.jobNumber[0]
-			
+
 			def lowerJobNumber = promoInstanceLowerEnvironment.jobNumber[0]?:0
-			
+
 
 			if(currentJobNumber == lowerJobNumber )	{ return true }
 		}
@@ -294,16 +294,16 @@ class DeploymentService {
 
 			def revisionNumber = Job.where{jobNumber == promoInstanceUserEnvironment.jobNumber && contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.revision.get()
 			if (currentRevision == revisionNumber) {
-				
+
 				return true
 			}
 		}
 
 		return false
-		
+
 
 	}
-	
+
 
 	/**
 	 * get Job/Promotion details for the Instance being passed in based on its environment id
@@ -343,7 +343,7 @@ class DeploymentService {
 
 		def principal = springSecurityService.principal
 		def authorities = principal.authorities
-		
+
 		def authStr = authorities.toString().replace("[","").replace("]","")
 		List<String> authList = Arrays.asList(authStr.split(", "));
 
@@ -520,7 +520,7 @@ class DeploymentService {
 	def executeJob(){
 
 		// get first instance in pending status
-		def promotionJobInstance = Promotion.where{status == JobStatus.Pending.getStatus() || status == JobStatus.Pending_Repromote.getStatus() }.list(max:1)
+		def promotionJobInstance = Promotion.where{status == JobStatus.Pending.getStatus() || status == JobStatus.Pending_Repromote.getStatus() || status == JobStatus.Pending_Retry.getStatus() }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
 
 		if(!promotionJobInstance.isEmpty()){
@@ -542,7 +542,11 @@ class DeploymentService {
 
 			if (promotionInstance.status==JobStatus.Pending_Repromote.getStatus().toString()){
 				statusStart = JobStatus.Repromoting.getStatus()
-			}else { statusStart = JobStatus.In_Progress.getStatus()	}
+			}
+			else if (promotionInstance.status==JobStatus.Pending_Retry.getStatus().toString()){
+				statusStart = JobStatus.Retrying.getStatus()
+			}
+			else { statusStart = JobStatus.In_Progress.getStatus()	}
 
 			promotionInstance.properties = [status: statusStart]
 			promotionInstance.save(failOnError: true, flush:true)

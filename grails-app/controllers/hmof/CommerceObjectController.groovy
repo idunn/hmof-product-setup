@@ -91,21 +91,21 @@ class CommerceObjectController {
 		def csvfile = request.getFile('CSVfiledata')
 
 		try {
-	
 
-				List parseFileAndPersistData = utilityService.parseTextFile(csvfile,4)
-				if (parseFileAndPersistData?.empty) {
-					
-					redirect(action: "list")
-					return
-				}else
-				{
-					render view:'importCSV', model:[parseFileAndPersistData:parseFileAndPersistData]
-					return
-				}
 
+			List parseFileAndPersistData = utilityService.parseTextFile(csvfile,4)
+			if (parseFileAndPersistData?.empty) {
+
+				redirect(action: "list")
+				return
+			}else
+			{
+				render view:'importCSV', model:[parseFileAndPersistData:parseFileAndPersistData]
+				return
 			}
-		 catch (IOException e) {
+
+		}
+		catch (IOException e) {
 			flash.message = "There were errors when importing the Commerce Objects"
 			log.error "There were errors when importing the Commerce Objects" + e
 			redirect(action: "importCSV")
@@ -196,20 +196,31 @@ class CommerceObjectController {
 			log.info("Job saved successfully")
 
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
-		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString()){
+		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString() ||
+		promotionJobInstance.status == JobStatus.Pending_Retry.getStatus().toString() || promotionJobInstance.status == JobStatus.Retrying.getStatus().toString()){
 
 			flash.message = "Job cannot be re-promoted as it is ${promotionJobInstance.status}"
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
 		}
 
+		else if(promotionJobInstance.status == JobStatus.Failed.getStatus().toString()){
+
+			// If job has failed and the user want to retry
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus()]
+
+		}
+
 		else{
 
-			// If job has failed or is successful and user want to re-promote
-			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted"
-			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being re-promoted")
+			// If job was previously successful and user want to re-promote
+			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
+			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
 			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus()]
 
 		}
+
 
 		redirect(action: "list")
 
