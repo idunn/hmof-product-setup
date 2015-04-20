@@ -11,23 +11,22 @@ class Program {
 	Date dateCreated
 	Date lastUpdated
 	String userUpdatingProgram
-	
+
 	ContentType contentType
 
 	static hasMany = [bundles:Bundle]
 	static searchable = {
 		bundles component: true
-
 	}
 
-	static mapping = {
+	SortedSet bundles
 
+	static mapping = {
 		sort id: "desc"
 	}
 
 	static constraints = {
-
-		name (matches: /[A-Za-z0-9_]+/, nullable:false, unique:['state'], blank:false)		
+		name (matches: /[A-Za-z0-9_]+/, nullable:false, unique:['state'], blank:false)
 		discipline(inList: ['language_arts', 'math', 'world_languages', 'social_studies', 'science', 'Other'], nullable:false, blank:false)
 		state(nullable:false)
 		contentType ()

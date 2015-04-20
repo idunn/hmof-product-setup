@@ -6,8 +6,8 @@ import java.util.SortedSet;
 import org.hibernate.envers.Audited
 
 @Audited
-class Bundle {
-	
+class Bundle implements Comparable {
+
 	String isbn
 	String title
 	String duration
@@ -26,13 +26,15 @@ class Bundle {
 	}
 
 	static mapping = {
-
 		sort id: "desc"
-		
 	}
 	
-	static constraints = {
+	int compareTo(obj) {
+		title.compareTo(obj.title)
+	}
 
+
+	static constraints = {
 		isbn (blank: false, matches:/([0-9]{13})$/,unique: true)
 		title (blank: false,maxSize:125)
 		includePremiumCommerceObjects(nullable: true)
