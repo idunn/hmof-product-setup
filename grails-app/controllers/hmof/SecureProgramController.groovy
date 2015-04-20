@@ -169,7 +169,7 @@ class SecureProgramController {
 			log.info("Job cannot be re-promoted as it is ${promotionJobInstance.status}")
 		}
 
-		else if(promotionJobInstance.status == JobStatus.Failed.getStatus().toString()){
+		else if(promotionJobInstance.status == JobStatus.Failed.getStatus().toString() || promotionJobInstance.status == JobStatus.FailedbyAdmin.getStatus().toString()){
 
 			// If job has failed and the user want to retry
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
