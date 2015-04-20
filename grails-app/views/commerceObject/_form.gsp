@@ -60,7 +60,7 @@
 					code="commerceObject.teacherUrl.label" default="Teacher Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="teacherUrl"
-					value="${commerceObjectInstance?.teacherUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Teacher Only content" />
+					value="${commerceObjectInstance?.teacherUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Teacher Only Content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'teacherUrl', 'error-field')}
 				</span>
@@ -86,7 +86,7 @@
 					code="commerceObject.studentUrl.label" default="Student Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="studentUrl"
-					value="${commerceObjectInstance?.studentUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Student Only content" />
+					value="${commerceObjectInstance?.studentUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Student Content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'studentUrl', 'error-field')}
 				</span>
@@ -130,10 +130,10 @@
 			class="control-group fieldcontain ${hasErrors(bean: commerceObjectInstance, field: 'objectReorderNumber', 'error-field')} ">
 			<label for="objectReorderNumber" class="control-label col-sw-1"><g:message
 					code="commerceObject.objectReorderNumber.label"
-					default="Object Reorder Number" /></label>
+					default="Resource Order" /></label>
 					
 					<div  class="controls"> 
-					<g:select name="objectReorderNumber" from="${1..16}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" data-toggle="tooltip" data-placement="right" data-container="body" title="Determines the content display sequence on the Resource Gadget" />
+					<g:select name="objectReorderNumber" from="${1..16}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" data-toggle="tooltip" data-placement="right" data-container="body" title="Determines the content display sequence on the Dashboard Resource Gadget" />
 					
 				</div>
 			</div>
