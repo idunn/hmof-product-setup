@@ -34,7 +34,7 @@ class JobService{
 	 */
 	Boolean processJobs(def jobs, def promotionInstance) {
 		String cObjectName=""
-		String spProductName=""		
+		String spProductName=""
 		def isbn=""
 		def secureIsbn=""
 		def bundleIsbn=""
@@ -89,8 +89,18 @@ class JobService{
 						bundlesToRemove = deploymentService.compareJobs( bundle, previousJob )
 						customerLog.info "User selected '${smartDeploy}' for Smart-Deployment for the '${programName}' Program"
 						customerLog.info "There are a total of: ${bundle.size()} Bundles in this Job"
-						customerLog.info "Smart-Deployment has detected that ${bundlesToRemove.size()} Bundle(s) do not need to be redeployed as part of this Job"
-						customerLog.debug "The following Bundles do not need to be redeployed: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
+
+						if(bundlesToRemove.size() == 1 ){
+							customerLog.info "Smart-Deployment has detected that 1 Bundle will not be redeployed as part of this Job"
+							customerLog.info "Its Bundle ID is: ${bundlesToRemove.contentId} at revision ${bundlesToRemove.revision}"
+						}
+
+						else if(bundlesToRemove.size() >1 ){
+							customerLog.info "Smart-Deployment has detected that ${bundlesToRemove.size()} Bundles will not be redeployed as part of this Job"
+							customerLog.info "Their Bundle IDs are: ${bundlesToRemove.contentId} at revisions ${bundlesToRemove.revision}"
+						} else{
+							customerLog.info "Smart-Deployment has detected that all ${bundle.size()} Bundles will redeployed as part of this Job"
+						}
 
 
 						// removes bundles from current job
@@ -264,7 +274,7 @@ class JobService{
 	 */
 	def deployBundles(def bundleList, Logger customerLog, def secureProgram, def commerceObject, def deploymentUrl){
 
-		bundleList.each{			
+		bundleList.each{
 
 			Long instanceNumber = it.contentId
 			Long revisionNumber = it.revision
@@ -281,14 +291,14 @@ class JobService{
 
 			if (bundleInstance instanceof hmof.Bundle){
 
-				bundleContent = bundleInstance.findAtRevision(revisionNumber.toInteger())				
+				bundleContent = bundleInstance.findAtRevision(revisionNumber.toInteger())
 			}
 			else{
 
 				log.warn"Promoting deleted Bundle from Envers"
 				// Get the properties we are interested in
 				bundleContent = new Bundle(isbn:bundleInstance.ISBN, title:bundleInstance.TITLE, duration:bundleInstance.DURATION, includePremiumCommerceObjects:bundleInstance.INCLUDE_PREMIUM_COMMERCE_OBJECTS, contentType:bundleInstance.CONTENT_TYPE_ID)
-				
+
 			}
 
 			Boolean includePremium = bundleContent.includePremiumCommerceObjects
@@ -357,16 +367,16 @@ class JobService{
 						}
 					}
 				}
-				
+
 				childMap << [(spEnversInstance):listOfCommerceObjects]
 				customerLog.info "child Map of Objects being sent to Geb: " + childMap
 			}
-			
+
 			// Pass data to Geb
 			RedPagesDriver rpd = new RedPagesDriver(deploymentUrl, bundleContent, childMap,customerLog)
 
 			customerLog.info "${'*'.multiply(5)} Finished Deploying Bundle ${'*'.multiply(5)}\r\n"
-			customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"			
+			customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 			customerLog.info("Job Status: Success\r\n")
 		}
 	}
@@ -432,8 +442,8 @@ class JobService{
 			securityWordPage2:sp.SECURITY_WORD_PAGE2,	 securityWord3:sp.SECURITY_WORD3,securityWordLocation3:sp.SECURITY_WORD_LOCATION3, securityWordPage3:sp.SECURITY_WORD_PAGE3,
 			contentType:sp.CONTENT_TYPE_ID]
 
-		
-		
+
+
 	}
 
 	/**
