@@ -173,7 +173,7 @@
 	 <section>
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord2', 'error-field')} col-sw-5">
 	<label for="securityWord2" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWord2.label" default="Security Word2" />
+		<g:message code="secureProgram.securityWord2.label" default="Security Word" />
 		
 	</label>
 	<div class="controls">
@@ -183,7 +183,7 @@
 
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation2', 'error-field')} col-sw-7">
 	<label for="securityWordLocation2" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location2" />
+		<g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location" />
 		
 	</label>
 	<div class="controls">
@@ -195,7 +195,7 @@
 
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordPage2', 'error-field')} col-sw-5">
 	<label for="securityWordPage2" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWordPage2.label" default="Security Word Page2" />
+		<g:message code="secureProgram.securityWordPage2.label" default="Security Word Page" />
 		
 	</label>
 	<div class="controls">
@@ -209,7 +209,7 @@
 <section>
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWord3', 'error-field')} col-sw-5">
 	<label for="securityWord3" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWord3.label" default="Security Word3" />
+		<g:message code="secureProgram.securityWord3.label" default="Security Word" />
 		
 	</label>
 	<div class="controls">
@@ -219,7 +219,7 @@
 
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordLocation3', 'error-field')} col-sw-7">
 	<label for="securityWordLocation3" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location3" />
+		<g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location" />
 		
 	</label>
 	<div class="controls">
@@ -230,7 +230,7 @@
 
 <div class="${hasErrors(bean: secureProgramInstance, field: 'securityWordPage3', 'error-field')} col-sw-5">
 	<label for="securityWordPage3" class="control-label col-sw-1">
-		<g:message code="secureProgram.securityWordPage3.label" default="Security Word Page3" />
+		<g:message code="secureProgram.securityWordPage3.label" default="Security Word Page" />
 		
 	</label>
 	<div class="controls">
