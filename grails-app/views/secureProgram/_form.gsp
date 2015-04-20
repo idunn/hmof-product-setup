@@ -66,7 +66,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'labelForOnlineResource', 'error-field')} ">
 				<label for="labelForOnlineResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></label>
 				<div class="col-md-5 margin1">
-					<g:textField class="form-control" name="labelForOnlineResource" value="${secureProgramInstance?.labelForOnlineResource}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Path To Resource URL"/>
+					<g:textField class="form-control" name="labelForOnlineResource" value="${secureProgramInstance?.labelForOnlineResource}" data-toggle="tooltip" data-placement="right" data-container="body" title="Label for Path To Resource URL (Legacy)"/>
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'labelForOnlineResource', 'error-field')}</span>
 				</div>
 			</div>
@@ -75,7 +75,7 @@
 				<label for="pathToResource" class="control-label col-sw-1"><g:message code="secureProgram.pathToResource.label" default="Path To Resource" /></label>
 				<div  class="controls">			
 				
-					<g:textField class="form-control" name="pathToResource"   value="${secureProgramInstance?.pathToResource}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Online Resources where the content exists"/>
+					<g:textField class="form-control" name="pathToResource"   value="${secureProgramInstance?.pathToResource}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Online Resources where the content exists (Legacy) "/>
 				
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'pathToCoverImage', 'error-field')} ">
 				<label for="pathToCoverImage" class="control-label col-sw-1"><g:message code="secureProgram.pathToCoverImage.label" default="Path To Cover Image" /></label>
 				<div class="controls">
-					<g:textField class="form-control" name="pathToCoverImage" value="${secureProgramInstance?.pathToCoverImage}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Book Cover Image located in: /nsmedia/images/bc/"/>
+					<g:textField class="form-control" name="pathToCoverImage" value="${secureProgramInstance?.pathToCoverImage}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Book Cover Image located in: /nsmedia/images/bc/ (Legacy)"/>
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'pathToCoverImage', 'error-field')}</span>
 				</div>
 			</div>
