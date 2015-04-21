@@ -90,7 +90,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 		
 			<div
 	class="control-group">
-	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectReorderNumber.label" default="Object Reorder Number" /></label>
+	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectReorderNumber.label" default="Resource Order" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectReorderNumber")}</div></div>
 		<div

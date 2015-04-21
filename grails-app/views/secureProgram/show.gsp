@@ -141,13 +141,13 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			
 		<div
 	class="col-sw-5">
-	<label for="securityWord2" class="control-label col-sw-1"><g:message code="secureProgram.securityWord2.label" default="Security Word2" /></label>
+	<label for="securityWord2" class="control-label col-sw-1"><g:message code="secureProgram.securityWord2.label" default="Security Word" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWord2")}</div></div>
 		
 			<div
 	class="col-sw-7">
-	<label for="securityWordLocation2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location2" /></label>
+	<label for="securityWordLocation2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation2.label" default="Security Word Location" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation2")}</div></div>
 		
@@ -155,27 +155,27 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			
 			<div
 	class="col-sw-5">
-	<label for="securityWordPage2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage2.label" default="Security Word Page2" /></label>
+	<label for="securityWordPage2" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage2.label" default="Security Word Page" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordPage2")}</div></div>
 		</section>
 			<section>
 		<div
 	class="col-sw-5">
-	<label for="securityWord3" class="control-label col-sw-1"><g:message code="secureProgram.securityWord3.label" default="Security Word3" /></label>
+	<label for="securityWord3" class="control-label col-sw-1"><g:message code="secureProgram.securityWord3.label" default="Security Word" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWord3")}</div></div>
 		
 			<div
 	class="col-sw-7">
-	<label for="securityWordLocation3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location3" /></label>
+	<label for="securityWordLocation3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordLocation3.label" default="Security Word Location" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordLocation3")}</div></div>
 					
 			
 			<div
 	class="col-sw-5">
-	<label for="securityWordPage3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage3.label" default="Security Word Page3" /></label>
+	<label for="securityWordPage3" class="control-label col-sw-1"><g:message code="secureProgram.securityWordPage3.label" default="Security Word Page" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "securityWordPage3")}</div></div>
 		
