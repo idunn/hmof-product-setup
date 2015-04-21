@@ -13,16 +13,16 @@ class Program {
 	String userUpdatingProgram
 
 	ContentType contentType
-
+	
+	SortedSet bundles
 	static hasMany = [bundles:Bundle]
 	static searchable = {
 		bundles component: true
 	}
 
-	SortedSet bundles
-
+	
 	static mapping = {
-		sort id: "desc"
+		sort id: "desc"		
 	}
 
 	static constraints = {
