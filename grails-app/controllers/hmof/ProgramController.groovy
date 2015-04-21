@@ -175,7 +175,7 @@ class ProgramController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 50, 100)
+		params.max = Math.min(max ?: 25, 100)
 		log.debug "Program count:" + Program.count()
 		respond Program.list(params), model:[programInstanceCount: Program.count()]
 	}

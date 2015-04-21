@@ -199,7 +199,7 @@ class BundleController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 100, 200)
+		params.max = Math.min(max ?: 50, 200)
 		log.debug "Bundle count:" + Bundle.count()
 		respond Bundle.list(params), model:[bundleInstanceCount: Bundle.count()]
 	}
