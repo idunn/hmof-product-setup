@@ -232,11 +232,12 @@ class UtilityService {
 					}
 					def eGrades
 
-					if( tokens[8]!=null || tokens[8]!="" ){
-						eGrades=tokens[8]
+					if ( tokens[8]==null || tokens[8]=="" ){
+						println "Value Not Set in Red Pages"
+						eGrades="Not Required"
 					}else
 					{
-						eGrades="Not Required"
+						eGrades=tokens[8]
 					}
 
 					// zero values need to be null
