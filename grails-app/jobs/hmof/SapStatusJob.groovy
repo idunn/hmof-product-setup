@@ -35,11 +35,10 @@ class SapStatusJob {
 			if(bundleInstance!=null && sapInstance!=null){
 			
 			bundleInstance.sap.status = it.value			
-			bundleInstance.sap.lastUpdated=new Date()
 			bundleInstance.save(flush: true)
 			}else
 		   {
-			   bundleInstance.sap = new Sap(isbn: isbnId,bundle: bundleInstance, status:it.value,dateCreated:new Date())
+			   bundleInstance.sap = new Sap(isbn: isbnId,bundle: bundleInstance, status:it.value)
 			   bundleInstance.save(flush: true)
 	    	}
 		}	

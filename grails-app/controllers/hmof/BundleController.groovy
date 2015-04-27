@@ -247,17 +247,17 @@ class BundleController {
 			if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
 				sapResultsMap.each {
 					String sapIsbn=it.key
-					bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value,dateCreated:new Date())
+					bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value)
 
 				}
 			}else
 			{
-				bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
+				bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"")
 			}
 
 		}else
 		{
-			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"",dateCreated:new Date())
+			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"")
 			log.error("SAP Service not Reachable")
 		}
 
