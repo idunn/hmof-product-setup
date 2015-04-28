@@ -452,7 +452,7 @@ class UtilityService {
 
 		try{
 
-			row = sql.rows("SELECT id FROM promotion WHERE (hour(SYSDATE) - hour(date_created))>2  AND status = 'In_Progress'")
+			row = sql.rows("SELECT id FROM promotion WHERE (hour(now())-hour(date_created))>2  AND status = 'In_Progress'")
 			log.info("row:"+row)
 		}
 		catch(Exception e){
@@ -470,6 +470,7 @@ class UtilityService {
 	 * @return sapResults
 	 */
 	def getIsbnRecords(List isbnNumber){
+		
 		try{
 
 			def endpoint = 'http://eaicamel-prd.hmco.com/services/material/getMaterialDetailEx'
@@ -480,6 +481,7 @@ class UtilityService {
 						getMaterialDetailRequest(xmlns: nameSpace) {
 							materialKeyList(xmlns: nameSpace) {
 								isbnNumber.each{
+									
 									isbn(xmlns:nameSpace,it.trim())
 								}
 							}

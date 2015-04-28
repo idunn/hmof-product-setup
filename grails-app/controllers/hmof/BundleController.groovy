@@ -311,6 +311,38 @@ class BundleController {
 			}
 			bundleInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
 		}
+		//Sap Status Update starts
+		InetAddress address = InetAddress.getByName("172.17.101.75");
+		boolean reachable = address.isReachable(5000);
+		if(reachable){
+
+			log.info("SAP Service Reachable")
+			def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
+			if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
+				sapResultsMap.each {
+			bundleInstance.sap.isbn = bundleInstance.isbn
+			bundleInstance.sap.status = it.value			
+			
+
+				}
+			}else
+			{
+				bundleInstance.sap.isbn = bundleInstance.isbn	
+				bundleInstance.sap.status = ""
+			}
+
+		}else
+		{
+			bundleInstance.sap.isbn = bundleInstance.isbn			
+			log.error("SAP Service not Reachable")
+		}
+		//Sap Status Update ends
+		
+		
+		
+		
+		
+		
 		bundleInstance.userUpdatingBundle = springSecurityService?.currentUser?.username
 		bundleInstance.save flush:true
 
