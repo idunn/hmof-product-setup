@@ -468,7 +468,7 @@ class JobService{
 	 */
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
-		Logger log1 = Logger.getLogger("Thread" + programISBN)
+		Logger log1 = Logger.getLogger("Thread" + programISBN+"-"+envId)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
 		props.setProperty("log4j.appender.file.maxFileSize","100MB")
@@ -509,7 +509,7 @@ class JobService{
 		props.setProperty("log4j.appender.file.Append","false")
 		props.setProperty("log4j.appender.file.layout","org.apache.log4j.PatternLayout")
 		props.setProperty("log4j.appender.file.layout.ConversionPattern","%d - %m%n")
-		props.setProperty("log4j.logger."+ "Thread" + programISBN,"INFO, file")
+		props.setProperty("log4j.logger."+ "Thread" + programISBN+"-"+envId,"INFO, file")
 		PropertyConfigurator.configure(props)
 		return log1
 	}
