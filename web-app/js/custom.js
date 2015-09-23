@@ -8,19 +8,23 @@ $(document).on("click", ".open-NewDeploymentDialog", function () {
      var myDepEnv = $(this).data('env');
      var myJobId = $(this).data('jobid');
      var myURL = $(this).data('url');
-     
+     var optionSelected1 = $('input[name=listGroup]:checked').val();
      //alert('myDepEnv: ' + myDepEnv + ' ,myJobId: '+ myJobId + ' myURL: ' + myURL)
 
-     // load the URL and show modal on success
-     $("#DeploymentModal .modal-body").load(myURL+ '?job.id=' + myJobId + '&env=' + myDepEnv, function() { 
-         $("#DeploymentModal").modal("show"); 
+     $("#confirmbox .modal-body").load(myURL+ '?env=' +myDepEnv+ '&job.id=' + myJobId, function() { 
+      	 
+     	$("#confirmbox").modal("show"); 
+        
      });
 });
 
+//Initialise to the first one on the page
+var mySelectedRadio = $("#Content :input[ name=listGroup]:checked").val();
 // Pass the id of the radio button selected from the list page
 $(document).on("click", 'input[name="listGroup"]', function () {
-    var mySelectedRadio = $(this).val();
-    
+
+    mySelectedRadio = $(this).val();
+
     //  Remove highlight from the previously selected row
     $(this).closest('table').find('tr.warning').removeClass("warning");
     //  Highlight the new row 
@@ -42,11 +46,139 @@ $(document).on("click", 'input[name="listGroup"]', function () {
         $(this).data('jobid', mySelectedRadio);
         });
 });
+/*
+ * Handle the environment group buttons that switch between the tabs of the environment carousel
+ */
+$(function() {
 
+	var totalEnvGroups = ($(":input[name='envGroupButton']").length - 1)
+
+    // Cycles to the previous environment group
+    $(".prev-slide").click(function(){
+    	$("#myCarousel").carousel('prev');
+	   
+		//  Remove warning highlight from the previously tab
+		var currentGroupInput = $(this).closest('div').find('input.btn-warning');
+		currentGroupInput.removeClass("btn-warning");
+		//  Highlight the newly selected carousel tab
+		var prevIndex = ($(":input[name='envGroupButton']").index(currentGroupInput) - 1);
+		  
+		//  Only 3 group types at the moment - this will need to be changed so it counts how many there are and isn't hardcoded
+		if(prevIndex < 0)
+			prevIndex = totalEnvGroups;
+		$(":input[name='envGroupButton']:eq(" + (prevIndex) + ")").toggleClass("btn-warning");
+		
+		//  Select the correct radio button for the current tab
+		//  First clear all of the others
+		
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false)
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+
+		if(prevIndex == 0)
+			$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		else if(prevIndex == 1)
+			$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		else if(prevIndex == 2)
+			$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		
+    });
+    // Cycles to the next environment group
+    $(".next-slide").click(function(){
+    	$("#myCarousel").carousel('next');
+	   
+		//  Remove warning highlight from the previously tab
+		var currentGroupInput = $(this).closest('div').find('input.btn-warning');
+		currentGroupInput.removeClass("btn-warning");
+		//  Highlight the newly selected carousel tab
+		var nextIndex = ($(":input[name='envGroupButton']").index(currentGroupInput) + 1);
+		//  Only 3 group types at the moment - this will need to be changed so it counts how many there are and isn't hardcoded
+		if(nextIndex > totalEnvGroups)
+			nextIndex = 0;
+		$(":input[name='envGroupButton']:eq(" + (nextIndex) + ")").toggleClass("btn-warning");
+		
+		//  Select the correct radio button for the current tab
+		//  First clear all of the others
+		
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false)
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+	
+		
+		if(nextIndex == 0)
+			$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		else if(nextIndex == 1)
+			$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		else if(nextIndex == 2)
+			$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		
+		
+    });
+    // Cycles the carousel to a particular environment group
+    $(".ContentButton").click(function(){
+    	$("#myCarousel").carousel(0);
+    	
+		//  Remove warning highlight from the previously tab
+		$(this).closest('div').find('input.btn-warning').removeClass("btn-warning");
+		//  Highlight the newly selected carousel tab
+		$(this).closest('div').find('input.ContentButton').toggleClass("btn-warning"); 
+		
+		//  Select the correct radio button for the current tab
+		//  First clear all of the others
+		
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false)
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+		
+	});
+    $(".PlatformButton").click(function(){
+	    $("#myCarousel").carousel(2);
+	  
+		//  Remove warning highlight from the previously tab
+		$(this).closest('div').find('input.btn-warning').removeClass("btn-warning");
+		//  Highlight the newly selected carousel tab
+		$(this).closest('div').find('input.PlatformButton').toggleClass("btn-warning");
+		
+		//  Select the correct radio button for the current tab
+		//  First clear all of the others
+		
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false)
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);
+	    
+    });
+    $(".IntegrationButton").click(function(){
+    	$("#myCarousel").carousel(1);
+    	
+		//  Remove warning highlight from the previously tab
+		$(this).closest('div').find('input.btn-warning').removeClass("btn-warning");
+		//  Highlight the newly selected carousel tab
+		$(this).closest('div').find('input.IntegrationButton').toggleClass("btn-warning");
+		//  Select the correct radio button for the current tab
+		//  First clear all of the others
+		
+		$("#Content :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+		$("#Integration :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false)
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked', false) 
+
+		$("#Platform :input[name=listGroup][value=" + mySelectedRadio + "]").prop('checked',true);         
+	});
+	
+    $('.carousel').each(function(){
+        $(this).carousel({
+            interval: false
+        });
+    });
+    
+  });
 
 /*
  * bootstrap-select.js
- */
+ 
 
 (function($) {
 
@@ -91,4 +223,4 @@ $('.accordion').on('show hide', function (n) {
     $(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
 });
   
-})(window.jQuery);
+})(window.jQuery);*/
