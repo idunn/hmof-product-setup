@@ -7,11 +7,11 @@
 				<ul class="unstyled">
 					<li><p>
 			    		<i class="glyphicon glyphicon-book"></i>
-						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/User+Guide+-+Product+Setup+App">User Guide</a>
+						<a target="_blank" href="https://confluence.hmhco.com/display/tool/User+Guide+-+Product+Setup+App">User Guide</a>
 				</p>	</li>
 						<li><p>
 			    		<i class="glyphicon glyphicon-hand-right"></i>
-						<a target="_blank" href="http://dubconf.hmhpub.com:8080/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
+						<a target="_blank" href="https://confluence.hmhco.com/display/tool/HMOF+Product+Setup+Best+Practices">Best Practices</a>
 					</p></li>
 						<li><p>
 			    		<i class="glyphicon glyphicon-hand-right"></i>
@@ -28,7 +28,7 @@
 					
 					<li><p>
 						<i class="glyphicon glyphicon-hand-right"></i>
-                        <a href="http://dubconf.hmhpub.com:8080/display/tool/Home">Developers</a>
+                        <a href="https://confluence.hmhco.com/display/tool/Home">Developers</a>
                     </p>
                    </li>
 				</ul>
@@ -40,16 +40,16 @@
 					<li>
 					<p>
 			    		<i class="glyphicon glyphicon-remove"></i>
-						<a target="_blank" href="https://jira.hmhpub.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=1&components=30020649&summary=I%20found%20a%20bug!&customfield_10044=10221&priority=4">Log a bug</a>
+						<a target="_blank" href="https://jira.hmhco.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=1&components=30020649&summary=I%20found%20a%20bug!&customfield_10044=10221&priority=4">Log a bug</a>
 					</p>
 					</li>
 					<li>
 			    			<p><i class="glyphicon glyphicon-hand-right"></i>
-						<a target="_blank" href="https://jira.hmhpub.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=2&components=30020649&summary=New%20Feature!&customfield_10044=10221&priority=4">Suggest a Feature</a>
+						<a target="_blank" href="https://jira.hmhco.com/secure/CreateIssueDetails!init.jspa?pid=30000535&issuetype=2&components=30020649&summary=New%20Feature!&customfield_10044=10221&priority=4">Suggest a Feature</a>
 					</p></li>
                    <li><p>
 			    		<i class="glyphicon glyphicon-envelope"></i>
-						<a target="_top" href="mailto:DublinTPDCustomDevelopment@hmhco.com">Contact</a>
+						<a target="_top" href="mailto:CustomDevelopment@hmhco.com">Contact</a>
 					</p></li>
 				</ul>																					
 			</div>
