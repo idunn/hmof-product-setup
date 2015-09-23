@@ -197,9 +197,11 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/favicon.ico':                ['permitAll'],
 	'/user/**':                       ['ROLE_ADMIN'],
 	'/quartz/**':                     ['ROLE_ADMIN'],
-	 '/secureProgram/importCSV/**':   ['ROLE_ADMIN'],
-	 '/commerceObject/importCSV/**':  ['ROLE_ADMIN'],
-	 '/monitoring/**':                ['ROLE_ADMIN'],
+	'/secureProgram/importCSV/**':   ['ROLE_ADMIN'],
+	'/commerceObject/importCSV/**':  ['ROLE_ADMIN'],
+	'/monitoring/**':                ['ROLE_ADMIN'],
+	'/environment/**':                ['ROLE_ADMIN'],
+	'/environmentGrp/**':                ['ROLE_ADMIN'],
 	'/dbconsole/**':                  ['ROLE_ADMIN']
 	 
 ]

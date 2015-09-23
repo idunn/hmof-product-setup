@@ -420,9 +420,17 @@ class DeploymentService {
 	def getPreviousEnvironment(environmentId){
 
 		def prevEnvironment
-		if(environmentId==3L){prevEnvironment=2L}
-		else if(environmentId==2L){prevEnvironment=1L}
-
+		/*if(environmentId==3L){prevEnvironment=2L}
+		else if(environmentId==2L){prevEnvironment=1L}*/
+		if(environmentId.equals('3'))
+		{
+			prevEnvironment=2L
+		}
+		else if(environmentId.equals('2'))
+		{
+		prevEnvironment=1L
+		}
+		println prevEnvironment
 		prevEnvironment
 	}
 

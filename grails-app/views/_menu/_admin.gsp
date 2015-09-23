@@ -23,9 +23,10 @@
 		</li>
 			<sec:ifAnyGranted roles="ROLE_ADMIN">
 		<li class="">
-			<a href="${createLink(uri: '/user')}">
+			<a href="${createLink(uri: '/user/list')}">
 				<i class="glyphicon glyphicon-info-sign"></i>
-				Manage Roles			</a>
+				User Settings
+			</a>
 		</li>
 		<li class="">
 			<a href="${createLink(uri: '/secureProgram/importCSV')}">
@@ -49,6 +50,18 @@
 			<a href="${createLink(uri: '/monitoring')}">
 				<i class="glyphicon glyphicon-info-sign"></i>
 				Java Melody Monitoring
+			</a>
+		</li>
+				<li class="">
+			<a href="${createLink(uri: '/environment/list')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				Environment Settings
+			</a>
+		</li>
+		<li class="">
+			<a href="${createLink(uri: '/environmentGrp/list')}">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				Environment Group Settings
 			</a>
 		</li>
 		</sec:ifAnyGranted>

@@ -1,76 +1,90 @@
+<%@ page import="hmof.security.User" %>
+<!doctype html>
 <html>
 
 <head>
-	<meta name='layout' content='springSecurityUI'/>
-	<g:set var="entityName" value="${message(code: 'user.label', default: 'User')}"/>
-	<title><g:message code="default.create.label" args="[entityName]"/></title>
-</head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="layout" content="kickstart" />
+	<g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
+	<title><g:message code="default.create.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
+	type="text/css">
+	<%--
+
+	
+			function env_display(){
+
+			
+				var spdata=""; 
+            	spdata+="<select  name=\"environmentsIds\"  value=\"${userInstance?.environments?.collect{it.id}}\" multiple=\"multiple\"   class=\"many-to-many form-control\">"
+            		spdata+="<option value=\"\">No Access - This user may not make deployments</option>";
+
+	            	if(document.getElementById("ROLE_PM").checked)
+		            	{            		
+            		spdata+="<option value='1'>Development / Cert_Review</option>";
+            		spdata+="<option value='3'>Certification / Cert</option>";
+            		spdata+="<option value='4'>Integration - Int</option>";
+            		
+		            	}
+	            	if(document.getElementById("ROLE_QA").checked)
+	            	{            		
+        		   spdata+="<option value='2'>QA / Prod_Review</option>";      		
+        		
+	            	}  
+	            	if(document.getElementById("ROLE_PROD").checked)
+	            	{            		
+        		  spdata+="<option value='5'>Production / Prod</option>";        		
+        		
+	            	}            	
+            	spdata+="</select>";				            	            	
+
+            
+            	$("#result").html(spdata);
+
+				
+			   
+			}
+			</script>
+	--%></head>
 
 <body>
+<div class="row">
+	<div class="widget stacked ">
+		<div class="widget-content">
+<section id="create-user" class="first">
 
-<h3><g:message code="default.create.label" args="[entityName]"/></h3>
+	<g:hasErrors bean="${userInstance}">
+	<div class="alert alert-error">
+		<g:renderErrors bean="${userInstance}" as="list" />
+	</div>
+	</g:hasErrors>
+	
+	<g:form action="save" class="form-horizontal" >
+		<fieldset class="form">
+			<g:render template="form"/>
+		</fieldset>
+		<div class="span9">
+<section>
 
-<g:form action="save" name='userCreateForm'>
-
-<%
-def tabData = []
-tabData << [name: 'userinfo', icon: 'icon_user', messageCode: 'spring.security.ui.user.info']
-tabData << [name: 'roles',    icon: 'icon_role', messageCode: 'spring.security.ui.user.roles']
-%>
-
-<s2ui:tabs elementId='tabs' height='375' data="${tabData}">
-
-	<s2ui:tab name='userinfo' height='280'>
-		<table>
-		<tbody>
-
-			<s2ui:textFieldRow name='username' labelCode='user.username.label' bean="${user}"
-                            labelCodeDefault='Username' value="${user?.username}"/>
-
-			<s2ui:passwordFieldRow name='password' labelCode='user.password.label' bean="${user}"
-                                labelCodeDefault='Password' value="${user?.password}"/>
-                                
-            <s2ui:textFieldRow name='email' labelCode='user.email.label' bean="${user}"
-                                labelCodeDefault='Email' value="${user?.email}"/>                    
-
-			<s2ui:checkboxRow name='enabled' labelCode='user.enabled.label' bean="${user}"
-                           labelCodeDefault='Enabled' value="${user?.enabled}"/>
-
-			<s2ui:checkboxRow name='accountExpired' labelCode='user.accountExpired.label' bean="${user}"
-                           labelCodeDefault='Account Expired' value="${user?.accountExpired}"/>
-
-			<s2ui:checkboxRow name='accountLocked' labelCode='user.accountLocked.label' bean="${user}"
-                           labelCodeDefault='Account Locked' value="${user?.accountLocked}"/>
-
-			<s2ui:checkboxRow name='passwordExpired' labelCode='user.passwordExpired.label' bean="${user}"
-                           labelCodeDefault='Password Expired' value="${user?.passwordExpired}"/>
-		</tbody>
-		</table>
-	</s2ui:tab>
-
-	<s2ui:tab name='roles' height='280'>
-		<g:each var="auth" in="${authorityList}">
-		<div>
-			<g:checkBox name="${auth.authority}" />
-			<g:link controller='role' action='edit' id='${auth.id}'>${auth.authority.encodeAsHTML()}</g:link>
+<div id="result"></div>
+		<div class="form-actions">
+			<g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+            <button class="btn" type="reset"><g:message code="default.button.reset.label" default="Reset" /></button>
 		</div>
-		</g:each>
-	</s2ui:tab>
+		</section>
+		</div>
+	</g:form>
+	
+</section>
+		</div>
+				<!-- /widget-content -->
 
-</s2ui:tabs>
+			</div>
+			<!-- /widget -->
 
-<div style='float:left; margin-top: 10px; '>
-<s2ui:submitButton elementId='create' form='userCreateForm' messageCode='default.button.create.label'/>
-</div>
-
-</g:form>
-
-<script>
-$(document).ready(function() {
-	$('#username').focus();
-	<s2ui:initCheckboxes/>
-});
-</script>
-
+		</div>
+		<!-- /span8 -->
+	
 </body>
+
 </html>

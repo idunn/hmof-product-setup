@@ -16,8 +16,8 @@ class Promotion {
 	Date	lastUpdated
 	
 
-	static belongsTo	= [job: Job,user: User,environments: Environment]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
-
+	static belongsTo	= [job: Job,environments: Environment]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
+	static hasOne		= [user: User]
 	static mapping = {
 
 		sort dateCreated: "desc" // or "asc"

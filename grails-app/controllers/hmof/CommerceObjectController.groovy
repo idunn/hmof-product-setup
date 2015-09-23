@@ -3,11 +3,10 @@ package hmof
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-import hmof.deploy.Job
-import hmof.deploy.Promotion
-import hmof.security.User
-import hmof.security.Role
-import hmof.security.UserRole
+import hmof.deploy.*
+
+import hmof.security.*
+
 import grails.plugin.springsecurity.annotation.Secured
 import org.apache.log4j.Logger
 
@@ -116,7 +115,90 @@ class CommerceObjectController {
 		redirect(action: "list")
 
 	}
+	@Transactional
+	def confirm() {
+		def msg
+		def commerceObjectInstance = CommerceObject.get(params.job.id)
+		//  Check the user is enabled first
+		//  If not we force them to log in again as we are probably trying to lock them out
+		def currentUser = springSecurityService.currentUser
+		if(!currentUser.enabled)
+		{
+			//  Redirect to login page
+			return redirect (controller: 'login', action: 'full', params: params)
 
+		}
+		def environmentRevision
+		//  Make sure its clean to start with
+		log.debug "Flushing the flash memory"
+		flash.clear()
+		//Required since Grails 2.3.4 upgrade http://stackoverflow.com/questions/20359203/grails-seems-unable-to-bind-params-to-properties-if-it-contains-a-key-name-as-th
+		params.remove('_')
+		//  Test that the current user has permission to create a deployment on the chosen environment
+		def environments = springSecurityService.currentUser.environments
+		if(!environments)
+		{
+			flash.message = message(code: 'deployment.create.no.environments', default: 'Sorry, you are not authorised to promote to any environment.')
+		}
+		def envId=params.env
+		def latestRevision=	deploymentService.getCurrentEnversRevision(commerceObjectInstance)
+		environmentRevision=deploymentService.getPromotionDetails(commerceObjectInstance,envId)
+		environmentRevision=environmentRevision[2]
+		def envName=Environment.where{id==envId}.name.get()
+		if (environmentRevision != null) {
+			environmentRevision = environmentRevision
+		}
+		
+		
+		
+		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(commerceObjectInstance,envId)
+		
+		
+		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
+			
+			 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+				
+		
+		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
+			
+			 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+				
+		
+		}
+		
+		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
+		{
+			
+			msg='Are you sure you want to deploy?'
+			
+			
+		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
+		 {
+			
+			 msg='Are you sure you want to promote?'
+			 
+		 }
+		
+		if(envId.equals("2") || envId.equals("3")){
+		def promotionInstance = deploymentService.getDeployedInstance(commerceObjectInstance,envId)
+	
+		
+				 if(promotionInstance==null){
+					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
+					 log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
+					 //redirect(action: "list")
+					 //return
+				 }
+		}
+		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this bad deployment instance can never be used
+		if(!flash.message)
+		{
+			flash.commerceObjectInstance = commerceObjectInstance
+		}
+		
+		 
+		render(view: "_confirm", model: [commerceObjectInstance:commerceObjectInstance,msg:msg,envName:envName,envId:envId])
+	}
 	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
@@ -125,10 +207,10 @@ class CommerceObjectController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-		def instanceDetail = params.instanceDetail
+		//def instanceDetail = params.instanceDetail
 
-		def instanceDetails = instanceDetail.split("/")
-		def instanceId = instanceDetails[0]
+		//def instanceDetails = instanceDetail.split("/")
+		def instanceId = params.programId
 
 		log.info("Commerce Object  Detail: "+instanceId)
 		def commerceObjectInstance = CommerceObject.get(instanceId)
@@ -146,7 +228,7 @@ class CommerceObjectController {
 		// Add Program instance to Job
 		Job j1 = new Job(job).save(failOnError:true)
 		log.info("Successfully added Commerce Object Instance to job : "+commerceObjectInstance.objectName)
-		def envId = deploymentService.getUserEnvironmentInformation()
+		def envId = params.depEnvId
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending.getStatus())
 		def promote = [status: JobStatus.Pending.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
@@ -166,15 +248,15 @@ class CommerceObjectController {
 
 		final String none = "none"
 
-		def instanceDetail = params.instanceToBePromoted
-		def instanceDetails = instanceDetail.split("/")
-		def instanceToBePromoted = instanceDetails[0]
+		//def instanceDetail = params.instanceToBePromoted
+		//def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = params.programId
 
 		def commerceObjectInstance = CommerceObject.get(instanceToBePromoted)
 		log.info("Promoting commerceObjectInstance : "+commerceObjectInstance.objectName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
-		def envId = deploymentService.getUserEnvironmentInformation()
+		def envId = params.depEnvId
 		log.info("User Id: "+userId+",envId:"+envId)
 		def promotionInstance = deploymentService.getDeployedInstance(commerceObjectInstance, envId)
 

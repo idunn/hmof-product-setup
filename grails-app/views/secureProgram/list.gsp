@@ -10,6 +10,14 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'secureProgram.label', default: 'SecureProgram')}" />
 	<title><g:message code="default.list.label" args="[entityName]" /></title>
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
+	type="text/css">
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'font-awesome.min.css')}"
+	type="text/css">
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'custom.css')}"
+	type="text/css">
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 </head>
 
 <body>
@@ -20,8 +28,41 @@
 
 <section id="list-secureProgram" class="first">
 
-<div>
 <g:form>
+	<g:set var="jobdetails" bean="deploymentService"/>
+	<g:set var="userdetail" bean="utilityService"/>
+<div class="panel panel-info">
+ <div class="panel-heading" style="height:50px;" >
+    <h3 class="panel-title"><b>&nbsp;</b></h3>
+    <!-- Environment Group Control Buttons -->
+				    	<div class="pull-right" style="margin-top:-20px;">
+            				<input type="button" class="btn btn-default prev-slide" value="&lsaquo;">
+            				
+            				
+            				<g:each in="${userdetail.getDeploymentEnvGroup()}" var="deploymentGroup" status="i">
+            				
+    							<hmof:ifGroupHasEnvironments environmentGroup="${deploymentGroup.id}">																																																									
+									<hmof:groupButton environmentGroup="${deploymentGroup}" i="${i}"/>
+								</hmof:ifGroupHasEnvironments>	
+        					</g:each>
+           					<input type="button" class="btn btn-default next-slide" value="&rsaquo;">
+						</div>
+  </div>
+  <div class="panel-body" >
+	
+				
+				<div class="widget-content">
+						
+				
+					<div id="myCarousel" class="carousel" data-interval="false" >
+   								<%-- Loop for each environment group, display each one on a different carousel tab --%>
+    							<%-- Carousel items --%>
+    							<div class="carousel-inner">
+    							<!-- Loop for each environment group, display each one on a different carousel tab, make the first one (content) active by default  -->
+    							<g:each in="${userdetail.getDeploymentEnvGroup()}" var="deploymentGroup">	
+    							
+    								<hmof:ifGroupHasEnvironments environmentGroup="${deploymentGroup.id}">
+    									<div class="${deploymentGroup.groupname == 'Content'? 'active ' : ''}item" id="${deploymentGroup.groupname}">
 
 	<table class="table table-bordered margin-top-medium">
 		<thead>
@@ -38,7 +79,17 @@
 			
 				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
 				
-			  <g:render template="/_common/templates/headerEnv"/>
+			 <g:each in="${userdetail.getAllEnvironments()}" var="deploymentEnv">	
+					<%-- Change which environments are shown based on the user groups and the environments configured for this type --%>
+							
+								<g:if test="${deploymentGroup.id==deploymentEnv?.groups?.id}">
+						
+								<th class="widget-header2" style="color:#bbb">
+											${deploymentEnv.name}
+								</th>
+								
+						</g:if>
+				</g:each>
 			
 			</tr>
 		</thead>
@@ -52,13 +103,24 @@
 			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/review/log/"+"${secureProgramInstance.registrationIsbn}"+"-review_log"+".log"
 			   File qaLogFile = new File(qaLog)
 			   prodLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/prod/log/"+"${secureProgramInstance.registrationIsbn}"+"-prod_log"+".log"
-			   File prodLogFile = new File(prodLog) %>
+			   File prodLogFile = new File(prodLog)
+			   certLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/cert/log/"+"${secureProgramInstance.registrationIsbn}"+"-cert_log"+".log"
+			   File certLogFile = new File(certLog)
+			   intLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/int/log/"+"${secureProgramInstance.registrationIsbn}"+"-int_log"+".log"
+			   File intLogFile = new File(intLog)
+			   
+			   
+			    %>
 				
 				
-				<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id+"/"+jobdetails.getCurrentEnversRevision(secureProgramInstance)+"/"+jobdetails.getPromotionDetails(secureProgramInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/>
+				<%--<td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${secureProgramInstance.id+"/"+jobdetails.getCurrentEnversRevision(secureProgramInstance)+"/"+jobdetails.getPromotionDetails(secureProgramInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/>
 				</sec:ifAnyGranted>
 				<g:link action="show" id="${secureProgramInstance.id}">${secureProgramInstance.id}</g:link> </td>
 			
+				--%>
+				
+				 <td><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="listGroup" id="listGroup" value="${secureProgramInstance.id}" <g:if test='${(deploymentGroup.groupname == 'Content') && i == 0}'>checked='checked'</g:if> /></sec:ifAnyGranted><g:link action="show" id="${secureProgramInstance.id}">${fieldValue(bean: secureProgramInstance, field: "id")}	</g:link></td>
+				
 				<td><g:link action="show" id="${secureProgramInstance.id}">${fieldValue(bean: secureProgramInstance, field: "productName")}</g:link></td>
 				
 				<td>Revision: ${jobdetails.getCurrentEnversRevision(secureProgramInstance)}<br>Last updated by: ${userdetail.getLastUpdatedUserNameForSP(jobdetails.getCurrentEnversRevision(secureProgramInstance))}</td>
@@ -68,82 +130,75 @@
 				<td>${fieldValue(bean: secureProgramInstance, field: "onlineIsbn")}</td>						
 			
 				<td>${fieldValue(bean: secureProgramInstance, field: "copyright")}</td>
-				
-				<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(secureProgramInstance,1)}" />
-						
-				<td>	<g:if test="${jobdetail[0]!=null && jobdetail[1]!=null && jobdetail[2]!=null && jobdetail[3]!=null}">				
-					Job: ${jobdetail[0]}  
+				<%-- Output one cell for each environment --%>
+													<g:each in="${userdetail.getAllEnvironments()}" var="deploymentEnv">
+														<!-- Change which environments are shown based on the user groups and the environments configured for this type -->
+														<g:if test="${deploymentGroup.id==deploymentEnv?.groups?.id}">				
+														<g:set var="jobdetail" value="${jobdetails.getPromotionDetails(secureProgramInstance,deploymentEnv.id)}" />
+															<td>
+																<ul class="unstyled">
+														<li><g:if test="${jobdetail[0]!=null && jobdetail[1]!=null && jobdetail[2]!=null && jobdetail[3]!=null}">			
+					<span class="label label-info" style="font-size:12px;padding-bottom:2px;">Job: ${jobdetail[0]}  </span>
 				<br>
-					Status: ${jobdetail[1]} 
+					<g:if test="${jobdetail[1]=="Success"}">
+					<span class="label label-success"  style="font-size:12px;">Status:&nbsp;${jobdetail[1]}</span>
+					</g:if>
+					<g:if test="${jobdetail[1]=="Failure" || jobdetail[1].toString().contains("Failed")}">
+					<span class="label label-danger" style="font-size:12px;">Status:&nbsp;${jobdetail[1]}</span>
+					</g:if>
+					<g:if test="${jobdetail[1]!="Success" && jobdetail[1]!="Failure" && !jobdetail[1].toString().contains("Failed")}">
+					<span class="label label-warning" style="font-size:12px;">Status:&nbsp;${jobdetail[1]}</span>
+					</g:if>
 				<br>
 					Revision: ${jobdetail[2]} 
 				<br>
 					User: ${jobdetail[3]} 
-				<br>	</g:if>
-					<br>
-											<g:if test="${devLogFile.exists()}">
+				<br>	
+				
+				                            <g:if test="${deploymentEnv.id==1 && devLogFile.exists()}">
 												<a href='./download?logFile=<%=devLog%>'>Log File</a>
 											</g:if>
-														
-				</td>
-				
-				<g:set var="jobdetailQa" value="${jobdetails.getPromotionDetails(secureProgramInstance,2)}" />
-				
-				<td><g:if test="${jobdetailQa[0]!=null && jobdetailQa[1]!=null && jobdetailQa[2]!=null && jobdetailQa[3]!=null}">
-				Job: ${jobdetailQa[0]}
-				<br>
-				Status: ${jobdetailQa[1]}
-				<br>
-				Revision: ${jobdetailQa[2]}
-				<br>
-				User: ${jobdetailQa[3]}
-				<br></g:if>
-				<br>
-											<g:if test="${qaLogFile.exists()}">
+										<g:if test="${deploymentEnv.id==2 && qaLogFile.exists()}">
 												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
 											</g:if>
-											
-				</td>
-				
-				<g:set var="jobdetailprod" value="${jobdetails.getPromotionDetails(secureProgramInstance,3)}" />
-				
-				<td><g:if test="${jobdetailprod[0]!=null && jobdetailprod[1]!=null && jobdetailprod[2]!=null && jobdetailprod[3]!=null}">
-				Job: ${jobdetailprod[0]}
-				<br>
-				Status: ${jobdetailprod[1]}
-				<br>
-				Revision: ${jobdetailprod[2]}
-				<br>
-				User: ${jobdetailprod[3]}
-				<br></g:if>
-				<br>
-											<g:if test="${prodLogFile.exists()}">
+												<g:if test="${deploymentEnv.id==3 && prodLogFile.exists()}">
 												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
 											</g:if>
+												<g:if test="${deploymentEnv.id==4 && certLogFile.exists()}">
+												<a href='./download?logFile=<%=certLog%>'>Log File</a>
+											</g:if>
+												<g:if test="${deploymentEnv.id==5 && intLogFile.exists()}">
+												<a href='./download?logFile=<%=intLog%>'>Log File</a>
+											</g:if>		
 											
-				</td>
-			
-			</tr>
-		</g:each>
-		</tbody>
-	</table>
-	<g:if test="${jobdetails.getUserEnvironmentInformation()==1}">
-	<sec:ifAnyGranted roles="ROLE_PM">
-	<g:actionSubmit style="color: #ffffff;background-color: #428bca;border-color: #357ebd;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;" value="Deploy" onClick="return deploy()"/>
-	</sec:ifAnyGranted>
-	</g:if>
-	<g:if test="${jobdetails.getUserEnvironmentInformation()==2 || jobdetails.getUserEnvironmentInformation()==3}">
-	<sec:ifAnyGranted roles="ROLE_QA, ROLE_PROD">
-	<g:actionSubmit style="color: #ffffff;background-color: #428bca;border-color: #357ebd;margin-right: 10px;margin-top: 10px;margin-bottom: 10px;" value="Promote" onClick="return promote()"/>
-	</sec:ifAnyGranted>
-	</g:if>
+											
+											
+				</g:if>
+											</li>
+					
+								
+																</ul>
+															</td>
+														</g:if>
+													</g:each>
+	</tr>
+			</g:each>
+			   	</tbody>
+	</table>			
+						</div></hmof:ifGroupHasEnvironments>					
+		 					
+			 			</g:each>	
+      				</div></div>
+      				</div>
+      				<!-- /.carousel -->
 	<%-- Required to pass to JavaScript --%>
+	<g:hiddenField name="programid"/>
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>
-		<%-- Confirm dialog for Deploy/Promote  --%>
-		<g:render template="/_common/modals/confirmDialog"/>
+	<g:render template="/secureProgram/deploymentDialog"   />
+		</div></div>
 </g:form>
-</div>
+
 	<div>
 		<bs:paginate total="${secureProgramInstanceCount}" />
 	</div>

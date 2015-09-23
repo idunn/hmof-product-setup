@@ -22,7 +22,8 @@
 				<g:sortableColumn property="priorityOrder" title="${message(code: 'environment.priorityOrder.label', default: 'Priority Order')}" />
 			
 				<g:sortableColumn property="url" title="${message(code: 'environment.url.label', default: 'Url')}" />
-			
+			    <g:sortableColumn property="url" title="${message(code: 'environment.role.label', default: 'Role')}" />
+				<th><g:message code="environment.groups.label" default="Groups" /></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,7 +35,8 @@
 				<td>${fieldValue(bean: environmentInstance, field: "priorityOrder")}</td>
 			
 				<td>${fieldValue(bean: environmentInstance, field: "url")}</td>
-			
+			  <td>${fieldValue(bean: environmentInstance, field: "role")}</td>
+				<td>${fieldValue(bean: environmentInstance, field: "groups")}</td>
 			</tr>
 		</g:each>
 		</tbody>

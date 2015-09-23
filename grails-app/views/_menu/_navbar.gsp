@@ -20,7 +20,9 @@
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse"
 			role="navigation">
-
+<ul class="nav navbar-nav">
+			<g:render template="/_menu/job"/>
+		</ul>
 			<%--<ul class="nav navbar-nav">
 			<g:render template="/_menu/controller"/>
 		</ul>

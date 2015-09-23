@@ -387,7 +387,7 @@ class JobService{
 	 */
 	Logger getLogHeader(Logger customerLogs, def envId, def jobNumber, def user_Name, envName ){
 
-		if(envId==1){
+		if(envId==1 || envId==4 || envId==5){
 			customerLogs.info"${'*'.multiply(5)} Job Creation ${'*'.multiply(5)}\r\n"
 			customerLogs.info("Job " + jobNumber+" was created by user " + user_Name + " for Environment "+envName+"\r\n")
 		} else if(envId==2 || envId==3){
@@ -503,6 +503,27 @@ class JobService{
 				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
 			}else if(contentType==4){
 				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
+			}
+		}
+		else if(envId==4){
+			if(contentType==1){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+			}else if(contentType==2){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+			}else if(contentType==3){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+			}else if(contentType==4){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+			}
+		}else if(envId==5){
+			if(contentType==1){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/int/log/"+programISBN+"-"+"int_log.log")
+			}else if(contentType==2){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Bundles/"+ programISBN + "/int/log/"+programISBN+"-"+"int_log.log")
+			}else if(contentType==3){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Secure Programs/"+ programISBN + "/int/log/"+programISBN+"-"+"int_log.log")
+			}else if(contentType==4){
+				props.setProperty("log4j.appender.file.File",workingDir +"/Commerce Objects/"+ programISBN + "/int/log/"+programISBN+"-"+"int_log.log")
 			}
 		}
 		props.setProperty("log4j.appender.file.threshold","info")

@@ -6,7 +6,7 @@ import org.codehaus.groovy.grails.web.util.WebUtils
 import grails.util.Holders
 import grails.converters.JSON
 import grails.transaction.Transactional
-
+import hmof.deploy.*
 
 @Transactional
 class UtilityService {
@@ -41,7 +41,53 @@ class UtilityService {
 		sql.close()
 		row
 	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getUserEnvironmentInfo(){
+		def sql = new Sql(dataSource)
+		def userId =springSecurityService?.currentUser?.id
+		def row = null
+         row = sql.rows( "select id,name from environment e,environment_users eu where e.id=eu.environment_id and eu.user_id=?  Order By name asc",[userId])
+				
+		//def userEnvironments =springSecurityService?.currentUser?.environments 
+		println row
+		 row
 
+	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getAllEnvironments(){
+		def allEnvironments = Environment.list()
+		 allEnvironments
+	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getDeploymentEnvGroup(){
+	/*	def deploymentEnvGroup = springSecurityService?.currentUser?.deploymentEnvGroups
+		log.debug deploymentEnvGroup
+		deploymentEnvGroup*/
+		def sql = new Sql(dataSource)
+		def row
+		def userName
+		try{
+			row = sql.rows("select * from environment_grp")
+		
+		}
+		catch(Exception e){
+			log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
+			log.error("exception in getLastUpdatedUserName method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		row
+	}
 	/**
 	 * Download the log file
 	 * @param logFileLocation

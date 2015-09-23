@@ -1,16 +1,12 @@
 package hmof
 
-import hmof.deploy.Environment
-import hmof.deploy.Job
-import hmof.deploy.Promotion
-import hmof.security.User
-import hmof.security.Role
-import hmof.security.UserRole
 
-
+import hmof.deploy.*
+import hmof.security.*
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+
 import org.apache.log4j.Logger
 /**
  * ProgramController
@@ -25,7 +21,119 @@ class ProgramController {
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+	@Transactional
+	def confirm() {
+		def msg
+		def programInstance = Program.get(params.job.id)
+		//  Check the user is enabled first
+		//  If not we force them to log in again as we are probably trying to lock them out
+		def currentUser = springSecurityService.currentUser
+		if(!currentUser.enabled)
+		{
+			//  Redirect to login page
+			return redirect (controller: 'login', action: 'full', params: params)
 
+		}
+		def environmentRevision
+		//  Make sure its clean to start with
+		log.debug "Flushing the flash memory"
+		flash.clear()
+		//Required since Grails 2.3.4 upgrade http://stackoverflow.com/questions/20359203/grails-seems-unable-to-bind-params-to-properties-if-it-contains-a-key-name-as-th
+		params.remove('_')
+		//  Test that the current user has permission to create a deployment on the chosen environment
+		def environments = springSecurityService.currentUser.environments
+		if(!environments)
+		{
+			flash.message = message(code: 'deployment.create.no.environments', default: 'Sorry, you are not authorised to promote to any environment.')
+		}
+		def envId=params.env
+		def latestRevision=	deploymentService.getCurrentEnversRevision(programInstance)
+		environmentRevision=deploymentService.getPromotionDetails(programInstance,envId)
+		environmentRevision=environmentRevision[2]
+		def envName=Environment.where{id==envId}.name.get()
+		if (environmentRevision != null) {
+			environmentRevision = environmentRevision
+		}
+		
+		def doesPJobExists=deploymentService.doesPreviousJobExist(programInstance.id,envId)
+		
+		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(programInstance,envId)
+		
+		
+		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
+			
+			if(doesPJobExists==true){
+			
+				
+				msg="deployMessage1"
+				 }else if(doesPJobExists==false)
+					 {
+						 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+					
+					 
+					 }
+			
+		
+		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
+			
+			if(doesPJobExists==true){
+			
+				
+				msg="promoteMessage1"
+				 }else if(doesPJobExists==false)
+					 {
+						 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+					
+					 
+					 }
+			
+		
+		}
+		
+		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
+		{
+			if(doesPJobExists==true)
+			{
+		
+				msg="deployMessage2"
+				 
+			}else{
+			msg='Are you sure you want to deploy?'
+			}
+			
+		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
+		 {
+			 if(doesPJobExists==true && lowEnvRevision==true)
+			 {
+				 msg="promoteMessage1"
+			 }else if(doesPJobExists==true && lowEnvRevision==false){
+			 msg="promoteMessage2"
+			 }else{
+			 
+			 msg='Are you sure you want to promote?'
+			 }
+		 }
+		
+		if(envId.equals("2") || envId.equals("3")){
+		def promotionInstance = deploymentService.getDeployedInstance(programInstance,envId)
+	
+		
+				 if(promotionInstance==null){
+					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
+					 log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
+					 //redirect(action: "list")
+					 //return
+				 }
+		}
+		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this bad deployment instance can never be used
+		if(!flash.message)
+		{
+			flash.programInstance = programInstance
+		}
+		
+		 
+		render(view: "_confirm", model: [programInstance:programInstance,msg:msg,envName:envName,envId:envId])
+	}
 	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
@@ -33,12 +141,13 @@ class ProgramController {
 	@Transactional
 	def deploy(){
 
-		def instanceDetail = params.instanceDetail
+		def instanceId = params.programId
 
-		def instanceDetails = instanceDetail.split("/")
-		def instanceId = instanceDetails[0]
+		//def instanceDetails = instanceDetail.split("/")
+		//def instanceId = instanceDetails[0]
 
 		log.info("Program Detail: "+instanceId)
+		
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
 		log.debug("childContent: "+childContent)
@@ -83,7 +192,8 @@ class ProgramController {
 
 		}
 
-		def envId = deploymentService.getUserEnvironmentInformation()
+		//def envId = deploymentService.getUserEnvironmentInformation()
+		def envId = params.depEnvId
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending.getStatus())
 
@@ -104,15 +214,15 @@ class ProgramController {
 
 		final String none = "none"
 
-		def instanceDetail = params.instanceToBePromoted
-		def instanceDetails = instanceDetail.split("/")
-		def instanceToBePromoted = instanceDetails[0]
+	//	def instanceDetail = params.instanceToBePromoted
+	//	def instanceDetails = instanceDetail.split("/")
+		def instanceToBePromoted = params.programId
 
 		def programInstance = Program.get(instanceToBePromoted)
 		log.info("Promoting programInstance name: "+programInstance.name)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
-		def envId = deploymentService.getUserEnvironmentInformation()
+		def envId = params.depEnvId
 		log.info("User Id: "+userId+",envId:"+envId)
 
 		def promotionInstance = deploymentService.getDeployedInstance(programInstance, envId)
@@ -172,11 +282,20 @@ class ProgramController {
 	}
 
 
-	def index(Integer max) {redirect(action: "list", params: params)}
+/*	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
 		params.max = Math.min(max ?: 25, 100)
 		log.debug "Program count:" + Program.count()
+		respond Program.list(params), model:[programInstanceCount: Program.count()]
+	}*/
+	def index(Integer max) {
+		redirect(action: "list", params: params)
+	}
+
+	def list(Integer max) {
+		params.max = Math.min(max ?: 30, 60)
+		
 		respond Program.list(params), model:[programInstanceCount: Program.count()]
 	}
 

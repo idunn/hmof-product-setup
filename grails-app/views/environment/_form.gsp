@@ -24,7 +24,7 @@
 					<g:field class="form-control" type="url" name="url" value="${environmentInstance?.url}"/>
 					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'url', 'error')}</span>
 				</div>
-			</div>
+			</div><%--
 
 			<div class="${hasErrors(bean: environmentInstance, field: 'promotion', 'error')} ">
 				<label for="promotion" class="control-label"><g:message code="environment.promotion.label" default="Promotion" /></label>
@@ -43,3 +43,28 @@
 				</div>
 			</div>
 
+--%><div class="${hasErrors(bean: environmentInstance, field: 'role', 'error')} ">
+				<label for="roels" class="control-label"><g:message code="environment.role.label" default="Role" /></label>
+				<div>
+					<g:select class="form-control" name="role" from="${hmof.security.Role.list()}" optionKey="id"  value="${environmentInstance?.role?.id}" />
+					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'role', 'error')}</span>
+				</div>
+			</div>
+			
+			<div class="${hasErrors(bean: environmentInstance, field: 'groups', 'error')} ">
+				<label for="groups" class="control-label"><g:message code="environment.groups.label" default="Groups" /></label>
+				<div>
+					<g:select class="form-control" id="groups" name="groups.id" from="${hmof.deploy.EnvironmentGrp.list()}"  optionKey="id" value="${environmentInstance?.groups?.id}"  />
+					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'groups', 'error')}</span>
+				</div>
+			</div>
+
+			<%--<div class="${hasErrors(bean: environmentInstance, field: 'enabled', 'error')} ">
+				<label for="enabled" class="control-label"><g:message code="environment.enabled.label" default="Enabled" /></label>
+				<div>
+					<bs:checkBox name="enabled" value="${environmentInstance?.enabled}" />
+					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'enabled', 'error')}</span>
+				</div>
+			</div>
+
+--%>
