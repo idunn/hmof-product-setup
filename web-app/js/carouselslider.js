@@ -4,21 +4,23 @@
 $(document).ready(function() {
 	var navdataleft="";
 	var navdataright="";
-	$('#myCarousel').carousel({	
+	$('#myCarouselslide').carousel({	
 		
 		interval: false
 	})   
 
 	// Cycles to the previous item
       //listener for after slide
-$('#myCarousel').on('slid.bs.carousel', function () {
+$('#myCarouselslide').on('slid.bs.carousel', function () {
    //Each slide has a .item class to it, you can get the total number of slides like this
     var totalItems = $('.item,.active').length;
 var showRightArrow=false;
 
 //find current slide number
-var currentIndex = $('div.active').index() + 1;
-
+//var currentIndex = $('div.active').index() + 1;
+var carouselData = $(this).data('bs.carousel');
+var currentIndex1 = carouselData.getActiveIndex();
+var currentIndex=currentIndex1+1;
 var tot=parseInt(document.getElementById("coverimagelen").value);
 
 if(currentIndex==1 && tot <=7) {
@@ -35,7 +37,7 @@ for(var i = 0; i < tot; i ++) {
    if(( i >7 || i >14 || i >21) && currentIndex==1  ) {
 	   showRightArrow=false;  
        navdataleft+="<a class=\"left carousel-control\" href=\"#javascript:void(0);\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
-   	   navdataright+="<a class=\"right carousel-control\" href=\"#myCarousel\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
+   	   navdataright+="<a class=\"right carousel-control\" href=\"#myCarouselslide\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
    	   navdata=navdataleft+navdataright;
    	   $("#navigation").html(navdata); 
     }    
@@ -46,15 +48,15 @@ for(var i = 0; i < tot; i ++) {
     else
 	   {
     	showRightArrow=false;  
-  	   navdataleft+="<a class=\"left carousel-control\" href=\"#myCarousel\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
-  	   navdataright+="<a class=\"right carousel-control\" href=\"#myCarousel\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
+  	   navdataleft+="<a class=\"left carousel-control\" href=\"#myCarouselslide\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
+  	   navdataright+="<a class=\"right carousel-control\" href=\"#myCarouselslide\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
   	   navdata=navdataleft+navdataright;
   	   $("#navigation").html(navdata);
   	   }
 }
 
 if(showRightArrow){
-	navdataleft+="<a class=\"left carousel-control\" href=\"#myCarousel\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
+	navdataleft+="<a class=\"left carousel-control\" href=\"#myCarouselslide\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
 	   navdataright+="<a class=\"right carousel-control\" href=\"javascript:void(0);\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
 	   navdata=navdataleft+navdataright;
 	   $("#navigation").html(navdata);
@@ -64,7 +66,7 @@ if(showRightArrow){
 
 }  
   if(totalItems == currentIndex){
-        $('.carousel').carousel({
+        $('.carousel2').carousel({
           interval: false
     })
   }
