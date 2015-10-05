@@ -73,14 +73,16 @@ body {
 ------------------------- */
 /* main docs page */
 .masthead1 {
-  background-color: #F4F4F4;
+  background-color: #B2D2EA;
   background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#F4F4F4), to(#F90));
-  background-image: -webkit-linear-gradient(#F4F4F4, #F90);
-  background-image: -moz-linear-gradient(#F4F4F4, #F90);
-  background-image: -o-linear-gradient(top, #F4F4F4, #F90);
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#F4F4F4), to(#F90));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F4F4F4', endColorstr='#F90', GradientType=0); /* IE8 and down */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#B2D2EA), to(#00C9FF));
+  background-image: -webkit-linear-gradient(#B2D2EA, #00C9FF);
+  background-image: -moz-linear-gradient(#B2D2EA, #00C9FF);
+  background-image: -o-linear-gradient(top, #B2D2EA, #00C9FF);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#B2D2EA), to(#00C9FF));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B2D2EA', endColorstr='#F90', GradientType=0); /* IE8 and down */
+
+
 }
 
 
