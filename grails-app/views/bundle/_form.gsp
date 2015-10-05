@@ -6,8 +6,8 @@
 <script src="${resource(dir:'js',file:'jquery.localisation-min.js')}"></script>
 	<script src="${resource(dir:'js',file:'jquery.scrollTo-min.js')}"></script>
 	<script src="${resource(dir:'js',file:'ui.multiselect.js')}"></script>
-	
-	
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 	<div class="span7">
 	<section>
 

@@ -24,7 +24,7 @@ class UserController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)	
+        params.max = Math.min(params.max ? params.int('max') : 25, 100)	
 		
 		
         [userInstanceList: User.list(params), userInstanceTotal: User.count()]
@@ -136,7 +136,15 @@ envId=Environment.where{name=="Production / Prod"}.get()
 			}	
 		}
 	}
-	
+	protected void deleteRoles(userInstance) {
+		
+				// Clear the user's current roles
+				 UserRole.removeAll(userInstance)
+                 utilityService.deleteUserEnvironmentAsso(userInstance)
+					
+						
+				
+			}
     def show() {
         def userInstance = User.get(params.id)
         if (!userInstance) {
@@ -254,7 +262,9 @@ envId=Environment.where{name=="Production / Prod"}.get()
         }
 
         try {
+			deleteRoles(userInstance)
             userInstance.delete(flush: true)
+
 			flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
             redirect(action: "list")
         }

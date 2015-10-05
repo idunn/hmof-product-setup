@@ -7,6 +7,8 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'environment.label', default: 'Environment')}" />
 	<title><g:message code="default.list.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 </head>
 
 <body>

@@ -10,6 +10,8 @@
 <title><g:message code="default.show.label" args="[entityName]" /></title>
 <link rel="stylesheet"
 	href="${resource(dir: 'css', file: 'search.css')}" type="text/css">
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 <style>
 @font-face {
 	font-family: 'Glyphicons Halflings';

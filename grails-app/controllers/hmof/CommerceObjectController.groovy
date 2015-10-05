@@ -311,7 +311,7 @@ class CommerceObjectController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 100, 200)
+		params.max = Math.min(max ?: 25, 50)
 		log.debug "Commerce Object count:" + CommerceObject.count()
 		respond CommerceObject.list(params), model:[commerceObjectInstanceCount: CommerceObject.count()]
 	}

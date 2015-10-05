@@ -1,4 +1,4 @@
-<div class="">
+<div  class="widget-header1">
 	<ul class="nav nav-tabs" data-role="listview" data-split-icon="gear" data-filter="true">
 	
 		<g:each status="i" var="c" in="${grailsApplication.controllerClasses.sort { it.logicalPropertyName } }">

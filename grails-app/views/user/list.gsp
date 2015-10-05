@@ -7,6 +7,8 @@
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
 	<title><g:message code="default.list.label" args="[entityName]" /></title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 </head>
 
 <body>
@@ -101,9 +103,11 @@
 			<!-- /widget-content -->
 			</div>
 			<!-- /widget -->
-			<div class="pagination">
-				<g:paginate total="${userInstanceTotal}" params="${[query: params.query]}"/>
-			</div>
+			
+			
+			<div>
+		<bs:paginate total="${userInstanceTotal}" />
+	</div>
 		</div>
 	</div>
 </body>

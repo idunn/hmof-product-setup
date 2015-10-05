@@ -3,7 +3,7 @@
 
 		<g:set var="userdetails" bean="utilityService"/>
 <g:if test="${(params.controller == 'program' && params.action !='confirm') }">
-
+<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD,ROLE_ADMIN">
 	<g:if test="${programInstance || programInstanceList}">
 		<g:set var="currId" value="${programInstance?.id ?: programInstanceList?.first()?.id}"/>
 		
@@ -27,9 +27,10 @@
 		
 			
 	</g:if>
+	</sec:ifAnyGranted>
 </g:if>
 <g:if test="${(params.controller == 'bundle' && params.action !='confirm') }">
-
+<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD,ROLE_ADMIN">
 	<g:if test="${bundleInstance || bundleInstanceList}">
 		<g:set var="currbundleId" value="${bundleInstance?.id ?: bundleInstanceList?.first()?.id}"/>
 		
@@ -53,9 +54,10 @@
 		
 			
 	</g:if>
+	</sec:ifAnyGranted>
 </g:if>
 <g:if test="${(params.controller == 'commerceObject' && params.action !='confirm') }">
-
+<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD,ROLE_ADMIN">
 	<g:if test="${commerceObjectInstance || commerceObjectInstanceList}">
 		<g:set var="currId" value="${commerceObjectInstance?.id ?: commerceObjectInstanceList?.first()?.id}"/>
 		
@@ -79,9 +81,10 @@
 		
 			
 	</g:if>
+	</sec:ifAnyGranted>
 </g:if>
 <g:if test="${(params.controller == 'secureProgram' && params.action !='confirm') }">
-
+<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD,ROLE_ADMIN">
 	<g:if test="${secureProgramInstance || secureProgramInstanceList}">
 		<g:set var="currId" value="${secureProgramInstance?.id ?: secureProgramInstanceList?.first()?.id}"/>
 		
@@ -105,4 +108,5 @@
 		
 			
 	</g:if>
+	</sec:ifAnyGranted>
 </g:if>

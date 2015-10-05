@@ -25,7 +25,7 @@
 		<div class="col-md-9">    
 		<div style="padding-left:10px;">   
 		 <div>     <div>    <div>     <div>    <div>   
-		<div id="myCarousel" class="carousel slide">   
+		<div id="myCarouselslide" class="carousel2 slide">   
 		<!-- Carousel items -->   
 		<div class="carousel-inner">   
 		  

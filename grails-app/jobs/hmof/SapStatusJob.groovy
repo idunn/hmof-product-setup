@@ -29,7 +29,7 @@ class SapStatusJob {
 	
 		if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
 		sapResultsMap.each {			
-			String isbnId = it.key	
+			String isbnId = it.isbn13	
 			
 			def bundleInstance = Bundle.where{isbn==isbnId}.get()
 			def sapInstance = Sap.where{bundle.id==bundleInstance.id}.get()
@@ -39,12 +39,17 @@ class SapStatusJob {
 			if(sapInstance!=null ){
 				
 			bundleInstance.sap.isbn = bundleInstance.isbn
-			bundleInstance.sap.status = it.value			
+            bundleInstance.sap.internalDescription = it.internalDescription
+				bundleInstance.sap.materialGroup = it.materialGroup
+				bundleInstance.sap.eGoodsIndicator = it.eGoodsIndicator
+			bundleInstance.sap.status = it.status			
 			bundleInstance.save(flush: true,failOnError:true)
 			}else
-		   {
-			 bundleInstance.sap = new Sap(isbn: isbnId,bundle: bundleInstance, status:it.value)			   
-			 bundleInstance.save(flush: true,failOnError:true)
+		   { 
+  			 
+			 bundleInstance.sap = new Sap(isbn: isbnId,internalDescription:it.internalDescription,materialGroup:it.materialGroup,eGoodsIndicator:it.eGoodsIndicator,bundle: bundleInstance, status:it.status)	
+			  bundleInstance.save(flush: true,failOnError:true)
+              
 	    	}
 		}	
 		}

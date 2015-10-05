@@ -1,6 +1,7 @@
 <%@ page import="hmof.Program"%>
 
-
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 <div class="span7">
 	<section>
 <div

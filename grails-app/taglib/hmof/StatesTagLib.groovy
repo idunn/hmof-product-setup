@@ -66,7 +66,8 @@ class StatesTagLib {
 			WV:"West Virginia",
 			WY:"Wyoming"]
 		out << "<select name='${attrs.name}' id='${attrs.id}' class='form-control' required=''>"
-		out << "<option value='NA'>National</option>"
+		out << "<option value='${attrs.value?:""}'>${attrs.value?:"Please Select a State"}</option>"
+		//out << "<option value='NA'>National</option>"
 		stateList.each {
 			out << "<option value='${it.key}'"
 			if(attrs.selectedValue == it.key) {

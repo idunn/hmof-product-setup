@@ -72,6 +72,7 @@ class UserRole implements Serializable {
 		if (r == null) return
 
 			UserRole.where {
+			
 				role == Role.load(r.id)
 			}.deleteAll()
 

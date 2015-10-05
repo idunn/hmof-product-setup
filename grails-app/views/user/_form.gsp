@@ -1,6 +1,7 @@
 <%@ page import="hmof.security.User" %>
 <%@ page import="hmof.deploy.EnvironmentGrp"%>
-
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
 <script>
 	
 

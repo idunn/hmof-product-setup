@@ -49,12 +49,34 @@ class UtilityService {
 		def sql = new Sql(dataSource)
 		def userId =springSecurityService?.currentUser?.id
 		def row = null
+		try{
          row = sql.rows( "select id,name from environment e,environment_users eu where e.id=eu.environment_id and eu.user_id=?  Order By name asc",[userId])
-				
-		//def userEnvironments =springSecurityService?.currentUser?.environments 
-		println row
+		}catch(Exception e){
+			 log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
+			 log.error("exception in getLastUpdatedUserName method is: "+e.getStackTrace())
+		 }
+		 finally{
+			 sql.close();
+		 }
+	
 		 row
 
+	}
+	/**
+	 * Delete the Environment associated with the User
+	 * @return
+	 */
+	def deleteUserEnvironmentAsso(userInstance){
+		def sql = new Sql(dataSource)
+		try{
+		sql.executeUpdate( "delete from environment_users where user_id=? ",[userInstance.id])
+		}catch(Exception e){
+			log.error("exception in deleteUserEnvironmentAsso method is: "+e.getMessage())
+			log.error("exception in deleteUserEnvironmentAsso method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
 	}
 	/**
 	 * Get the Environment associated with the User
@@ -580,11 +602,19 @@ class UtilityService {
 	 * @return
 	 */
 	def getmaterialDetailResponse(def res){
-		def sapResultsMap = [:]
+		def sapResultsMap = []
+		
 		try{
 			res.materialDetailList.materialDetail.each{
-
-				sapResultsMap.put( it.isbn13.text(),it.materialStatusDescription.text())
+				MaterialDetails materialDetails = new MaterialDetails()
+				materialDetails.isbn13=it.isbn13.text()
+				materialDetails.status = it.materialStatusDescription.text()
+				materialDetails.internalDescription = it.internalDescription.text()
+				materialDetails.materialGroup = it.materialGroup.text()
+				materialDetails.eGoodsIndicator = it.eGoodsIndicator.text()
+				
+				
+				sapResultsMap.add(materialDetails)
 			}
 
 		}catch(Exception e){

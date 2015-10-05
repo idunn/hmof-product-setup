@@ -13,7 +13,8 @@
 	type="text/css">
 	<link rel="stylesheet" href="${resource(dir: 'css', file: 'scroller.css')}"
 	type="text/css">
-    
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
+	type="text/css">
         <g:render template="/program/studentsliderjs"/>
         <g:render template="/program/teachersliderjs"/>
 </head>
@@ -104,55 +105,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 
 					<div class="controls show-style">
 						<!-- Add new Template --> <g:render template="addBundle" /> <!-- Added new table -->
-						<table class="table table-bordered margin-top-medium">
-							<thead>
-								<tr>
-									<th>
-										${'List'}
-									</th>
-									<th>
-										${'Preview'}
-									</th>
-									<th>
-										${'Edit'}
-									</th>
-									<th>
-										${'SAP Status'}
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								<g:each in="${programInstance.bundles}" status="i" var="b">
-							       
-									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-										<td><g:link controller="bundle" action="show"
-												id="${b.id}">
-												${b?.encodeAsHTML()}
-											</g:link> </td>
-										<td><g:if test="${jobdetails.isDashboardSecureProgram(b.id)==true}">	
-				
-<a href="#"  class="previewlink"  onclick="return teacherPreview(${b.id},'${b.title}');"  >Teacher</a>|&nbsp;<a href="#"  class="previewlink"  onclick="return studentPreview(${b.id},'${b.title}');"  >Student</a>
-				
-				</g:if></td>
-										<td><g:link controller="bundle" action="edit"
-												id="${b.id}">
-												${"Edit"}
-											</g:link></td>
-											
-											<td>
-											<g:each in="${sapResultsList}" status="j" var="c">										
-											<g:if test="${c.isbn!=null &&  (c.isbn).equals(b.isbn) }"> 											
-											${c.status}
-										     </g:if>
-											</g:each>
-											</td>
-											
-									</tr>
-									
-								</g:each>
-
-							</tbody>
-						</table>
+						<g:render template="showBundles" />
 					</div>
 						
 				<div

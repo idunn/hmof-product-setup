@@ -281,7 +281,7 @@ class BundleController {
 	def index(Integer max) {redirect(action: "list", params: params)}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 50, 200)
+		params.max = Math.min(max ?: 25, 50)
 		log.debug "Bundle count:" + Bundle.count()
 		respond Bundle.list(params), model:[bundleInstanceCount: Bundle.count()]
 	}
@@ -328,18 +328,18 @@ class BundleController {
 			def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
 			if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
 				sapResultsMap.each {
-					String sapIsbn=it.key
-					bundleInstance.sap = new Sap(isbn: sapIsbn,bundle: bundleInstance, status:it.value)
+					
+					bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:it.internalDescription,materialGroup:it.materialGroup,eGoodsIndicator:it.eGoodsIndicator,bundle: bundleInstance, status:it.status)
 
 				}
 			}else
 			{
-				bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"")
+				bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:"",materialGroup:"",eGoodsIndicator:"",bundle: bundleInstance, status:"")
 			}
 
 		}else
 		{
-			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,bundle: bundleInstance, status:"")
+			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:"",materialGroup:"",eGoodsIndicator:"",bundle: bundleInstance, status:"")
 			log.error("SAP Service not Reachable")
 		}
 
@@ -394,6 +394,7 @@ class BundleController {
 			bundleInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
 		}
 		//Sap Status Update starts
+		def sapInstance = Sap.where{bundle.id==bundleInstance.id}.get()
 		InetAddress address = InetAddress.getByName("172.17.101.75");
 		boolean reachable = address.isReachable(5000);
 		if(reachable){
@@ -402,20 +403,35 @@ class BundleController {
 			def sapResultsMap= utilityService.getIsbnRecord(bundleInstance.isbn)
 			if(sapResultsMap!=null && !sapResultsMap.isEmpty()){
 				sapResultsMap.each {
+					
+					if(sapInstance!=null ){
 			bundleInstance.sap.isbn = bundleInstance.isbn
-			bundleInstance.sap.status = it.value			
-			
-
+			bundleInstance.sap.internalDescription = it.internalDescription
+			bundleInstance.sap.materialGroup = it.materialGroup
+			bundleInstance.sap.eGoodsIndicator = it.eGoodsIndicator
+			bundleInstance.sap.status = it.status			
+					}else{
+					bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:it.internalDescription,materialGroup:it.materialGroup,eGoodsIndicator:it.eGoodsIndicator,bundle: bundleInstance, status:it.status)
+					
+				}
 				}
 			}else
 			{
+				if(sapInstance!=null ){
 				bundleInstance.sap.isbn = bundleInstance.isbn	
+				bundleInstance.sap.internalDescription = ""
+				bundleInstance.sap.materialGroup = ""
+				bundleInstance.sap.eGoodsIndicator = ""
 				bundleInstance.sap.status = ""
+				}else{
+					bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:"",materialGroup:"",eGoodsIndicator:"",bundle: bundleInstance, status:"")
+					
+				}
 			}
 
 		}else
 		{
-			bundleInstance.sap.isbn = bundleInstance.isbn			
+			bundleInstance.sap = new Sap(isbn: bundleInstance.isbn,internalDescription:"",materialGroup:"",eGoodsIndicator:"",bundle: bundleInstance, status:"")	
 			log.error("SAP Service not Reachable")
 		}
 		//Sap Status Update ends

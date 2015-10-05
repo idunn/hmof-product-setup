@@ -164,7 +164,7 @@ class ProgramController {
 		if(doesPreviousJobExist1!=null){
 			previousJobExist=true
 		}
-
+		
 		log.debug("userId: "+userId)
 		log.debug("contentId: "+programInstance.id)
 		log.debug("contentTypeId: "+programInstance.contentType.contentId)
@@ -294,7 +294,7 @@ class ProgramController {
 	}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 30, 60)
+		params.max = Math.min(max ?: 25, 50)
 		
 		respond Program.list(params), model:[programInstanceCount: Program.count()]
 	}
@@ -313,7 +313,9 @@ class ProgramController {
 		}
 
 		def sapResultsList=Sap.list()
-		render(view:"show", model:[programInstance:programInstance,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
+		params.max = Math.min(params.max ? params.int('max') : 30, 100)
+		def bundleLists = Bundle.where{program{id==programInstance.id}}.list(params)
+		render(view:"show", model:[programInstance:programInstance,bundleInstance:bundleLists,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
 
 	}
 	@Secured(['ROLE_ADMIN'])

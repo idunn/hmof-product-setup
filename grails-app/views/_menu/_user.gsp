@@ -30,7 +30,7 @@
 </sec:ifNotLoggedIn>
 
 <sec:ifLoggedIn>
-<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i> <sec:username /><b class="caret"></b></a>
+<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-user"></i> <sec:username /><b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			
 			<li><a href="${createLink(controller: 'j_spring_security_logout')}">Logout</a></li>

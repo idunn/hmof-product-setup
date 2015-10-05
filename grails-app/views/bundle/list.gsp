@@ -21,6 +21,8 @@
 	type="text/css">
 	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
 	type="text/css">
+
+	<script src="${resource(dir:'js',file:'carouselslider.js')}"></script>
         <g:render template="/bundle/studentsliderjs"/>
         <g:render template="/bundle/teachersliderjs"/>
         
@@ -210,6 +212,8 @@
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>
 	<g:render template="/bundle/deploymentDialog"   />
+<g:render template="/_common/modals/scrollDialog"   />
+   
 			</div></div>
 </g:form>
 
