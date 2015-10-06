@@ -389,6 +389,10 @@ class SecureProgramController {
 			notFound()
 			return
 		}
+		
+		// notify of delete
+		log.info "Updating the revisions of parent objects"
+		updateParent(secureProgramInstance)
 
 		log.info "Removing Parent/Child associations from the SP that is being deleted"
 		removeAssociations(secureProgramInstance)
