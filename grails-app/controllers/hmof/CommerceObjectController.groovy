@@ -24,27 +24,21 @@ class CommerceObjectController {
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
 	/**
-	 * Update the parents of the object being updated
+	 * Update the Parent Program on an Edit and Bundles on a delete
 	 * @param currentInstance
 	 * @return
 	 */
 	@Transactional
 	def updateParent(def currentInstance){
 
-		def secureProgramInstances = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
+		log.info "Executing action $actionName"
 
-		secureProgramInstances.each{
-			it.properties = [lastUpdated: new Date(),userUpdatingSProgram: springSecurityService?.currentUser?.username]
-		}
+		def secureProgramInstances = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
 
 		def bundleInstances = []
 		// Needed for MySql database
 		if(!secureProgramInstances.isEmpty()){
 			bundleInstances = Bundle.where{secureProgram{id in secureProgramInstances.id}}.list()
-		}
-
-		bundleInstances.each{
-			it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
 		}
 
 		def programInstances = []
@@ -53,10 +47,19 @@ class CommerceObjectController {
 			programInstances = Program.where{bundles{id in bundleInstances.id }}.list()
 		}
 
+		// update Program instances if they are associated with CO
 		programInstances.each{
 			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
 
+
+		// only update Bundles on a delete action - envers will detect that the SP has been modified
+		if (actionName == "delete"){
+
+			bundleInstances.each{
+				it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
+			}
+		}
 	}
 
 	/**
@@ -76,13 +79,14 @@ class CommerceObjectController {
 			secureProgram.removeFromCommerceObjects(currentInstance)
 		}
 	}
+
 	@Secured(['ROLE_ADMIN'])
 	def importCSV(Integer max) {render(view:"importCSV")}
+
 	/**
 	 * Pass in a comma separated file and update the database with new CO instances
 	 * @return
 	 */
-
 	@Transactional
 	def importFile(){
 
@@ -148,57 +152,51 @@ class CommerceObjectController {
 		if (environmentRevision != null) {
 			environmentRevision = environmentRevision
 		}
-		
-		
-		
+
+
+
 		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(commerceObjectInstance,envId)
-		
-		
+
 		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
-			
-			 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-				
-		
+
+			msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
 		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
-			
-			 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-				
-		
+
+			msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
+
 		}
-		
-		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
+
+		else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
 		{
-			
 			msg='Are you sure you want to deploy?'
-			
-			
+
 		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
-		 {
-			
-			 msg='Are you sure you want to promote?'
-			 
-		 }
-		
-		if(envId.equals("2") || envId.equals("3")){
-		def promotionInstance = deploymentService.getDeployedInstance(commerceObjectInstance,envId)
-	
-		
-				 if(promotionInstance==null){
-					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
-					 log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
-					 //redirect(action: "list")
-					 //return
-				 }
+		{
+			msg='Are you sure you want to promote?'
+
 		}
-		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this bad deployment instance can never be used
+
+		if(envId.equals("2") || envId.equals("3")){
+			def promotionInstance = deploymentService.getDeployedInstance(commerceObjectInstance,envId)
+
+
+			if(promotionInstance==null){
+				flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
+				log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
+			}
+		}
+
+		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this deployment instance can never be used
 		if(!flash.message)
 		{
 			flash.commerceObjectInstance = commerceObjectInstance
 		}
-		
-		 
+
 		render(view: "_confirm", model: [commerceObjectInstance:commerceObjectInstance,msg:msg,envName:envName,envId:envId])
 	}
+
 	/**
 	 * Persist job details to the job and promotions tables
 	 * @return
@@ -207,9 +205,6 @@ class CommerceObjectController {
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def deploy(){
 
-		//def instanceDetail = params.instanceDetail
-
-		//def instanceDetails = instanceDetail.split("/")
 		def instanceId = params.programId
 
 		log.info("Commerce Object  Detail: "+instanceId)
@@ -248,8 +243,6 @@ class CommerceObjectController {
 
 		final String none = "none"
 
-		//def instanceDetail = params.instanceToBePromoted
-		//def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = params.programId
 
 		def commerceObjectInstance = CommerceObject.get(instanceToBePromoted)
@@ -413,6 +406,9 @@ class CommerceObjectController {
 			notFound()
 			return
 		}
+
+		log.info "Updating the revisions of parent objects"
+		updateParent(commerceObjectInstance)
 
 		log.info "Removing Parent associations from the CO that is being deleted"
 		removeAssociations(commerceObjectInstance)
