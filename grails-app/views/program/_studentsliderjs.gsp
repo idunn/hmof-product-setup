@@ -152,14 +152,14 @@
    					            	            	else if(coverimage.length>7)
    					            	            	{
    					            	            		navdataleft1+="";
-   					            	            		navdataleft2+="<a class=\"left carousel-control\" href=\"#myCarousel\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
+   					            	            		navdataleft2+="<a class=\"left carousel-control\" href=\"#myCarouselslide\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
    						            	            	}
 
 
    					            	            	}
    				            	            	if(coverimage.length!=0 && coverimage.length>7)
    				            	            	{
-   				            	            	navdataright+="<a class=\"right carousel-control\" href=\"#myCarousel\"  id=\"right\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
+   				            	            	navdataright+="<a class=\"right carousel-control\" href=\"#myCarouselslide\"  id=\"right\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
    				            	            	}
    				            	            	navdata=navdataleft1+navdataleft2+navdataright;
 

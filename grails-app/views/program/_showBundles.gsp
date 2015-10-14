@@ -11,6 +11,9 @@
 										${'Edit'}
 									</th>
 									<th class="widget-header2" style="color:#bbb">
+										${'Preview'}
+									</th>
+									<th class="widget-header2" style="color:#bbb">
 										SAP<br>Status
 									</th>
 									<th class="widget-header2" style="color:#bbb" >
@@ -18,7 +21,7 @@
 									</th><th class="widget-header2" style="color:#bbb">
 										SAP<br>Material Group
 									</th><th class="widget-header2" style="color:#bbb">
-										SAP<br>eGoodsIndicator
+										SAP<br>eGoods Indicator
 									</th>
         </tr>
         </thead>
@@ -36,11 +39,18 @@
 												id="${b.id}">
 												${"Edit"}
 											</g:link></td>									
-																		
+												<td><g:if test="${jobdetails.isDashboardSecureProgram(b.id)==true}">	
+				
+<a href="#"  class="previewlink"  onclick="return teacherPreview(${b.id},'${b.title}');"  >Teacher</a>|&nbsp;<a href="#"  class="previewlink"  onclick="return studentPreview(${b.id},'${b.title}');"  >Student</a>
+				
+				</g:if></td>						
 											<g:each in="${sapResultsList}" status="j" var="c">										
 											<g:if test="${c.isbn!=null &&  (c.isbn).equals(b.isbn) }"> 											
 											<td>${c.status}</td><td>${c.internalDescription}</td><td><% def materialGroup = c.materialGroup
-def subtitle =  materialGroup.split('MATERIAL_GROUP_')[-1].replace("ON_LINE","Online")?:materialGroup
+
+											def subtitle =""
+											if(materialGroup!=null)
+											 subtitle =  materialGroup.split('MATERIAL_GROUP_')[-1].replace("ON_LINE","Online")?:materialGroup
  %> ${subtitle}</td><td>${c.eGoodsIndicator}</td>
 										    </g:if>
 										   

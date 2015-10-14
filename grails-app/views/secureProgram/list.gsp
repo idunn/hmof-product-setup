@@ -67,17 +67,17 @@
 	<table class="table table-bordered margin-top-medium">
 		<thead>
 			<tr>
-				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" />
+				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" class="widget-header2" style="color:#bbb"/>
 			
-				<g:sortableColumn property="productName" title="${message(code: 'secureProgram.productName.label', default: 'Product Name')}" />
+				<g:sortableColumn property="productName" title="${message(code: 'secureProgram.productName.label', default: 'Product Name')}" class="widget-header2" style="color:#bbb"/>
 				
-				<th>${'Current Revision'}</th>
+				<th class="widget-header2" style="color:#bbb">${'Current Revision'}</th>
 			
-				<g:sortableColumn property="registrationIsbn" title="${message(code: 'secureProgram.registrationIsbn.label', default: 'Registration Isbn')}" />
+				<g:sortableColumn property="registrationIsbn" title="${message(code: 'secureProgram.registrationIsbn.label', default: 'Registration Isbn')}" class="widget-header2" style="color:#bbb"/>
 			
-				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" />								
+				<g:sortableColumn property="onlineIsbn" title="${message(code: 'secureProgram.onlineIsbn.label', default: 'Online Isbn')}" class="widget-header2" style="color:#bbb"/>								
 			
-				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" />
+				<g:sortableColumn property="copyright" title="${message(code: 'secureProgram.copyright.label', default: 'Copyright')}" class="widget-header2" style="color:#bbb"/>
 				
 			 <g:each in="${userdetail.getAllEnvironments()}" var="deploymentEnv">	
 					<%-- Change which environments are shown based on the user groups and the environments configured for this type --%>
@@ -98,7 +98,9 @@
 		<g:set var="userdetail" bean="utilityService"/>
 		<g:each in="${secureProgramInstanceList}" status="i" var="secureProgramInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<% devLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
+			<% 
+		    
+			   devLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/dev/log/"+"${secureProgramInstance.registrationIsbn}"+"-dev_log"+".log"
 			   File devLogFile = new File(devLog)
 			   qaLog = "${grails.util.Holders.config.cacheLocation}"+"/Secure Programs"+"/${secureProgramInstance.registrationIsbn}"+"/review/log/"+"${secureProgramInstance.registrationIsbn}"+"-review_log"+".log"
 			   File qaLogFile = new File(qaLog)
@@ -158,7 +160,7 @@
 				                            <g:if test="${deploymentEnv.id==1 && devLogFile.exists()}">
 												<a href='./download?logFile=<%=devLog%>'>Log File</a>
 											</g:if>
-										<g:if test="${deploymentEnv.id==2 && qaLogFile.exists()}">
+										    <g:if test="${deploymentEnv.id==2 && qaLogFile.exists()}">
 												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
 											</g:if>
 												<g:if test="${deploymentEnv.id==3 && prodLogFile.exists()}">

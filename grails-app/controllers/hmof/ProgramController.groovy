@@ -313,7 +313,7 @@ class ProgramController {
 		}
 
 		def sapResultsList=Sap.list()
-		params.max = Math.min(params.max ? params.int('max') : 30, 100)
+		params.max = Math.min(params.max ? params.int('max') : 25, 100)
 		def bundleLists = Bundle.where{program{id==programInstance.id}}.list(params)
 		render(view:"show", model:[programInstance:programInstance,bundleInstance:bundleLists,bundleCount:bundleList.size(),unDeployableBundleMap:unDeployableBundleMap,sapResultsList:sapResultsList])
 

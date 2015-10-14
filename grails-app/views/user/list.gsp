@@ -105,7 +105,7 @@
 			<!-- /widget -->
 			
 			
-			<div>
+	<div>
 		<bs:paginate total="${userInstanceTotal}" />
 	</div>
 		</div>

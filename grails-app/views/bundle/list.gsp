@@ -75,17 +75,17 @@
 		<thead>
 			<tr>
 			
-				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}" />
+				<g:sortableColumn property="id" title="${message(code: 'program.id.label', default:'#')}"  class="widget-header2" style="color:#bbb"/>
 			
-				<g:sortableColumn property="isbn" title="${message(code: 'bundle.isbn.label', default: 'Isbn')}" />
+				<g:sortableColumn property="isbn" title="${message(code: 'bundle.isbn.label', default: 'Isbn')}" class="widget-header2" style="color:#bbb"/>
 				
-				<th>${'Current Revision'}</th>
+				<th class="widget-header2" style="color:#bbb">${'Current Revision'}</th>
 			
-				<g:sortableColumn property="title" title="${message(code: 'bundle.title.label', default: 'Title')}" />
+				<g:sortableColumn property="title" title="${message(code: 'bundle.title.label', default: 'Title')}" class="widget-header2" style="color:#bbb"/>
 			
-				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}" />
-				<g:sortableColumn property="program" title="${message(code: 'bundle.program.label', default: 'Program')}" />
-				<th >Preview</th>
+				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}"  class="widget-header2" style="color:#bbb"/>
+				<g:sortableColumn property="program" title="${message(code: 'bundle.program.label', default: 'Program')}" class="widget-header2" style="color:#bbb"/>
+				<th class="widget-header2" style="color:#bbb">Preview</th>
 												
 				
 				<g:each in="${userdetail.getAllEnvironments()}" var="deploymentEnv">	
@@ -121,8 +121,6 @@
 			   
 			    %>
 				
-				
-					
 				
 				<%--<td ><sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD"><input type="radio" name="rad" id="rad${i}" value="${bundleInstance.id+"/"+jobdetails.getCurrentEnversRevision(bundleInstance)+"/"+jobdetails.getPromotionDetails(bundleInstance,jobdetails.getUserEnvironmentInformation())+"/false/false"}" onclick="toggle(this,'row${i}')"/> Confirm dialog for Deploy/Promote  <g:render template="/_common/modals/confirmDialog"/></sec:ifAnyGranted>&nbsp;<g:link action="show" id="${bundleInstance.id}">${bundleInstance.id}</g:link></td>
 			   
