@@ -626,7 +626,27 @@ class UtilityService {
 		sapResultsMap
 	}
 
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getProgramXMLSecurePrograms(){
+		def sql = new Sql(dataSource)
+		def userId =springSecurityService?.currentUser?.id
+		def row = null
+		try{
+		 row = sql.rows( "select sp.id from secure_program sp where sp.include_dashboard_object=true and sp.id not in (select programxml_secure_program_id from programxml_secure_program)  Order By sp.product_name asc")
+		}catch(Exception e){
+			 log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
+			 log.error("exception in getLastUpdatedUserName method is: "+e.getStackTrace())
+		 }
+		 finally{
+			 sql.close();
+		 }
+	
+		 row
 
+	}
 
 }
 

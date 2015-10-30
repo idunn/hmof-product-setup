@@ -118,7 +118,7 @@ class BootStrap {
 			ContentType ct2 = new ContentType(contentId:2, name:'Bundle').save(failOnError:true)
 			ContentType ct3 = new ContentType(contentId:3, name:'SecureProgram').save(failOnError:true)
 			ContentType ct4 = new ContentType(contentId:4, name:'CommerceObject').save(failOnError:true)
-
+			ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
 
 			EnvironmentGrp.withTransaction{
 				def eg1 = new EnvironmentGrp(groupname:'Content').save(failOnError:true)

@@ -1,4 +1,4 @@
-<header id="Header" class="jumbotron1 masthead1">
+<header id="Header" class="jumbotron1 masthead1 jumbotron11">
 	<div class="container">
 		<h1 class="title"><g:layoutTitle default="${meta(name:'app.name')}" /></h1>
 	</div>

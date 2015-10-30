@@ -32,8 +32,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	<div class="span7 form-horizontal">
 
 	<section>
-<div
-	class="control-group">
+<div class="control-group">
 	<label for="name" class="control-label col-sw-1"><g:message code="commerceObject.objectName.label" default="Object Name" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: commerceObjectInstance, field: "objectName")}</div></div>

@@ -24,7 +24,7 @@
 					</g:each>
 				</ul>
 			</li>	
-		
+		  
 			
 	</g:if>
 	</sec:ifAnyGranted>
@@ -106,6 +106,38 @@
 				</ul>
 			</li>	
 		
+			
+	</g:if>
+	</sec:ifAnyGranted>
+</g:if>
+
+
+
+${params.controller }
+
+<g:if test="${(params.controller == 'programXML' && params.action !='confirm') }">
+<sec:ifAnyGranted roles="ROLE_PM, ROLE_QA, ROLE_PROD,ROLE_ADMIN">
+	<g:if test="${programXMLInstance || programXMLInstanceList}">
+		<g:set var="currId" value="${programXMLInstance?.id ?: programXMLInstanceList?.first()?.id}"/>
+		
+			<%-- NB jquery data seems to be case sensitive!  data-jobId doesn't work! --%>
+			<li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-edit"></i> <span><g:message code="default.submenu.job.promote" default="Program XML Promote to Environment" /></span> <b class="caret"></b></a>
+				<ul class="dropdown-menu">	
+					<!--   The class is just for the JQuery to differentiate it from other hrefs.  See custom.js -->
+					<g:each in="${userdetails.getUserEnvironmentInfo()}" status="i" var="deploymentEnv">
+				
+						<%-- Only show if the current user has permission to deploy to this environment type --%>
+							<li>
+							
+							<a href="#DeploymentModal" role="button" data-env="${deploymentEnv?.id}"  data-url="${createLink(controller:"programXML",action: 'confirm')}" data-jobid="${currId}" class="open-NewDeploymentDialog" >
+							<g:message code="default.submenu.product.deploy" default="${deploymentEnv?.name}" />
+							</a>
+							</li>
+						
+					</g:each>
+				</ul>
+			</li>	
+		  
 			
 	</g:if>
 	</sec:ifAnyGranted>

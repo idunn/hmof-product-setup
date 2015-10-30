@@ -105,6 +105,7 @@ environments {
 
 		cacheLocation="target/ProductSetup-cache"
 		uploadFolder="target/ProductSetup-cache/import"
+		programXMLFolder="target/ProductSetup-cache/programXML"
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
