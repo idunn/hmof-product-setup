@@ -11,7 +11,7 @@
 
  function updateBUID(){
 
- var title = document.getElementById("title").value;
+  var title = document.getElementById("title").value;
   var str = title.toUpperCase(); 
   while (str.indexOf(' ') !== -1)
   {
@@ -19,6 +19,9 @@
   }
 	
 	 document.getElementById("buid").value=str;
+	 var buid=document.getElementById("buid").value;
+	 document.getElementById("filename").value="hmof_program_"+buid+".xml";
+	 
  }
 </script>
 <div class="span7">
