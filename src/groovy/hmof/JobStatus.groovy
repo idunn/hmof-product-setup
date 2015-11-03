@@ -10,7 +10,7 @@ public enum JobStatus {
 	Repromoting("Repromoting"),
 	FailedbyAdmin("Failed - by Admin cleanup process"),
 	Retrying("Retrying"),
-
+	PendingProgramDeploy("PendingProgramDeploy"),
 	String status
 	
 	JobStatus(String status) {
