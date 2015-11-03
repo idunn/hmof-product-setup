@@ -1,15 +1,94 @@
 package hmof
 
+import org.apache.log4j.Logger;
+
 import grails.transaction.Transactional
 import hmof.programxml.ProgramXML
 import grails.util.Holders
 import hmof.deploy.*
 import hmof.security.*
 import hmof.*
+
+
+import org.apache.log4j.Logger
+import org.apache.log4j.PropertyConfigurator
+
+
 @Transactional
 class ProgramXMLService {
 
-  	
+	static transactional = false
+	def deploymentService
+	def commerceObjectService
+	def utilityService
+	def springSecurityService
+
+
+	Logger log = Logger.getLogger(JobService.class)
+
+	/**
+	 * Take the jobs and process them by pushing the content to the environment via Geb
+	 * @param jobs
+	 * @return
+	 */
+	Boolean processJobs(def jobs, def promotionInstance) {
+		
+		
+		String programXMLIsbn=""
+		Logger customerLog=null
+
+		def bundlesToRemove = []
+
+		try{
+			promotionInstance.refresh()
+			// Get the environment URL
+			def environmentInstance = Environment.where{id==promotionInstance.environmentsId}.get()
+			def envId = environmentInstance.id
+			def deploymentUrl = environmentInstance.url
+			def envName = environmentInstance.name
+			def user_Name = User.where{id == promotionInstance.userId}.username.get()
+
+			// Divide out the instances
+			def programXML = jobs.findAll{it.contentTypeId == 5}
+			def cacheLocation = Holders.config.cacheLocation
+			// used only to initialize logs
+			if (!programXML.isEmpty() ){
+
+				programXML.each{
+
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+					
+					Long jobNumber = it.jobNumber
+					def programXMLInstance = programXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
+					programXMLIsbn=programXMLInstance.isbn
+
+					//customerLog = initializeLogger(programXMLIsbn, cacheLocation,envId,2)
+				//	customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+				}
+			} // end bundle log initializer
+			
+
+			log.debug "cacheLocation" + cacheLocation
+			log.debug "The deployment Url is: " + deploymentUrl
+
+	
+			} 
+		   catch(InterruptedException  e){
+
+			log.error "Exception deploying content: " + e
+			return false
+
+		}
+		catch(Exception e){
+
+			log.error "Exception deploying content: " + e
+			return false
+
+		}
+
+		return true
+	}
 	
 	def generateProramXML(ProgramXML programXMLInstance)
 	{

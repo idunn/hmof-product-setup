@@ -7,6 +7,7 @@ import grails.util.Holders
 import grails.converters.JSON
 import grails.transaction.Transactional
 import hmof.deploy.*
+import hmof.programxml.ProgramXML
 
 @Transactional
 class UtilityService {
@@ -631,19 +632,20 @@ class UtilityService {
 	 * @return
 	 */
 	def getProgramXMLSecurePrograms(){
-		def sql = new Sql(dataSource)
-		def userId =springSecurityService?.currentUser?.id
+		def sql = new Sql(dataSource)		
 		def row = null
 		try{
-		 row = sql.rows( "select sp.id from secure_program sp where sp.include_dashboard_object=true and sp.id not in (select programxml_secure_program_id from programxml_secure_program)  Order By sp.product_name asc")
-		}catch(Exception e){
-			 log.error("exception in getLastUpdatedUserName method is: "+e.getMessage())
-			 log.error("exception in getLastUpdatedUserName method is: "+e.getStackTrace())
+		 row = sql.rows( "select sp.id from secure_program sp where sp.include_dashboard_object=true and sp.id not in (select secure_program_id from programxml_secure_program)  Order By sp.product_name asc")
+		
+		 
+		 }catch(Exception e){
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getMessage())
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getStackTrace())
 		 }
 		 finally{
 			 sql.close();
 		 }
-	
+
 		 row
 
 	}

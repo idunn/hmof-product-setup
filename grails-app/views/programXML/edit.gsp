@@ -7,6 +7,16 @@
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'search.css')}"
 	type="text/css">
+	<style>
+	@font-face {
+font-family: 'Glyphicons Halflings';
+src: url('../../fonts/glyphicons-halflings-regular.eot');
+src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded- opentype'), 
+     url('../../fonts/glyphicons-halflings-regular.woff') format('woff'), 
+     url('../../fonts/glyphicons-halflings-regular.ttf') format('truetype'), 
+     url('../../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+} 
+</style>
 	</head>
 	<body>
 	<div class="row">

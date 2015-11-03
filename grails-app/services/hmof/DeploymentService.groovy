@@ -17,7 +17,7 @@ class DeploymentService {
 	def springSecurityService
 	def jobService
 	def sessionFactory
-
+	def progamXMLService
 
 	/**
 	 * Return Boolean to detect if previous Job exists for a particular Program and Current Users environment
@@ -530,17 +530,13 @@ class DeploymentService {
 		// get first instance in pending status
 		def promotionJobInstance = Promotion.where{status == JobStatus.Pending.getStatus() || status == JobStatus.Pending_Repromote.getStatus() || status == JobStatus.Pending_Retry.getStatus() }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
-
+		def promotionProgramXMlJobInstance = Promotion.where{status == JobStatus.PendingProgramDeploy.getStatus()  }.list(max:1)
+		def promotionProgramXMlJobNumber =  promotionProgramXMlJobInstance.jobNumber
 		if(!promotionJobInstance.isEmpty()){
 
 			def jobList = Job.where{jobNumber == promotionJobNumber}.list()
 			Long promotionJobId =  promotionJobInstance.id[0]
 
-			/*def promotionJobStatus = Promotion.findByStatus(JobStatus.Pending)			
-			 //  Locking the job.  The lock will be released after the DeploymentProcessorService saves the bundle with a status of InProgress.
-			 //  This should prevent any other threads picking up the deployment anyway
-			 promotionJobStatus.discard()
-			 promotionJobStatus = Promotion.lock(promotionJobId)*/		
 
 			def promotionInstance = Promotion.get(promotionJobId)
 			promotionInstance.discard()
@@ -560,6 +556,33 @@ class DeploymentService {
 			promotionInstance.save(failOnError: true, flush:true)
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
+
+			def statusFinish = null
+
+			if (processJobs){
+				statusFinish = JobStatus.Success.getStatus()
+			} else {statusFinish = JobStatus.Failed.getStatus()}
+
+			// return map
+			def results = [status: statusFinish, promotionId:promotionJobInstance.id]
+		}else if(!promotionProgramXMlJobInstance.isEmpty())
+		{
+			def jobList = Job.where{jobNumber == promotionProgramXMlJobNumber}.list()
+			Long promotionJobId =  promotionProgramXMlJobInstance.id[0]
+
+
+			def promotionInstance = Promotion.get(promotionJobId)
+			promotionInstance.discard()
+			promotionInstance.lock()
+
+			def statusStart = null
+
+		    statusStart = JobStatus.In_Progress.getStatus()	
+
+			promotionInstance.properties = [status: statusStart]
+			promotionInstance.save(failOnError: true, flush:true)
+
+			def processJobs = progamXMLService.processJobs(jobList, promotionInstance)
 
 			def statusFinish = null
 

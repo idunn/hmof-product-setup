@@ -76,9 +76,12 @@ class ProgramXMLController {
         }
     }
 	@Secured(['ROLE_ADMIN'])
-    def edit(ProgramXML programXMLInstance) {
-      def secureProgramsXML = utilityService.getProgramXMLSecurePrograms()		
-	  def securePrograms =SecureProgram.where{includeDashboardObject==true}
+    def edit(ProgramXML programXMLInstance) {	
+      def secureProgramsXML = utilityService.getProgramXMLSecurePrograms()	
+	 def securePrograms1 =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+	 securePrograms1.addAll(secureProgramsXML)
+	  def securePrograms =SecureProgram.where{id in (securePrograms1.id)}
+	
 	  respond programXMLInstance, model:[securePrograms:securePrograms]
     }
 
@@ -153,6 +156,7 @@ class ProgramXMLController {
 	@Transactional
 	def confirm() {
 		def msg
+		println params.job.id
 		def programXMLInstance = ProgramXML.get(params.job.id)
 		//  Check the user is enabled first
 		//  If not we force them to log in again as we are probably trying to lock them out
@@ -189,56 +193,22 @@ class ProgramXMLController {
 		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(programXMLInstance,envId)
 		
 		
-		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
-			
-			if(doesPJobExists==true){
-							
-				msg="deployMessage1"
-				 }else if(doesPJobExists==false)
-				 {
+		if (latestRevision == environmentRevision) {
+						
 					 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
 					
-					 
-				 }
-			
 		
-		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
+		}
+		 else if(latestRevision != environmentRevision)
+		{
 			
-			if(doesPJobExists==true){	
-				
-				msg="promoteMessage1"
-				 }else if(doesPJobExists==false)
-				{
-					 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-					
-				 }
+			msg='Are you sure you want to deploy?'
+			
+			
 		}
 		
-		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
-		{
-			if(doesPJobExists==true)
-			{
-				msg="deployMessage2"
-				 
-			}else{
-			msg='Are you sure you want to deploy?'
-			}
-			
-		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
-		 {
-			 if(doesPJobExists==true && lowEnvRevision==true)
-			 {
-				 msg="promoteMessage1"
-			 }else if(doesPJobExists==true && lowEnvRevision==false){
-			 msg="promoteMessage2"
-			 }else{
-			 
-			 msg='Are you sure you want to promote?'
-			 }
-		 }
-		
 		if(envId.equals("2") || envId.equals("3")){
-		def promotionInstance = deploymentService.getDeployedInstance(programXMLInstance,envId)
+		      def promotionInstance = deploymentService.getDeployedInstance(programXMLInstance,envId)
 			
 				 if(promotionInstance==null){
 					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
@@ -298,13 +268,20 @@ class ProgramXMLController {
 		//def envId = deploymentService.getUserEnvironmentInformation()
 		def envId = params.depEnvId
 		log.info("Environment ID:"+envId)
-		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.Pending.getStatus())
+		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.PendingProgramDeploy.getStatus())
 
 		def promote = [status: JobStatus.Pending.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
 
 		redirect(action: "list")
 
+	}
+	/**
+	 * Download the log file
+	 * @return
+	 */
+	def download() {
+		utilityService.getLogFile(params.logFile)
 	}
 
 }
