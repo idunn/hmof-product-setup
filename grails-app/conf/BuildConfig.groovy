@@ -71,7 +71,8 @@ grails.project.dependency.resolution = {
 			'org.apache.lucene:lucene-snowball:2.4.1',
 			'org.apache.lucene:lucene-spellchecker:2.4.1')
 		
-		
+		// SVNKit 
+		compile "org.tmatesoft.svnkit:svnkit:1.8.10"
 	}
 
 	plugins {
@@ -111,6 +112,7 @@ grails.project.dependency.resolution = {
 		
 		compile ":grails-melody:1.54.0"
 		compile ":wslite:0.7.2.0"
+		
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0.1"
 		//runtime ":cached-resources:1.1"
