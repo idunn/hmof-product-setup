@@ -12,7 +12,7 @@ class ProgramXMLController {
 	def springSecurityService
 	def deploymentService
 	def utilityService
-	def programXMLService
+	def programXmlService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     /*def index(Integer max) {
@@ -42,7 +42,7 @@ class ProgramXMLController {
     }
 
     @Transactional
-	@Secured(['ROLE_ADMIN'])
+	@Secured(['ROLE_PM','ROLE_ADMIN'])
     def save() {
 		def contentType = ContentType.where{id==5}.get()
 	//	params.userUpdatingProgram = springSecurityService?.currentUser?.username
@@ -59,10 +59,7 @@ class ProgramXMLController {
             return
         }
 		
-		//Generate XML	
-		def isXMLGenerated=programXMLService.generateProramXML(programXMLInstance)
-        //end
-       if(isXMLGenerated)
+		     
         programXMLInstance.save (failOnError:true,flush:true)
 		
 		
@@ -75,7 +72,7 @@ class ProgramXMLController {
             '*' { respond programXMLInstance,[status: CREATED] }
         }
     }
-	@Secured(['ROLE_ADMIN'])
+	@Secured(['ROLE_PM','ROLE_ADMIN'])
     def edit(ProgramXML programXMLInstance) {	
       def secureProgramsXML = utilityService.getProgramXMLSecurePrograms()	
 	 def securePrograms1 =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
@@ -125,7 +122,7 @@ class ProgramXMLController {
     }
 
     @Transactional
-	@Secured(['ROLE_ADMIN'])
+	@Secured(['ROLE_PM','ROLE_ADMIN'])
     def delete(ProgramXML programXMLInstance) {
 
         if (programXMLInstance == null) {
@@ -257,6 +254,13 @@ class ProgramXMLController {
 		*/
 		log.debug("userId: "+userId)
 		log.debug("contentId: "+programXMLInstance.id)
+		
+		
+		//Generate XML
+		def isXMLGenerated=programXmlService.generateProramXML(programXMLInstance)
+		
+		//end
+		if(isXMLGenerated){
 		//log.debug("contentTypeId: "+programXMLInstance.contentType.contentId)
 		// Create a map of job data to persist
 		def job = [contentId: programXMLInstance.id, revision: deploymentService.getCurrentEnversRevision(programXMLInstance), contentTypeId: programXMLInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
@@ -270,9 +274,9 @@ class ProgramXMLController {
 		log.info("Environment ID:"+envId)
 		log.info("Job:"+ j1+",jobNumber: "+j1.getJobNumber()+",JobStatus:"+ JobStatus.PendingProgramDeploy.getStatus())
 
-		def promote = [status: JobStatus.Pending.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
+		def promote = [status: JobStatus.PendingProgramDeploy.getStatus(), job: j1, jobNumber: j1.getJobNumber(), user: userId, environments: envId,smartDeploy:false]
 		Promotion p1 = new Promotion(promote).save(failOnError:true)
-
+		}
 		redirect(action: "list")
 
 	}

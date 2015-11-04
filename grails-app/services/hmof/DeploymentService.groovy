@@ -17,8 +17,8 @@ class DeploymentService {
 	def springSecurityService
 	def jobService
 	def sessionFactory
-	def progamXMLService
-
+	def programXmlService
+	
 	/**
 	 * Return Boolean to detect if previous Job exists for a particular Program and Current Users environment
 	 * @param programInstanceNumber
@@ -26,8 +26,8 @@ class DeploymentService {
 	 * @return
 	 */
 	Boolean doesPreviousJobExist(def programInstanceNumber, def envId){
-
-
+	
+		
 		// get all Job Numbers from the Job Table for this Program
 		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==1 }.list().jobNumber
 
@@ -530,8 +530,7 @@ class DeploymentService {
 		// get first instance in pending status
 		def promotionJobInstance = Promotion.where{status == JobStatus.Pending.getStatus() || status == JobStatus.Pending_Repromote.getStatus() || status == JobStatus.Pending_Retry.getStatus() }.list(max:1)
 		def promotionJobNumber =  promotionJobInstance.jobNumber
-		def promotionProgramXMlJobInstance = Promotion.where{status == JobStatus.PendingProgramDeploy.getStatus()  }.list(max:1)
-		def promotionProgramXMlJobNumber =  promotionProgramXMlJobInstance.jobNumber
+		
 		if(!promotionJobInstance.isEmpty()){
 
 			def jobList = Job.where{jobNumber == promotionJobNumber}.list()
@@ -556,34 +555,7 @@ class DeploymentService {
 			promotionInstance.save(failOnError: true, flush:true)
 
 			def processJobs = jobService.processJobs(jobList, promotionInstance)
-
-			def statusFinish = null
-
-			if (processJobs){
-				statusFinish = JobStatus.Success.getStatus()
-			} else {statusFinish = JobStatus.Failed.getStatus()}
-
-			// return map
-			def results = [status: statusFinish, promotionId:promotionJobInstance.id]
-		}else if(!promotionProgramXMlJobInstance.isEmpty())
-		{
-			def jobList = Job.where{jobNumber == promotionProgramXMlJobNumber}.list()
-			Long promotionJobId =  promotionProgramXMlJobInstance.id[0]
-
-
-			def promotionInstance = Promotion.get(promotionJobId)
-			promotionInstance.discard()
-			promotionInstance.lock()
-
-			def statusStart = null
-
-		    statusStart = JobStatus.In_Progress.getStatus()	
-
-			promotionInstance.properties = [status: statusStart]
-			promotionInstance.save(failOnError: true, flush:true)
-
-			def processJobs = progamXMLService.processJobs(jobList, promotionInstance)
-
+		
 			def statusFinish = null
 
 			if (processJobs){

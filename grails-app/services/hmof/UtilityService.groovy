@@ -38,7 +38,9 @@ class UtilityService {
 			row = sql.firstRow( "select * from COMMERCE_OBJECT_AUD where id=? AND REVTYPE !=2 AND rev=? Order By LAST_UPDATED desc LIMIT 1", [instanceId, revision])
 		}
 
-
+		if (contentType==5){
+			row = sql.firstRow( "select * from PROGRAMXML_AUD where id=? AND REVTYPE !=2 AND rev=?  LIMIT 1", [instanceId, revision])
+		}
 		sql.close()
 		row
 	}

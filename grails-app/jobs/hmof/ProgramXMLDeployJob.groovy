@@ -1,13 +1,13 @@
 package hmof
 
-class ProcessJob {
+class ProgramXMLDeployJob {
 	
 	def concurrent = true
 
 	def deploymentService
-
+	def programXmlService
 	static triggers = {
-		simple repeatInterval: 30 * 1000 // execute job once in 30 seconds		
+		simple repeatInterval: 60 * 1000 // execute job once in 30 seconds		
 		
 	}
 
@@ -15,7 +15,7 @@ class ProcessJob {
 		def result = []
 		
 		// execute job
-		result= deploymentService.executeJob()
+		result= programXmlService.executeJob()
 		if(result !=null){
 			println "Results of deployment/promotion: " + result
 			deploymentService.updateStatus(result)
