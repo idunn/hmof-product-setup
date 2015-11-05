@@ -21,6 +21,8 @@ import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 
+
+
 /**
  * SubversionIntegrationService
  * A service class encapsulates the core business logic of a Grails application
@@ -34,15 +36,21 @@ class SubversionIntegrationService {
 	def createSvnOperationFactory() {
 
 		log.info "Creating an SVN Client"
-
+		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
 		def username = "admin"
 		def password = "admin"
+		
+		
+
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
 		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		//svnOperationFactory.createRepositoryCreate(SVNURL.parseURIDecoded(url))
+		//svnOperationFactory.create();
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
-
-		return svnOperationFactory
-
+		
+		//final SVNRepository svnRepository = svnOperationFactory.getRepositoryPool().createRepository(url, true);
+		
+     return svnOperationFactory
 	}
 
 	/**
@@ -60,25 +68,44 @@ class SubversionIntegrationService {
 	 * @param localCacheLocation
 	 * @return
 	 */
-	Boolean commitSvnContent( def localFolderLocation, def localFilePath ){
-
+	Boolean commitSvnContent( def localFolderLocation, def localFilePath ) {
+	
 		def svnClient = createSvnOperationFactory()
-		final SVNURL url = "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/"
-		try
-		{
 
+
+		try{
+			
+
+		
 			log.info "Add and Commit to SVN Content..."
 
 			def localCache =  new File(localFilePath)	
+			 SVNURL svnRepositoryURL = SVNURL.parseURIEncoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof")
+		
 			
+			 SvnUpdate update = svnClient.createUpdate();
+			//update.setSource(SvnTarget.fromURL(svnRepositoryURL))
+			update.setSingleTarget(SvnTarget.fromURL(svnRepositoryURL))
+		
+			// Alternative SVNDepth.IMMEDIATES OR SVNDepth.FILES
+			update.setDepth(SVNDepth.FILES)
+			update.setRevision(SVNRevision.HEAD)
+			//update.setSingleTarget(SvnTarget.fromFile(localCache));
+			//update.setSingleTarget(SvnTarget.fromFile(svnRepository.getFullPath(url)));
+			//update.setRevision(SVNRevision.HEAD);
+			update.run()
+			
+			
+			
+			
+			/*final SVNURL url =svnClient.createSvnRepository()
+			final SVNRepository svnRepository = svnClient.getRepositoryPool().createRepository(url, true);
+			final SVNDirEntry dirEntry = svnRepository.info("", 1);
+			
+			final WorkingCopy workingCopy = sandbox.checkoutNewWorkingCopy(url);
+			final File workingCopyDirectory = workingCopy.getWorkingCopyDirectory();*/
 			
 		
-
-			
-					
-			final SvnUpdate update = svnClient.createUpdate();
-			update.setSingleTarget(SvnTarget.fromFile(localCache));
-			if(update.run()){
 		    final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
             scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
             scheduleForAddition.run()				
@@ -88,7 +115,7 @@ class SubversionIntegrationService {
 			commit.setCommitMessage("TT-1234: SVN commit through HMOF Product Setup app");
 			commit.run()
             
-			}
+			
 
 		}catch (Exception e)
 		{
@@ -96,10 +123,7 @@ class SubversionIntegrationService {
 			
 			return false
 		}finally{
-
 			cleanupSvnOperationFactory(svnClient)
-			
-
 		}
     return true
 	}
