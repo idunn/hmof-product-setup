@@ -83,7 +83,7 @@ class SubversionIntegrationService {
 			 SVNURL svnRepositoryURL = SVNURL.parseURIEncoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof")
 		
 			
-			 SvnUpdate update = svnClient.createUpdate();
+	/*		 SvnUpdate update = svnClient.createUpdate();
 			//update.setSource(SvnTarget.fromURL(svnRepositoryURL))
 			update.setSingleTarget(SvnTarget.fromURL(svnRepositoryURL))
 		
@@ -93,7 +93,7 @@ class SubversionIntegrationService {
 			//update.setSingleTarget(SvnTarget.fromFile(localCache));
 			//update.setSingleTarget(SvnTarget.fromFile(svnRepository.getFullPath(url)));
 			//update.setRevision(SVNRevision.HEAD);
-			update.run()
+			update.run()*/
 			
 			
 			
