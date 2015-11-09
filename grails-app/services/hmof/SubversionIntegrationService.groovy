@@ -1,12 +1,15 @@
 package hmof
 import grails.transaction.*
 
+import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNDirEntry
 import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager
 import org.tmatesoft.svn.core.io.SVNRepository
+import org.tmatesoft.svn.core.wc.SVNClientManager
+import org.tmatesoft.svn.core.wc.SVNUpdateClient
 import org.tmatesoft.svn.core.wc.SVNWCUtil
 import org.tmatesoft.svn.core.wc2.SvnCheckout
 import org.tmatesoft.svn.core.wc2.SvnCommit
@@ -29,7 +32,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory
  */
 @Transactional
 class SubversionIntegrationService {
-
+	//Logger log = Logger.getLogger(SubversionIntegrationService.class)
 	/**
 	 * Helper method to create an SVN Operation Factory	 
 	 */
@@ -68,16 +71,12 @@ class SubversionIntegrationService {
 	 * @param localCacheLocation
 	 * @return
 	 */
-	Boolean commitSvnContent( def localFolderLocation, def localFilePath ) {
+	Boolean commitSvnContent( def localFilePath,Logger log ) {
 	
 		def svnClient = createSvnOperationFactory()
 
 
 		try{
-			
-
-		
-			log.info "Add and Commit to SVN Content..."
 
 			def localCache =  new File(localFilePath)	
 			 SVNURL svnRepositoryURL = SVNURL.parseURIEncoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof")
@@ -89,32 +88,26 @@ class SubversionIntegrationService {
 		
 			// Alternative SVNDepth.IMMEDIATES OR SVNDepth.FILES
 			update.setDepth(SVNDepth.FILES)
-			update.setRevision(SVNRevision.HEAD)
-			//update.setSingleTarget(SvnTarget.fromFile(localCache));
-			//update.setSingleTarget(SvnTarget.fromFile(svnRepository.getFullPath(url)));
-			//update.setRevision(SVNRevision.HEAD);
-			update.run()*/
-			
-			
-			
-			
-			/*final SVNURL url =svnClient.createSvnRepository()
-			final SVNRepository svnRepository = svnClient.getRepositoryPool().createRepository(url, true);
-			final SVNDirEntry dirEntry = svnRepository.info("", 1);
-			
-			final WorkingCopy workingCopy = sandbox.checkoutNewWorkingCopy(url);
-			final File workingCopyDirectory = workingCopy.getWorkingCopyDirectory();*/
-			
-		
+			update.setRevision(SVNRevision.HEAD)		
+			update.run()*/		
+			 log.info "Updating program XML contained SVN Content"
+			 SVNRepository repository = SVNRepositoryFactory.create(svnRepositoryURL);
+			 File dstPath = new File("C:/ProductSetup-cache/ProgramXML/hmof"); 			 
+			 SVNClientManager cm = SVNClientManager.newInstance();
+			 SVNUpdateClient uc = cm.getUpdateClient();		
+			 uc.doUpdate(dstPath, SVNRevision.UNDEFINED, true)
+			 log.info "Updated program XML to SVN Content"
+			 log.info "Adding program XML to SVN Content"
 		    final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
             scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
             scheduleForAddition.run()				
-			
+			log.info "Added program XML to SVN Content"
+			log.info "Committing program XML to SVN Content"
 			SvnCommit commit = svnClient.createCommit();
 			commit.addTarget(SvnTarget.fromFile(localCache));
 			commit.setCommitMessage("TT-1234: SVN commit through HMOF Product Setup app");
 			commit.run()
-            
+			log.info "Committed program XML to SVN Content"
 			
 
 		}catch (Exception e)

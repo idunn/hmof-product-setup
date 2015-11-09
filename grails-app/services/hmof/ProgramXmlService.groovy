@@ -47,8 +47,7 @@ class ProgramXmlService {
 			promotionInstance.save(failOnError: true, flush:true)
 		
 			def processJobs = processJobs(jobList, promotionInstance)
-			println "----------processJobs"
-			println processJobs
+			
 			def statusFinish = null
 
 			if (processJobs){
@@ -81,12 +80,11 @@ class ProgramXmlService {
 			def deploymentUrl = environmentInstance.url
 			def envName = environmentInstance.name
 			def user_Name = User.where{id == promotionInstance.userId}.username.get()
-			println user_Name
+		
 			// Divide out the instances
 			def programXML = jobs.findAll{it.contentTypeId == 5}
 			def cacheLocation = Holders.config.cacheLocation
-			
-			def SVNURL= "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/"
+						
 			def localURL= Holders.config.programXMLFolder
 			
 			// used only to initialize logs
@@ -101,18 +99,28 @@ class ProgramXmlService {
 					def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
 				
 					def path=localURL+programXMLInstance.filename
-					println path
-					 commitJobs =subversionIntegrationService.commitSvnContent(localURL,path)
-					//customerLog = initializeLogger(programXMLIsbn, cacheLocation,envId,2)
-				//	customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					
+					 
+					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
+				    customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog)
+					if(commitJobs)
+					{
+						customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"						
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Success\r\n")
+	
+					}else
+			    	{
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Failed\r\n")
+				    }
 				}
 			} // end bundle log initializer
 			
 
 			log.debug "cacheLocation" + cacheLocation
-			log.debug "The deployment Url is: " + deploymentUrl
-
-	
+			
 			}
 		   catch(InterruptedException  e){
 
@@ -218,37 +226,23 @@ class ProgramXmlService {
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
 		props.setProperty("log4j.appender.file.maxFileSize","100MB")
 		props.setProperty("log4j.appender.file.maxBackupIndex","100")
-		if(envId==1){
-			if(contentType==1){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log")
-			}else if(contentType==2){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Products/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log")
-			}
+		if(envId==1){			
+				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log")
 		}else if(envId==2){
-			if(contentType==1){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
-			}else if(contentType==2){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Products/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
-			}
-
+			
+				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
+			
 		}else if(envId==5){
-			if(contentType==1){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
-			}else if(contentType==2){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Products/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
-			}
-		}else if(envId==3){
-			if(contentType==1){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
-			}else if(contentType==2){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Products/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
-			}
+			
+				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
+			
+		}else if(envId==3){			
+				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+			
 		}else if(envId==4){
-			if(contentType==1){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Programs/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
-			}else if(contentType==2){
-				props.setProperty("log4j.appender.file.File",workingDir +"/Products/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
-			}
+			
+				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
+			
 		}
 		props.setProperty("log4j.appender.file.threshold","info")
 		props.setProperty("log4j.appender.file.Append","false")
