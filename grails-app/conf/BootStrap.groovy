@@ -243,21 +243,21 @@ class BootStrap {
 			
 			ProgramXML.withTransaction{
 				
-				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',language:'en-us').save(failOnError:true)
-				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',language:'en-us').save(failOnError:true)
-				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',language:'en-us').save(failOnError:true)
-				def p4xml = new ProgramXML(title:'Social Studies Texas 2016',buid:'SCIENCE_HSSSCIENCE2014XXXX',filename:'SocialStudies_US_History.xml',language:'en-us').save(failOnError:true)
-				def p5xml = new ProgramXML(title:'NL Go Math! 2014',buid:'MATH_HMHMXNA2013',filename:'National_Math_2014.xml',language:'en-us').save(failOnError:true)
-				def p6xml = new ProgramXML(title:'High School Integrated Math',buid:'MATH_HMHNAINTHSM2015',filename:'National_INT_HSM_2015.xml',language:'en-us').save(failOnError:true)
-				def p7xml = new ProgramXML(title:'High School Math',buid:'MATH_HMHNAAGAHSM2015',filename:'National_AGA_HSM_2015.xml',language:'en-us').save(failOnError:true)
-				def p8xml = new ProgramXML(title:'Escalate English NA 2017',buid:'NA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATENA2017.xml',language:'en-us').save(failOnError:true)
-				def p9xml = new ProgramXML(title:'Escalate English 2017',buid:'CA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATECA2017.xml',language:'en-us').save(failOnError:true)
-				def p10xml = new ProgramXML(title:'HMH Collections 2017',buid:'HMHCOLLECTIONS_2017_SAMPLE_LP',filename:'hsp_program_HMHCollections_2017.xml',language:'en-us').save(failOnError:true)
-				def p11xml = new ProgramXML(title:'HMH Collections',buid:'HMHCOLLECTIONS_SAMPLE_LP',filename:'hsp_program_HMHCollections.xml',language:'en-us').save(failOnError:true)
-				def p12xml = new ProgramXML(title:'CA Go Math! 2015',buid:'MATH_HMHCALMATH2015',filename:'California_Math_2015_G6_12.xml ',language:'en-us').save(failOnError:true)
-				def p13xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',language:'en-us').save(failOnError:true)
-				def p14xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',language:'en-us').save(failOnError:true)
-				def p15xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',language:'en-us').save(failOnError:true)
+				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p4xml = new ProgramXML(title:'Social Studies Texas 2016',buid:'SCIENCE_HSSSCIENCE2014XXXX',filename:'SocialStudies_US_History.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p5xml = new ProgramXML(title:'NL Go Math! 2014',buid:'MATH_HMHMXNA2013',filename:'National_Math_2014.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p6xml = new ProgramXML(title:'High School Integrated Math',buid:'MATH_HMHNAINTHSM2015',filename:'National_INT_HSM_2015.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p7xml = new ProgramXML(title:'High School Math',buid:'MATH_HMHNAAGAHSM2015',filename:'National_AGA_HSM_2015.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p8xml = new ProgramXML(title:'Escalate English NA 2017',buid:'NA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATENA2017.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p9xml = new ProgramXML(title:'Escalate English 2017',buid:'CA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATECA2017.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p10xml = new ProgramXML(title:'HMH Collections 2017',buid:'HMHCOLLECTIONS_2017_SAMPLE_LP',filename:'hsp_program_HMHCollections_2017.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p11xml = new ProgramXML(title:'HMH Collections',buid:'HMHCOLLECTIONS_SAMPLE_LP',filename:'hsp_program_HMHCollections.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p12xml = new ProgramXML(title:'CA Go Math! 2015',buid:'MATH_HMHCALMATH2015',filename:'California_Math_2015_G6_12.xml ',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p13xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p14xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',language:'en_US', contentType:ct5).save(failOnError:true)
+				def p15xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',language:'en_US', contentType:ct5).save(failOnError:true)
 				
 				
 			}
