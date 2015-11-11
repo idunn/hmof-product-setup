@@ -9,6 +9,7 @@ import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager
 import org.tmatesoft.svn.core.io.SVNRepository
 import org.tmatesoft.svn.core.wc.SVNClientManager
+import org.tmatesoft.svn.core.wc.SVNStatusType
 import org.tmatesoft.svn.core.wc.SVNUpdateClient
 import org.tmatesoft.svn.core.wc.SVNWCUtil
 import org.tmatesoft.svn.core.wc2.SvnCheckout
@@ -23,7 +24,7 @@ import org.tmatesoft.svn.core.wc2.SvnUpdate
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory
-
+import org.tmatesoft.svn.core.wc.SVNStatus;
 
 
 /**
@@ -94,13 +95,20 @@ class SubversionIntegrationService {
 			 SVNRepository repository = SVNRepositoryFactory.create(svnRepositoryURL);
 			 File dstPath = new File("C:/ProductSetup-cache/ProgramXML/hmof"); 			 
 			 SVNClientManager cm = SVNClientManager.newInstance();
-			 SVNUpdateClient uc = cm.getUpdateClient();		
-			 uc.doUpdate(dstPath, SVNRevision.UNDEFINED, true)
+			 SVNUpdateClient uc = cm.getUpdateClient();  	
+		
+		    	uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
+
+			
+			
+			
 			 log.info "Updated program XML to SVN Content"
 			 log.info "Adding program XML to SVN Content"
-		    final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
+			// SVNRevision.WORKING, SVNDepth.INFINITY,
+			// println SVNRevision.getScheduleForAddition()
+		     final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
             scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
-            scheduleForAddition.run()				
+            scheduleForAddition.run()			
 			log.info "Added program XML to SVN Content"
 			log.info "Committing program XML to SVN Content"
 			SvnCommit commit = svnClient.createCommit();

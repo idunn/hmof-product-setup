@@ -136,11 +136,11 @@ class BootStrap {
 				def r4 = Role.where{id==4}.get()
 
 
-				def certReview = Environment.findByName('Dev') ?: new Environment(groups:eg1,name: 'Dev', role:r2,priorityOrder: '0', url: "http://support-review-cert.hrw.com").save(failOnError: true)
-				def qa = Environment.findByName('QA') ?: new Environment(groups:eg1,name: 'QA',role:r3,priorityOrder: '1', url: "http://support-review.hrw.com").save(failOnError: true)
-				def prod = Environment.findByName('Production') ?: new Environment(groups:eg1,name: 'Production',role:r4, priorityOrder: '2',  url: "http://support.hrw.com" ).save(failOnError: true)
-				def Cert = new Environment(groups:eg3,name:'Cert', priority_order:3,role:r2, url:'http://support-cert.hrw.com').save(failOnError:true)
-				def Int = new Environment(groups:eg2,name:'Int', priority_order:1,role:r2, url:'http://support-test.hrw.com').save(failOnError:true)
+				def certReview = Environment.findByName('Development / Cert_Review') ?: new Environment(groups:eg1,name: 'Development / Cert_Review', role:r2,priorityOrder: '0', url: "http://support-review-cert.hrw.com").save(failOnError: true)
+				def qa = Environment.findByName('QA / Prod_Review') ?: new Environment(groups:eg1,name: 'QA / Prod_Review',role:r3,priorityOrder: '1', url: "http://support-review.hrw.com").save(failOnError: true)
+				def prod = Environment.findByName('Production / Prod') ?: new Environment(groups:eg1,name: 'Production / Prod',role:r4, priorityOrder: '2',  url: "http://support.hrw.com" ).save(failOnError: true)
+				def Cert = new Environment(groups:eg3,name:'Certification / Cert', priority_order:3,role:r2, url:'http://support-cert.hrw.com').save(failOnError:true)
+				def Int = new Environment(groups:eg2,name:'Integration / Int', priority_order:1,role:r2, url:'http://support-test.hrw.com').save(failOnError:true)
 			}
 
 
