@@ -41,7 +41,7 @@
 		<g:message code="programXML.buid.label" default="Buid" />
 		<span class="required-indicator">*</span>
 	</label><div class="controls">
-	<g:textField class="form-control" name="buid" required="" value="${programXMLInstance?.buid}" />
+	<g:textField class="form-control" name="buid" required="" value="${programXMLInstance?.buid}"  pattern="${programXMLInstance.constraints.buid.matches}"/>
 </div>
 </div>
 
@@ -59,7 +59,7 @@
 		<g:message code="programXML.filename.label" default="Filename" />
 		<span class="required-indicator">*</span>
 	</label><div class="controls">
-	<g:textField class="form-control" name="filename" required="" value="${programXMLInstance?.filename}"/>
+	<g:textField class="form-control" name="filename" required="" value="${programXMLInstance?.filename}"  pattern="${programXMLInstance.constraints.filename.matches}"/>
 </div>
 </div>
 

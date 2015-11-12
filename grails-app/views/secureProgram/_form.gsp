@@ -32,7 +32,8 @@
 				<label for="onlineIsbn" class="control-label col-sw-1"><g:message code="secureProgram.onlineIsbn.label" default="Online Isbn" /><span class="required-indicator">*</span></label>
 				<div class="col-md-4 margin1" >
 					<g:textField class="form-control" name="onlineIsbn" maxlength="13" required="" value="${secureProgramInstance?.onlineIsbn}" data-toggle="tooltip" data-placement="right" data-container="body" title="13-digit ISBN, which is usually the Online 6-Year ISBN that is being used for development, MDS and 6-Year Bundle"/>
-					
+					<g:hiddenField name="oldonlineIsbn" value="${secureProgramInstance?.onlineIsbn}" />
+			
 				</div>
 			</div>
 

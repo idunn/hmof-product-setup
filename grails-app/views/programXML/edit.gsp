@@ -41,7 +41,7 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 			<div class="span9">
 <section>
 			<div class="form-actions margin-top-medium">
-					<g:actionSubmit class="save" formnovalidate action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+					<g:actionSubmit class="save"  action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</div>
 			</section>
 			</div>

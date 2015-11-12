@@ -45,7 +45,7 @@ class ProgramXMLController {
 	@Secured(['ROLE_PM','ROLE_ADMIN'])
     def save() {
 		def contentType = ContentType.where{id==5}.get()
-	//	params.userUpdatingProgram = springSecurityService?.currentUser?.username
+	    params.userUpdatingProgramXML = springSecurityService?.currentUser?.username
 		params.contentType = contentType
 		def programXMLInstance = new ProgramXML(params)
 		def securePrograms = SecureProgram.where{includeDashboardObject==true}.list()
@@ -74,11 +74,14 @@ class ProgramXMLController {
     }
 	@Secured(['ROLE_PM','ROLE_ADMIN'])
     def edit(ProgramXML programXMLInstance) {	
+		def securePrograms =[]
+		def securePrograms1=[]
       def secureProgramsXML = utilityService.getProgramXMLSecurePrograms()	
-	 def securePrograms1 =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
-	 securePrograms1.addAll(secureProgramsXML)
-	  def securePrograms =SecureProgram.where{id in (securePrograms1.id)}
-	
+	  if(programXMLInstance.secureProgram){
+	   securePrograms1 =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()	
+	  } 
+	  securePrograms1.addAll(secureProgramsXML)
+	   securePrograms =SecureProgram.where{id in (securePrograms1.id)}
 	  respond programXMLInstance, model:[securePrograms:securePrograms]
     }
 
@@ -110,6 +113,8 @@ class ProgramXMLController {
 			}
 			programXMLInstance.secureProgram=new TreeSet<SecureProgram>(secureProgList)
 		}
+		
+		programXMLInstance.userUpdatingProgramXML = springSecurityService?.currentUser?.username
         programXMLInstance.save flush:true
 
         request.withFormat {

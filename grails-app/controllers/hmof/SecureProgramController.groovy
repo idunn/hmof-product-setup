@@ -10,7 +10,7 @@ import hmof.security.*
 import grails.plugin.springsecurity.annotation.Secured
 
 import org.apache.log4j.Logger
-
+import hmof.programxml.*
 @Transactional(readOnly = true)
 class SecureProgramController {
 
@@ -43,9 +43,29 @@ class SecureProgramController {
 		programInstances.each{
 			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
-
+		
+	
+		
+				
+			
 	}
+	/**
+	 * Update the parents of the object being updated
+	 * @param currentInstance
+	 * @return
+	 */
+	@Transactional
+	def updateProgramXML(def currentInstance){
 
+		
+		def programXMLInstances = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()		
+				programXMLInstances.each{
+					
+					it.properties = [lastUpdated: new Date(),userUpdatingProgramXML: springSecurityService?.currentUser?.username]
+				}
+		
+							
+	}
 
 	/**
 	 * Remove Standalone Associations before deleting the SecureProgram
@@ -361,15 +381,19 @@ class SecureProgramController {
 			}
 			secureProgramInstance.commerceObjects=new TreeSet<CommerceObject>(commerceObjectList)
 		}
-
-
+		
+	
 		secureProgramInstance.userUpdatingSProgram = springSecurityService?.currentUser?.username
 
 		secureProgramInstance.save flush:true
 
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
 		updateParent(secureProgramInstance)
-
+		if(!params.oldonlineIsbn.equals(params.onlineIsbn))
+		{
+			println "not equal"
+			updateProgramXML(secureProgramInstance)
+		}
 		request.withFormat {
 			form multipartForm {
 				flash.message = message(code: 'default.updated.message', args: [message(code: 'SecureProgram.label', default: 'SecureProgram'), secureProgramInstance.id])
