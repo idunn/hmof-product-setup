@@ -149,6 +149,7 @@ class BootStrap {
 				def p1 = new Program(name:'visualmath', state:'FL', discipline:'math',userUpdatingProgram:'Dev', contentType:ct1).save(failOnError:true)
 				def p2 = new Program(name:'hmhcollections2017', state:'NA', discipline:'language_arts',userUpdatingProgram:'Dev', contentType:ct1).save(failOnError:true)
 				def p3 = new Program(name:'hmhcollections2017', state:'CA', discipline:'language_arts',userUpdatingProgram:'Dev', contentType:ct1).save(failOnError:true)
+				def p4 = new Program(name:'visualmathNY', state:'NY', discipline:'language_arts',userUpdatingProgram:'Dev', contentType:ct1).save(failOnError:true)
 			}
 
 
@@ -188,6 +189,8 @@ class BootStrap {
 				onlineIsbn:'9780123456794', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456794.jpg', securityWord:'multiply', includeDashboardObject:true, includeEplannerObject:true,includeNotebookObject:false, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054f',curriculumArea:'Mathematics',essayGraderPrompts:'High School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob5).save(failOnError:true)
 				def sp6 = new SecureProgram (productName:'Visual Math: Teacher Edition, Grade 12', registrationIsbn:'054423884X',
 				onlineIsbn:'9780123456795', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456795.jpg', securityWord:'essay', includeDashboardObject:true, includeEplannerObject:true,includeNotebookObject:false, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756055b',curriculumArea:'Mathematics',essayGraderPrompts:'High School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob6).addToCommerceObjects(cob7).save(failOnError:true)
+				def sp7 = new SecureProgram (productName:'Visual Math: NY, Teacher Edition, Grade 7', registrationIsbn:'0512345673',
+					onlineIsbn:'9780123456781', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456781.jpg', securityWord:'algebra', includeDashboardObject:true, includeEplannerObject:false,includeNotebookObject:false,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'Middle School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob1).addToCommerceObjects(cob7).addToCommerceObjects(cob2).addToCommerceObjects(cob3).addToCommerceObjects(cob4).addToCommerceObjects(cob5).addToCommerceObjects(cob6).addToCommerceObjects(cob8).save(failOnError:true)
 
 			}
 
@@ -195,12 +198,16 @@ class BootStrap {
 			Bundle.withTransaction{
 
 				def p1 = Program.where{id==1}.get()
+				def p4 = Program.where{id==4}.get()
+				
+				
 				def sp1 = SecureProgram.where{id==1}.get()
 				def sp2 = SecureProgram.where{id==2}.get()
 				def sp3 = SecureProgram.where{id==3}.get()
 				def sp4 = SecureProgram.where{id==4}.get()
 				def sp5 = SecureProgram.where{id==5}.get()
 				def sp6 = SecureProgram.where{id==6}.get()
+				def sp7 = SecureProgram.where{id==7}.get()
 
 				def b1 = new Bundle(program:p1, isbn:'9780123456781', title:'Visual Math ete, Grade 7, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				def b2 = new Bundle(program:p1, isbn:'9780123456782', title:'Visual Math ete, Grade 7 Premium, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:true,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
@@ -213,11 +220,12 @@ class BootStrap {
 				def b9 = new Bundle(program:p1, isbn:'9780123456795', title:'Visual Math ete, Grade 12, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 				def b10 = new Bundle(program:p1, isbn:'9780123456796', title:'Visual Math ete, Grade 12 Premium, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:true,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 
-				// Load testing
+				
 
-				/*def b11 = new Bundle(program:p1, isbn:'9780123456760',title:'Visual Math load Testing, Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				 def b12 = new Bundle(program:p1, isbn:'9780123456761',title:'Visual Math load Testing, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
-				 def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b11 = new Bundle(program:p4, isbn:'9780123456760',title:'Visual Math NY, ete Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)				
+				def b12 = new Bundle(program:p4, isbn:'9780123456761',title:'Visual Math NY, ete, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)
+				 
+				 /*def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
