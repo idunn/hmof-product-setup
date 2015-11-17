@@ -47,12 +47,9 @@ class SubversionIntegrationService {
 		
 
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
-		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
-		//svnOperationFactory.createRepositoryCreate(SVNURL.parseURIDecoded(url))
-		//svnOperationFactory.create();
+		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)		
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
-		
-		//final SVNRepository svnRepository = svnOperationFactory.getRepositoryPool().createRepository(url, true);
+				
 		
      return svnOperationFactory
 	}
@@ -80,36 +77,26 @@ class SubversionIntegrationService {
 		try{
 
 			def localCache =  new File(localFilePath)	
-			 SVNURL svnRepositoryURL = SVNURL.parseURIEncoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof")
-		
-			
-	/*		 SvnUpdate update = svnClient.createUpdate();
-			//update.setSource(SvnTarget.fromURL(svnRepositoryURL))
-			update.setSingleTarget(SvnTarget.fromURL(svnRepositoryURL))
-		
-			// Alternative SVNDepth.IMMEDIATES OR SVNDepth.FILES
-			update.setDepth(SVNDepth.FILES)
-			update.setRevision(SVNRevision.HEAD)		
-			update.run()*/		
+				
 			 log.info "Updating program XML contained SVN Content"
-			 SVNRepository repository = SVNRepositoryFactory.create(svnRepositoryURL);
+			 			 
 			 File dstPath = new File("C:/ProductSetup-cache/ProgramXML/hmof"); 			 
 			 SVNClientManager cm = SVNClientManager.newInstance();
-			 SVNUpdateClient uc = cm.getUpdateClient();  	
-		
-		    	uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
+			 SVNUpdateClient uc = cm.getUpdateClient();
+			 uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
 
-			
-			
-			
+			 def isExistfile=doesFileExist(localFilePath)
+			 			 
 			 log.info "Updated program XML to SVN Content"
+			
+			 if(!isExistfile){
 			 log.info "Adding program XML to SVN Content"
-			// SVNRevision.WORKING, SVNDepth.INFINITY,
-			// println SVNRevision.getScheduleForAddition()
-		     final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
+			
+			final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
             scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
-            scheduleForAddition.run()			
+            scheduleForAddition.run()		
 			log.info "Added program XML to SVN Content"
+			 }
 			log.info "Committing program XML to SVN Content"
 			SvnCommit commit = svnClient.createCommit();
 			commit.addTarget(SvnTarget.fromFile(localCache));
@@ -127,6 +114,79 @@ class SubversionIntegrationService {
 			cleanupSvnOperationFactory(svnClient)
 		}
     return true
+	}
+	
+	public static boolean doesFileExist(String targetPath) throws SVNException {
+		def username = "admin"
+		def password = "admin"
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/"));
+	    ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
+        repository.setAuthenticationManager(authManager);
+	 
+	Collection entries = repository.getDir( "hmof", -1 , null , (Collection) null );
+	Iterator iterator = entries.iterator( );
+	def localCache =  new File(targetPath)
+	String name=localCache.getName()
+	while ( iterator.hasNext( ) ) {
+		 SVNDirEntry entry = ( SVNDirEntry ) iterator.next( );		
+	if(name.equals(entry.getName()))
+	{
+		return true;
+	}
+	}
+	
+		return false;
+	}
+	/**
+	 * Checkout SVN file to local cache
+	 * @param productToExport
+	 * @param localCacheLocation
+	 * @return
+	 */
+	Boolean checkFileName( def filename){
+
+		def svnClient = createSvnOperationFactory()
+
+		try
+		{
+
+			log.info "Fetching filenames from  SVN Content..."
+
+
+			File[] files = new File("C:/ProductSetup-cache/ProgramXML/hmof").listFiles(); 			 
+
+			List<String> results = new ArrayList<String>();
+			
+			
+			//If this pathname does not denote a directory, then listFiles() returns null.
+			
+			for (File file : files) {
+				if (file.isFile()) {
+					String allfilename=file.getName()
+					results.add(allfilename);
+				}
+			}
+			results.each{
+				
+				println it
+				println filename
+				String newfilename=filename
+				if(it.equals(newfilename))
+				{
+					return true
+				}
+			}
+			
+			
+
+		}catch (Exception e)
+		{
+			log.error " SVN Error when checking out content:  ${e}"
+			return true
+
+		}
+		return false
+
 	}
 	/**
 	 * Checkout SVN file to local cache	

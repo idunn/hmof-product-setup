@@ -6,6 +6,7 @@ import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 
 import grails.util.Holders
+import groovy.xml.StreamingMarkupBuilder
 import hmof.programxml.ProgramXML
 import hmof.security.*
 import org.apache.commons.io.FileUtils;
@@ -100,7 +101,6 @@ class ProgramXmlService {
 				
 					def path=localURL+programXMLInstance.filename
 					
-					 
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 				    customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog)
@@ -140,12 +140,79 @@ class ProgramXmlService {
 	
 	def generateProramXML(ProgramXML programXMLInstance)
 	{
+		
+		
+	
 		def builder = new groovy.xml.StreamingMarkupBuilder()
 		builder.encoding = 'UTF-8'
 		StringBuilder sb = new StringBuilder();
 		ArrayList<String> items = new ArrayList<String>()
 		
 	 try{
+		 
+		 def programsXMLLocation = Holders.config.programXMLFolder
+		 File f = new File(programsXMLLocation);
+		 f.mkdir();
+		 File f1 = new File(programsXMLLocation+programXMLInstance.filename);
+		 if(f1.exists()) {
+			 
+
+			 
+			 
+			 
+			 def newSecurePrograms=[]
+			 def oldSecurePrograms=[]
+			 
+			
+			if(programXMLInstance.secureProgram){
+				newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+			   }
+			
+			
+			 XmlParser parser = new XmlParser()
+			 
+			  def xmldata1 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
+			  
+			   xmldata1.hsp_product.each{
+				   oldSecurePrograms.add(it.product_isbn.text())
+			   }
+			   
+		   def addISBNS=[]
+			   newSecurePrograms.onlineIsbn.each{
+				   if(!oldSecurePrograms.contains(it))
+				   {
+					   addISBNS.add(it)
+				   }
+				   
+			   }
+			  
+			  
+			   
+			   def root = new XmlParser().parse( f1 )
+			   
+			   addISBNS.each{
+			   def toadd = "<hsp_product><product_isbn lang='en_US'>"+it+"</product_isbn></hsp_product>"
+			   
+		def fragmentToAdd = new XmlParser().parseText( toadd )
+	
+	// Insert this new node at position 0 in the children of the first coreEntry node
+	root.children().add( 0, fragmentToAdd )
+	
+			   }
+			   def outxml ={ groovy.xml.XmlUtil.serialize( root )}
+			
+			   def stringWriter = new StringWriter()
+			   def indentPrinter = new IndentPrinter(stringWriter, "", false)
+			   def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
+			   File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
+			   outputFile.write(stringWriter.toString(), "UTF-8")
+			   
+					 
+		 }
+		 else{
+			 
+		 
+		 
 		def xml = {
 		  mkp.xmlDeclaration()
 		  hsp_program(
@@ -166,16 +233,26 @@ class ProgramXmlService {
 		
 	 }
   }
-  def programsXMLLocation = Holders.config.programXMLFolder
-			
-  File f = new File(programsXMLLocation);
-  f.mkdir();
+  
+  
+
+   
+// rootNode.children().each { assert it.name() in ['one','two'] }
+
  
 
   items.add(programsXMLLocation+"/"+programXMLInstance.filename)
   def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
   writer << builder.bind(xml)
   writer.close()
+		 }
+  
+  
+  
+
+
+
+  
    }catch(Exception ex){
 	  ex.getMessage()
 	  return false
