@@ -158,15 +158,19 @@ class ProgramXmlService {
 			 
 
 			 
-			 
-			 
 			 def newSecurePrograms=[]
 			 def oldSecurePrograms=[]
+			 def oldSecurePrograms1=[]
+			 def stringWriter = new StringWriter()
+			 def indentPrinter = new IndentPrinter(stringWriter, "", false)
+			
 			 
 			
+			 
 			if(programXMLInstance.secureProgram){
 				newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			   }
+			
 			
 			
 			 XmlParser parser = new XmlParser()
@@ -177,36 +181,53 @@ class ProgramXmlService {
 				   oldSecurePrograms.add(it.product_isbn.text())
 			   }
 			   
-		   def addISBNS=[]
-			   newSecurePrograms.onlineIsbn.each{
-				   if(!oldSecurePrograms.contains(it))
-				   {
-					   addISBNS.add(it)
-				   }
+			   def newonlineIsbn=newSecurePrograms.onlineIsbn
+			   println newonlineIsbn
+			   println  oldSecurePrograms
+			 println  oldSecurePrograms.removeAll(newonlineIsbn);
+			 println " test++++++++++"
+			 println "old secure programs"
+			 println  oldSecurePrograms
+			 xmldata1.hsp_product.each{
+				 oldSecurePrograms1.add(it.product_isbn.text())
+			 }
+			 
+			
+			 println  newonlineIsbn.removeAll(oldSecurePrograms1);
+			   
+			 println "new secure programs"
+			 println  newonlineIsbn
+			   
+	          def root = new XmlParser().parse( f1 )
+			   newonlineIsbn.each{
+				   String newISBN=it
+				   
+				
+					 def toadd = "<hsp_product><product_isbn lang='en_us'>"+newISBN+"</product_isbn></hsp_product>"
+                     def fragmentToAdd = new XmlParser().parseText( toadd )
+                     root.children().add( 0, fragmentToAdd )
+					
+					 
 				   
 			   }
-			  
-			  
-			   
-			   def root = new XmlParser().parse( f1 )
-			   
-			   addISBNS.each{
-			   def toadd = "<hsp_product><product_isbn lang='en_US'>"+it+"</product_isbn></hsp_product>"
-			   
-		def fragmentToAdd = new XmlParser().parseText( toadd )
-	
-	// Insert this new node at position 0 in the children of the first coreEntry node
-	root.children().add( 0, fragmentToAdd )
-	
+			  println root
+			  def parent 
+			  def xmldata2 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
+			  oldSecurePrograms.each{
+		           String isbn= it				 
+				   def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}				   
+                   parent = nodeToDel.parent()               
+				   parent.remove(nodeToDel)
+					 
 			   }
-			   def outxml ={ groovy.xml.XmlUtil.serialize( root )}
-			
-			   def stringWriter = new StringWriter()
-			   def indentPrinter = new IndentPrinter(stringWriter, "", false)
-			   def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
-			   File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
-			   outputFile.write(stringWriter.toString(), "UTF-8")
-			   
+		
+		
+			  
+			    def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
+			  //def formatedXml = formatBold.replaceAll("<i>"," <i>").replaceAll("</i>","</i> ")
+			    File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
+			    outputFile.write(stringWriter.toString(), "UTF-8")
+				 	   
 					 
 		 }
 		 else{
