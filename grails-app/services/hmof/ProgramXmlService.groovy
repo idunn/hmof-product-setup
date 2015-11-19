@@ -165,54 +165,47 @@ class ProgramXmlService {
 			 def indentPrinter = new IndentPrinter(stringWriter, "", false)
 			
 			 
-			
-			 
 			if(programXMLInstance.secureProgram){
 				newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			   }
 			
-			
-			
+						
 			 XmlParser parser = new XmlParser()
 			 
 			  def xmldata1 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
 			  
-			   xmldata1.hsp_product.each{
+			  
+			def root = new XmlParser().parse( f1 )
+			 xmldata1.hsp_product.each{
 				   oldSecurePrograms.add(it.product_isbn.text())
+				   oldSecurePrograms1.add(it.product_isbn.text())
 			   }
 			   
 			   def newonlineIsbn=newSecurePrograms.onlineIsbn
-			   println newonlineIsbn
-			   println  oldSecurePrograms
-			 println  oldSecurePrograms.removeAll(newonlineIsbn);
-			 println " test++++++++++"
-			 println "old secure programs"
-			 println  oldSecurePrograms
-			 xmldata1.hsp_product.each{
-				 oldSecurePrograms1.add(it.product_isbn.text())
-			 }
-			 
+			   oldSecurePrograms.removeAll(newonlineIsbn);					
+			  newonlineIsbn.removeAll(oldSecurePrograms1);
+			   
 			
-			 println  newonlineIsbn.removeAll(oldSecurePrograms1);
 			   
-			 println "new secure programs"
-			 println  newonlineIsbn
-			   
-	          def root = new XmlParser().parse( f1 )
+	          
+			  
+			  if(!root['@title'].equals(programXMLInstance.title))
+			  root['@title']=programXMLInstance.title
+			  
+			  if(!root['@buid'].equals(programXMLInstance.buid))
+			  root['@buid']=programXMLInstance.buid
 			   newonlineIsbn.each{
 				   String newISBN=it
 				   
-				
 					 def toadd = "<hsp_product><product_isbn lang='en_us'>"+newISBN+"</product_isbn></hsp_product>"
                      def fragmentToAdd = new XmlParser().parseText( toadd )
                      root.children().add( 0, fragmentToAdd )
 					
-					 
-				   
+					
 			   }
-			  println root
+			  
 			  def parent 
-			  def xmldata2 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
+			 
 			  oldSecurePrograms.each{
 		           String isbn= it				 
 				   def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}				   
@@ -220,15 +213,21 @@ class ProgramXmlService {
 				   parent.remove(nodeToDel)
 					 
 			   }
-		
-		
+								  
 			  
+				
 			    def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
+				
 			  //def formatedXml = formatBold.replaceAll("<i>"," <i>").replaceAll("</i>","</i> ")
-			    File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
-			    outputFile.write(stringWriter.toString(), "UTF-8")
-				 	   
-					 
+			   // File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
+			    //outputFile.write(stringWriter.toString(), "UTF-8")
+				def nodePrinter1 =stringWriter.toString()
+				
+				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + nodePrinter1
+								
+				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
+			
+				
 		 }
 		 else{
 			 
@@ -255,12 +254,7 @@ class ProgramXmlService {
 	 }
   }
   
-  
-
    
-// rootNode.children().each { assert it.name() in ['one','two'] }
-
- 
 
   items.add(programsXMLLocation+"/"+programXMLInstance.filename)
   def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)

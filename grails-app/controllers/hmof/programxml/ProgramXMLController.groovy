@@ -82,7 +82,9 @@ class ProgramXMLController {
 	  } 
 	  securePrograms1.addAll(secureProgramsXML)
 	   securePrograms =SecureProgram.where{id in (securePrograms1.id)}
-	  respond programXMLInstance, model:[securePrograms:securePrograms]
+	   
+	  def title=programXMLInstance.title
+	  respond programXMLInstance, model:[securePrograms:securePrograms,title:title]
     }
 
     @Transactional
@@ -243,7 +245,7 @@ class ProgramXMLController {
 
 		log.info("ProgramXML Detail: "+instanceId)
 				
-		def programXMLInstance = ProgramXML.get(instanceId)
+		def programXMLInstance = ProgramXML.where{id==instanceId}.get()
 		log.debug("Deploying programInstance name: "+programXMLInstance.title)
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
 		log.debug("deploymentJobNumber: "+deploymentJobNumber)
@@ -271,7 +273,7 @@ class ProgramXMLController {
 		def job = [contentId: programXMLInstance.id, revision: deploymentService.getCurrentEnversRevision(programXMLInstance), contentTypeId: programXMLInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
 		// Add Program instance to Job
-		Job j1 = new Job(job).save(failOnError:true)
+	    Job j1 = new Job(job).save(failOnError:true)
 		log.debug("Successfully added Program Instance to job : "+programXMLInstance.title)
 	
 		//def envId = deploymentService.getUserEnvironmentInformation()

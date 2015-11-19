@@ -8,9 +8,20 @@
 	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tcps.css')}"
 	type="text/css">
 <script type="text/javascript">
+var title="${title}";
+window.onload = updateFilename;
+function updateFilename(){	
+	if(title)
+	{
+		document.getElementById("filename").style.visibility='hidden';
+	}
+	
+}
+
 
  function updateBUID(){
-
+if(title)
+	{
   var title = document.getElementById("title").value;
   var str = title.toUpperCase(); 
   while (str.indexOf(' ') !== -1)
@@ -21,7 +32,10 @@
 	 document.getElementById("buid").value=str;
 	 var buid=document.getElementById("buid").value;
 	 document.getElementById("filename").value="hmof_program_"+buid+".xml";
-	 
+	}else
+		{
+
+		}
  }
 </script>
 <div class="span7">
@@ -49,22 +63,25 @@
 	<label for="language" class="control-label col-sw-1">
 		<g:message code="programXML.language.label" default="Language" />
 		
-	</label><div class="controls">
+	</label>
+	<div class="controls">
 	<g:select class="form-control"  name="language" from="${programXMLInstance.constraints.language.inList}" value="${programXMLInstance?.language}" valueMessagePrefix="programXML.language" />
 
-</div></div>
+</div>
+</div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: programXMLInstance, field: 'filename', 'error')} required">
 	<label for="filename" class="control-label col-sw-1">
 		<g:message code="programXML.filename.label" default="Filename" />
 		<span class="required-indicator">*</span>
-	</label><div class="controls">
-	<g:textField class="form-control" name="filename" required="" value="${programXMLInstance?.filename}"  pattern="${programXMLInstance.constraints.filename.matches}"/>
+	</label><div class="controls">${programXMLInstance?.filename}
+	<g:textField class="form-control"  name="filename"  required="" value="${programXMLInstance?.filename}"  pattern="${programXMLInstance.constraints.filename.matches}"/>
+
+
 </div>
 </div>
 
-<div
-			class="control-group fieldcontain ${hasErrors(bean: programXMLInstance, field: 'secureProgram', 'error-field')} ">
+<div class="control-group fieldcontain ${hasErrors(bean: programXMLInstance, field: 'secureProgram', 'error-field')} ">
 			<label for="secureProgram" class="control-label col-sw-1"><g:message
 					code="programXML.secureProgram.label" default="Secure Program" /></label>
 					<br>
