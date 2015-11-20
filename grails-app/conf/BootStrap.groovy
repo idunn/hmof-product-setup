@@ -119,14 +119,14 @@ class BootStrap {
 			ContentType ct2 = new ContentType(contentId:2, name:'Bundle').save(failOnError:true)
 			ContentType ct3 = new ContentType(contentId:3, name:'SecureProgram').save(failOnError:true)
 			ContentType ct4 = new ContentType(contentId:4, name:'CommerceObject').save(failOnError:true)
-			ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
+			//ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
 
 			EnvironmentGrp.withTransaction{
 				def eg1 = new EnvironmentGrp(groupname:'Content').save(failOnError:true)
 				def eg2 = new EnvironmentGrp(groupname:'Integration').save(failOnError:true)
 				def eg3 = new EnvironmentGrp(groupname:'Platform').save(failOnError:true)
 			}
-			
+
 			Environment.withTransaction{
 				def eg1 = EnvironmentGrp.where{id==1}.get()
 				def eg2 = EnvironmentGrp.where{id==2}.get()
@@ -190,7 +190,7 @@ class BootStrap {
 				def sp6 = new SecureProgram (productName:'Visual Math: Teacher Edition, Grade 12', registrationIsbn:'054423884X',
 				onlineIsbn:'9780123456795', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456795.jpg', securityWord:'essay', includeDashboardObject:true, includeEplannerObject:true,includeNotebookObject:false, knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756055b',curriculumArea:'Mathematics',essayGraderPrompts:'High School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob6).addToCommerceObjects(cob7).save(failOnError:true)
 				def sp7 = new SecureProgram (productName:'Visual Math: NY, Teacher Edition, Grade 7', registrationIsbn:'0512345673',
-					onlineIsbn:'9780123456781', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456781.jpg', securityWord:'algebra', includeDashboardObject:true, includeEplannerObject:false,includeNotebookObject:false,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'Middle School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob1).addToCommerceObjects(cob7).addToCommerceObjects(cob2).addToCommerceObjects(cob3).addToCommerceObjects(cob4).addToCommerceObjects(cob5).addToCommerceObjects(cob6).addToCommerceObjects(cob8).save(failOnError:true)
+				onlineIsbn:'9780123456781', copyright:2016, pathToCoverImage:'/nsmedia/bc/9780123456781.jpg', securityWord:'algebra', includeDashboardObject:true, includeEplannerObject:false,includeNotebookObject:false,knowledgeGraphIdDev:'513429ef-7ad2-422d-bd21-e60ae756054b',curriculumArea:'Mathematics',essayGraderPrompts:'Middle School',userUpdatingSProgram:'Dev', contentType:ct3).addToCommerceObjects(cob1).addToCommerceObjects(cob7).addToCommerceObjects(cob2).addToCommerceObjects(cob3).addToCommerceObjects(cob4).addToCommerceObjects(cob5).addToCommerceObjects(cob6).addToCommerceObjects(cob8).save(failOnError:true)
 
 			}
 
@@ -199,8 +199,8 @@ class BootStrap {
 
 				def p1 = Program.where{id==1}.get()
 				def p4 = Program.where{id==4}.get()
-				
-				
+
+
 				def sp1 = SecureProgram.where{id==1}.get()
 				def sp2 = SecureProgram.where{id==2}.get()
 				def sp3 = SecureProgram.where{id==3}.get()
@@ -220,12 +220,12 @@ class BootStrap {
 				def b9 = new Bundle(program:p1, isbn:'9780123456795', title:'Visual Math ete, Grade 12, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:false,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 				def b10 = new Bundle(program:p1, isbn:'9780123456796', title:'Visual Math ete, Grade 12 Premium, 2016, 6Y', duration:'6-Year', includePremiumCommerceObjects:true,userUpdatingBundle:'Dev', contentType:ct2).addToSecureProgram(sp6).save(failOnError:true)
 
-				
 
-				def b11 = new Bundle(program:p4, isbn:'9780123456760',title:'Visual Math NY, ete Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)				
+
+				def b11 = new Bundle(program:p4, isbn:'9780123456760',title:'Visual Math NY, ete Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)
 				def b12 = new Bundle(program:p4, isbn:'9780123456761',title:'Visual Math NY, ete, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)
-				 
-				 /*def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+
+				/*def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
@@ -244,13 +244,37 @@ class BootStrap {
 				 def b29 = new Bundle(program:p1, isbn:'9780123456778',title:'Visual Math load Testing2, Grade 10, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
 				 def b30 = new Bundle(program:p1, isbn:'9780123456779',title:'Visual Math load Testing2, Grade 10, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
 				 */
-
-
 			}
 			
-			
+
+		} // end if
+		
+		
+		
+		includeProgramXML()
+
+
+
+	}
+	
+	
+	def destroy = {}
+
+
+
+
+	/**
+	 * Include ProgramXML if it does not exist
+	 * @return
+	 */
+	def includeProgramXML(){
+
+		if(ProgramXML.where{}.list().isEmpty()){
+
+			ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
+
 			ProgramXML.withTransaction{
-				
+
 				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
@@ -266,17 +290,8 @@ class BootStrap {
 				def p13xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 				def p14xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 				def p15xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				
-				
+
 			}
-
-
-
-
-		} // end if
-
-
-	}
-	def destroy = {
+		}
 	}
 }
