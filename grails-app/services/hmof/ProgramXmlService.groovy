@@ -161,8 +161,8 @@ class ProgramXmlService {
 			 def newSecurePrograms=[]
 			 def oldSecurePrograms=[]
 			 def oldSecurePrograms1=[]
-			 def stringWriter = new StringWriter()
-			 def indentPrinter = new IndentPrinter(stringWriter, "", false)
+			 def oldSecurePrograms2=[]
+			
 			
 			 
 			if(programXMLInstance.secureProgram){
@@ -183,12 +183,17 @@ class ProgramXmlService {
 			   
 			   def newonlineIsbn=newSecurePrograms.onlineIsbn
 			   oldSecurePrograms.removeAll(newonlineIsbn);					
-			  newonlineIsbn.removeAll(oldSecurePrograms1);
+			   newonlineIsbn.removeAll(oldSecurePrograms1);
 			   
 			
-			   
-	          
+		   	def secprogramIds= utilityService.getProgramXMLAudSecurePrograms(programXMLInstance.id)
+	       
+			if(secprogramIds){
+				  oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
+				 }
 			  
+			  println oldSecurePrograms2.onlineIsbn
+			  def oldProgramInstanceIsbns=oldSecurePrograms2.onlineIsbn
 			  if(!root['@title'].equals(programXMLInstance.title))
 			  root['@title']=programXMLInstance.title
 			  
@@ -207,24 +212,31 @@ class ProgramXmlService {
 			  def parent 
 			 
 			  oldSecurePrograms.each{
-		           String isbn= it				 
+		           String isbn= it	
+				   oldProgramInstanceIsbns.each{
+					   
+				   if(isbn.equals(it)){					   
+				   
 				   def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}				   
                    parent = nodeToDel.parent()               
 				   parent.remove(nodeToDel)
+				   }
+		           }
 					 
 			   }
 								  
-			  
+			  StringWriter stringWriter = new StringWriter()
+			  XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter))
+			  nodePrinter.setPreserveWhitespace(true)
+			  nodePrinter.print(root)
 				
-			    def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
+			   // def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
 				
-			  //def formatedXml = formatBold.replaceAll("<i>"," <i>").replaceAll("</i>","</i> ")
-			   // File outputFile = (new File(programsXMLLocation+programXMLInstance.filename))
-			    //outputFile.write(stringWriter.toString(), "UTF-8")
+			
 				def nodePrinter1 =stringWriter.toString()
 				
-				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + nodePrinter1
-								
+				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
+				//println indentPrinter.toString()
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
 			
 				

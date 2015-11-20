@@ -650,6 +650,27 @@ class UtilityService {
 
 		 row
 
+	}/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getProgramXMLAudSecurePrograms(def programXmlId){
+		def sql = new Sql(dataSource)		
+		def row = null
+		try{
+		 row = sql.rows( "select sp.secure_program_id  from programxml_secure_program_aud sp where sp.programxml_secure_program_id=?",[programXmlId])
+		
+		 
+		 }catch(Exception e){
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getMessage())
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getStackTrace())
+		 }
+		 finally{
+			 sql.close();
+		 }
+
+		 row
+
 	}
 
 }
