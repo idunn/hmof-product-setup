@@ -41,8 +41,8 @@ class SubversionIntegrationService {
 
 		log.info "Creating an SVN Client"
 		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
-		def username = "admin"
-		def password = "admin"
+		def username = "arollapati"
+		def password = "Ji9ahhia"
 		
 		
 
@@ -80,15 +80,14 @@ class SubversionIntegrationService {
 				
 			 log.info "Updating program XML contained SVN Content"
 			 			 
-			 File dstPath = new File("C:/ProductSetup-cache/ProgramXML/hmof"); 			 
+			 File dstPath = new File("C:/ProgramXML"); 			 
 			 SVNClientManager cm = SVNClientManager.newInstance();
 			 SVNUpdateClient uc = cm.getUpdateClient();
 			 uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
 
-			 def isExistfile=doesFileExist(localFilePath)
 			 			 
 			 log.info "Updated program XML to SVN Content"
-			
+			 def isExistfile=doesFileExist(localFilePath)
 			 if(!isExistfile){
 			 log.info "Adding program XML to SVN Content"
 			
@@ -117,13 +116,13 @@ class SubversionIntegrationService {
 	}
 	
 	public static boolean doesFileExist(String targetPath) throws SVNException {
-		def username = "admin"
-		def password = "admin"
-		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded("http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/"));
+		def username = "arollapati"
+		def password = "Ji9ahhia"
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded("http://dubv-engsvn01.dubeng.local/svn/tools"));
 	    ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
         repository.setAuthenticationManager(authManager);
 	 
-	Collection entries = repository.getDir( "hmof", -1 , null , (Collection) null );
+	Collection entries = repository.getDir( "ProgramXML", -1 , null , (Collection) null );
 	Iterator iterator = entries.iterator( );
 	def localCache =  new File(targetPath)
 	String name=localCache.getName()
@@ -153,7 +152,7 @@ class SubversionIntegrationService {
 			log.info "Fetching filenames from  SVN Content..."
 
 
-			File[] files = new File("C:/ProductSetup-cache/ProgramXML/hmof").listFiles(); 			 
+			File[] files = new File("C:/ProgramXML").listFiles(); 			 
 
 			List<String> results = new ArrayList<String>();
 			

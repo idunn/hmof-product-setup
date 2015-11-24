@@ -105,7 +105,8 @@ environments {
 
 		cacheLocation="target/ProductSetup-cache"
 		uploadFolder="target/ProductSetup-cache/import"
-		programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
+		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
+		programXMLFolder="C:/ProgramXML/"
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
@@ -148,7 +149,8 @@ environments {
 
 		cacheLocation="E:/ProductSetup-cache"
 		uploadFolder="E:/ProductSetup-cache/import"
-		programXMLFolder="E:/ProductSetup-cache/ProgramXML/hmof/"
+		programXMLFolder="E:/ProgramXML/"
+		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
 		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {

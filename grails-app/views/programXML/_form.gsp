@@ -20,10 +20,12 @@ function updateFilename(){
 
 
  function updateBUID(){
-if(title)
+
+if(title=="")
 	{
-  var title = document.getElementById("title").value;
-  var str = title.toUpperCase(); 
+  var title1=document.getElementById("title").value;
+  var str = title1.toUpperCase(); 
+  
   while (str.indexOf(' ') !== -1)
   {
 	  str = str.replace(' ', '_');
@@ -32,10 +34,7 @@ if(title)
 	 document.getElementById("buid").value=str;
 	 var buid=document.getElementById("buid").value;
 	 document.getElementById("filename").value="hmof_program_"+buid+".xml";
-	}else
-		{
-
-		}
+	}
  }
 </script>
 <div class="span7">
