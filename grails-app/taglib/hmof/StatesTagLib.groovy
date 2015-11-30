@@ -38,6 +38,7 @@ class StatesTagLib {
 			MS:"Mississippi",
 			MO:"Missouri",
 			MT:"Montana",
+			NA:"National",
 			NE:"Nebraska",
 			NV:"Nevada",
 			NH:"New Hampshire",

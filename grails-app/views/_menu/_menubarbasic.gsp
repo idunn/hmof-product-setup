@@ -23,10 +23,10 @@
 						<g:message code="CommerceObject.Controller.label"/>	
 			</g:link>				
 		</li>
-		<li	class="controller${params.controller == 'programXML' ? " active" : ""}">
+		<%--<li	class="controller${params.controller == 'programXML' ? " active" : ""}">
 			<g:link controller="ProgramXML" action="index">
 						<g:message code="ProgramXML.Controller.label"/>
 			</g:link>
 		</li>
-		</ul>
+		--%></ul>
 </div>

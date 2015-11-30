@@ -50,9 +50,9 @@ class CommerceObject implements Comparable{
 
 		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
 		teacherLabel (blank: false, nullable:true,maxSize:50)
-		teacherUrl (shared: "globalUrl",maxSize:200)
+		teacherUrl (shared: "globalUrl",maxSize:600)
 		studentLabel (blank: false, nullable:true,maxSize:50)
-		studentUrl (shared: "globalUrl",maxSize:200)
+		studentUrl (shared: "globalUrl",maxSize:600)
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
 		objectReorderNumber (range: 0..16) // only legacy products can have order number 0
 		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
