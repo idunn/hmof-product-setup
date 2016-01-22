@@ -392,9 +392,13 @@ class SecureProgramController {
 		secureProgramInstance.save flush:true
 
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
-
+		//includeDashboardObject, registrationIsbn, includeEplannerObject, includeNotebookObject
+		
+		
 		def updatedValues = compareDomainInstanceService.getDiffMap(secureProgramInstance)
-		if( updatedValues.containsKey('commerceObjects') ){
+		if( updatedValues.containsKey('commerceObjects') || updatedValues.containsKey('includeDashboardObject') || updatedValues.containsKey('registrationIsbn') ||
+		updatedValues.containsKey('includeEplannerObject' ||  updatedValues.containsKey('includeNotebookObject'))){
+
 			updateParent(secureProgramInstance)
 		}
 

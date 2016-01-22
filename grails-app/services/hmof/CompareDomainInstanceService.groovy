@@ -12,6 +12,9 @@ class CompareDomainInstanceService {
 	 * @return
 	 */
 	def getDiffMap(def currentObject) {
+		
+		
+		currentObject.properties.each{println it}
 
 		List allRevisions = currentObject.retrieveRevisions()
 		// Get SECOND last revision for testing
