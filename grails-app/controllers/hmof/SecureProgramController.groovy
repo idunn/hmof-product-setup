@@ -17,6 +17,7 @@ class SecureProgramController {
 	def springSecurityService
 	def deploymentService
 	def utilityService
+	def compareDomainInstanceService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -43,11 +44,11 @@ class SecureProgramController {
 		programInstances.each{
 			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
-		
-	
-		
-				
-			
+
+
+
+
+
 	}
 	/**
 	 * Update the parents of the object being updated
@@ -57,14 +58,14 @@ class SecureProgramController {
 	@Transactional
 	def updateProgramXML(def currentInstance){
 
-		
-		def programXMLInstances = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()		
-				programXMLInstances.each{
-					
-					it.properties = [lastUpdated: new Date(),userUpdatingProgramXML: springSecurityService?.currentUser?.username]
-				}
-		
-							
+
+		def programXMLInstances = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()
+		programXMLInstances.each{
+
+			it.properties = [lastUpdated: new Date(),userUpdatingProgramXML: springSecurityService?.currentUser?.username]
+		}
+
+
 	}
 
 	/**
@@ -91,7 +92,7 @@ class SecureProgramController {
 
 	}
 
-	
+
 	@Transactional
 	def confirm() {
 		def msg
@@ -125,54 +126,54 @@ class SecureProgramController {
 		if (environmentRevision != null) {
 			environmentRevision = environmentRevision
 		}
-		
-		
-		
+
+
+
 		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(secureProgramInstance,envId)
-		
-		
+
+
 		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
-			
-				 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-						
-		
+
+			msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
+
 		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
-			
-			 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-				
+
+			msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
 		}
-		
-		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
+
+		else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
 		{
-			
+
 			msg='Are you sure you want to deploy?'
-			
-			
+
+
 		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
-		 {
-			
-			 msg='Are you sure you want to promote?'
-			 
-		 }
-		
+		{
+
+			msg='Are you sure you want to promote?'
+
+		}
+
 		if(envId.equals("2") || envId.equals("3")){
-		def promotionInstance = deploymentService.getDeployedInstance(secureProgramInstance,envId)
-	
-		
-				 if(promotionInstance==null){
-					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
-					 log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
-					 //redirect(action: "list")
-					 //return
-				 }
+			def promotionInstance = deploymentService.getDeployedInstance(secureProgramInstance,envId)
+
+
+			if(promotionInstance==null){
+				flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
+				log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
+				//redirect(action: "list")
+				//return
+			}
 		}
 		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this bad deployment instance can never be used
 		if(!flash.message)
 		{
 			flash.secureProgramInstance = secureProgramInstance
 		}
-		
-		 
+
+
 		render(view: "_confirm", model: [secureProgramInstance:secureProgramInstance,msg:msg,envName:envName,envId:envId])
 	}
 	/**
@@ -184,7 +185,7 @@ class SecureProgramController {
 	def deploy(){
 
 		//def instanceDetail = params.instanceDetail
-//
+		//
 		//def instanceDetails = instanceDetail.split("/")
 		def instanceId = params.programId
 		log.info("Secure Program  Detail: "+instanceId)
@@ -263,7 +264,7 @@ class SecureProgramController {
 			Promotion p2 = new Promotion(promote).save(failOnError:true, flush:true)
 
 			log.info("Job saved successfully")
-			
+
 		} else if(promotionJobInstance.status == JobStatus.In_Progress.getStatus().toString() || promotionJobInstance.status == JobStatus.Pending.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Repromote.getStatus().toString() || promotionJobInstance.status == JobStatus.Repromoting.getStatus().toString() ||
 		promotionJobInstance.status == JobStatus.Pending_Retry.getStatus().toString() || promotionJobInstance.status == JobStatus.Retrying.getStatus().toString()){
@@ -359,13 +360,16 @@ class SecureProgramController {
 			notFound()
 			return
 		}
-		log.info "Started updating Secure Program :"+secureProgramInstance.productName
+
+		log.info "Started updating Secure Program :" + secureProgramInstance.productName
 		if (secureProgramInstance.hasErrors()) {
-			log.info "No Errors Found while updating Secure Program"
+			log.info "There were errors Found while updating Secure Program"
 			respond secureProgramInstance.errors, view:'edit'
 			return
 		}
+
 		List<CommerceObject> commerceObjectList=[]
+
 		if(params.commerceObjects==null)
 		{
 			secureProgramInstance.commerceObjects.clear()
@@ -381,17 +385,23 @@ class SecureProgramController {
 			}
 			secureProgramInstance.commerceObjects=new TreeSet<CommerceObject>(commerceObjectList)
 		}
-		
-	
+
+
 		secureProgramInstance.userUpdatingSProgram = springSecurityService?.currentUser?.username
 
 		secureProgramInstance.save flush:true
 
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
-		updateParent(secureProgramInstance)
+
+		def updatedValues = compareDomainInstanceService.getDiffMap(secureProgramInstance)
+		if( updatedValues.containsKey('commerceObjects') ){
+			updateParent(secureProgramInstance)
+		}
+
+
 		if(!params.oldonlineIsbn.equals(params.onlineIsbn))
 		{
-			println "not equal"
+			log.info "Online ISBN has been modified!"
 			updateProgramXML(secureProgramInstance)
 		}
 		request.withFormat {
@@ -413,7 +423,7 @@ class SecureProgramController {
 			notFound()
 			return
 		}
-		
+
 		// notify of delete
 		log.info "Updating the revisions of parent objects"
 		updateParent(secureProgramInstance)
