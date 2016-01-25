@@ -81,7 +81,7 @@
 				
 				</div>
 			</div>
-
+			
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'pathToCoverImage', 'error-field')} ">
 				<label for="pathToCoverImage" class="control-label col-sw-1"><g:message code="secureProgram.pathToCoverImage.label" default="Path To Cover Image" /></label>
 				<div class="controls">
@@ -120,13 +120,14 @@
 				</div>
 			</div>
 			
-			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')} ">
+			<%--  <div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')} ">
 				<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="myNotebook" /></label>
 				<div class="controls">
 					<bs:checkBox name="includeNotebookObject" value="${secureProgramInstance?.includeNotebookObject}"  />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'includeNotebookObject', 'error-field')}</span>
 				</div>
 			</div>
+			--%>
 			
 	</div>
 			

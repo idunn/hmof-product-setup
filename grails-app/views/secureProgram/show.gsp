@@ -97,11 +97,11 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	<label for="includeEplannerObject" class="control-label col-sw-1"><g:message code="secureProgram.includeEplannerObject.label" default="Include Eplanner Object" /></label>
 				
 				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeEplannerObject}" /></div></div>
-			<div
-	class="control-group">
-	<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></label>
-				
-				<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeNotebookObject}" /></div></div>
+			
+			<%-- Removing from view as it should always never be true --%>
+			<%-- <div class="control-group">
+			<label for="includeNotebookObject" class="control-label col-sw-1"><g:message code="secureProgram.includeNotebookObject.label" default="Include Notebook Object" /></label>				
+			<div class="controls show-style"><g:formatBoolean boolean="${secureProgramInstance?.includeNotebookObject}" /></div> </div>--%>
 			
 			
 	
