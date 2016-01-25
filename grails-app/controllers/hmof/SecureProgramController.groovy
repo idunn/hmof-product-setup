@@ -24,15 +24,21 @@ class SecureProgramController {
 	/**
 	 * Update the parents of the object being updated
 	 * @param currentInstance
+	 * @param updateProgramOnly
 	 * @return
 	 */
 	@Transactional
-	def updateParent(def currentInstance){
+	def updateParent(def currentInstance, boolean updateAllParents){
+
+		log.info "Updating All parents is: $updateAllParents"
 
 		def bundleInstances = Bundle.where{secureProgram{id==currentInstance.id}}.list()
 
-		bundleInstances.each{
-			it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
+
+		if (updateAllParents){
+			bundleInstances.each{
+				it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
+			}
 		}
 
 		def programInstances = []
@@ -44,12 +50,8 @@ class SecureProgramController {
 		programInstances.each{
 			it.properties = [lastUpdated: new Date(),userUpdatingProgram: springSecurityService?.currentUser?.username]
 		}
-
-
-
-
-
 	}
+
 	/**
 	 * Update the parents of the object being updated
 	 * @param currentInstance
@@ -392,14 +394,21 @@ class SecureProgramController {
 		secureProgramInstance.save flush:true
 
 		// Update the timeStamp of all its parents so that the change is reflected in Envers
-		//includeDashboardObject, registrationIsbn, includeEplannerObject, includeNotebookObject
-		
-		
+
+		// TODO
 		def updatedValues = compareDomainInstanceService.getDiffMap(secureProgramInstance)
 		if( updatedValues.containsKey('commerceObjects') || updatedValues.containsKey('includeDashboardObject') || updatedValues.containsKey('registrationIsbn') ||
-		updatedValues.containsKey('includeEplannerObject' ||  updatedValues.containsKey('includeNotebookObject'))){
+		updatedValues.containsKey('includeEplannerObject') ||  updatedValues.containsKey('includeNotebookObject')){
 
-			updateParent(secureProgramInstance)
+			log.info "Updating Bundles and Programs"
+			boolean updateAll = true
+			updateParent(secureProgramInstance, updateAll)
+		}
+
+		else{
+			log.info "Updating Programs Only"
+			boolean updateBundle = false
+			updateParent( secureProgramInstance, updateBundle)
 		}
 
 

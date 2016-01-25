@@ -14,10 +14,10 @@ class CompareDomainInstanceService {
 	def getDiffMap(def currentObject) {
 		
 		
-		currentObject.properties.each{println it}
+		//currentObject.properties.each{println it}
 
 		List allRevisions = currentObject.retrieveRevisions()
-		// Get SECOND last revision for testing
+		// Get Envers Object that has been previously persisted
 		def enversObject = currentObject.findAtRevision(allRevisions[-1])
 
 
@@ -27,7 +27,7 @@ class CompareDomainInstanceService {
 
 		def difMap = newMap - origMap
 		
-		log.info difMap
+		log.info "The Dif Map is: $difMap"
 		
 		return difMap
 
