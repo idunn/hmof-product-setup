@@ -1,6 +1,7 @@
 <%@ page import="hmof.programxml.ProgramXML"%>
 
 <section id="create-deployment">
+
 	<g:hasErrors bean="${programXMLInstance}">
 		<div class="alert alert-error">
 			<g:renderErrors bean="${programXMLInstance}" as="list" />
@@ -43,8 +44,7 @@
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					
 				<sec:ifAnyGranted roles="ROLE_PM">
-				<g:actionSubmit class="btn btn-primary" id="confirmTrue"
-					value="Deploy" onClick="return true;" />
+				<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Deploy"  />
 </sec:ifAnyGranted>
 
 				</div>
@@ -62,15 +62,15 @@
 				
 					ProgramXML Promote To Environment :${envName}<br><br>
 					
-				   ${msg}
-				  
+				   ${msg}<br>
+				Enter the JIRA Number :  <input name="jiraid" id="jiraid" type="text" value="">
 				<div class="modal-footer">
 					
 					<input name="programId" id="programId" type="hidden" value="${programXMLInstance?.id}">
 					<input name="depEnvId" id="depEnvId" type="hidden" value="${envId}">
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					
-	<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="return true;"/>
+	                <g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" />
 
 				</div>
 			</fieldset>
@@ -78,4 +78,7 @@
 		</sec:ifAnyGranted>
 		</g:if>
 	</g:else>
+	
+	
+	
 </section>

@@ -24,6 +24,8 @@
 				<g:sortableColumn property="priorityOrder" title="${message(code: 'environment.priorityOrder.label', default: 'Priority Order')}" />
 			
 				<g:sortableColumn property="url" title="${message(code: 'environment.url.label', default: 'Url')}" />
+				<g:sortableColumn property="bambooPlan1" title="${message(code: 'environment.url.bamboo1.label', default: 'Bamboo Plan 1')}" />
+				<g:sortableColumn property="bambooPlan2" title="${message(code: 'environment.url.bamboo2.label', default: 'Bamboo Plan 2')}" />
 			    <g:sortableColumn property="url" title="${message(code: 'environment.role.label', default: 'Role')}" />
 				<th><g:message code="environment.groups.label" default="Groups" /></th>
 			</tr>
@@ -37,7 +39,9 @@
 				<td>${fieldValue(bean: environmentInstance, field: "priorityOrder")}</td>
 			
 				<td>${fieldValue(bean: environmentInstance, field: "url")}</td>
-			  <td>${fieldValue(bean: environmentInstance, field: "role")}</td>
+				<td>${fieldValue(bean: environmentInstance, field: "bambooPlan1")}</td>
+				<td>${fieldValue(bean: environmentInstance, field: "bambooPlan2")}</td>
+			 	<td>${fieldValue(bean: environmentInstance, field: "role")}</td>
 				<td>${fieldValue(bean: environmentInstance, field: "groups")}</td>
 			</tr>
 		</g:each>

@@ -34,7 +34,22 @@ import grails.util.Holders
  */
 @Transactional
 class SubversionIntegrationService {
-	
+	/**
+	 * Helper method to create an SVN Operation Factory
+	 */
+	def createTestSvnOperationFactory() {
+
+		log.info "Creating an SVN Client"
+		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
+		
+		def username = Holders.config.svn.test.username
+		def password = Holders.config.svn.test.password
+		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
+		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		svnOperationFactory.setAuthenticationManager(authenticationManager)
+
+		return svnOperationFactory
+	}
 	
 	/**
 	 * Helper method to create an SVN Operation Factory	 
@@ -43,9 +58,9 @@ class SubversionIntegrationService {
 
 		log.info "Creating an SVN Client"
 		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
-		def username = "arollapati"
-		def password = "Ji9ahhia"
-
+		
+		def username = Holders.config.svn.username
+		def password = Holders.config.svn.password
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
 		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
@@ -72,14 +87,13 @@ class SubversionIntegrationService {
 	 */
 	Boolean commitSvnContent( def localFilePath, Logger log ) {
 
-		def svnClient = createSvnOperationFactory()
+		def svnClient = createTestSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
-
-
+		
 		try{
 
 			def localCache =  new File(localFilePath)
-
+			
 			log.info "Updating program XML contained SVN Content"
 
 			File dstPath = new File(workingCopy)
@@ -87,6 +101,8 @@ class SubversionIntegrationService {
 			SVNUpdateClient uc = cm.getUpdateClient()
 			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
 
+			
+			
 
 			log.info "Updated program XML to SVN Content"
 			def isExistfile=doesFileExist(localFilePath)
@@ -101,9 +117,11 @@ class SubversionIntegrationService {
 			log.info "Committing program XML to SVN Content"
 			SvnCommit commit = svnClient.createCommit();
 			commit.addTarget(SvnTarget.fromFile(localCache));
-			commit.setCommitMessage("TT-1234: SVN commit through HMOF Product Setup App");
+			commit.setCommitMessage("TT-1234: SVN commit Program Xml through HMOF Product Setup App");
 			commit.run()
 			log.info "Committed program XML to SVN Content"
+			
+				
 
 
 		}catch (Exception e)
@@ -116,11 +134,62 @@ class SubversionIntegrationService {
 		}
 		return true
 	}
+	/**
+	 * Checkout SVN file to local cache
+	 * @param productToExport
+	 * @param localCacheLocation
+	 * @return
+	 */
+	Boolean commitTxtFileSvnContent( def localTextURL, Logger log ) {
+
+		    def svnClient = createSvnOperationFactory()
+			String workingTxtCopy = Holders.config.programXMLTextFolder
+		try{
+
+			
+			def localCacheTxt =  new File(localTextURL)
+							
+			
+			log.info "Updating program XML Text File contained SVN Content"
+			File dstPath = new File(workingTxtCopy)
+			SVNClientManager cm = SVNClientManager.newInstance()
+			SVNUpdateClient uc = cm.getUpdateClient()
+			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
+
+			
+			log.info "Updated program XML Text File to SVN Content"
+			def isExistfile=doesTxtFileExist(localTextURL)
+			if(!isExistfile){
+				log.info "Adding program XML Text File to SVN Content"
+				log.info localCacheTxt
+				log.info workingTxtCopy
+				final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
+				scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCacheTxt));
+				scheduleForAddition.run()
+				log.info "Added program XML Text File to SVN Content"
+			}
+			log.info "Committing program XML Text File to SVN Content"
+			SvnCommit commit = svnClient.createCommit();
+			commit.addTarget(SvnTarget.fromFile(localCacheTxt));
+			commit.setCommitMessage("TT-1234: SVN commit Program Xml Text File through HMOF Product Setup App");
+			commit.run()
+			log.info "Committed program XML Text File to SVN Content"
+			
+		}catch (Exception e)
+		{
+			log.error " SVN Error when Add and Commit to content:  ${e}"
+
+			return false
+		}finally{
+			cleanupSvnOperationFactory(svnClient)
+		}
+		return true
+	}
 
 	public static boolean doesFileExist(String targetPath) throws SVNException {
-		def username = "arollapati"
-		def password = "Ji9ahhia"
-		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded("http://dubv-engsvn01.dubeng.local/svn/tools"));
+		def username = Holders.config.svn.test.username
+		def password = Holders.config.svn.test.password
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(Holders.config.svn.url));
 		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
 		repository.setAuthenticationManager(authManager);
 
@@ -138,58 +207,26 @@ class SubversionIntegrationService {
 
 		return false;
 	}
-	/**
-	 * Checkout SVN file to local cache
-	 * @param productToExport
-	 * @param localCacheLocation
-	 * @return
-	 */
-	Boolean checkFileName( def filename){
+	public static boolean doesTxtFileExist(String targetPath) throws SVNException {
+		def username = Holders.config.svn.username
+		def password = Holders.config.svn.password
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(Holders.config.svn.ProgramXMLTxturl));
+		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
+		repository.setAuthenticationManager(authManager);
 
-		def svnClient = createSvnOperationFactory()
-		
-		String workingCopy = Holders.config.programXMLFolder
-
-		try
-		{
-
-			log.info "Fetching filenames from  SVN Content..."
-
-
-			File[] files = new File(workingCopy).listFiles();
-
-			List<String> results = new ArrayList<String>();
-
-
-			//If this pathname does not denote a directory, then listFiles() returns null.
-
-			for (File file : files) {
-				if (file.isFile()) {
-					String allfilename=file.getName()
-					results.add(allfilename);
-				}
+		Collection entries = repository.getDir( "hmof", -1 , null , (Collection) null );
+		Iterator iterator = entries.iterator( );
+		def localCache =  new File(targetPath)
+		String name=localCache.getName()
+		while ( iterator.hasNext( ) ) {
+			SVNDirEntry entry = ( SVNDirEntry ) iterator.next( );
+			if(name.equals(entry.getName()))
+			{
+				return true;
 			}
-			results.each{
-
-				println it
-				println filename
-				String newfilename=filename
-				if(it.equals(newfilename))
-				{
-					return true
-				}
-			}
-
-
-
-		}catch (Exception e)
-		{
-			log.error " SVN Error when checking out content:  ${e}"
-			return true
-
 		}
-		return false
 
+		return false;
 	}
 	/**
 	 * Checkout SVN file to local cache	

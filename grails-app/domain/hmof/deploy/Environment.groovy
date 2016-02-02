@@ -10,7 +10,8 @@ class Environment {
 	String name
 	int priorityOrder
 	String url
-
+	String bambooPlan1
+	String bambooPlan2
 	//Set<DeploymentEnvGroup> groups
 	Role role
 	static hasMany = [promotion: Promotion, users: User]	// tells GORM to associate other domain objects for a 1-n or n-m mapping
@@ -24,6 +25,8 @@ class Environment {
 		users()
 		role()
 		url(url: true)
+		bambooPlan1(shared: "globalUrl" ,nullable:true,blank:true)
+		bambooPlan2(shared: "globalUrl" ,nullable:true,blank:true)
 		groups(blank: true, nullable: true)
 	}
 

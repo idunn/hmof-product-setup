@@ -26,6 +26,20 @@
 					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'url', 'error')}</span>
 				</div>
 			</div>
+				<div class="${hasErrors(bean: environmentInstance, field: 'bambooPlan1', 'error')} ">
+				<label for="bambooPlan1" class="control-label"><g:message code="environment.bambooPlan1.label" default="bambooPlan1" /></label>
+				<div>
+					<g:field class="form-control" type="url" name="bambooPlan1" value="${environmentInstance?.bambooPlan1}"/>
+					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'bambooPlan1', 'error')}</span>
+				</div>
+			</div>
+				<div class="${hasErrors(bean: environmentInstance, field: 'bambooPlan2', 'error')} ">
+				<label for="bambooPlan2" class="control-label"><g:message code="environment.bambooPlan2.label" default="bambooPlan2" /></label>
+				<div>
+					<g:field class="form-control" type="url" name="bambooPlan2" value="${environmentInstance?.bambooPlan2}"/>
+					<span class="help-inline">${hasErrors(bean: environmentInstance, field: 'bambooPlan2', 'error')}</span>
+				</div>
+			</div>
 <%--
 
 			<div class="${hasErrors(bean: environmentInstance, field: 'promotion', 'error')} ">

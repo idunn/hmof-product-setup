@@ -87,6 +87,15 @@ class SecureProgramController {
 			def bundle = Bundle.get(it.id)
 			bundle.removeFromSecureProgram(currentInstance)
 		}
+		def parentProgramXmls = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()
+		
+				log.info"Parent ProgramXmls in association" + parentProgramXmls
+		
+				parentProgramXmls.each{
+		
+					def program = ProgramXML.get(it.id)
+					program.removeFromSecureProgram(currentInstance)
+				}
 
 		def childCommerceObjects = []
 		childCommerceObjects += currentInstance.commerceObjects
@@ -309,8 +318,8 @@ class SecureProgramController {
 	def show(SecureProgram secureProgramInstance) {
 
 		def parentBundles = Bundle.where{secureProgram{id==secureProgramInstance.id}}.list()
-
-		render(view:"show", model:[secureProgramInstance:secureProgramInstance, parentBundles:parentBundles])
+		def parentProgramXmls = ProgramXML.where{secureProgram{id==secureProgramInstance.id}}.list()
+		render(view:"show", model:[secureProgramInstance:secureProgramInstance, parentBundles:parentBundles,parentProgramXmls:parentProgramXmls])
 	}
 
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])

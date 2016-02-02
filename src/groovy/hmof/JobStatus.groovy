@@ -11,6 +11,9 @@ public enum JobStatus {
 	FailedbyAdmin("Failed - by Admin cleanup process"),
 	Retrying("Retrying"),
 	PendingProgramDeploy("PendingProgramDeploy"),
+	PendingProgramRepromote("PendingProgramRepromote"),
+	PendingProgramRetry("PendingProgramRetry"),
+	
 	String status
 	
 	JobStatus(String status) {

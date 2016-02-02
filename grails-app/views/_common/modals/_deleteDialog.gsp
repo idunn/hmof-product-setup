@@ -8,11 +8,17 @@ This is the standard dialog that initiates the delete action.
     <div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h3 id="DeleteModalLabel"><g:message code="default.button.delete.confirm.title" args="[entityName]" default="Delete Item"/></h3>
+				<h3 id="DeleteModalLabel">
+				
+				<g:message code="default.button.delete.confirm.title" args="[entityName]" default="Delete Item"/></h3>
 			</div>
 			<div class="modal-body">
-				<p><g:message code="default.button.delete.confirm.message" args="[entityName]" default="Do you really want to delete this item?"/>
-				
+				<p><g:if test="${entityName == "Programxml"}">
+				<g:message code="default.button.delete.confirm.pxmlmessage" args="[entityName]" default="Delete Item"/>			
+				</g:if>
+				<g:else>
+				<g:message code="default.button.delete.confirm.message" args="[entityName]" default="Do you really want to delete this item?"/>
+				</g:else>
 				<g:if test="${entityName == "Bundle"}">
 					<g:if test="${bundleInstance.secureProgram}">
 						<p><g:message code="default.bundle.children" default="Secure Programs will not be deleted:"/></p>						
@@ -24,7 +30,8 @@ This is the standard dialog that initiates the delete action.
 				<p><br /><g:message code="default.content.delete"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
 				</g:if>
 				
-				<g:if test="${entityName == "SecureProgram"}">					
+				<g:if test="${entityName == "SecureProgram"}">		
+							
 					<g:if test="${parentBundles}">
 						<p><g:message code="default.secureProgram.parent" default="This Secure Program is being used by the following Bundles that will not be deleted:"/></p>						
 						<g:each in="${parentBundles}" status="i" var="parentBundlesList">
@@ -40,6 +47,15 @@ This is the standard dialog that initiates the delete action.
 						</g:each>
 					</g:if>
 					<g:else><p>This Secure Program does not have any Commerce Objects.</p></g:else>
+					<br />
+					<g:if test="${parentProgramXmls}">
+						<p><g:message code="default.secureProgram.parent1" default="This Secure Program is being used by the following ProgramXmls that will not be deleted:"/></p>						
+						<g:each in="${parentProgramXmls}" status="i" var="parentProgramXmlsList">
+							<ul><li>${parentProgramXmlsList}</li></ul>
+						</g:each>
+						<br />
+					</g:if>					
+					<g:else><p>This Secure Program is not being used by any ProgramXmls.</p></g:else>
 				<p><br /><g:message code="default.content.delete"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
 					
 				</g:if>				
@@ -63,8 +79,18 @@ This is the standard dialog that initiates the delete action.
 						</g:each>
 					</g:if>
 					<g:else><p>This Program does not have any Bundles and is safe to delete!</p></g:else>
-				</g:if>				
-				
+				</g:if>		
+						
+					<g:if test="${entityName == "Programxml"}">
+					<g:if test="${programXMLInstance.secureProgram}">
+						<p><g:message code="default.programxml.children" default="Secure Programs will not be deleted:"/></p>						
+						<g:each in="${programXMLInstance.secureProgram}" status="i" var="programXMLChildren">
+							<ul><li>${programXMLChildren}</li></ul>
+						</g:each>						
+					</g:if>
+					<g:else><p>This ProgramXML does not have any Secure Programs.</p></g:else>
+				<p><br /><g:message code="default.content.delete1"  args="[entityName]" default="Clicking Delete will only delete this Object!"/></p>
+				</g:if>
 				</p>
 			</div>
 			<div class="modal-footer">

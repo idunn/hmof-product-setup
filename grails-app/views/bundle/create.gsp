@@ -15,7 +15,9 @@
 	<div class="widget stacked ">
 		<div class="widget-content">
 	<section id="create-bundle" class="first">
-
+	<g:if test="${flash.message}">
+			<div class="alert alert-info" role="status">${flash.message}</div>
+			</g:if>
 		<g:hasErrors bean="${bundleInstance}">
 		<div class="alert alert-danger">
 			<g:renderErrors bean="${bundleInstance}" as="list" />

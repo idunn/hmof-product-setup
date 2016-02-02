@@ -12,6 +12,8 @@ class Promotion {
 	String  status
 	Long 	jobNumber
     Boolean smartDeploy
+	String  jiraId
+	String  bambooPlanNumber
 	Date	dateCreated
 	Date	lastUpdated
 	
@@ -26,6 +28,8 @@ class Promotion {
 	static constraints = {
 		
 		smartDeploy nullable:false
+		jiraId nullable:true
+		bambooPlanNumber(nullable:true,blank:true)
 	}
 
 	public String toString() {

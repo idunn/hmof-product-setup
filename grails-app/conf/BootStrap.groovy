@@ -6,6 +6,8 @@ import hmof.SecureProgram
 import hmof.programxml.ProgramXML
 import hmof.deploy.Environment
 import hmof.deploy.EnvironmentGrp
+import hmof.deploy.Job
+import hmof.deploy.Promotion
 import hmof.security.Role
 import hmof.security.User
 import hmof.security.UserRole
@@ -136,11 +138,11 @@ class BootStrap {
 				def r4 = Role.where{id==4}.get()
 
 
-				def certReview = Environment.findByName('Development / Cert_Review') ?: new Environment(groups:eg1,name: 'Development / Cert_Review', role:r2,priorityOrder: '0', url: "http://support-review-cert.hrw.com").save(failOnError: true)
-				def qa = Environment.findByName('QA / Prod_Review') ?: new Environment(groups:eg1,name: 'QA / Prod_Review',role:r3,priorityOrder: '1', url: "http://support-review.hrw.com").save(failOnError: true)
-				def prod = Environment.findByName('Production / Prod') ?: new Environment(groups:eg1,name: 'Production / Prod',role:r4, priorityOrder: '2',  url: "http://support.hrw.com" ).save(failOnError: true)
-				def Cert = new Environment(groups:eg3,name:'Certification / Cert', priority_order:3,role:r2, url:'http://support-cert.hrw.com').save(failOnError:true)
-				def Int = new Environment(groups:eg2,name:'Integration / Int', priority_order:1,role:r2, url:'http://support-test.hrw.com').save(failOnError:true)
+				def certReview = Environment.findByName('Development / Cert_Review') ?: new Environment(groups:eg1,name: 'Development / Cert_Review', role:r2,priorityOrder: '0', url: "http://support-review-cert.hrw.com",bambooPlan1: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER",bambooPlan2: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER").save(failOnError: true)
+				def qa = Environment.findByName('QA / Prod_Review') ?: new Environment(groups:eg1,name: 'QA / Prod_Review',role:r3,priorityOrder: '1', url: "http://support-review.hrw.com",bambooPlan1: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-RCRTPRCRM",bambooPlan2: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-RPRUPF").save(failOnError: true)
+				def prod = Environment.findByName('Production / Prod') ?: new Environment(groups:eg1,name: 'Production / Prod',role:r4, priorityOrder: '2',  url: "http://support.hrw.com",bambooPlan1: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-RELEASEMDS",bambooPlan2: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-RPUPF" ).save(failOnError: true)
+				def Cert = new Environment(groups:eg3,name:'Certification / Cert', priority_order:3,role:r2, url:'http://support-cert.hrw.com',bambooPlan1: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER",bambooPlan2: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER").save(failOnError:true)
+				def Int = new Environment(groups:eg2,name:'Integration / Int', priority_order:1,role:r2, url:'http://support-test.hrw.com',bambooPlan1: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER",bambooPlan2: "http://dubv-engbam05.dubeng.local:8085/rest/api/latest/queue/MDS-PLACEHOLDER").save(failOnError:true)
 			}
 
 
@@ -275,21 +277,43 @@ class BootStrap {
 
 			ProgramXML.withTransaction{
 
-				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p4xml = new ProgramXML(title:'Social Studies Texas 2016',buid:'SCIENCE_HSSSCIENCE2014XXXX',filename:'SocialStudies_US_History.xml',userUpdatingProgramXML:'Dev',language:'en_us', contentType:ct5).save(failOnError:true)
-				def p5xml = new ProgramXML(title:'NL Go Math! 2014',buid:'MATH_HMHMXNA2013',filename:'National_Math_2014.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p6xml = new ProgramXML(title:'High School Integrated Math',buid:'MATH_HMHNAINTHSM2015',filename:'National_INT_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p7xml = new ProgramXML(title:'High School Math',buid:'MATH_HMHNAAGAHSM2015',filename:'National_AGA_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p8xml = new ProgramXML(title:'Escalate English NA 2017',buid:'NA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATENA2017.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p9xml = new ProgramXML(title:'Escalate English 2017',buid:'CA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATECA2017.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p10xml = new ProgramXML(title:'HMH Collections 2017',buid:'HMHCOLLECTIONS_2017_SAMPLE_LP',filename:'hsp_program_HMHCollections_2017.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p11xml = new ProgramXML(title:'HMH Collections',buid:'HMHCOLLECTIONS_SAMPLE_LP',filename:'hsp_program_HMHCollections.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p12xml = new ProgramXML(title:'CA Go Math! 2015',buid:'MATH_HMHCALMATH2015',filename:'California_Math_2015_G6_12.xml ',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p13xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p14xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p15xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',language:'en_us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p4xml = new ProgramXML(title:'Social Studies Texas 2016',buid:'SCIENCE_HSSSCIENCE2014XXXX',filename:'SocialStudies_US_History.xml',userUpdatingProgramXML:'Dev',language:'en-us', contentType:ct5).save(failOnError:true)
+				def p5xml = new ProgramXML(title:'NL Go Math! 2014',buid:'MATH_HMHMXNA2013',filename:'National_Math_2014.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p6xml = new ProgramXML(title:'High School Integrated Math',buid:'MATH_HMHNAINTHSM2015',filename:'National_INT_HSM_2015.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p7xml = new ProgramXML(title:'High School Math',buid:'MATH_HMHNAAGAHSM2015',filename:'National_AGA_HSM_2015.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+						
+				
+				def p8xml = new ProgramXML(title:'CA Go Math! 2015',buid:'MATH_HMHCALMATH2015',filename:'California_Math_2015_G6_12.xml ',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p9xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p10xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				
+				def p11xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				
+				def p12xml = new ProgramXML(title:'HMH Collections',buid:'HMHCOLLECTIONS_SAMPLE_LP',filename:'hsp_program_HMHCollections.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p13xml = new ProgramXML(title:'Escalate English NA 2017',buid:'NA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATENA2017.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p14xml = new ProgramXML(title:'Escalate English 2017',buid:'CA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATECA2017.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p15xml = new ProgramXML(title:'Collections 2017',buid:'HMHCOLLECTIONS_2017_NA',filename:'hsp_program_HMHCollections_2017_NA.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				def p16xml = new ProgramXML(title:'CA Collections 2017',buid:'HMHCOLLECTIONS_2017_CA',filename:'hsp_program_HMHCollections_2017_CA.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				
+				def p17xml = new ProgramXML(title:'Family Engagement NA 2017',buid:'HMH_FE_2017_NA',filename:'hsp_program_HMH_FE_2017_NA.xml',language:'en-us',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
+				
+				
+				// Associate Jobs
+				def job1 = new Job(jobNumber:435,contentTypeId:5,contentId:p1xml.id,revision:2506,user: 1).save(failOnError:true)
+				def promo1 = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				def promo1b = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				def promo1c = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				
+				
+				def job2 = new Job(jobNumber:436,contentTypeId:5,contentId:p2xml.id,revision:2506,user: 1).save(failOnError:true)
+				def promo2 = new Promotion (status: "Success", job: job1, jobNumber: job2.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				def promo2b = new Promotion (status: "Success", job: job1, jobNumber: job2.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				def promo2c = new Promotion (status: "Success", job: job1, jobNumber: job2.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
+				
+				
 
 			}
 		}

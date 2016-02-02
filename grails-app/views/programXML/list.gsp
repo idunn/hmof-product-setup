@@ -1,6 +1,7 @@
 
 <%@ page import="hmof.programxml.ProgramXML" %>
 <%@ page import="hmof.deploy.EnvironmentGrp"%>
+<%@ page import="grails.util.Holders" %>
 <!DOCTYPE html>
 <html>
 
@@ -23,6 +24,7 @@
 		Please <g:link controller='login' action='auth'><b>login</b></g:link> to deploy content
 </sec:ifNotLoggedIn>
 <section id="list-programXML" class="first">
+
 	<g:set var="jobdetails" bean="deploymentService"/>
 	<g:set var="userdetail" bean="utilityService"/>
 <div class="panel panel-info">
@@ -43,8 +45,10 @@
 						</div>
   </div>
   <div class="panel-body" >
-	
-				
+	<g:if test="${flash.message}">
+			<div class="alert alert-info" role="status">${flash.message}</div>
+			</g:if>
+			
 				<div class="widget-content">
 						
 				
@@ -138,12 +142,23 @@
 				
 				                            <g:if test="${deploymentEnv.id==1 && devLogFile.exists()}">
 												<a href='./download?logFile=<%=devLog%>'>Log File</a>
+												<g:if test="${ (jobdetail[1]=="Failure" || jobdetail[1].toString().contains("Failed")) && jobdetail[4]!=null}">
+												<a href="${Holders.config.bamboo.hosturl}/download/<%=jobdetail[5] %>/build_logs/<%=jobdetail[4] %>.log?disposition=attachment">Bamboo logs</a>
+											   </g:if>
 											</g:if>
 										<g:if test="${deploymentEnv.id==2 && qaLogFile.exists()}">
-												<a href='./download?logFile=<%=qaLog%>'>Log File</a>
+												<a href='./download?logFile=<%=qaLog%>'>Log File</a><br>
+												
+												<g:if test="${ (jobdetail[1]=="Failure" || jobdetail[1].toString().contains("Failed")) && jobdetail[4]!=null}">
+												<a href="${Holders.config.bamboo.hosturl}/download/<%=jobdetail[5] %>/build_logs/<%=jobdetail[4] %>.log?disposition=attachment">Bamboo logs</a>
+											   </g:if>
+											
 											</g:if>
 												<g:if test="${deploymentEnv.id==3 && prodLogFile.exists()}">
 												<a href='./download?logFile=<%=prodLog%>'>Log File</a>
+												<g:if test="${ (jobdetail[1]=="Failure" || jobdetail[1].toString().contains("Failed")) && jobdetail[4]!=null}">
+												<a href="${Holders.config.bamboo.hosturl}/download/<%=jobdetail[5] %>/build_logs/<%=jobdetail[4] %>.log?disposition=attachment">Bamboo logs</a>
+											   </g:if>
 											</g:if>
 												<g:if test="${deploymentEnv.id==4 && certLogFile.exists()}">
 												<a href='./download?logFile=<%=certLog%>'>Log File</a>
@@ -154,7 +169,7 @@
 											
 											
 											
-				</g:if>
+				     </g:if>
 											</li>
 					
 								

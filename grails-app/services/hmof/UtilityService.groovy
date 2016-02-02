@@ -44,6 +44,21 @@ class UtilityService {
 		sql.close()
 		row
 	}
+	
+	def deleteSecurePrograms(programXMLInstance)
+	{
+		def sql = new Sql(dataSource)
+		try{
+		sql.executeUpdate( "delete from product_secure_program where program_secure_program_id=? ",[programXMLInstance.id])
+		}catch(Exception e){
+			log.error("exception in deleteSecurePrograms method is: "+e.getMessage())
+			log.error("exception in deleteSecurePrograms method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		
+	}
 	/**
 	 * Get the Environment associated with the User
 	 * @return
@@ -316,7 +331,7 @@ class UtilityService {
 					if (tokens[12]=='0'){tokens[12]=null}
 					if (tokens[13]=='0'){tokens[13]=null}
 
-					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', '©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
+					SecureProgram dom=new SecureProgram (productName:tokens[0].replaceAll('&#169;', 'Â©'), registrationIsbn:tokens[1].replaceAll('"',''),comments:tokens[2],
 					onlineIsbn:tokens[3].replaceAll('"',''),curriculumArea:tokens[4], copyright:tokens[5],labelForOnlineResource:tokens[6],pathToResource:tokens[7],essayGraderPrompts:eGrades, pathToCoverImage:tokens[9],
 					knewtonProduct:false,knowledgeGraphIdProd:tokens[10],knowledgeGraphWarmUpTimeLimit:tokens[11],knowledgeGraphEnrichmentTimeLimit:tokens[12],knowledgeGraphEnrichmentCbiTimeLimit:tokens[13],
 					labelForTeacherAdditionalResource:tokens[14],pathToTeacherAdditionalResource:tokens[15],
@@ -335,7 +350,7 @@ class UtilityService {
 
 					if (!dom.save(flush: true)) {
 
-						log.error "Failed to Save CommerceObject"
+						log.error "Failed to Save SecurePrograms"
 						errorList.add("<b>Program Name : " + tokens[0] + "</b>")
 						dom.errors.allErrors.each {
 
@@ -628,7 +643,28 @@ class UtilityService {
 
 		sapResultsMap
 	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getProgramXMLISecurePrograms(){
+		def sql = new Sql(dataSource)
+		def row = null
+		try{
+		 row = sql.rows( "select ps.secure_program_id from programxml_secure_program ps")
+		
+		 
+		 }catch(Exception e){
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getMessage())
+			 log.error("exception in getProgramXMLSecurePrograms method is: "+e.getStackTrace())
+		 }
+		 finally{
+			 sql.close();
+		 }
 
+		 row
+
+	}
 	/**
 	 * Get the Environment associated with the User
 	 * @return
@@ -672,6 +708,33 @@ class UtilityService {
 		 row
 
 	}
+	
+	
+	/**
+	 *
+	 * @param Bundle revision
+	 * @return
+	 */
+	def getProgramXMLID(def instanceId){
+		def sql = new Sql(dataSource)
+		def row
+
+		def userName
+		try{
+			row = sql.rows("select programxml_secure_program_id from programxml_secure_program where secure_program_id=?",[instanceId])
+			
+
+		}
+		catch(Exception e){
+			log.error("exception in getProgramXMLID method is: "+e.getMessage())
+			log.error("exception in getProgramXMLID method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		row
+	}
+
 
 }
 

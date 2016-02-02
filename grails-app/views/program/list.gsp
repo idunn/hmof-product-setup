@@ -53,7 +53,9 @@
   </div>
   <div class="panel-body" >
 	
-				
+				<g:if test="${flash.message}">
+			<div class="alert alert-info" role="status">${flash.message}</div>
+			</g:if>
 				<div class="widget-content">
 						
 				

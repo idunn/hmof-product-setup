@@ -13,6 +13,17 @@
 
 <body>
 
+	<style>
+		@font-face {
+			font-family: 'Glyphicons Halflings';
+			src: url('../../fonts/glyphicons-halflings-regular.eot');
+			src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded- opentype'), 
+     		url('../../fonts/glyphicons-halflings-regular.woff') format('woff'), 
+    		 url('../../fonts/glyphicons-halflings-regular.ttf') format('truetype'), 
+     		url('../../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+		} 
+	</style>
+
 <section id="show-environment" class="first">
 
 	<table class="table">
@@ -38,7 +49,18 @@
 				<td valign="top" class="value">${fieldValue(bean: environmentInstance, field: "url")}</td>
 				
 			</tr>
-		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="environment.bambooPlan1.label" default="bambooPlan1" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: environmentInstance, field: "bambooPlan1")}</td>
+				
+			</tr>
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="environment.bambooPlan2.label" default="bambooPlan2" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: environmentInstance, field: "bambooPlan2")}</td>
+				
+			</tr>
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="environment.promotion.label" default="Promotion" /></td>
 				

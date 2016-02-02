@@ -448,7 +448,22 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 						<li><g:link controller="commerceObject" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
 					</g:each>
 					</ul>
-				</div></div>					
+				</div></div>	
+				
+				<div class="platformf">Program XMLs</div><br>
+			<!-- Added Parent Object Links -->
+			<div
+	class="control-group">
+	<label for="programXmls" class="control-label col-sw-1"><g:message code="secureProgram.programXmls.label" default="Program Xmls (Parent Objects)" /></label>
+				
+				<div class="controls show-style" style="text-align: left;">
+					<ul>
+					<g:each in="${parentProgramXmls}" var="b">
+						<li><g:link controller="programXML" action="show" id="${b.id}">${b?.title}</g:link></li>
+					</g:each>
+					</ul>
+				</div></div>
+								
 			</div>
 				
 		

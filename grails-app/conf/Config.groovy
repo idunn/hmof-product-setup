@@ -107,6 +107,7 @@ environments {
 		uploadFolder="target/ProductSetup-cache/import"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
 		programXMLFolder="C:/ProgramXML/"
+		programXMLTextFolder="C:/ProgramLists/"
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
@@ -151,6 +152,7 @@ environments {
 		uploadFolder="E:/ProductSetup-cache/import"
 		programXMLFolder="E:/ProgramXML/"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
+		programXMLTextFolder="E:/ProgramLists"
 		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
@@ -201,11 +203,11 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/favicon.ico':                ['permitAll'],
 	'/user/**':                       ['ROLE_ADMIN'],
 	'/quartz/**':                     ['ROLE_ADMIN'],
-	'/secureProgram/importCSV/**':   ['ROLE_ADMIN'],
-	'/commerceObject/importCSV/**':  ['ROLE_ADMIN'],
-	'/monitoring/**':                ['ROLE_ADMIN'],
+	'/secureProgram/importCSV/**':    ['ROLE_ADMIN'],
+	'/commerceObject/importCSV/**':   ['ROLE_ADMIN'],
+	'/monitoring/**':                 ['ROLE_ADMIN'],
 	'/environment/**':                ['ROLE_ADMIN'],
-	'/environmentGrp/**':                ['ROLE_ADMIN'],
+	'/environmentGrp/**':             ['ROLE_ADMIN'],
 	'/dbconsole/**':                  ['ROLE_ADMIN']
 	 
 ]
@@ -217,3 +219,27 @@ grails.plugin.springsecurity.securityConfigType = "Annotation"
 //grails.gorm.default.constraints = {	globalUrl(blank: false, nullable: true, matches:/^(http:\/\/|https:\/\/|\/|javascript:)[\w:\.\/\s';"()=?&-]+/) }
 // relaxed URL input match
 grails.gorm.default.constraints = {	globalUrl(blank: false, nullable: true, matches:/^(http:\/\/|https:\/\/|\/|javascript:)[\w\W]+/) }
+
+
+//Bamboo Accounts
+bamboo.username = 'customdev'
+bamboo.password = 'cust0mD3v!'
+bamboo.test.username = 'admin'
+bamboo.test.password = 'admin'
+bamboo.hosturl="http://dubv-engbam05.dubeng.local:8085"
+bamboo.resulturl="http://dubv-engbam05.dubeng.local:8085/rest/api/latest/result/"
+
+
+
+
+
+//ProgramXMl Accounts
+svn.test.username='arollapati'
+svn.test.password='Ji9ahhia'
+
+//svn.username='cust_dev_app'
+//svn.password='JDv9cpp'
+svn.username='idunn'
+svn.password='EebeL7ae'
+svn.url ="http://dubv-engsvn01.dubeng.local/svn/tools"
+svn.ProgramXMLTxturl ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/Lists"

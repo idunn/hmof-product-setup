@@ -47,7 +47,7 @@ class ProgramXML implements Comparable{
 			}
 
 		},nullable:false,blank: false,unique: true)
-		language (inList: ["en_us","en_as","en_au","en_be","en_bz","en_bw","en_ca","en_gu","en_hk","en_mx","en_na","en_nz"], nullable:false)
+		language (inList: ["en-us", "es-mx", "fr", "Multi"], nullable:false)
 		filename(validator: { val, obj ->
 			if(val==null)
 			{

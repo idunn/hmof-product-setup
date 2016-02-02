@@ -43,6 +43,7 @@
  <div class="panel-heading" style="height:50px;" >
     <h3 class="panel-title"><b>&nbsp;</b></h3>
     <!-- Environment Group Control Buttons -->
+ 
 				    	<div class="pull-right" style="margin-top:-20px;">
             				<input type="button" class="btn btn-default prev-slide" value="&lsaquo;">
             				
@@ -58,7 +59,9 @@
   </div>
   <div class="panel-body" >
 	
-				
+				   <g:if test="${flash.message}">
+			<div class="alert alert-info" role="status">${flash.message}</div>
+			</g:if>
 				<div class="widget-content">
 						
 				

@@ -20,6 +20,7 @@ class ProgramXmlService {
 	def utilityService
 	def springSecurityService
 	def subversionIntegrationService
+	def bambooIntegrationService
 	Logger log = Logger.getLogger(JobService.class)
 	
 	/**
@@ -27,9 +28,9 @@ class ProgramXmlService {
 	 * @return
 	 */
 	def executeJob(){
-
 		
-		def promotionProgramXMlJobInstance = Promotion.where{status == JobStatus.PendingProgramDeploy.getStatus()  }.list(max:1)
+		
+		def promotionProgramXMlJobInstance = Promotion.where{status == JobStatus.PendingProgramDeploy.getStatus() || status == JobStatus.PendingProgramRepromote.getStatus() || status == JobStatus.PendingProgramRetry.getStatus()}.list(max:1)
 		def promotionProgramXMlJobNumber =  promotionProgramXMlJobInstance.jobNumber
 		 if(!promotionProgramXMlJobInstance.isEmpty())
 		{
@@ -71,7 +72,7 @@ class ProgramXmlService {
 		String programXMLIsbn=""
 		Logger customerLog=null
 		def commitJobs =false
-		
+		def commitJobs1 =false
 
 		try{
 			promotionInstance.refresh()
@@ -79,17 +80,18 @@ class ProgramXmlService {
 			def environmentInstance = Environment.where{id==promotionInstance.environmentsId}.get()
 			def envId = environmentInstance.id
 			def deploymentUrl = environmentInstance.url
+			def deploymentBambooUrl = environmentInstance.bambooPlan1
 			def envName = environmentInstance.name
 			def user_Name = User.where{id == promotionInstance.userId}.username.get()
-		
+			String jiraId = promotionInstance.jiraId
 			// Divide out the instances
 			def programXML = jobs.findAll{it.contentTypeId == 5}
 			def cacheLocation = Holders.config.cacheLocation
 						
 			def localURL= Holders.config.programXMLFolder
-			
+			def localTxtURL= Holders.config.programXMLTextFolder
 			// used only to initialize logs
-			if (!programXML.isEmpty() ){
+			if (!programXML.isEmpty() && envId==1 ){
 
 				programXML.each{
 
@@ -97,6 +99,7 @@ class ProgramXmlService {
 					Long revisionNumber = it.revision
 					
 					Long jobNumber = it.jobNumber
+					
 					def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
 				
 					def path=localURL+programXMLInstance.filename
@@ -104,12 +107,31 @@ class ProgramXmlService {
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 				    customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog)
-					if(commitJobs)
+					
+					if(commitJobs )
 					{
+						def pathStr=programXMLInstance.filename.replace(".xml","")
+						def localTextURL=localTxtURL+pathStr+".txt"
+							commitJobs1 =subversionIntegrationService.commitTxtFileSvnContent(localTextURL,customerLog)
+								if(commitJobs1 )		
+									{										
+										
+							/*def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,envId,customerLog,promotionInstance)
+									if(respJson.equals("Successful"))	{	*/	
 						customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"						
 						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 						customerLog.info("Job Status: Success\r\n")
+									/*}else
+			    	{
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Failed\r\n")
+				    }*/
 	
+					}else
+			    	{
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Failed\r\n")
+				    }
 					}else
 			    	{
 						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
@@ -117,7 +139,41 @@ class ProgramXmlService {
 				    }
 				}
 			} // end bundle log initializer
-			
+			else
+			{
+				programXML.each{
+					
+										Long instanceNumber = it.contentId
+										Long revisionNumber = it.revision
+										
+										Long jobNumber = it.jobNumber
+										def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
+									
+										def path=localURL+programXMLInstance.filename
+										def pathStr=programXMLInstance.filename.replace(".xml","")
+										def localTextURL=pathStr+".txt"
+										customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
+										customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+										
+										
+				def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
+				
+				if(respJson.equals("Successful"))
+				{								
+					commitJobs=true
+					customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"
+					customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+					customerLog.info("Job Status: Success\r\n")
+
+				}else
+				{
+					
+					customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+					customerLog.info("Job Status: Failed\r\n")
+				}
+				
+			}
+			}
 
 			log.debug "cacheLocation" + cacheLocation
 			
@@ -151,12 +207,13 @@ class ProgramXmlService {
 	 try{
 		 
 		 def programsXMLLocation = Holders.config.programXMLFolder
+		 def programsXMLTextLocation = Holders.config.programXMLTextFolder
 		 File f = new File(programsXMLLocation);
 		 f.mkdir();
 		 File f1 = new File(programsXMLLocation+programXMLInstance.filename);
 		 if(f1.exists()) {
 			 
-
+			 def txtFileName=programXMLInstance.filename.replace(".xml", "")
 			 
 			 def newSecurePrograms=[]
 			 def oldSecurePrograms=[]
@@ -192,7 +249,7 @@ class ProgramXmlService {
 				  oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
 				 }
 			  
-			  println oldSecurePrograms2.onlineIsbn
+			  
 			  def oldProgramInstanceIsbns=oldSecurePrograms2.onlineIsbn
 			  if(!root['@title'].equals(programXMLInstance.title))
 			  root['@title']=programXMLInstance.title
@@ -238,7 +295,15 @@ class ProgramXmlService {
 				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
 				//println indentPrinter.toString()
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
-			
+				
+				
+				FileWriter outFile = new FileWriter(programsXMLTextLocation+"/"+txtFileName+".txt");
+				PrintWriter out = new PrintWriter(outFile);
+				// Also could be written as follows on one line
+				// Printwriter out = new PrintWriter(new FileWriter(filename));
+				// Write text to file
+				out.println(programXMLInstance.filename);
+				out.close();
 				
 		 }
 		 else{
@@ -272,14 +337,14 @@ class ProgramXmlService {
   def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
   writer << builder.bind(xml)
   writer.close()
+  
+    
+    def txtWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(programsXMLTextLocation+"/"+txtFileName+".txt"), "utf-8"));
+    txtWriter.write(programXMLInstance.filename);
+    txtWriter.close()
 		 }
   
-  
-  
-
-
-
-  
+    
    }catch(Exception ex){
 	  ex.getMessage()
 	  return false
@@ -325,6 +390,8 @@ class ProgramXmlService {
 	 */
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
+		
+		println envId+" ----env id---"
 		Logger log1 = Logger.getLogger("Thread" + programISBN+"-"+envId)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
@@ -336,14 +403,14 @@ class ProgramXmlService {
 			
 				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
 			
-		}else if(envId==5){
+		}else if(envId==3){
 			
 				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
 			
-		}else if(envId==3){			
+		}else if(envId==4){			
 				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
 			
-		}else if(envId==4){
+		}else if(envId==5){
 			
 				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
 			

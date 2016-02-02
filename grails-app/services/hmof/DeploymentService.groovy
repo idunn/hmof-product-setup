@@ -4,7 +4,7 @@ import hmof.deploy.*
 import hmof.security.User
 import hmof.security.Role
 import hmof.security.UserRole
-
+import hmof.programxml.*
 /**
  * DeploymentService
  * A service class encapsulates the core business logic of a Grails application
@@ -204,7 +204,32 @@ class DeploymentService {
 		def (secureProgramList, commerceObjectList) = [deployableSecureProgram, deployableCommerceObject]
 
 	}
+	/**
+	 * Get the children objects of an individual Bundle (Bundle) which should have SecureProgram, and Content C
+	 * @param instanceId
+	 * @return
+	 */
+	def getProgramXmlChildren(instanceId) {
 
+		// deployable content A has a SecureProgram
+		def deployableProgramXml = ProgramXML.where{ id==instanceId && secureProgram{}}
+
+		// get a unique listing of Content B belonging to the deployable Content A
+		Set uniqueSecureProgram = deployableProgramXml.list().secureProgram.id.flatten()
+
+		// deployment logic for SP
+		def deployableSecureProgram = []
+		// Needed for MySql database
+		if(!uniqueSecureProgram.isEmpty()){
+			deployableSecureProgram = SecureProgram.where{id in uniqueSecureProgram}.list()
+		}
+
+		
+
+		// return Deployable SecureProgram and CommerceObject
+		def (secureProgramList) = [deployableSecureProgram]
+
+	}
 
 
 	/**
@@ -327,11 +352,29 @@ class DeploymentService {
 		def job_Number = promoInstanceList.jobNumber
 		def status_Type = promoInstanceList.status
 		def user_Name = User.where{id == promoInstanceList.userId}.username.get()
-
+		def bamboo_plan_number = promoInstanceList.bambooPlanNumber.toString()
+		def bambooPlanName=""
+	
+		def bambooplanname1
+		def bambooplanname2
+		def bambooplanname3
+		if(bamboo_plan_number && bamboo_plan_number!=null && bamboo_plan_number!="[]" )
+		
+	{
+		bambooplanname1=bamboo_plan_number.replace('[','').replace(']','')	
+		bambooplanname2=bambooplanname1.substring(bambooplanname1.toString().lastIndexOf('-') + 1)	
+		
+		bambooplanname3=bambooplanname1.replace(bambooplanname2, "")	
+		//bambooPlanName= bambooplanname2.substring(0,bambooplanname2.length() - 1);
+		bambooPlanName=bambooplanname3+"DEPLOYLOCAL"
+		
+		
+		bambooplanname1=bambooplanname3+"DEPLOYLOCAL-"+bambooplanname2
+	}
 		// get the revision number of the instance
 		def revision_Number = Job.where{jobNumber == promoInstanceList.jobNumber && contentId == instanceId.id && contentTypeId == instanceId.contentTypeId}.revision.get()
 
-		def (job, status, revision, user) = [job_Number, status_Type, revision_Number, user_Name].flatten()
+		def (job, status, revision, user,bambooPlanNumber,bambooPlanName1) = [job_Number, status_Type, revision_Number, user_Name,bambooplanname1,bambooPlanName].flatten()
 
 	}
 
