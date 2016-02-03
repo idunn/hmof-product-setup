@@ -121,7 +121,7 @@ class BootStrap {
 			ContentType ct2 = new ContentType(contentId:2, name:'Bundle').save(failOnError:true)
 			ContentType ct3 = new ContentType(contentId:3, name:'SecureProgram').save(failOnError:true)
 			ContentType ct4 = new ContentType(contentId:4, name:'CommerceObject').save(failOnError:true)
-			//ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
+			ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
 
 			EnvironmentGrp.withTransaction{
 				def eg1 = new EnvironmentGrp(groupname:'Content').save(failOnError:true)
@@ -273,7 +273,10 @@ class BootStrap {
 
 		if(ProgramXML.where{}.list().isEmpty()){
 
-			ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
+
+			//ContentType ct5 = new ContentType(contentId:5, name:'ProgramXML').save(failOnError:true)
+			ContentType ct5 = ContentType.where{id==5}.get()
+
 
 			ProgramXML.withTransaction{
 
@@ -351,11 +354,11 @@ class BootStrap {
 				def promo10 = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
 				def promo10b = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
 				def promo10c = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				
+
 				// TEST PROGRAM
 				def job11 = new Job(jobNumber:445,contentTypeId:5,contentId:p11xml.id,revision:2506,user: 1).save(failOnError:true)
 				def promo11 = new Promotion (status: "Success", job: job11, jobNumber: job11.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-								
+
 				def job12 = new Job(jobNumber:446,contentTypeId:5,contentId:p12xml.id,revision:2506,user: 1).save(failOnError:true)
 				def promo12 = new Promotion (status: "Success", job: job12, jobNumber: job12.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
 				def promo12b = new Promotion (status: "Success", job: job12, jobNumber: job12.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
@@ -376,7 +379,7 @@ class BootStrap {
 
 				def job16 = new Job(jobNumber:450,contentTypeId:5,contentId:p16xml.id,revision:2506,user: 1).save(failOnError:true)
 				def promo16 = new Promotion (status: "Success", job: job16, jobNumber: job16.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				
+
 				def job17 = new Job(jobNumber:451,contentTypeId:5,contentId:p17xml.id,revision:2506,user: 1).save(failOnError:true)
 				def promo17 = new Promotion (status: "Success", job: job17, jobNumber: job17.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
 
