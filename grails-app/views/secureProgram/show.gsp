@@ -58,6 +58,13 @@ src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded
 	<label for="copyright" class="control-label col-sw-1"><g:message code="secureProgram.copyright.label" default="Copyright" /></label>
 				
 				<div class="controls show-style">${fieldValue(bean: secureProgramInstance, field: "copyright")}</div></div>
+				
+				
+					<div class="control-group">
+							<label for="name" class="control-label col-sw-1"><g:message code="secureProgram.language.label" default="Language" /></label>									
+							<div class="controls show-style"><g:fieldValue bean="${secureProgramInstance}" field="language"/></div>
+						</div>
+				
 		
 			<div
 	class="control-group">

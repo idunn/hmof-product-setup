@@ -63,7 +63,17 @@
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error-field')}</span>
 				</div>
 			</div>
+			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'language', 'error-field')} ">
+	<label for="language" class="control-label col-sw-1">
+		<g:message code="secureProgram.language.label" default="Language" />
+		
+	</label>
+	<div class="col-md-4 margin1">
+	<g:select class="form-control"  name="language" from="${secureProgramInstance.constraints.language.inList}" value="${secureProgramInstance?.language}" valueMessagePrefix="secureProgram.language" />
+<g:hiddenField name="oldlanguage" value="${secureProgramInstance?.language}" />
 			
+</div>
+</div>
 			
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'labelForOnlineResource', 'error-field')} ">
 				<label for="labelForOnlineResource" class="control-label col-sw-1"><g:message code="secureProgram.labelForOnlineResource.label" default="Label For Online Resource" /></label>

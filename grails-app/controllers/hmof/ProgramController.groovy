@@ -264,7 +264,7 @@ class ProgramController {
 			// If job has failed and the user want to retry
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus(), smartDeploy:previousJobExist]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus(), smartDeploy:previousJobExist, user: userId]
 
 		}
 
@@ -273,7 +273,7 @@ class ProgramController {
 			// If job was previously successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), smartDeploy:previousJobExist]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), smartDeploy:previousJobExist, user: userId]
 
 		}
 

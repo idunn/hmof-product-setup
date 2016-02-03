@@ -67,6 +67,7 @@ class SecureProgram implements Comparable {
 	Integer securityWordLocation3
 	String securityWordPage3	
 	String userUpdatingSProgram
+	String language="en-us"
 	ContentType contentType
 
 	static belongsTo = Bundle
@@ -234,6 +235,7 @@ class SecureProgram implements Comparable {
 		securityWordLocation3(nullable:true,range:1..10)
 		securityWordPage3(nullable:true,maxSize:20)
 		//TT-3979 changes ends
+		language (inList: ["en-us", "es-mx", "fr", "Multi"], nullable:false)
 
 	}
 

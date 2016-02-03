@@ -100,8 +100,7 @@ class SubversionIntegrationService {
 			SVNClientManager cm = SVNClientManager.newInstance()
 			SVNUpdateClient uc = cm.getUpdateClient()
 			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
-
-			
+		
 			
 
 			log.info "Updated program XML to SVN Content"

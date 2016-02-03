@@ -324,7 +324,7 @@ class ProgramXmlService {
 	 for(int i=0;i<programXMLInstance.secureProgram.size();i++)
 	 {
 		 
-	   hsp_product{product_isbn(lang:programXMLInstance.language,programXMLInstance.secureProgram[i].onlineIsbn)}
+	   hsp_product{product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)}
 		 
 	 }
 		

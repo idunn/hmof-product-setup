@@ -107,7 +107,7 @@ environments {
 		uploadFolder="target/ProductSetup-cache/import"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
 		programXMLFolder="C:/ProgramXML/"
-		programXMLTextFolder="C:/ProgramLists/"
+		programXMLTextFolder="C:/programLists/"
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {

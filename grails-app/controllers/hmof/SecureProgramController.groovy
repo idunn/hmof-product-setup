@@ -63,7 +63,6 @@ class SecureProgramController {
 
 		def programXMLInstances = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()
 		programXMLInstances.each{
-
 			it.properties = [lastUpdated: new Date(),userUpdatingProgramXML: springSecurityService?.currentUser?.username]
 		}
 
@@ -289,7 +288,7 @@ class SecureProgramController {
 			// If job has failed and the user want to retry
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus()]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus(), user: userId]
 
 		}
 
@@ -298,7 +297,7 @@ class SecureProgramController {
 			// If job was previously successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus()]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), user: userId]
 
 		}
 
@@ -344,6 +343,10 @@ class SecureProgramController {
 			respond secureProgramInstance.errors, view:'create'
 			return
 		}
+		
+		println params.knowledgeGraphWarmUpTimeLimit 
+		println params.knowledgeGraphEnrichmentCbiTimeLimit
+		println params.knowledgeGraphEnrichmentTimeLimit
 
 		if (!secureProgramInstance.save(flush: true)) {
 			render(view: "create", model: [secureProgramInstance: secureProgramInstance])
@@ -358,6 +361,7 @@ class SecureProgramController {
 		}
 		log.info "Successfully saved Secure Program :"+secureProgramInstance.productName
 	}
+	
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def edit(SecureProgram secureProgramInstance) {
 		respond secureProgramInstance
@@ -365,7 +369,7 @@ class SecureProgramController {
 
 	@Transactional
 	def update(SecureProgram secureProgramInstance) {
-
+		
 		if (secureProgramInstance == null) {
 			log.info "updating Secure Program Not Found"
 			notFound()
@@ -421,7 +425,7 @@ class SecureProgramController {
 		}
 
 
-		if(!params.oldonlineIsbn.equals(params.onlineIsbn))
+		if(!params.oldonlineIsbn.equals(params.onlineIsbn) || !params.oldlanguage.equals(params.language))
 		{
 			log.info "Online ISBN has been modified!"
 			updateProgramXML(secureProgramInstance)

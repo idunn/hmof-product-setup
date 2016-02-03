@@ -12,7 +12,7 @@ class ProgramXML implements Comparable{
 
 	String title
 	String buid
-	String language
+
 	String filename
 	String userUpdatingProgramXML
 
@@ -47,7 +47,7 @@ class ProgramXML implements Comparable{
 			}
 
 		},nullable:false,blank: false,unique: true)
-		language (inList: ["en-us", "es-mx", "fr", "Multi"], nullable:false)
+		
 		filename(validator: { val, obj ->
 			if(val==null)
 			{

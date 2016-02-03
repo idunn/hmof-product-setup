@@ -58,16 +58,7 @@ if(title=="")
 </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: programXMLInstance, field: 'language', 'error')} ">
-	<label for="language" class="control-label col-sw-1">
-		<g:message code="programXML.language.label" default="Language" />
-		
-	</label>
-	<div class="controls">
-	<g:select class="form-control"  name="language" from="${programXMLInstance.constraints.language.inList}" value="${programXMLInstance?.language}" valueMessagePrefix="programXML.language" />
 
-</div>
-</div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: programXMLInstance, field: 'filename', 'error')} required">
 	<label for="filename" class="control-label col-sw-1">

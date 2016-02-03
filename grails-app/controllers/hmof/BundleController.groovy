@@ -261,7 +261,7 @@ class BundleController {
 			// If job has failed and the user want to retry
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus()]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Retry.getStatus(), user: userId]
 
 		}
 
@@ -270,7 +270,7 @@ class BundleController {
 			// If job was previously successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus()]
+			promotionJobInstance.properties = [status:JobStatus.Pending_Repromote.getStatus(), user: userId]
 
 		}
 

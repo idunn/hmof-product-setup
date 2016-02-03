@@ -47,10 +47,7 @@
 							<div class="controls show-style"><g:fieldValue bean="${programXMLInstance}" field="buid"/></div>
 						</div>
 									
-						<div class="control-group">
-							<label for="name" class="control-label col-sw-1"><g:message code="programXML.language.label" default="Language" /></label>									
-							<div class="controls show-style"><g:fieldValue bean="${programXMLInstance}" field="language"/></div>
-						</div>
+					
 								
 						<div class="control-group">
 							<label for="name" class="control-label col-sw-1"><g:message code="programXML.filename.label" default="Filename" /></label>									

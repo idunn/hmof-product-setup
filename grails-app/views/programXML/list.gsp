@@ -69,7 +69,7 @@
 			
 				<g:sortableColumn property="buid" title="${message(code: 'programXML.buid.label', default: 'Buid')}" />
 			
-				<g:sortableColumn property="language" title="${message(code: 'programXML.language.label', default: 'Language')}" />
+				
 			
 				--%><th class="widget-header2" style="color:#bbb">${'Current Revision'}</th><g:sortableColumn property="filename" title="${message(code: 'programXML.filename.label', default: 'Filename')}" class="widget-header2" style="color:#bbb" />
 			<g:each in="${userdetail.getAllEnvironments()}" var="deploymentEnv">	
