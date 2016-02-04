@@ -58,8 +58,8 @@
 				<label for="copyright" class="control-label col-sw-1"><g:message code="secureProgram.copyright.label" default="Copyright" /></label>
 				<div class="col-md-4 margin1">
 					<%--<g:textField class="form-control" name="copyright" --%>
-					<g:select class="form-control" name="copyright" from="${year-1..year+6}"
-					value="${secureProgramInstance?.copyright}" />
+					<g:select class="form-control" name="copyright" from="${year-6..year+6}"
+					value="${secureProgramInstance?.copyright?:year+2}" />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'copyright', 'error-field')}</span>
 				</div>
 			</div>
