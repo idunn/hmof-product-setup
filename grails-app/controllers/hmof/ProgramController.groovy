@@ -54,84 +54,84 @@ class ProgramController {
 		if (environmentRevision != null) {
 			environmentRevision = environmentRevision
 		}
-		
+
 		def doesPJobExists=deploymentService.doesPreviousJobExist(programInstance.id,envId)
-		
+
 		def lowEnvRevision=deploymentService.isLowerEnvironmentEqual(programInstance,envId)
-		
-		
+
+
 		if (latestRevision == environmentRevision && (!envId.equals("2") && !envId.equals("3") )) {
-			
+
 			if(doesPJobExists==true){
-			
-				
+
+
 				msg="deployMessage1"
-				 }else if(doesPJobExists==false)
-					 {
-						 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-					
-					 
-					 }
-			
-		
+			}else if(doesPJobExists==false)
+			{
+				msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
+
+			}
+
+
 		}else if (latestRevision == environmentRevision && (envId.equals("2") || envId.equals("3") )) {
-			
+
 			if(doesPJobExists==true){
-			
-				
+
+
 				msg="promoteMessage1"
-				 }else if(doesPJobExists==false)
-					 {
-						 msg="A job with the same revision already exists on the environment, Do you want to proceed?"
-					
-					 
-					 }
-			
-		
+			}else if(doesPJobExists==false)
+			{
+				msg="A job with the same revision already exists on the environment, Do you want to proceed?"
+
+
+			}
+
+
 		}
-		
-		 else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
+
+		else if(latestRevision != environmentRevision && (!envId.equals("2") && !envId.equals("3") ))
 		{
 			if(doesPJobExists==true)
 			{
-		
+
 				msg="deployMessage2"
-				 
+
 			}else{
-			msg='Are you sure you want to deploy?'
+				msg='Are you sure you want to deploy?'
 			}
-			
+
 		}else if(latestRevision != environmentRevision && (envId.equals("2") || envId.equals("3")) )
-		 {
-			 if(doesPJobExists==true && lowEnvRevision==true)
-			 {
-				 msg="promoteMessage1"
-			 }else if(doesPJobExists==true && lowEnvRevision==false){
-			 msg="promoteMessage2"
-			 }else{
-			 
-			 msg='Are you sure you want to promote?'
-			 }
-		 }
-		
+		{
+			if(doesPJobExists==true && lowEnvRevision==true)
+			{
+				msg="promoteMessage1"
+			}else if(doesPJobExists==true && lowEnvRevision==false){
+				msg="promoteMessage2"
+			}else{
+
+				msg='Are you sure you want to promote?'
+			}
+		}
+
 		if(envId.equals("2") || envId.equals("3")){
-		def promotionInstance = deploymentService.getDeployedInstance(programInstance,envId)
-	
-		
-				 if(promotionInstance==null){
-					 flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
-					 log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
-					 //redirect(action: "list")
-					 //return
-				 }
+			def promotionInstance = deploymentService.getDeployedInstance(programInstance,envId)
+
+
+			if(promotionInstance==null){
+				flash.message = message(code: 'promote.no.environments', default: 'Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment')
+				log.info("Job cannot be promoted as content has not been successfully deployed or promoted to a previous environment")
+				//redirect(action: "list")
+				//return
+			}
 		}
 		//  Only set this if everything has passed inspection.  If it hasn't we want to make sure this bad deployment instance can never be used
 		if(!flash.message)
 		{
 			flash.programInstance = programInstance
 		}
-		
-		 
+
+
 		render(view: "_confirm", model: [programInstance:programInstance,msg:msg,envName:envName,envId:envId])
 	}
 	/**
@@ -143,11 +143,8 @@ class ProgramController {
 
 		def instanceId = params.programId
 
-		//def instanceDetails = instanceDetail.split("/")
-		//def instanceId = instanceDetails[0]
-
 		log.info("Program Detail: "+instanceId)
-		
+
 		def (bundle, secureProgram, commerceObject) = deploymentService.getProgramChildren(instanceId)
 		def childContent = bundle + secureProgram + commerceObject
 		log.debug("childContent: "+childContent)
@@ -164,7 +161,7 @@ class ProgramController {
 		if(doesPreviousJobExist1!=null){
 			previousJobExist=true
 		}
-		
+
 		log.debug("userId: "+userId)
 		log.debug("contentId: "+programInstance.id)
 		log.debug("contentTypeId: "+programInstance.contentType.contentId)
@@ -214,8 +211,6 @@ class ProgramController {
 
 		final String none = "none"
 
-	//	def instanceDetail = params.instanceToBePromoted
-	//	def instanceDetails = instanceDetail.split("/")
 		def instanceToBePromoted = params.programId
 
 		def programInstance = Program.get(instanceToBePromoted)
@@ -281,21 +276,13 @@ class ProgramController {
 
 	}
 
-
-/*	def index(Integer max) {redirect(action: "list", params: params)}
-
-	def list(Integer max) {
-		params.max = Math.min(max ?: 25, 100)
-		log.debug "Program count:" + Program.count()
-		respond Program.list(params), model:[programInstanceCount: Program.count()]
-	}*/
 	def index(Integer max) {
 		redirect(action: "list", params: params)
 	}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 25, 50)
-		
+		params.max = Math.min(max ?: 35, 50)
+
 		respond Program.list(params), model:[programInstanceCount: Program.count()]
 	}
 
