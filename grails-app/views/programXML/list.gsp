@@ -142,9 +142,7 @@
 				
 				                            <g:if test="${deploymentEnv.id==1 && devLogFile.exists()}">
 												<a href='./download?logFile=<%=devLog%>'>Log File</a>
-												<g:if test="${ (jobdetail[1]=="Failure" || jobdetail[1].toString().contains("Failed")) && jobdetail[4]!=null}">
-												<a href="${Holders.config.bamboo.hosturl}/download/<%=jobdetail[5] %>/build_logs/<%=jobdetail[4] %>.log?disposition=attachment">Bamboo logs</a>
-											   </g:if>
+												
 											</g:if>
 										<g:if test="${deploymentEnv.id==2 && qaLogFile.exists()}">
 												<a href='./download?logFile=<%=qaLog%>'>Log File</a><br>
