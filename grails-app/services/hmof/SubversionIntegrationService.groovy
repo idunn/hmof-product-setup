@@ -37,7 +37,7 @@ class SubversionIntegrationService {
 	/**
 	 * Helper method to create an SVN Operation Factory
 	 */
-	
+
 	/**
 	 * Helper method to create an SVN Operation Factory	 
 	 */
@@ -45,7 +45,7 @@ class SubversionIntegrationService {
 
 		log.info "Creating an SVN Client"
 		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
-		
+
 		def username = Holders.config.svn.username
 		def password = Holders.config.svn.password
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
@@ -64,8 +64,8 @@ class SubversionIntegrationService {
 		log.info "SVN Cleanup: Disposing of context and repository pool"
 		svnFactory.dispose()
 	}
-	
-	
+
+
 	/**
 	 * Checkout SVN file to local cache
 	 * @param productToExport
@@ -76,19 +76,19 @@ class SubversionIntegrationService {
 
 		def svnClient = createSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
-		
+
 		try{
 
 			def localCache =  new File(localFilePath)
-			
+
 			log.info "Updating program XML contained SVN Content"
 
 			File dstPath = new File(workingCopy)
 			SVNClientManager cm = SVNClientManager.newInstance()
 			SVNUpdateClient uc = cm.getUpdateClient()
 			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
-		
-			
+
+
 
 			log.info "Updated program XML to SVN Content"
 			def isExistfile=doesFileExist(localFilePath)
@@ -106,8 +106,8 @@ class SubversionIntegrationService {
 			commit.setCommitMessage("TT-1234: SVN commit Program Xml through HMOF Product Setup App");
 			commit.run()
 			log.info "Committed program XML to SVN Content"
-			
-				
+
+
 
 
 		}catch (Exception e)
@@ -143,6 +143,6 @@ class SubversionIntegrationService {
 
 		return false;
 	}
-	
-	
+
+
 }

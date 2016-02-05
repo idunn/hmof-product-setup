@@ -9,7 +9,7 @@ import grails.util.Holders
 import groovy.xml.StreamingMarkupBuilder
 import hmof.programxml.ProgramXML
 import hmof.security.*
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils
 
 
 class ProgramXmlService {
@@ -22,17 +22,17 @@ class ProgramXmlService {
 	def subversionIntegrationService
 	def bambooIntegrationService
 	Logger log = Logger.getLogger(JobService.class)
-	
+
 	/**
 	 * Deploy or Promote Jobs in Pending or Pending_Repromote Status
 	 * @return
 	 */
 	def executeJob(){
-		
-		
+
+
 		def promotionProgramXMlJobInstance = Promotion.where{status == JobStatus.PendingProgramDeploy.getStatus() || status == JobStatus.PendingProgramRepromote.getStatus() || status == JobStatus.PendingProgramRetry.getStatus()}.list(max:1)
 		def promotionProgramXMlJobNumber =  promotionProgramXMlJobInstance.jobNumber
-		 if(!promotionProgramXMlJobInstance.isEmpty())
+		if(!promotionProgramXMlJobInstance.isEmpty())
 		{
 			def jobList = Job.where{jobNumber == promotionProgramXMlJobNumber}.list()
 			Long promotionJobId =  promotionProgramXMlJobInstance.id[0]
@@ -47,9 +47,9 @@ class ProgramXmlService {
 
 			promotionInstance.properties = [status: statusStart]
 			promotionInstance.save(failOnError: true, flush:true)
-		
+
 			def processJobs = processJobs(jobList, promotionInstance)
-			
+
 			def statusFinish = null
 
 			if (processJobs){
@@ -67,8 +67,8 @@ class ProgramXmlService {
 	 * @return
 	 */
 	Boolean processJobs(def jobs, def promotionInstance) {
-	
-		
+
+
 		String programXMLIsbn=""
 		Logger customerLog=null
 		def commitJobs =false
@@ -87,7 +87,7 @@ class ProgramXmlService {
 			// Divide out the instances
 			def programXML = jobs.findAll{it.contentTypeId == 5}
 			def cacheLocation = Holders.config.cacheLocation
-						
+
 			def localURL= Holders.config.programXMLFolder
 			def localTxtURL= Holders.config.programXMLTextFolder
 			// used only to initialize logs
@@ -97,80 +97,80 @@ class ProgramXmlService {
 
 					Long instanceNumber = it.contentId
 					Long revisionNumber = it.revision
-					
+
 					Long jobNumber = it.jobNumber
-					
+
 					def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
-				
+
 					def path=localURL+programXMLInstance.filename
-					
+
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
-				    customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog)
-					
+
 					if(commitJobs )
 					{
-																
-										
-							/*def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,envId,customerLog,promotionInstance)
-									if(respJson.equals("Successful"))	{	*/	
-						customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"						
+
+
+						/*def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,envId,customerLog,promotionInstance)
+						 if(respJson.equals("Successful"))	{	*/	
+						customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"
 						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 						customerLog.info("Job Status: Success\r\n")
-									/*}else
-			    	{
-						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
-						customerLog.info("Job Status: Failed\r\n")
-				    }*/
-	
-					
+						/*}else
+						 {
+						 customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						 customerLog.info("Job Status: Failed\r\n")
+						 }*/
+
+
 					}else
-			    	{
+					{
 						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
 						customerLog.info("Job Status: Failed\r\n")
-				    }
+					}
 				}
 			} // end bundle log initializer
 			else
 			{
 				programXML.each{
-					
-										Long instanceNumber = it.contentId
-										Long revisionNumber = it.revision
-										
-										Long jobNumber = it.jobNumber
-										def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
-									
-										def path=localURL+programXMLInstance.filename
-										def pathStr=programXMLInstance.filename.replace(".xml","")
-										def localTextURL=pathStr+".txt"
-										customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
-										customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
-										
-										
-				def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
-				
-				if(respJson.equals("Successful"))
-				{								
-					commitJobs=true
-					customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"
-					customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
-					customerLog.info("Job Status: Success\r\n")
 
-				}else
-				{
-					
-					customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
-					customerLog.info("Job Status: Failed\r\n")
+					Long instanceNumber = it.contentId
+					Long revisionNumber = it.revision
+
+					Long jobNumber = it.jobNumber
+					def programXMLInstance = ProgramXML.where{id==instanceNumber}.get()?: utilityService.getDeletedObject(instanceNumber, revisionNumber, 5)
+
+					def path=localURL+programXMLInstance.filename
+					def pathStr=programXMLInstance.filename.replace(".xml","")
+					def localTextURL=pathStr+".txt"
+					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
+					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+
+
+					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
+
+					if(respJson.equals("Successful"))
+					{
+						commitJobs=true
+						customerLog.info "${'*'.multiply(5)} Finished Deploying Program XML ${'*'.multiply(5)}\r\n"
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Success\r\n")
+
+					}else
+					{
+
+						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
+						customerLog.info("Job Status: Failed\r\n")
+					}
+
 				}
-				
-			}
 			}
 
 			log.debug "cacheLocation" + cacheLocation
-			
-			}
-		   catch(InterruptedException  e){
+
+		}
+		catch(InterruptedException  e){
 
 			log.error "Exception deploying content: " + e
 			return false
@@ -185,153 +185,153 @@ class ProgramXmlService {
 
 		return commitJobs
 	}
-	
+
 	def generateProramXML(ProgramXML programXMLInstance)
 	{
-		
-		
-	
+
+
+
 		def builder = new groovy.xml.StreamingMarkupBuilder()
 		builder.encoding = 'UTF-8'
 		StringBuilder sb = new StringBuilder();
 		ArrayList<String> items = new ArrayList<String>()
-		
-	 try{
-		 
-		 def programsXMLLocation = Holders.config.programXMLFolder
-	
-		 File f = new File(programsXMLLocation);
-		 f.mkdir();
-		 File f1 = new File(programsXMLLocation+programXMLInstance.filename);
-		 if(f1.exists()) {
-			 
-			
-			 
-			 def newSecurePrograms=[]
-			 def oldSecurePrograms=[]
-			 def oldSecurePrograms1=[]
-			 def oldSecurePrograms2=[]
-			
-			
-			 
-			if(programXMLInstance.secureProgram){
-				newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
-			   }
-			
-						
-			 XmlParser parser = new XmlParser()
-			 
-			  def xmldata1 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
-			  
-			  
-			def root = new XmlParser().parse( f1 )
-			 xmldata1.hsp_product.each{
-				   oldSecurePrograms.add(it.product_isbn.text())
-				   oldSecurePrograms1.add(it.product_isbn.text())
-			   }
-			   
-			   def newonlineIsbn=newSecurePrograms.onlineIsbn
-			   oldSecurePrograms.removeAll(newonlineIsbn);					
-			   newonlineIsbn.removeAll(oldSecurePrograms1);
-			   
-			
-		   	def secprogramIds= utilityService.getProgramXMLAudSecurePrograms(programXMLInstance.id)
-	       
-			if(secprogramIds){
-				  oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
-				 }
-			  
-			  
-			  def oldProgramInstanceIsbns=oldSecurePrograms2.onlineIsbn
-			  if(!root['@title'].equals(programXMLInstance.title))
-			  root['@title']=programXMLInstance.title
-			  
-			  if(!root['@buid'].equals(programXMLInstance.buid))
-			  root['@buid']=programXMLInstance.buid
-			   newonlineIsbn.each{
-				   String newISBN=it
-				   
-					 def toadd = "<hsp_product><product_isbn lang='en_us'>"+newISBN+"</product_isbn></hsp_product>"
-                     def fragmentToAdd = new XmlParser().parseText( toadd )
-                     root.children().add( 0, fragmentToAdd )
-					
-					
-			   }
-			  
-			  def parent 
-			 
-			  oldSecurePrograms.each{
-		           String isbn= it	
-				   oldProgramInstanceIsbns.each{
-					   
-				   if(isbn.equals(it)){					   
-				   
-				   def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}				   
-                   parent = nodeToDel.parent()               
-				   parent.remove(nodeToDel)
-				   }
-		           }
-					 
-			   }
-								  
-			  StringWriter stringWriter = new StringWriter()
-			  XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter))
-			  nodePrinter.setPreserveWhitespace(true)
-			  nodePrinter.print(root)
-				
-			   // def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
-				
-			
+
+		try{
+
+			def programsXMLLocation = Holders.config.programXMLFolder
+
+			File f = new File(programsXMLLocation);
+			f.mkdir();
+			File f1 = new File(programsXMLLocation+programXMLInstance.filename);
+			if(f1.exists()) {
+
+
+
+				def newSecurePrograms=[]
+				def oldSecurePrograms=[]
+				def oldSecurePrograms1=[]
+				def oldSecurePrograms2=[]
+
+
+
+				if(programXMLInstance.secureProgram){
+					newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+				}
+
+
+				XmlParser parser = new XmlParser()
+
+				def xmldata1 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
+
+
+				def root = new XmlParser().parse( f1 )
+				xmldata1.hsp_product.each{
+					oldSecurePrograms.add(it.product_isbn.text())
+					oldSecurePrograms1.add(it.product_isbn.text())
+				}
+
+				def newonlineIsbn=newSecurePrograms.onlineIsbn
+				oldSecurePrograms.removeAll(newonlineIsbn);
+				newonlineIsbn.removeAll(oldSecurePrograms1);
+
+
+				def secprogramIds= utilityService.getProgramXMLAudSecurePrograms(programXMLInstance.id)
+
+				if(secprogramIds){
+					oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
+				}
+
+
+				def oldProgramInstanceIsbns=oldSecurePrograms2.onlineIsbn
+				if(!root['@title'].equals(programXMLInstance.title))
+					root['@title']=programXMLInstance.title
+
+				if(!root['@buid'].equals(programXMLInstance.buid))
+					root['@buid']=programXMLInstance.buid
+				newonlineIsbn.each{
+					String newISBN=it
+
+					def toadd = "<hsp_product><product_isbn lang='en_us'>"+newISBN+"</product_isbn></hsp_product>"
+					def fragmentToAdd = new XmlParser().parseText( toadd )
+					root.children().add( 0, fragmentToAdd )
+
+
+				}
+
+				def parent
+
+				oldSecurePrograms.each{
+					String isbn= it
+					oldProgramInstanceIsbns.each{
+
+						if(isbn.equals(it)){
+
+							def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}
+							parent = nodeToDel.parent()
+							parent.remove(nodeToDel)
+						}
+					}
+
+				}
+
+				StringWriter stringWriter = new StringWriter()
+				XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter))
+				nodePrinter.setPreserveWhitespace(true)
+				nodePrinter.print(root)
+
+				// def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
+
+
 				def nodePrinter1 =stringWriter.toString()
-				
+
 				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
 				//println indentPrinter.toString()
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
-							
-				
-		 }
-		 else{
-			 
-		 
-		 
-		def xml = {
-		  mkp.xmlDeclaration()
-		  hsp_program(
-		  buid:programXMLInstance.buid,
-		  mastery_level:'75',
-		  title:programXMLInstance.title,
-		  xmlns:'http://xml.thinkcentral.com/pub/xml/hsp/program',
-		  'xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance',
-		  'xsi:schemaLocation':'http://xml.thinkcentral.com/pub/xml/hsp/program http://xml.thinkcentral.com/pub/xml2_0/hsp_program.xsd'
-	  ) {
-   
-	 for(int i=0;i<programXMLInstance.secureProgram.size();i++)
-	 {
-		 
-	   hsp_product{product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)}
-		 
-	 }
-		
-	 }
-  }
-    
 
-  items.add(programsXMLLocation+"/"+programXMLInstance.filename)
-  def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
-  writer << builder.bind(xml)
-  writer.close()
-     
-    
-		 }
-  
-    
-   }catch(Exception ex){
-	  ex.getMessage()
-	  return false
-  }
 
-   return true
-   
+			}
+			else{
+
+
+
+				def xml = {
+					mkp.xmlDeclaration()
+					hsp_program(
+							buid:programXMLInstance.buid,
+							mastery_level:'75',
+							title:programXMLInstance.title,
+							xmlns:'http://xml.thinkcentral.com/pub/xml/hsp/program',
+							'xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance',
+							'xsi:schemaLocation':'http://xml.thinkcentral.com/pub/xml/hsp/program http://xml.thinkcentral.com/pub/xml2_0/hsp_program.xsd'
+							) {
+
+								for(int i=0;i<programXMLInstance.secureProgram.size();i++)
+								{
+
+									hsp_product{product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)}
+
+								}
+
+							}
+				}
+
+
+				items.add(programsXMLLocation+"/"+programXMLInstance.filename)
+				def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
+				writer << builder.bind(xml)
+				writer.close()
+
+
+			}
+
+
+		}catch(Exception ex){
+			ex.getMessage()
+			return false
+		}
+
+		return true
+
 	}
 
 	/**
@@ -370,30 +370,30 @@ class ProgramXmlService {
 	 */
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
-		
+
 		println envId+" ----env id---"
 		Logger log1 = Logger.getLogger("Thread" + programISBN+"-"+envId)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
 		props.setProperty("log4j.appender.file.maxFileSize","100MB")
 		props.setProperty("log4j.appender.file.maxBackupIndex","100")
-		if(envId==1){			
-				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log")
+		if(envId==1){
+			props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/dev/log/"+programISBN+"-"+"dev_log.log")
 		}else if(envId==2){
-			
-				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
-			
+
+			props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/review/log/"+programISBN+"-"+"review_log.log")
+
 		}else if(envId==3){
-			
-				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
-			
-		}else if(envId==4){			
-				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
-			
+
+			props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/prod/log/"+programISBN+"-"+"prod_log.log")
+
+		}else if(envId==4){
+			props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/cert/log/"+programISBN+"-"+"cert_log.log")
+
 		}else if(envId==5){
-			
-				props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
-			
+
+			props.setProperty("log4j.appender.file.File",workingDir +"/ProgramXML/"+ programISBN + "/Int/log/"+programISBN+"-"+"int_log.log")
+
 		}
 		props.setProperty("log4j.appender.file.threshold","info")
 		props.setProperty("log4j.appender.file.Append","false")
@@ -404,6 +404,6 @@ class ProgramXmlService {
 		return log1
 	}
 
-	
+
 
 }
