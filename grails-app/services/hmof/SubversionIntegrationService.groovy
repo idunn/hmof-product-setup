@@ -6,6 +6,7 @@ import org.tmatesoft.svn.core.SVNDirEntry
 import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.auth.BasicAuthenticationManager
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager
 import org.tmatesoft.svn.core.io.SVNRepository
 import org.tmatesoft.svn.core.wc.SVNClientManager
@@ -50,6 +51,7 @@ class SubversionIntegrationService {
 		def password = Holders.config.svn.password
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
 		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		//BasicAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
 
 		return svnOperationFactory
@@ -81,43 +83,46 @@ class SubversionIntegrationService {
 
 			def localCache =  new File(localFilePath)
 
-			log.info "Updating program XML contained SVN Content"
+			log.info "Updating programXML Working Copy"
 
 			File dstPath = new File(workingCopy)
 			SVNClientManager cm = SVNClientManager.newInstance()
 			SVNUpdateClient uc = cm.getUpdateClient()
 			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
+			log.info "Working Copy Updated"
 
 
-
-			log.info "Updated program XML to SVN Content"
 			def isExistfile=doesFileExist(localFilePath)
 			if(!isExistfile){
-				log.info "Adding program XML to SVN Content"
+				log.info "Adding new programXML to SVN Working Copy"
 
 				final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
 				scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
 				scheduleForAddition.run()
-				log.info "Added program XML to SVN Content"
+				log.info "SVN Add Action"
 			}
-			log.info "Committing program XML to SVN Content"
+
+			log.info "SVN Commit Action"
+
 			SvnCommit commit = svnClient.createCommit();
 			commit.addTarget(SvnTarget.fromFile(localCache));
-			commit.setCommitMessage("TT-1234: SVN commit Program Xml through HMOF Product Setup App");
+			commit.setCommitMessage("TT-1234: Adding Program XML to SVN using the HMOF Product Setup App");
 			commit.run()
-			log.info "Committed program XML to SVN Content"
+			log.info "SVN Complete"
 
 
 
 
 		}catch (Exception e)
 		{
-			log.error " SVN Error when Add and Commit to content:  ${e}"
+			log.error " SVN Error:  ${e}"
 
 			return false
+
 		}finally{
 			cleanupSvnOperationFactory(svnClient)
 		}
+
 		return true
 	}
 
