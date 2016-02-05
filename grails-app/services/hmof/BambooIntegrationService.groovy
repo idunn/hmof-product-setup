@@ -34,21 +34,8 @@ class BambooIntegrationService {
 	def bambooTrigger (def xmlTextPath, def jiraId,def deploymentBambooUrl,Logger log,def promotionInstance) {
 
 		String Comment = "Proccesed by the Product Setup WebApp"
-
-		//def prodReviewUrl=Holders.config.bamboo.prod.review.hosturl
-		//def productionUrl=Holders.config.bamboo.production.hosturl
-		// Basic test Bamboo plan running locally if this does not work test the server is up via the browser http://172.17.4.106:8085
-		//String endPoint = "http://localhost:8085/rest/api/latest/queue/CUS-TR?productSetup&ExecuteAllStages=true&bamboo.variable.comment=Promote&bamboo.variable.ISBNs="+xmlTextPath+"&Promote&bamboo.variable.JIRA=TT-1234"
-		//String endPoint = "http://172.17.3.201:8085/rest/api/latest/queue/CUS-TR?ExecuteAllStages=true";
 		String endPoint
-	/*	if(envId==1)
-		 endPoint = "http://localhost:8085/rest/api/latest/queue/CUS-TR?ExecuteAllStages=true&bamboo.variable.Comments='promoto to Cert-review'&bamboo.variable.programList="+xmlTextPath+"&bamboo.variable.JIRA="+jiraId
-        else if(envId==2)
-		endPoint = prodReviewUrl+"?ExecuteAllStages=true&bamboo.variable.Comments=Promoto to Prod-Review by CUSDEV&bamboo.variable.programList="+xmlTextPath+"&bamboo.variable.jiraIssue="+jiraId
-		else if(envId==3)
-		endPoint = productionUrl+"?ExecuteAllStages=true&bamboo.variable.Comments='Promoto to Prodction by CUSDEV'&bamboo.variable.programList="+xmlTextPath+"&bamboo.variable.jiraIssue="+jiraId
-		*/
-		endPoint=deploymentBambooUrl+"?ExecuteAllStages=true&bamboo.variable.Comments="+jiraId+" : Promoted by CUSDEV&bamboo.variable.IdList="+xmlTextPath+"&bamboo.variable.jiraIssue="+jiraId
+       endPoint=deploymentBambooUrl+"?ExecuteAllStages=true&bamboo.variable.Comments="+jiraId+" : Promoted by CUSDEV&bamboo.variable.IdList="+xmlTextPath+"&bamboo.variable.jiraIssue="+jiraId
 		
 		
 		
@@ -64,8 +51,7 @@ class BambooIntegrationService {
 
 			body (form)
 		}
-		
-	
+			
 		log.info "The HTTP Status of the response is: ${resp.status}"
 	
 		log.info "The Parsed build results Key is ${resp.json.buildResultKey}"
@@ -108,7 +94,7 @@ class BambooIntegrationService {
 	def bambooBuildResults(def buildResultKey){
 
 		String resultEndPoint = "${Holders.config.bamboo.resulturl+buildResultKey}"
-	//String resultEndPoint = "http://172.17.3.22:8085/rest/api/latest/result/CUS-TR-44"
+
 		log.info "Bamboo build plan endPoint is ${resultEndPoint}"
 
 		def resp = new RestBuilder().get(resultEndPoint) {
@@ -117,7 +103,6 @@ class BambooIntegrationService {
 			header "Accept", "application/json"
 
 		}
-		
 		
 		
 		// parse the response for the State (either One of null, unknown, Successful or Failed)

@@ -106,8 +106,8 @@ environments {
 		cacheLocation="target/ProductSetup-cache"
 		uploadFolder="target/ProductSetup-cache/import"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
-		programXMLFolder="C:/ProgramXML/"
-		programXMLTextFolder="C:/programLists/"
+		programXMLFolder="C:/productSetup-cache/ProgramXML/MDS_Program/"
+		
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
@@ -150,9 +150,9 @@ environments {
 
 		cacheLocation="E:/ProductSetup-cache"
 		uploadFolder="E:/ProductSetup-cache/import"
-		programXMLFolder="E:/ProgramXML/"
+		programXMLFolder="E:/ProductSetup-cache/ProgramXML/MDS_Program/"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
-		programXMLTextFolder="E:/ProgramLists"
+	
 		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
 		log4j = {
@@ -234,12 +234,8 @@ bamboo.resulturl="http://dubv-engbam05.dubeng.local:8085/rest/api/latest/result/
 
 
 //ProgramXMl Accounts
-svn.test.username='arollapati'
-svn.test.password='Ji9ahhia'
+svn.username='cust_dev_app'
+svn.password='JDv9cpp'
 
-//svn.username='cust_dev_app'
-//svn.password='JDv9cpp'
-svn.username='idunn'
-svn.password='EebeL7ae'
-svn.url ="http://dubv-engsvn01.dubeng.local/svn/tools"
+svn.url ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/MDS/CERT-REVIEW/program"
 svn.ProgramXMLTxturl ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/Lists"

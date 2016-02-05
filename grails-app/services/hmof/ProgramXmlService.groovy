@@ -110,11 +110,7 @@ class ProgramXmlService {
 					
 					if(commitJobs )
 					{
-						def pathStr=programXMLInstance.filename.replace(".xml","")
-						def localTextURL=localTxtURL+pathStr+".txt"
-							commitJobs1 =subversionIntegrationService.commitTxtFileSvnContent(localTextURL,customerLog)
-								if(commitJobs1 )		
-									{										
+																
 										
 							/*def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,envId,customerLog,promotionInstance)
 									if(respJson.equals("Successful"))	{	*/	
@@ -127,11 +123,7 @@ class ProgramXmlService {
 						customerLog.info("Job Status: Failed\r\n")
 				    }*/
 	
-					}else
-			    	{
-						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
-						customerLog.info("Job Status: Failed\r\n")
-				    }
+					
 					}else
 			    	{
 						customerLog.info"${'*'.multiply(5)} Status ${'*'.multiply(5)}\r\n"
@@ -156,7 +148,7 @@ class ProgramXmlService {
 										customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 										
 										
-				def respJson=bambooIntegrationService.bambooTrigger(localTextURL,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
+				def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
 				
 				if(respJson.equals("Successful"))
 				{								
@@ -207,13 +199,13 @@ class ProgramXmlService {
 	 try{
 		 
 		 def programsXMLLocation = Holders.config.programXMLFolder
-		 def programsXMLTextLocation = Holders.config.programXMLTextFolder
+	
 		 File f = new File(programsXMLLocation);
 		 f.mkdir();
 		 File f1 = new File(programsXMLLocation+programXMLInstance.filename);
 		 if(f1.exists()) {
 			 
-			 def txtFileName=programXMLInstance.filename.replace(".xml", "")
+			
 			 
 			 def newSecurePrograms=[]
 			 def oldSecurePrograms=[]
@@ -295,15 +287,7 @@ class ProgramXmlService {
 				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
 				//println indentPrinter.toString()
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
-				
-				
-				FileWriter outFile = new FileWriter(programsXMLTextLocation+"/"+txtFileName+".txt");
-				PrintWriter out = new PrintWriter(outFile);
-				// Also could be written as follows on one line
-				// Printwriter out = new PrintWriter(new FileWriter(filename));
-				// Write text to file
-				out.println(programXMLInstance.filename);
-				out.close();
+							
 				
 		 }
 		 else{
@@ -330,18 +314,14 @@ class ProgramXmlService {
 		
 	 }
   }
-  
-   
+    
 
   items.add(programsXMLLocation+"/"+programXMLInstance.filename)
   def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
   writer << builder.bind(xml)
   writer.close()
-  
+     
     
-    def txtWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(programsXMLTextLocation+"/"+txtFileName+".txt"), "utf-8"));
-    txtWriter.write(programXMLInstance.filename);
-    txtWriter.close()
 		 }
   
     
