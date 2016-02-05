@@ -50,8 +50,16 @@ class SubversionIntegrationService {
 		def username = Holders.config.svn.username
 		def password = Holders.config.svn.password
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
-		ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
-		//BasicAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		
+		
+		//ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		//ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(SVNWCUtil.getDefaultConfigurationDirectory(),username, password, false)
+		
+		
+		
+		def authenticationManager = new BasicAuthenticationManager(username, password)
+		println authenticationManager.getClass()
+		
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
 
 		return svnOperationFactory
