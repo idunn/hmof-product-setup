@@ -45,21 +45,16 @@ class SubversionIntegrationService {
 	def createSvnOperationFactory() {
 
 		log.info "Creating an SVN Client"
-		//SVNURL url = SVNURL.parseURIEncoded( "http://172.17.1.17/svn/tck6content/data/content/tools/common/customdev/build/static/MDS/CERT-REVIEW/program/hmof/" );
-
+		
 		def username = Holders.config.svn.username
 		def password = Holders.config.svn.password
 		SvnOperationFactory svnOperationFactory = new SvnOperationFactory()
-		
-		
+
 		//ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
-		//ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager(SVNWCUtil.getDefaultConfigurationDirectory(),username, password, false)
-		
-		
 		
 		def authenticationManager = new BasicAuthenticationManager(username, password)
 		println authenticationManager.getClass()
-		
+
 		svnOperationFactory.setAuthenticationManager(authenticationManager)
 
 		return svnOperationFactory
@@ -87,20 +82,26 @@ class SubversionIntegrationService {
 		def svnClient = createSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
 
+
 		try{
+
 
 			def localCache =  new File(localFilePath)
 
 			log.info "Updating programXML Working Copy"
 
-			File dstPath = new File(workingCopy)
-			SVNClientManager cm = SVNClientManager.newInstance()
-			SVNUpdateClient uc = cm.getUpdateClient()
-			uc.doUpdate(dstPath, SVNRevision.UNDEFINED, SVNDepth.INFINITY, true, false)
-			log.info "Working Copy Updated"
+			File workingCopyPath = new File(workingCopy)
 
+			// Run SVN Update ON Working Copy
+			SvnUpdate update = svnClient.createUpdate()
+			update.setSingleTarget(SvnTarget.fromFile(workingCopyPath))
+			update.setRevision(SVNRevision.HEAD);
 
-			def isExistfile=doesFileExist(localFilePath)
+			update.run()
+
+			log.info "Working Copy is Updated!"
+
+			def isExistfile = doesFileExist(localFilePath)
 			if(!isExistfile){
 				log.info "Adding new programXML to SVN Working Copy"
 
@@ -112,11 +113,11 @@ class SubversionIntegrationService {
 
 			log.info "SVN Commit Action"
 
-			SvnCommit commit = svnClient.createCommit();
-			commit.addTarget(SvnTarget.fromFile(localCache));
+			SvnCommit commit = svnClient.createCommit()
+			commit.addTarget(SvnTarget.fromFile(localCache))
 			commit.setCommitMessage("TT-1234: Adding Program XML to SVN using the HMOF Product Setup App");
 			commit.run()
-			log.info "SVN Complete"
+			log.info "ProgramXML has been committed to the MDS Content Repository"
 
 
 
