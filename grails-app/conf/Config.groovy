@@ -106,7 +106,8 @@ environments {
 		cacheLocation="target/ProductSetup-cache"
 		uploadFolder="target/ProductSetup-cache/import"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
-		programXMLFolder="C:/productSetup-cache/ProgramXML/MDS_Program/"
+		programXMLFolder="C:/productSetup-cache/ProgramXML/MDS_Program/"			
+		programXMLISBNsFolder="C:/ProductSetup-cache/ProgramXML/MDS_ISBNS/"
 		
 		javamelody.'storage-directory' = 'target/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
@@ -150,7 +151,7 @@ environments {
 
 		cacheLocation="E:/ProductSetup-cache"
 		uploadFolder="E:/ProductSetup-cache/import"
-		programXMLFolder="E:/ProductSetup-cache/ProgramXML/MDS_Program/"
+		programXMLFolder="E:/ProductSetup-cache/ProgramXML/MDS_Program/hmof/"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
 	
 		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
@@ -238,4 +239,4 @@ svn.username='cust_dev_app'
 svn.password='JDv9cpp'
 
 svn.url ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/MDS/CERT-REVIEW/program"
-svn.ProgramXMLTxturl ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/Lists"
+svn.isbnsurl ="http://dubsvn.hmco.com/svn/MDS_Content/trunk/MDS/CERT-REVIEW/metadata"

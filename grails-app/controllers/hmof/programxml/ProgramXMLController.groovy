@@ -306,7 +306,7 @@ class ProgramXMLController {
 
 
 		def deploymentJobNumber = deploymentService.getCurrentJobNumber()
-		log.debug("deploymentJobNumber: "+deploymentJobNumber)
+		log.info("deploymentJobNumber: "+deploymentJobNumber)
 		def user = springSecurityService?.currentUser?.id
 		def userId = User.where{id==user}.get()
 
@@ -316,8 +316,8 @@ class ProgramXMLController {
 		 previousJobExist=true
 		 }
 		 */
-		log.debug("userId: "+userId)
-		log.debug("contentId: "+programXMLInstance.id)
+		log.info("userId: "+userId)
+		log.info("contentId: "+programXMLInstance.id)
 
 
 		//Generate XML
@@ -331,7 +331,7 @@ class ProgramXMLController {
 
 			// Add Program instance to Job
 			Job j1 = new Job(job).save(failOnError:true)
-			log.debug("Successfully added Program Instance to job : "+programXMLInstance.title)
+			log.info("Successfully added Program Instance to job : "+programXMLInstance.title)
 
 			//def envId = deploymentService.getUserEnvironmentInformation()
 			def envId = params.depEnvId

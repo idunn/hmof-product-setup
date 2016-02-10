@@ -106,7 +106,7 @@ class ProgramXmlService {
 
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
-					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog)
+					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance)
 
 					if(commitJobs )
 					{
