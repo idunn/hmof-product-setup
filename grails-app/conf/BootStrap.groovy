@@ -280,109 +280,15 @@ class BootStrap {
 
 			ProgramXML.withTransaction{
 
-				def p1xml = new ProgramXML(title:'TX High School Science',buid:'SCIENCE_HSSSCIENCE2014',filename:'Tx_HighSchoolScience.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p2xml = new ProgramXML(title:'TX Go Math! 2015',buid:'MATH_HMHTXNA2015',filename:'Texas_Math_2015_G6_8.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p3xml = new ProgramXML(title:'TX High School Math',buid:'MATH_HMHTXHSM2016',filename:'Texas_HSM_2016.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p4xml = new ProgramXML(title:'Social Studies Texas 2016',buid:'SCIENCE_HSSSCIENCE2014XXXX',filename:'SocialStudies_US_History.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p5xml = new ProgramXML(title:'NL Go Math! 2014',buid:'MATH_HMHMXNA2013',filename:'National_Math_2014.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p6xml = new ProgramXML(title:'High School Integrated Math',buid:'MATH_HMHNAINTHSM2015',filename:'National_INT_HSM_2015.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p7xml = new ProgramXML(title:'High School Math',buid:'MATH_HMHNAAGAHSM2015',filename:'National_AGA_HSM_2015.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-
-
-				def p8xml = new ProgramXML(title:'CA Go Math! 2015',buid:'MATH_HMHCALMATH2015',filename:'California_Math_2015_G6_12.xml ',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p9xml = new ProgramXML(title:'CA High School Integrated Math',buid:'MATH_HMHCAINTHSM2015',filename:'California_INT_HSM_2015.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p10xml = new ProgramXML(title:'CA High School Math',buid:'MATH_HMHCAAGAHSM2015',filename:'California_AGA_HSM_2015.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 
 				def p11xml = new ProgramXML(title:'Visual Math 2017',buid:'VISUALMATH2017',filename:'hmof_program_visualMath.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
 
-				def p12xml = new ProgramXML(title:'HMH Collections',buid:'HMHCOLLECTIONS_SAMPLE_LP',filename:'hsp_program_HMHCollections.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p13xml = new ProgramXML(title:'Escalate English NA 2017',buid:'NA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATENA2017.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p14xml = new ProgramXML(title:'Escalate English 2017',buid:'CA_Escalate_English_2017',filename:'hsp_program_READING_HSPESCALATECA2017.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p15xml = new ProgramXML(title:'Collections 2017',buid:'HMHCOLLECTIONS_2017_NA',filename:'hsp_program_HMHCollections_2017_NA.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-				def p16xml = new ProgramXML(title:'CA Collections 2017',buid:'HMHCOLLECTIONS_2017_CA',filename:'hsp_program_HMHCollections_2017_CA.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-
-				def p17xml = new ProgramXML(title:'Family Engagement NA 2017',buid:'HMH_FE_2017_NA',filename:'hsp_program_HMH_FE_2017_NA.xml',userUpdatingProgramXML:'Dev', contentType:ct5).save(failOnError:true)
-
 
 				// Associate Jobs
-				def job1 = new Job(jobNumber:435,contentTypeId:5,contentId:p1xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo1 = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo1b = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo1c = new Promotion (status: "Success", job: job1, jobNumber: job1.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job2 = new Job(jobNumber:436,contentTypeId:5,contentId:p2xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo2 = new Promotion (status: "Success", job: job2, jobNumber: job2.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo2b = new Promotion (status: "Success", job: job2, jobNumber: job2.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo2c = new Promotion (status: "Success", job: job2, jobNumber: job2.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job3 = new Job(jobNumber:437,contentTypeId:5,contentId:p3xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo3 = new Promotion (status: "Success", job: job3, jobNumber: job3.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo3b = new Promotion (status: "Success", job: job3, jobNumber: job3.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo3c = new Promotion (status: "Success", job: job3, jobNumber: job3.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job4 = new Job(jobNumber:438,contentTypeId:5,contentId:p4xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo4 = new Promotion (status: "Success", job: job4, jobNumber: job4.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo4b = new Promotion (status: "Success", job: job4, jobNumber: job4.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo4c = new Promotion (status: "Success", job: job4, jobNumber: job4.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job5 = new Job(jobNumber:439,contentTypeId:5,contentId:p5xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo5 = new Promotion (status: "Success", job: job4, jobNumber: job5.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo5b = new Promotion (status: "Success", job: job4, jobNumber: job5.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo5c = new Promotion (status: "Success", job: job4, jobNumber: job5.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job6 = new Job(jobNumber:440,contentTypeId:5,contentId:p6xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo6 = new Promotion (status: "Success", job: job4, jobNumber: job6.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo6b = new Promotion (status: "Success", job: job4, jobNumber: job6.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo6c = new Promotion (status: "Success", job: job4, jobNumber: job6.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job7 = new Job(jobNumber:441,contentTypeId:5,contentId:p7xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo7 = new Promotion (status: "Success", job: job4, jobNumber: job7.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo7b = new Promotion (status: "Success", job: job4, jobNumber: job7.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo7c = new Promotion (status: "Success", job: job4, jobNumber: job7.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job8 = new Job(jobNumber:442,contentTypeId:5,contentId:p8xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo8 = new Promotion (status: "Success", job: job4, jobNumber: job8.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo8b = new Promotion (status: "Success", job: job4, jobNumber: job8.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo8c = new Promotion (status: "Success", job: job4, jobNumber: job8.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job9 = new Job(jobNumber:443,contentTypeId:5,contentId:p9xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo9 = new Promotion (status: "Success", job: job9, jobNumber: job9.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo9b = new Promotion (status: "Success", job: job9, jobNumber: job9.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo9c = new Promotion (status: "Success", job: job9, jobNumber: job9.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job10 = new Job(jobNumber:444,contentTypeId:5,contentId:p10xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo10 = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo10b = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo10c = new Promotion (status: "Success", job: job10, jobNumber: job10.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
 
 				// TEST PROGRAM
 				def job11 = new Job(jobNumber:445,contentTypeId:5,contentId:p11xml.id,revision:2506,user: 1).save(failOnError:true)
 				def promo11 = new Promotion (status: "Success", job: job11, jobNumber: job11.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job12 = new Job(jobNumber:446,contentTypeId:5,contentId:p12xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo12 = new Promotion (status: "Success", job: job12, jobNumber: job12.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo12b = new Promotion (status: "Success", job: job12, jobNumber: job12.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo12c = new Promotion (status: "Success", job: job12, jobNumber: job12.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job13 = new Job(jobNumber:447,contentTypeId:5,contentId:p13xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo13 = new Promotion (status: "Success", job: job13, jobNumber: job13.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo13b = new Promotion (status: "Success", job: job13, jobNumber: job13.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo13c = new Promotion (status: "Success", job: job13, jobNumber: job13.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job14 = new Job(jobNumber:448,contentTypeId:5,contentId:p14xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo14 = new Promotion (status: "Success", job: job14, jobNumber: job14.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo14b = new Promotion (status: "Success", job: job14, jobNumber: job14.getJobNumber(), user: 1, environments: 2 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-				def promo14c = new Promotion (status: "Success", job: job14, jobNumber: job14.getJobNumber(), user: 1, environments: 3 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job15 = new Job(jobNumber:449,contentTypeId:5,contentId:p15xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo15 = new Promotion (status: "Success", job: job15, jobNumber: job15.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job16 = new Job(jobNumber:450,contentTypeId:5,contentId:p16xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo16 = new Promotion (status: "Success", job: job16, jobNumber: job16.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
-				def job17 = new Job(jobNumber:451,contentTypeId:5,contentId:p17xml.id,revision:2506,user: 1).save(failOnError:true)
-				def promo17 = new Promotion (status: "Success", job: job17, jobNumber: job17.getJobNumber(), user: 1, environments: 1 ,smartDeploy:false,jira_id:"").save(failOnError:true)
-
 
 
 			}
