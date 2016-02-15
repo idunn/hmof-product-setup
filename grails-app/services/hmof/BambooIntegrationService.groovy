@@ -71,17 +71,16 @@ class BambooIntegrationService {
 			if(i==0){
 				log.info "Bamboo build plan status: " + status
 				log.info "Waiting 5 minutes before rechecking the build status..."
-				Thread.sleep(500000)
+				Thread.sleep(300000)
 				status = bambooBuildResults( buildKey )
 
 			}
-
 
 			if( status.equals("Unknown") || status.equals(null))
 			{
 				log.info "Bamboo build plan status: " + status
 				log.info "Waiting 3 minutes before rechecking the build status..."
-				Thread.sleep(300000)
+				Thread.sleep(180000)
 
 
 			}else if(status.equals("Successful"))
