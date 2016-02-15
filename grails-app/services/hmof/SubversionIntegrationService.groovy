@@ -40,9 +40,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  */
 @Transactional
 class SubversionIntegrationService {
-	/**
-	 * Helper method to create an SVN Operation Factory
-	 */
+	def compareDomainInstanceService
 
 	/**
 	 * Helper method to create an SVN Operation Factory	 
@@ -79,7 +77,7 @@ class SubversionIntegrationService {
 	 * @param localCacheLocation
 	 * @return
 	 */
-	Boolean commitSvnContent( def localFilePath, Logger log,ProgramXML programXMLInstance ) {
+	Boolean commitSvnContent( def localFilePath, Logger log,ProgramXML programXMLInstance,boolean updateMDSISBN ) {
 
 		def svnClient = createSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
@@ -123,9 +121,11 @@ class SubversionIntegrationService {
 
 			log.info "SVN Add Action "
 			log.info "ProgramXML has been committed to the MDS Content Repository"
-
-			updateIsbnFileRevision(programXMLInstance,log,svnClient)
-
+		   
+					
+			if(updateMDSISBN)		  			
+			  updateIsbnFileRevision(programXMLInstance,log,svnClient)
+			
 
 		}catch (Exception e)
 		{
@@ -176,9 +176,7 @@ class SubversionIntegrationService {
 		try{
 
 
-
-
-			log.info "Updating ISBNs XML Working Copy"
+    		log.info "Updating ISBNs XML Working Copy"
 
 			File workingCopyPath = new File(workingCopy)
 
@@ -201,7 +199,7 @@ class SubversionIntegrationService {
 			println newonlineIsbn
 
 
-			File dir = new File("C:/ProductSetup-cache/ProgramXML/MDS_ISBNS");
+			File dir = new File( Holders.config.programXMLISBNsFolder);
 
 			log.info("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories");
 			List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);

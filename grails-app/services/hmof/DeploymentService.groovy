@@ -103,6 +103,36 @@ class DeploymentService {
 
 		return lastJob
 	}
+	/**
+	 * Return a List of Bundle job instances that were previously pushed for the same Program to the Users Environment
+	 * Will only be called if doesPreviousJobExist() method returns true
+	 * @param programInstanceNumber
+	 * @param currentJobNumber
+	 * @return
+	 */
+	def getPreviousProgramXMLJob( def programInstanceNumber, def currentJobNumber, def envId ){
+
+		def lastJob = []
+
+		def previousJobNumbers = Job.where{contentId==programInstanceNumber && contentTypeId==5 && jobNumber <= currentJobNumber}.list().jobNumber
+		log.info "previous Job Numbers: ${previousJobNumbers}"
+
+		// required for mySql
+		if (!previousJobNumbers.isEmpty()){
+
+			def theJob = Promotion.where{jobNumber in previousJobNumbers && (status==JobStatus.Success.getStatus() || status==JobStatus.Repromoting.getStatus()) &&  environments{id == envId }}.list(max:1, sort:'jobNumber', order:'desc')
+
+			Long theJobNumber = theJob.find{it.jobNumber}?.jobNumber
+
+			println "Current Job is: ${currentJobNumber} and is being compared to ${theJobNumber}"
+			log.info"Current Job is: ${currentJobNumber} and is being compared to ${theJobNumber}"
+
+			// pass back an ArrayList of job instances of Bundles that belong to the previous successful Job
+			return lastJob = Job.where{jobNumber == theJobNumber && contentTypeId == 5}.get()
+		}
+
+		return lastJob
+	}
 
 	/**
 	 * Get the bundles children as a map of String where the Key is the id of the SP and the value is the CO id
@@ -546,7 +576,11 @@ class DeploymentService {
 
 		// TODO put measures in to check for null
 		List allRevisions = deployableInstance.retrieveRevisions()
+
+		
 		def currentRevision = allRevisions[-1]
+		
+		currentRevision
 	}
 
 	/**

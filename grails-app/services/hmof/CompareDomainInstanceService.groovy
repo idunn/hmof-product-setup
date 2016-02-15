@@ -6,7 +6,7 @@ import grails.transaction.Transactional
 class CompareDomainInstanceService {
 
 
-
+	def deploymentService
 	/**
 	 * get a difference of the Current persisted object and the object being updated 
 	 * @return
@@ -18,12 +18,12 @@ class CompareDomainInstanceService {
 
 		List allRevisions = currentObject.retrieveRevisions()
 		// Get Envers Object that has been previously persisted
-		def enversObject = currentObject.findAtRevision(allRevisions[-1])
 
+
+		def enversObject = currentObject.findAtRevision(allRevisions[-1])
 
 		def origMap = toMap(enversObject)
 		def newMap = toMap(currentObject)
-
 
 		def difMap = newMap - origMap
 
@@ -40,20 +40,22 @@ class CompareDomainInstanceService {
 	 * @param previousRevision
 	 * @return
 	 */
-	def compareEnversRevisions(def domainInstance, def currentRevision, def previousRevision){
+	def compareEnversRevisions(def programXMLInstance,def revisionNumber,def previousRevision){
+		
+		int previousRevision1 = (int) previousRevision;
+		int revisionNumber1 = (int) revisionNumber;	
 
-		
-		def currentRev = domainInstance.findAtRevision(currentRevision)
-		def previousRev = domainInstance.findAtRevision(previousRevision)
-		
+		def currentRev = programXMLInstance.findAtRevision(revisionNumber1)
+		def previousRev = programXMLInstance.findAtRevision(previousRevision1)
+
 
 		def origMap = toMap(currentRev)
 		def prevMap = toMap(previousRev)
 
 
 		def difMap = origMap - prevMap
-
-
+		log.info "The Dif Map is: $difMap"
+		return difMap
 	}
 
 

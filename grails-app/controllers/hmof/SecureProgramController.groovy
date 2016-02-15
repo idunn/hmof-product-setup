@@ -344,9 +344,7 @@ class SecureProgramController {
 			return
 		}
 		
-		println params.knowledgeGraphWarmUpTimeLimit 
-		println params.knowledgeGraphEnrichmentCbiTimeLimit
-		println params.knowledgeGraphEnrichmentTimeLimit
+		
 
 		if (!secureProgramInstance.save(flush: true)) {
 			render(view: "create", model: [secureProgramInstance: secureProgramInstance])

@@ -21,6 +21,7 @@ class ProgramXmlService {
 	def springSecurityService
 	def subversionIntegrationService
 	def bambooIntegrationService
+	def compareDomainInstanceService
 	Logger log = Logger.getLogger(JobService.class)
 
 	/**
@@ -106,7 +107,23 @@ class ProgramXmlService {
 
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
-					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance)
+					
+					
+					def previousJob = deploymentService.getPreviousProgramXMLJob( instanceNumber, jobNumber, envId )
+					def previousRevision
+					boolean updateMDSISBN=false
+						if (previousJob)
+					    {
+							previousRevision=previousJob.revision
+							
+							def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
+							
+						   if( updatedValues.containsKey('title')){
+							   updateMDSISBN=true
+						   }
+						
+					    }
+					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance,updateMDSISBN)
 
 					if(commitJobs )
 					{
