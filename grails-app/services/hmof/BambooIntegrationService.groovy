@@ -70,7 +70,7 @@ class BambooIntegrationService {
 			// initially wait for 5 minutes before checking
 			if(i==0){
 				log.info "Bamboo build plan status: " + status
-				log.info "Waiting 5 minutes before checking the build status..."
+				log.info "Waiting 5 minutes before rechecking the build status..."
 				Thread.sleep(500000)
 				status = bambooBuildResults( buildKey )
 
