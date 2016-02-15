@@ -55,7 +55,7 @@ class BambooIntegrationService {
 		log.info "The HTTP response status is: ${resp.status}"
 
 		def buildKey = "${resp.json.buildResultKey}"
-		log.info "The plans build key is: ${buildKey}"
+		log.info "The build key is: ${buildKey}"
 
 
 		def status
