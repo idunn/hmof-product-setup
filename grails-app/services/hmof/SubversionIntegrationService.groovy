@@ -194,8 +194,6 @@ class SubversionIntegrationService {
 
 
 		try{
-
-
 			log.info "Updating MDS ISBNs Working Copy: ${workingCopy}"
 
 			File workingCopyPath = new File(workingCopy)
@@ -207,46 +205,43 @@ class SubversionIntegrationService {
 
 			update.run()
 
-			log.info "Working Copy is Updated!"
+			log.info "Working Copy is Updated!"			
 
-
-			log.info "Searching for the MDS ISBNs that are required to be updated..."
-
-			def newSecurePrograms = []
-
+			def secureProgramList = []
 			if(programXMLInstance.secureProgram){
-				newSecurePrograms = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+				secureProgramList = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			}
+			
+			def mdsISBN = secureProgramList.onlineIsbn			
+			log.info"MDS ISBNs: $mdsISBN"
+			
+			def mdsIsbnFile = []			
+			mdsISBN.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
+			log.info "${mdsIsbnFile}"			
 
-			def newonlineIsbn = newSecurePrograms.onlineIsbn
-
-			log.info"New Online ISBNs: $newonlineIsbn"
-
-			// duplicated
-			File dir = new File( Holders.config.programXMLISBNsFolder)
-
-			log.info("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories")
+			log.info("Getting all files in " + workingCopyPath.getCanonicalPath() + " including those in subdirectories")
 
 
-			// ONLY find XML files
-			String[] xmlExtensions = [ "xml" ]
-			//List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
-			List<File> files = (List<File>) FileUtils.listFiles(dir, xmlExtensions, true)
+			// Only find XML files
+			String[] xmlExtensions = [ "xml" ]			
+			List<File> files = (List<File>) FileUtils.listFiles(workingCopyPath, xmlExtensions, true)
+			
+			log.info "Searching for the MDS ISBNs that are required to be updated..."
+			
+			// find file
 
-			log.info "Files are: ######: ${files}"
+			/*for (File file : files) {
 
-			for (File file : files) {
-
-				if(file.getName() in newonlineIsbn)
+				if(file.getName() in mdsIsbnFile)
 				{
-					log.info "Found MDS ISBN :" + file.getName()
+					log.info "Found MDS ISBN: " + file.getName()
 
 
 					String fileFullPath = file.getCanonicalFile()
 					String fileName = file.getName()
 					String fileUrl = fileFullPath.replace(fileName,"")
 
-					String fileFullPath1 = dir.getAbsolutePath()
+					String fileFullPath1 = workingCopyPath.getAbsolutePath()
 					String url = fileUrl.replace(fileFullPath1,"")
 					url = url.replaceAll("\\\\", "/")
 
@@ -279,7 +274,7 @@ class SubversionIntegrationService {
 
 					return true
 				}
-			}
+			}*/
 
 			log.info "MDS ISBN XMLs has been committed to the MDS Content Repository"
 		}catch (Exception e)
