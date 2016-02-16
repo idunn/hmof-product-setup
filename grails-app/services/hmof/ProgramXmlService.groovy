@@ -165,7 +165,7 @@ class ProgramXmlService {
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
 
 
-					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance)
+					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance)
 
 					if(respJson.equals("Successful"))
 					{

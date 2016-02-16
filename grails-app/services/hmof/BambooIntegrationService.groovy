@@ -5,6 +5,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import grails.plugins.rest.client.RestBuilder
 import grails.util.Holders
+import hmof.programxml.ProgramXML
 import org.apache.log4j.Logger
 
 @Transactional
@@ -35,10 +36,16 @@ class BambooIntegrationService {
 	 * @param promotionInstance
 	 * @return Status of Promotion
 	 */
-	def bambooTrigger ( def idList, def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance ) {
+	def bambooTrigger ( def idList, def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance) {
 
 		String comment = "Proccesed by the Product-Setup WebApp"
-		String endPoint = "${deploymentBambooUrl}?ExecuteAllStages=true&bamboo.variable.Comments=${jiraId}:${comment}&bamboo.variable.IdList=${idList}&bamboo.variable.jiraIssue=${jiraId}"
+		def newSecurePrograms=[]
+		if(programXMLInstance.secureProgram){
+			newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+		}
+		String strOnlineIsbns = newSecurePrograms.onlineIsbn.toString();		
+		strOnlineIsbns = strOnlineIsbns.replaceAll("[\\[\\]]", "");
+		String endPoint = "${deploymentBambooUrl}?ExecuteAllStages=true&bamboo.variable.Comments=${jiraId}:${comment}&bamboo.variable.IdList=${idList},${strOnlineIsbns}&bamboo.variable.jiraIssue=${jiraId}"
 
 		log.info "Bamboo REST Url is: ${endPoint}"
 
