@@ -163,9 +163,24 @@ class ProgramXmlService {
 					def localTextURL=pathStr+".txt"
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
+					
+					
+					def previousJob = deploymentService.getPreviousProgramXMLJob( instanceNumber, jobNumber, envId )
+					def previousRevision
+					boolean updateMDSISBN=false
+						if (previousJob)
+						{
+							previousRevision=previousJob.revision
+							
+							def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
+							
+						   if( updatedValues.containsKey('title')){
+							   updateMDSISBN=true
+						   }
+						
+						}
 
-
-					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance)
+					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN)
 
 					if(respJson.equals("Successful"))
 					{
