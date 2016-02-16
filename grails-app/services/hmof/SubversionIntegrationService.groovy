@@ -40,7 +40,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter
  */
 @Transactional
 class SubversionIntegrationService {
-	
+
 	def compareDomainInstanceService
 
 	/**
@@ -143,7 +143,7 @@ class SubversionIntegrationService {
 		return true
 	}
 
-	
+
 	/**
 	 * Check if the File exists in SVN
 	 * @param targetPath
@@ -151,10 +151,10 @@ class SubversionIntegrationService {
 	 * @throws SVNException
 	 */
 	public static boolean doesFileExist(String targetPath) throws SVNException {
-		
+
 		def username = Holders.config.svn.username
 		def password = Holders.config.svn.password
-		
+
 		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded( Holders.config.svn.url))
 		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
 		repository.setAuthenticationManager(authManager)
@@ -175,8 +175,8 @@ class SubversionIntegrationService {
 
 		return false
 	}
-	
-	
+
+
 	/**
 	 * Force an update to MDS ISBNs as part of a significant change to Program XML
 	 * @param programXMLInstance
@@ -211,66 +211,76 @@ class SubversionIntegrationService {
 
 
 			log.info "Searching for the MDS ISBNs that are required to be updated..."
-			
+
 			def newSecurePrograms = []
-			
+
 			if(programXMLInstance.secureProgram){
 				newSecurePrograms = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			}
-			
+
 			def newonlineIsbn = newSecurePrograms.onlineIsbn
-			
-			log.info"New Online ISBNs: $newonlineIsbn" 
+
+			log.info"New Online ISBNs: $newonlineIsbn"
 
 			// duplicated
 			File dir = new File( Holders.config.programXMLISBNsFolder)
 
 			log.info("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories")
-			
-			List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
-			
+
+
+			// ONLY find XML files
+			String[] xmlExtensions = [ "xml" ]
+			//List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+			List<File> files = (List<File>) FileUtils.listFiles(dir, xmlExtensions, true)
+
 			log.info "Files are: ######: ${files}"
-			
+
 			for (File file : files) {
 
-				if(file.getName().contains(newonlineIsbn))
+				if(file.getName() in newonlineIsbn)
 				{
-					log.info "Found MDS ISBN :"+file.getName()
+					log.info "Found MDS ISBN :" + file.getName()
 
 
-					String fileFullPath=file.getCanonicalFile()
-					String fileName=file.getName()
-					String fileUrl=fileFullPath.replace(fileName,"")
+					String fileFullPath = file.getCanonicalFile()
+					String fileName = file.getName()
+					String fileUrl = fileFullPath.replace(fileName,"")
 
-					String fileFullPath1=dir.getAbsolutePath()
-					String url=fileUrl.replace(fileFullPath1,"")
-					url=url.replaceAll("\\\\", "/");
+					String fileFullPath1 = dir.getAbsolutePath()
+					String url = fileUrl.replace(fileFullPath1,"")
+					url = url.replaceAll("\\\\", "/")
 
-					String svnUrl=Holders.config.svn.isbnsurl+url
-					log.info "SVN Folder Url ...:"+svnUrl
-					SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(svnUrl));
-					ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
-					repository.setAuthenticationManager(authManager);
+					String svnUrl = Holders.config.svn.isbnsurl+url
 
-					log.info "SVN Edit isbn file add property Action"
+					log.info "SVN Folder Url: $svnUrl"
 
-					ISVNEditor editor = repository.getCommitEditor("TT-1234: Adding ISBN XML to SVN using the HMOF Product Setup App" , null);
-					editor.openRoot(-1);
-					editor.openFile("/"+fileName, -1);
-					editor.changeFileProperty("/"+fileName, "dummy", SVNPropertyValue.create("CUST_DEV"));
-					editor.closeFile("/"+fileName,null);
-					editor.closeEdit();
+					SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(svnUrl))
+					ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+					repository.setAuthenticationManager(authManager)
+
+					log.info "Modifying MDS ISBN file"
+
+					ISVNEditor editor = repository.getCommitEditor("TT-1234: Adding ISBN XML to SVN using the HMOF Product Setup App" , null)
+					editor.openRoot(-1)
+					editor.openFile("/"+fileName, -1)
+					editor.changeFileProperty("/"+fileName, "dummy", SVNPropertyValue.create("CUST_DEV"))
+					editor.closeFile("/"+fileName,null)
+					editor.closeEdit()
 
 
 					log.info "SVN Commit isbn file Action"
+
 					SvnCommit commit = svnClient.createCommit()
-					log.info "commiting File :"+file.getCanonicalFile()
+
+					log.info "commiting File:" + file.getCanonicalFile()
 					commit.addTarget(SvnTarget.fromFile(file.getCanonicalFile()))
-					commit.setCommitMessage("TT-1234: Adding ISBN XML to SVN using the HMOF Product Setup App");
+					commit.setCommitMessage("TT-1234: Adding MDS ISBN XML to SVN using the HMOF Product Setup App")
 					commit.run()
-					return true;
+
+					return true
 				}
 			}
+
 			log.info "MDS ISBN XMLs has been committed to the MDS Content Repository"
 		}catch (Exception e)
 		{
@@ -280,7 +290,7 @@ class SubversionIntegrationService {
 
 		}
 
-		return false;
+		return false
 	}
 
 }
