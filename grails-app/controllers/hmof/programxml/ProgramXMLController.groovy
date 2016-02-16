@@ -401,7 +401,7 @@ class ProgramXMLController {
 			// If job has failed and the user want to retry
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Retried")
-			promotionJobInstance.properties = [status:JobStatus.PendingProgramRetry.getStatus(),jiraId:jiraId]
+			promotionJobInstance.properties = [status:JobStatus.PendingProgramRetry.getStatus(),jiraId:jiraId, user: userId]
 
 		}
 
@@ -410,7 +410,7 @@ class ProgramXMLController {
 			// If job was previously successful and user want to re-promote
 			flash.message = "Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted"
 			log.info("Job ${promotionJobInstance.jobNumber} that was in ${promotionJobInstance.status} status is being Re-promoted")
-			promotionJobInstance.properties = [status:JobStatus.PendingProgramRepromote.getStatus(),jiraId:jiraId]
+			promotionJobInstance.properties = [status:JobStatus.PendingProgramRepromote.getStatus(),jiraId:jiraId,user: userId]
 
 		}
 
