@@ -265,9 +265,10 @@ class SubversionIntegrationService {
 				url = url.replaceAll("\\\\", "/")
 
 				String svnUrl = Holders.config.svn.isbnsurl + url
+				
+				//TODO please explain this code?
 
 				log.info "SVN Folder Url: $svnUrl"
-
 				SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(svnUrl))
 				ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
 				repository.setAuthenticationManager(authManager)
