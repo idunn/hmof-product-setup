@@ -31,8 +31,8 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 import org.tmatesoft.svn.core.wc.SVNStatus
 import grails.util.Holders
 import hmof.programxml.ProgramXML
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.filefilter.TrueFileFilter
 
 /**
  * SubversionIntegrationService
@@ -40,6 +40,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  */
 @Transactional
 class SubversionIntegrationService {
+	
 	def compareDomainInstanceService
 
 	/**
@@ -72,12 +73,14 @@ class SubversionIntegrationService {
 
 
 	/**
-	 * Checkout SVN file to local cache
-	 * @param productToExport
-	 * @param localCacheLocation
+	 * Commit Files to SVN
+	 * @param localFilePath
+	 * @param log
+	 * @param programXMLInstance
+	 * @param updateMDSISBN
 	 * @return
 	 */
-	Boolean commitSvnContent( def localFilePath, Logger log,ProgramXML programXMLInstance,boolean updateMDSISBN ) {
+	Boolean commitSvnContent( def localFilePath, Logger log, ProgramXML programXMLInstance, boolean updateMDSISBN ) {
 
 		def svnClient = createSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
@@ -88,14 +91,14 @@ class SubversionIntegrationService {
 
 			def localCache =  new File(localFilePath)
 
-			log.info "Updating programXML Working Copy"
+			log.info "Updating programXML Working Copy: ${workingCopy}"
 
 			File workingCopyPath = new File(workingCopy)
 
 			// Run SVN Update ON Working Copy
 			SvnUpdate update = svnClient.createUpdate()
 			update.setSingleTarget(SvnTarget.fromFile(workingCopyPath))
-			update.setRevision(SVNRevision.HEAD);
+			update.setRevision(SVNRevision.HEAD)
 
 			update.run()
 
@@ -105,8 +108,8 @@ class SubversionIntegrationService {
 			if(!isExistfile){
 				log.info "Adding new programXML to SVN Working Copy"
 
-				final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition();
-				scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache));
+				final SvnScheduleForAddition scheduleForAddition = svnClient.createScheduleForAddition()
+				scheduleForAddition.setSingleTarget(SvnTarget.fromFile(localCache))
 				scheduleForAddition.run()
 
 			}
@@ -115,17 +118,17 @@ class SubversionIntegrationService {
 
 			SvnCommit commit = svnClient.createCommit()
 			commit.addTarget(SvnTarget.fromFile(localCache))
-			commit.setCommitMessage("TT-1234: Adding Program XML to SVN using the HMOF Product Setup App");
+			commit.setCommitMessage("TT-1234: Adding Program XML to SVN using the HMOF Product Setup WebApp")
 			commit.run()
 
 
-			log.info "SVN Add Action "
+			log.info "Program XML has been addded to the Working Copy"
 			log.info "ProgramXML has been committed to the MDS Content Repository"
-		   
-					
-			if(updateMDSISBN)		  			
-			  updateIsbnFileRevision(programXMLInstance,log,svnClient)
-			
+
+
+			if(updateMDSISBN)
+				updateIsbnFileRevision(programXMLInstance,log,svnClient)
+
 
 		}catch (Exception e)
 		{
@@ -140,32 +143,49 @@ class SubversionIntegrationService {
 		return true
 	}
 
-
+	
+	/**
+	 * Check if the File exists in SVN
+	 * @param targetPath
+	 * @return
+	 * @throws SVNException
+	 */
 	public static boolean doesFileExist(String targetPath) throws SVNException {
+		
 		def username = Holders.config.svn.username
 		def password = Holders.config.svn.password
-		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded( Holders.config.svn.url));
-		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
-		repository.setAuthenticationManager(authManager);
+		
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded( Holders.config.svn.url))
+		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
+		repository.setAuthenticationManager(authManager)
 
-		Collection entries = repository.getDir( "", -1 , null , (Collection) null );
-		Iterator iterator = entries.iterator( );
+		Collection entries = repository.getDir( "", -1 , null , (Collection) null )
+		Iterator iterator = entries.iterator( )
 		def localCache =  new File(targetPath)
 		String name=localCache.getName()
 		while ( iterator.hasNext( ) ) {
-			SVNDirEntry entry = ( SVNDirEntry ) iterator.next( );
-
+			SVNDirEntry entry = ( SVNDirEntry ) iterator.next( )
 
 			if(name.equals(entry.getName()))
 			{
 				println entry.getRevision()
-				return true;
+				return true
 			}
 		}
 
-		return false;
+		return false
 	}
-	public static boolean updateIsbnFileRevision( ProgramXML programXMLInstance ,Logger log,svnClient) throws SVNException {
+	
+	
+	/**
+	 * Force an update to MDS ISBNs as part of a significant change to Program XML
+	 * @param programXMLInstance
+	 * @param log
+	 * @param svnClient
+	 * @return
+	 * @throws SVNException
+	 */
+	public static boolean updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
 
 
 		def username = Holders.config.svn.username
@@ -176,33 +196,41 @@ class SubversionIntegrationService {
 		try{
 
 
-    		log.info "Updating ISBNs XML Working Copy"
+			log.info "Updating MDS ISBNs Working Copy: ${workingCopy}"
 
 			File workingCopyPath = new File(workingCopy)
 
 			// Run SVN Update ON Working Copy
 			SvnUpdate update = svnClient.createUpdate()
 			update.setSingleTarget(SvnTarget.fromFile(workingCopyPath))
-			update.setRevision(SVNRevision.HEAD);
+			update.setRevision(SVNRevision.HEAD)
 
 			update.run()
 
 			log.info "Working Copy is Updated!"
 
 
-			log.info "Searching for the MDS ISBN"
-			def newSecurePrograms=[]
+			log.info "Searching for the MDS ISBNs that are required to be updated..."
+			
+			def newSecurePrograms = []
+			
 			if(programXMLInstance.secureProgram){
-				newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+				newSecurePrograms = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			}
-			def newonlineIsbn=newSecurePrograms.onlineIsbn
-			println newonlineIsbn
+			
+			def newonlineIsbn = newSecurePrograms.onlineIsbn
+			
+			log.info"New Online ISBNs: $newonlineIsbn" 
 
+			// duplicated
+			File dir = new File( Holders.config.programXMLISBNsFolder)
 
-			File dir = new File( Holders.config.programXMLISBNsFolder);
-
-			log.info("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories");
-			List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+			log.info("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories")
+			
+			List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+			
+			log.info "Files are: ######: ${files}"
+			
 			for (File file : files) {
 
 				if(file.getName().contains(newonlineIsbn))
