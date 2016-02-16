@@ -34,17 +34,20 @@ class BambooIntegrationService {
 	 * @param deploymentBambooUrl
 	 * @param log
 	 * @param promotionInstance
+	 * @param programXMLInstance
 	 * @return Status of Promotion
 	 */
 	def bambooTrigger ( def idList, def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance) {
 
 		String comment = "Proccesed by the Product-Setup WebApp"
 		def newSecurePrograms=[]
+
 		if(programXMLInstance.secureProgram){
-			newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
+			newSecurePrograms = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 		}
-		String strOnlineIsbns = newSecurePrograms.onlineIsbn.toString();		
-		strOnlineIsbns = strOnlineIsbns.replaceAll("[\\[\\]]", "");
+
+		String strOnlineIsbns = newSecurePrograms.onlineIsbn.toString()
+		strOnlineIsbns = strOnlineIsbns.replaceAll("[\\[\\]]", "")
 		String endPoint = "${deploymentBambooUrl}?ExecuteAllStages=true&bamboo.variable.Comments=${jiraId}:${comment}&bamboo.variable.IdList=${idList},${strOnlineIsbns}&bamboo.variable.jiraIssue=${jiraId}"
 
 		log.info "Bamboo REST Url is: ${endPoint}"
