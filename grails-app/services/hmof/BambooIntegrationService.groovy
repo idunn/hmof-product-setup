@@ -37,7 +37,7 @@ class BambooIntegrationService {
 	 * @param programXMLInstance
 	 * @return Status of Promotion
 	 */
-	def bambooTrigger ( def idList, def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance,boolean updateMDSISBN) {
+	def bambooTrigger ( def idList, def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance, boolean updateMDSISBN) {
 
 		String comment = "Proccesed by the Product-Setup WebApp"
 		def newSecurePrograms=[]
