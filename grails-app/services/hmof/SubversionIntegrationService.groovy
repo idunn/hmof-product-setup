@@ -213,7 +213,7 @@ class SubversionIntegrationService {
 			}
 
 			def mdsISBN = secureProgramList.onlineIsbn
-			log.info"MDS ISBNs: $mdsISBN"
+			log.info"MDS ISBNs: ${mdsISBN}"
 
 			def mdsIsbnFile = []
 			mdsISBN.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
@@ -254,6 +254,8 @@ class SubversionIntegrationService {
 
 				def file = it
 				log.info "The file: ${file}"
+				
+				// TODO this needs to be improved
 
 				String fileFullPath = file.getCanonicalFile()
 				String fileName = file.getName()
