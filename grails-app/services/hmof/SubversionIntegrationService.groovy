@@ -90,20 +90,12 @@ class SubversionIntegrationService {
 
 		try{
 
-
 			def localCache =  new File(localFilePath)
 
 			log.info "Updating programXML Working Copy: ${workingCopy}"
-
 			File workingCopyPath = new File(workingCopy)
 
-			// Run SVN Update ON Working Copy
-			SvnUpdate update = svnClient.createUpdate()
-			update.setSingleTarget(SvnTarget.fromFile(workingCopyPath))
-			update.setRevision(SVNRevision.HEAD)
-
-			update.run()
-
+			doSvnUpdate(workingCopyPath)
 			log.info "Working Copy is Updated!"
 
 			def isExistfile = doesFileExist(localFilePath)
@@ -116,32 +108,21 @@ class SubversionIntegrationService {
 
 			}
 
-			log.info "SVN Commit Action"
-
-			SvnCommit commit = svnClient.createCommit()
-			commit.addTarget(SvnTarget.fromFile(localCache))
-			commit.setCommitMessage("TT-1234: Adding Program XML to SVN using the HMOF Product Setup WebApp")
-			commit.run()
-
-
-			log.info "Program XML has been addded to the Working Copy"
+			log.info "Committing Change..."
+			commitSvnContent(localCache)
 			log.info "ProgramXML has been committed to the MDS Content Repository"
 
-
-			if(updateMDSISBN)
-				updateIsbnFileRevision(programXMLInstance,log,svnClient)
+			if(updateMDSISBN){ forceMdsIsbnUpdateAndCommit( programXMLInstance, log, svnClient )}
 
 
 		}catch (Exception e)
 		{
 			log.error " SVN Error:  ${e}"
-
 			return false
 
 		}finally{
 			cleanupSvnOperationFactory(svnClient)
 		}
-
 		return true
 	}
 
@@ -185,8 +166,8 @@ class SubversionIntegrationService {
 	 * @return
 	 */
 	def setSvnProperty(def fileToModify){
-
-		//TODO consider try/catch
+		
+		def today = new Date()		
 
 		log.info"File to be modified: ${fileToModify}"
 
@@ -194,13 +175,12 @@ class SubversionIntegrationService {
 
 		SvnSetProperty changeProperty = svnClient.createSetProperty()
 		changeProperty.setSingleTarget(SvnTarget.fromFile(fileToModify))
-		changeProperty.setPropertyName("test")
-		changeProperty.setPropertyValue(SVNPropertyValue.create("CUST_DEV"))
+		changeProperty.setPropertyName("lastUpdated")
+		changeProperty.setPropertyValue(SVNPropertyValue.create(today.toString()))
 
 		changeProperty.run()
 
 		cleanupSvnOperationFactory(svnClient)
-
 	}
 
 	/**
@@ -219,7 +199,6 @@ class SubversionIntegrationService {
 		update.run()
 
 		cleanupSvnOperationFactory(svnClient)
-
 	}
 
 	/**
@@ -235,25 +214,23 @@ class SubversionIntegrationService {
 		SvnCommit commit = svnClient.createCommit()
 		log.info "commiting File: ${workingCopy}"
 		commit.addTarget(SvnTarget.fromFile(workingCopy))
-		commit.setCommitMessage("TT-1234: Committing MDS_ISBN to SVN using the HMOF Product-Setup App")
+		commit.setCommitMessage("TT-1234: Committing MDS Files to SVN using the HMOF Product-Setup App")
 		commit.run()
 
 		cleanupSvnOperationFactory(svnClient)
-
 
 	}
 
 
 	/**
-	 * Force an update to MDS ISBNs as part of a significant change to Program XML
+	 * Force an update to MDS ISBNs as part of a title change to Program XML
 	 * @param programXMLInstance
 	 * @param log
 	 * @param svnClient
 	 * @return
 	 * @throws SVNException
-	 */
-	//public static boolean updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
-	def updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
+	 */	
+	def forceMdsIsbnUpdateAndCommit( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
 
 		String workingCopy = Holders.config.programXMLISBNsFolder
 
@@ -261,6 +238,7 @@ class SubversionIntegrationService {
 
 			log.info "Updating MDS_ISBNs Working Copy: ${workingCopy}"
 			File workingCopyPath = new File(workingCopy)
+
 			doSvnUpdate(workingCopyPath)
 			log.info "Working Copy is Updated!"
 
@@ -269,66 +247,46 @@ class SubversionIntegrationService {
 				secureProgramList = SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 			}
 
-			def mdsISBN = secureProgramList.onlineIsbn
-			log.info"MDS ISBNs: ${mdsISBN}"
 
 			def mdsIsbnFile = []
-			mdsISBN.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
+			def mdsISBN = secureProgramList.onlineIsbn.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
 			log.info "${mdsIsbnFile}"
 
-			log.info("Getting all XML file...")
+			log.info("Getting all XML files from Working Copy...")
 			String[] xmlExtensions = [ "xml" ]
 			def listOfXmlFiles = FileUtils.listFiles(workingCopyPath, xmlExtensions, true)
 
 			log.info "Searching for the MDS ISBNs that are required to be updated..."
 			def mdsIsbnFilesFound = []
 
+			// find the MDS ISBN files
 			mdsIsbnFile.each{
-
-				def theFileToFind = it
-				log.info "Looking for $theFileToFind"
-
+				def fileToFind = it
+				log.info "Looking for $fileToFind"
 				listOfXmlFiles.each{
-
-					def theFilesToSearch = it
-
-					if (theFileToFind == theFilesToSearch.getName()){
-
-						log.info "found ${theFilesToSearch}"
-						mdsIsbnFilesFound << theFilesToSearch
-
+					def filesBeingSearched = it
+					if (fileToFind == filesBeingSearched.getName()){
+						log.info "Found MDS File: ${filesBeingSearched}"
+						mdsIsbnFilesFound << filesBeingSearched
 					}
 				}
 			}
 
-			log.info "Found the following files ${mdsIsbnFilesFound}"
+			log.info "The following files need to be modified: ${mdsIsbnFilesFound}"
+			// modify by setting SVN property on file in working copy
+			mdsIsbnFilesFound.each{ setSvnProperty(it) }
 
-			// modify files found
-			mdsIsbnFilesFound.each{
-
-				def localFile = it
-				// set property on file in working copy
-				setSvnProperty(localFile)
-
-			}
-
-			// call commit
-			log.info "Committing Change"
+			log.info "Committing Change..."
 			commitSvnContent(workingCopyPath)
-			log.info "Content committed!"
+			log.info "MDS ISBN Content Committed!"
 
 			return true
 
-			log.info "MDS ISBN XMLs has been committed to the MDS Content Repository"
 		}catch (Exception e)
 		{
-			log.error "Issue in updateIsbnFileRevision:  ${e}"
-
+			log.error "Issue in forceMdsIsbnUpdateAndCommit Method:  ${e}"
 			return false
-
 		}
-
 		return false
 	}
-
 }
