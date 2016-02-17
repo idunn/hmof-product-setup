@@ -151,8 +151,10 @@ environments {
 
 		cacheLocation="E:/ProductSetup-cache"
 		uploadFolder="E:/ProductSetup-cache/import"
-		programXMLFolder="E:/ProductSetup-cache/ProgramXML/MDS_Program/hmof/"
+		//programXMLFolder="E:/ProductSetup-cache/ProgramXML/MDS_Program/hmof/"
 		//programXMLFolder="C:/ProductSetup-cache/ProgramXML/hmof/"
+		programXMLFolder="E:/productSetup-cache/ProgramXML/MDS_Program/"
+		programXMLISBNsFolder="E:/ProductSetup-cache/ProgramXML/MDS_ISBNS/"
 	
 		javamelody.'storage-directory' = 'E:/ProductSetup-cache/PS_Monitoring/PS_javamelody'
 		// log4j configuration
