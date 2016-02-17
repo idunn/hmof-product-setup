@@ -23,8 +23,10 @@ import org.tmatesoft.svn.core.wc2.SvnGetInfo
 import org.tmatesoft.svn.core.wc2.SvnInfo
 import org.tmatesoft.svn.core.wc2.SvnOperationFactory
 import org.tmatesoft.svn.core.wc2.SvnScheduleForAddition
+import org.tmatesoft.svn.core.wc2.SvnSetProperty
 import org.tmatesoft.svn.core.wc2.SvnTarget
 import org.tmatesoft.svn.core.wc2.SvnUpdate
+import org.tmatesoft.svn.core.wc2.SvnSetProperty
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory
@@ -178,6 +180,71 @@ class SubversionIntegrationService {
 
 
 	/**
+	 * Take the files to be modified and set a property to force the revision change in SVN
+	 * @param fileToModify
+	 * @return
+	 */
+	def setSvnProperty(def fileToModify){
+
+		//TODO consider try/catch
+
+		log.info"File to be modified: ${fileToModify}"
+
+		def svnClient = createSvnOperationFactory()
+
+		SvnSetProperty changeProperty = svnClient.createSetProperty()
+		changeProperty.setSingleTarget(SvnTarget.fromFile(fileToModify))
+		changeProperty.setPropertyName("test")
+		changeProperty.setPropertyValue(SVNPropertyValue.create("CUST_DEV"))
+
+		changeProperty.run()
+
+		cleanupSvnOperationFactory(svnClient)
+
+	}
+
+	/**
+	 * Update Working Copy
+	 * @param fileToUpdate
+	 * @return
+	 */
+	def doSvnUpdate(def fileToUpdate){
+
+		def svnClient = createSvnOperationFactory()
+
+		SvnUpdate update = svnClient.createUpdate()
+		update.setSingleTarget(SvnTarget.fromFile(fileToUpdate))
+		update.setRevision(SVNRevision.HEAD)
+
+		update.run()
+
+		cleanupSvnOperationFactory(svnClient)
+
+	}
+
+	/**
+	 * Commit the Working directory to SVN
+	 * @override
+	 * @return
+	 */
+	Boolean commitSvnContent(def workingCopy){
+
+		def svnClient = createSvnOperationFactory()
+		log.info "Commit Working Copy"
+
+		SvnCommit commit = svnClient.createCommit()
+		log.info "commiting File: ${workingCopy}"
+		commit.addTarget(SvnTarget.fromFile(workingCopy))
+		commit.setCommitMessage("TT-1234: Committing MDS_ISBN to SVN using the HMOF Product-Setup App")
+		commit.run()
+
+		cleanupSvnOperationFactory(svnClient)
+
+
+	}
+
+
+	/**
 	 * Force an update to MDS ISBNs as part of a significant change to Program XML
 	 * @param programXMLInstance
 	 * @param log
@@ -185,26 +252,16 @@ class SubversionIntegrationService {
 	 * @return
 	 * @throws SVNException
 	 */
-	public static boolean updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
+	//public static boolean updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
+	def updateIsbnFileRevision( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
 
-
-		def username = Holders.config.svn.username
-		def password = Holders.config.svn.password
 		String workingCopy = Holders.config.programXMLISBNsFolder
 
-
 		try{
-			log.info "Updating MDS ISBNs Working Copy: ${workingCopy}"
 
+			log.info "Updating MDS_ISBNs Working Copy: ${workingCopy}"
 			File workingCopyPath = new File(workingCopy)
-
-			// Run SVN Update ON Working Copy
-			SvnUpdate update = svnClient.createUpdate()
-			update.setSingleTarget(SvnTarget.fromFile(workingCopyPath))
-			update.setRevision(SVNRevision.HEAD)
-
-			update.run()
-
+			doSvnUpdate(workingCopyPath)
 			log.info "Working Copy is Updated!"
 
 			def secureProgramList = []
@@ -219,10 +276,7 @@ class SubversionIntegrationService {
 			mdsISBN.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
 			log.info "${mdsIsbnFile}"
 
-			log.info("Getting all files in " + workingCopyPath.getCanonicalPath() + " including those in subdirectories")
-
-
-			// Only find XML files
+			log.info("Getting all XML file...")
 			String[] xmlExtensions = [ "xml" ]
 			def listOfXmlFiles = FileUtils.listFiles(workingCopyPath, xmlExtensions, true)
 
@@ -249,55 +303,26 @@ class SubversionIntegrationService {
 
 			log.info "Found the following files ${mdsIsbnFilesFound}"
 
-			// TODO now we have a list of files we want to modify them and commit			
+			// modify files found
 			mdsIsbnFilesFound.each{
 
-				def file = it
-				log.info "The file: ${file}"
-				
-				// TODO this needs to be improved
-
-				String fileFullPath = file.getCanonicalFile()
-				String fileName = file.getName()
-				String fileUrl = fileFullPath.replace(fileName,"")
-				String fileFullPath1 = workingCopyPath.getAbsolutePath()
-				String url = fileUrl.replace(fileFullPath1,"")
-				url = url.replaceAll("\\\\", "/")
-
-				String svnUrl = Holders.config.svn.isbnsurl + url
-				
-				//TODO please explain this code?
-
-				log.info "SVN Folder Url: $svnUrl"
-				SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIDecoded(svnUrl))
-				ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password)
-				repository.setAuthenticationManager(authManager)
-
-				log.info "Modifying MDS ISBN file"
-
-				ISVNEditor editor = repository.getCommitEditor("TT-1234: Adding ISBN XML to SVN using the HMOF Product Setup App" , null)
-				editor.openRoot(-1)
-				editor.openFile("/"+fileName, -1)
-				editor.changeFileProperty("/"+fileName, "dummy", SVNPropertyValue.create("CUST_DEV"))
-				editor.closeFile("/"+fileName,null)
-				editor.closeEdit()
-
-				log.info "SVN Commit isbn file Action"
-
-				SvnCommit commit = svnClient.createCommit()
-				log.info "commiting File:" + file.getCanonicalFile()
-				commit.addTarget(SvnTarget.fromFile(file.getCanonicalFile()))
-				commit.setCommitMessage("TT-1234: Adding MDS ISBN XML to SVN using the HMOF Product Setup App")
-				commit.run()
-
-				return true
+				def localFile = it
+				// set property on file in working copy
+				setSvnProperty(localFile)
 
 			}
+
+			// call commit
+			log.info "Committing Change"
+			commitSvnContent(workingCopyPath)
+			log.info "Content committed!"
+
+			return true
 
 			log.info "MDS ISBN XMLs has been committed to the MDS Content Repository"
 		}catch (Exception e)
 		{
-			log.error " SVN Error:  ${e}"
+			log.error "Issue in updateIsbnFileRevision:  ${e}"
 
 			return false
 
