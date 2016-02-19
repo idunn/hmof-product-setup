@@ -68,6 +68,7 @@ class BambooIntegrationService {
 
 		def buildKey = "${resp.json.buildResultKey}"
 		log.info "The build key is: ${buildKey}"
+		def browsePlanUrl = "${Holders.config.bamboo.browse.plan}"
 
 
 		def status
@@ -98,14 +99,14 @@ class BambooIntegrationService {
 			}else if(status.equals("Successful"))
 			{
 				log.info "Bamboo build plan status: " + status
-				log.info "${deploymentBambooUrl}-${buildKey}"
+				log.info "${browsePlanUrl}${buildKey}"
 				return status
 
 			}else if(status.equals("Failed"))
 			{
 				log.info "Bamboo build plan status: " + status
 				log.info "Bamboo build plan ${buildKey} Failed! Please check the bamboo logs to help rectify the issue"
-				log.info "${deploymentBambooUrl}-${buildKey}"
+				log.info "${browsePlanUrl}${buildKey}"
 				promotionInstance.properties = [bambooPlanNumber:resp.json.buildResultKey]
 				return status
 			}

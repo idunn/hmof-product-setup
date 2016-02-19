@@ -231,6 +231,7 @@ bamboo.test.username = 'admin'
 bamboo.test.password = 'admin'
 bamboo.hosturl="http://dubv-engbam05.dubeng.local:8085"
 bamboo.resulturl="http://dubv-engbam05.dubeng.local:8085/rest/api/latest/result/"
+bamboo.browse.plan="http://dubv-engbam05.dubeng.local:8085/browse/"
 
 
 
