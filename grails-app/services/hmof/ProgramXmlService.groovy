@@ -222,7 +222,7 @@ class ProgramXmlService {
 	{
 
 
-
+		
 		def builder = new groovy.xml.StreamingMarkupBuilder()
 		builder.encoding = 'UTF-8'
 		StringBuilder sb = new StringBuilder();
@@ -231,10 +231,11 @@ class ProgramXmlService {
 		try{
 
 			def programsXMLLocation = Holders.config.programXMLFolder
-
+			
 			File f = new File(programsXMLLocation);
 			f.mkdir();
 			File f1 = new File(programsXMLLocation+programXMLInstance.filename);
+			subversionIntegrationService.doSvnUpdate(f1)
 			if(f1.exists()) {
 
 
