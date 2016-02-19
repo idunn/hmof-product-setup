@@ -5,15 +5,23 @@
 			<div class="col-lg-4">
 				<h4 style="color:#5BC0DE">Support</h4>
 				<ul class="unstyled">
+				
 					<li><p>
 			    		<i class="glyphicon glyphicon-book"></i>
 						<a target="_blank" href="https://confluence.hmhco.com/display/tool/User+Guide+-+Product+Setup+App" style="color:#bbb">User Guide</a>
-				</p>	</li>
-						<li><p>
+					</p></li>
+				
+					<li><p>
+			    		<i class="glyphicon glyphicon-wrench"></i>
+						<a target="_blank" href="https://confluence.hmhco.com/display/tool/User+Guide+-+Product+Setup+App#UserGuide-ProductSetupApp-ProgramXML" style="color:#bbb">Program XML</a>
+					</p></li>
+				
+					<li><p>
 			    		<i class="glyphicon glyphicon-hand-right"></i>
 						<a target="_blank" href="https://confluence.hmhco.com/display/tool/HMOF+Product+Setup+Best+Practices" style="color:#bbb">Best Practices</a>
 					</p></li>
-						<li><p>
+					
+					<li><p>
 			    		<i class="glyphicon glyphicon-hand-right"></i>
 						<a target="_blank" href="http://172.17.1.16:8080/SapWrapperApplication" style="color:#bbb">SAP Wrapper</a>
 					</p></li>			
