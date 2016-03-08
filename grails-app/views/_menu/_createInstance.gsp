@@ -2,7 +2,6 @@
 <%@ page import="hmof.UtilityService"%>
 
 		<g:set var="userdetails" bean="utilityService"/>
-<g:if test="${(params.controller == 'program' && params.action =='list') || (params.controller == 'bundle' && params.action =='list') ||(params.controller == 'secureProgram' && params.action =='list') ||(params.controller == 'commerceObject' && params.action =='list')}">
 <sec:ifAnyGranted roles="ROLE_PM,ROLE_ADMIN">
 	<li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-edit"></i> <span><g:message code="default.submenu.job.promote" default="Create" /></span> <b class="caret"></b></a>
 				<ul class="dropdown-menu">					
@@ -29,5 +28,3 @@
 				
 				</li>
 	</sec:ifAnyGranted>
-
-</g:if>
