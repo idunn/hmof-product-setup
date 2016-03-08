@@ -61,7 +61,7 @@
 					code="commerceObject.teacherUrl.label" default="Teacher Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="teacherUrl"
-					value="${commerceObjectInstance?.teacherUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Teacher Only Content" />
+					value="${commerceObjectInstance?.teacherUrl}"   data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Teacher Only Content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'teacherUrl', 'error-field')}
 				</span>
@@ -87,7 +87,7 @@
 					code="commerceObject.studentUrl.label" default="Student Url" /></label>
 			<div class="controls">
 				<g:textField class="form-control" name="studentUrl"
-					value="${commerceObjectInstance?.studentUrl}" data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Student Content" />
+					value="${commerceObjectInstance?.studentUrl}"  data-toggle="tooltip" data-placement="right" data-container="body" title="Path to Student Content" />
 				<span class="help-inline">
 					${hasErrors(bean: commerceObjectInstance, field: 'studentUrl', 'error-field')}
 				</span>
