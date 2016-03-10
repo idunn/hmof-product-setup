@@ -50,9 +50,40 @@ class CommerceObject implements Comparable{
 
 		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
 		teacherLabel (blank: false, nullable:true,maxSize:50)
-		teacherUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/\.]+(?<!\/$)/,maxSize:600)
+		teacherUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+			if(null!=val )
+			{
+		
+
+				if(val.contains("http://my.hrw.com") || val.contains("https://my.hrw.com")){
+
+					return 'hmof.CommerceObject.studentUrl.matches.invalid'
+				}else{
+
+					return true
+				}
+			}else
+			{
+				return true
+			}
+		})
 		studentLabel (blank: false, nullable:true,maxSize:50)
-		studentUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/\.]+(?<!\/$)/,maxSize:600)
+		studentUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+			if(null!=val )
+			{
+				
+				if(val.contains("http://my.hrw.com") || val.contains("https://my.hrw.com")){
+
+					return 'hmof.CommerceObject.studentUrl.matches.invalid'
+				}else{
+
+					return true
+				}
+			}else
+			{
+				return true
+			}
+		})
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
 		objectReorderNumber (range: 0..16) // only legacy products can have order number 0
 		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )

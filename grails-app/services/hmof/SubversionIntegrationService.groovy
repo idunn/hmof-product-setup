@@ -91,13 +91,13 @@ class SubversionIntegrationService {
 		try{
 
 			def localCache =  new File(localFilePath)
-
-			log.info "Updating programXML Working Copy: ${workingCopy}"
 			File workingCopyPath = new File(workingCopy)
+			/*log.info "Updating programXML Working Copy: ${workingCopy}"
 
+			
 			doSvnUpdate(workingCopyPath)
 			log.info "Working Copy is Updated!"
-
+*/
 			def isExistfile = doesFileExist(localFilePath)
 			if(!isExistfile){
 				log.info "Adding new programXML to SVN Working Copy"
@@ -191,7 +191,6 @@ class SubversionIntegrationService {
 	def doSvnUpdate(def fileToUpdate){
 
 		def svnClient = createSvnOperationFactory()
-
 		SvnUpdate update = svnClient.createUpdate()
 		update.setSingleTarget(SvnTarget.fromFile(fileToUpdate))
 		update.setRevision(SVNRevision.HEAD)

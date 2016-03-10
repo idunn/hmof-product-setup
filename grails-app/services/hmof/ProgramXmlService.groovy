@@ -107,22 +107,23 @@ class ProgramXmlService {
 
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
-					
-					
+
+
 					def previousJob = deploymentService.getPreviousProgramXMLJob( instanceNumber, jobNumber, envId )
 					def previousRevision
-					boolean updateMDSISBN=false
-						if (previousJob)
-					    {
-							previousRevision=previousJob.revision
-							
-							def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
-							
-						   if( updatedValues.containsKey('title')){
-							   updateMDSISBN=true
-						   }
+				    boolean updateMDSISBN=false
+					if (previousJob)
+					{
+						previousRevision=previousJob.revision
+
+						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
+						println updatedValues
+						if( updatedValues.containsKey('title')){
+							updateMDSISBN=true
+						}
 						
-					    }
+
+					}
 					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance,updateMDSISBN)
 
 					if(commitJobs )
@@ -163,22 +164,22 @@ class ProgramXmlService {
 					def localTextURL=pathStr+".txt"
 					customerLog = initializeLogger(programXMLInstance.buid, cacheLocation,envId,5)
 					customerLog=getLogHeader(customerLog, envId, jobNumber, user_Name, envName )
-					
-					
+
+
 					def previousJob = deploymentService.getPreviousProgramXMLJob( instanceNumber, jobNumber, envId )
 					def previousRevision
 					boolean updateMDSISBN=false
-						if (previousJob)
-						{
-							previousRevision=previousJob.revision
-							
-							def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
-							
-						   if( updatedValues.containsKey('title')){
-							   updateMDSISBN=true
-						   }
-						
+					if (previousJob)
+					{
+						previousRevision=previousJob.revision
+
+						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
+
+						if( updatedValues.containsKey('title') || updatedValues.containsKey('secureProgram') ){
+							updateMDSISBN=true
 						}
+
+					}
 
 					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN)
 
@@ -222,7 +223,7 @@ class ProgramXmlService {
 	{
 
 
-		
+
 		def builder = new groovy.xml.StreamingMarkupBuilder()
 		builder.encoding = 'UTF-8'
 		StringBuilder sb = new StringBuilder();
@@ -231,7 +232,7 @@ class ProgramXmlService {
 		try{
 
 			def programsXMLLocation = Holders.config.programXMLFolder
-			
+
 			File f = new File(programsXMLLocation);
 			f.mkdir();
 			File f1 = new File(programsXMLLocation+programXMLInstance.filename);
