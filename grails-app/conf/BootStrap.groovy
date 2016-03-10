@@ -17,7 +17,7 @@ class BootStrap {
 	def init = { servletContext ->
 
 
-		// test if data exists by looking for a Program on startup
+		/*// test if data exists by looking for a Program on startup
 		if(Program.where{}.list().isEmpty()){
 
 			//Security Order matters but shouldn't there is a bug where a User cannot be in more than one group
@@ -227,7 +227,7 @@ class BootStrap {
 				def b11 = new Bundle(program:p4, isbn:'9780123456760',title:'Visual Math NY, ete Grade 7, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)
 				def b12 = new Bundle(program:p4, isbn:'9780123456761',title:'Visual Math NY, ete, Grade 7, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,userUpdatingBundle:'Dev',contentType:ct2).addToSecureProgram(sp7).save(failOnError:true)
 
-				/*def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
+				def b13 = new Bundle(program:p1, isbn:'9780123456762',title:'Visual Math load Testing, Grade 7, 2016, 3Y',duration:'3-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b14 = new Bundle(program:p1, isbn:'9780123456763',title:'Visual Math load Testing, Grade 7, 2016, 4Y',duration:'4-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b15 = new Bundle(program:p1, isbn:'9780123456764',title:'Visual Math load Testing, Grade 7, 2016, 5Y',duration:'5-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
 				 def b16 = new Bundle(program:p1, isbn:'9780123456765',title:'Visual Math load Testing, Grade 7, 2016, 6Y',duration:'6-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp1).save(failOnError:true)
@@ -245,7 +245,7 @@ class BootStrap {
 				 def b28 = new Bundle(program:p1, isbn:'9780123456777',title:'Visual Math load Testing2, Grade 9, 2016, 8Y',duration:'8-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp3).save(failOnError:true)
 				 def b29 = new Bundle(program:p1, isbn:'9780123456778',title:'Visual Math load Testing2, Grade 10, 2016, 1Y',duration:'1-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
 				 def b30 = new Bundle(program:p1, isbn:'9780123456779',title:'Visual Math load Testing2, Grade 10, 2016, 2Y',duration:'2-Year',includePremiumCommerceObjects:false,contentType:ct2).addToSecureProgram(sp4).save(failOnError:true)
-				 */
+				 
 			}
 
 
@@ -253,7 +253,7 @@ class BootStrap {
 
 
 
-		includeProgramXML()
+		includeProgramXML()*/
 
 
 
