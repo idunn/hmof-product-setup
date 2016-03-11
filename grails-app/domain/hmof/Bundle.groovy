@@ -36,7 +36,7 @@ class Bundle implements Comparable {
 
 	static constraints = {
 		isbn (blank: false, matches:/([0-9]{13})$/,unique: true)
-		title (blank: false,maxSize:125,matches:/^[A-Za-z0-9\/\s`~,.<>;&#%\xA9^*!:"\/\[\]\|{}()=_+-\.\-]+$/)
+		title (blank: false,maxSize:125,matches:/^[A-Za-z0-9\/\s~,.<>;&#%\xA9^*!:\/\[\]\|{}()=_+-\.\-]+$/)
 		includePremiumCommerceObjects(nullable: true)
 		duration (inList: ["1-Year", "2-Year", "3-Year", "4-Year", "5-Year", "6-Year", "7-Year", "8-Year"], nullable:false)
 		program()

@@ -16,11 +16,37 @@ hibernate {
 // environment specific settings
 environments {
 	development {
+		
+		
+		dataSource {
+			pooled = true
+			driverClassName = "com.mysql.jdbc.Driver"
+			username = "productsetup"
+			password = "products3tup!"
+			dbCreate = "update" // create-drop or update
+			url = "jdbc:mysql://127.0.0.1:3306/productsetup"
+			dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+			properties {
+				// See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
+				maxActive = -1
+				minEvictableIdleTimeMillis=1800000
+				timeBetweenEvictionRunsMillis=1800000
+				numTestsPerEvictionRun=3
+				testOnBorrow=true
+				testWhileIdle=true
+				testOnReturn=true
+				validationQuery="SELECT 1"
+
+			}
+		}
+	
+		
+		/*
 		dataSource {
 			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
 			url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
 		}
-	}
+	*/}
 	test {
 		dataSource {
 			dbCreate = "update"
