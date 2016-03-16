@@ -4,7 +4,7 @@ import org.hibernate.envers.Audited
 
 @Audited
 class CommerceObject implements Comparable{
-	
+
 	static searchable = true
 	String objectName
 	String isbnNumber
@@ -50,10 +50,10 @@ class CommerceObject implements Comparable{
 
 		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
 		teacherLabel (blank: false, nullable:true,maxSize:50)
-		teacherUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+		teacherUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
 			if(null!=val )
 			{
-		
+
 
 				if(val.contains("http://my.hrw.com") || val.contains("https://my.hrw.com")){
 
@@ -68,10 +68,11 @@ class CommerceObject implements Comparable{
 			}
 		})
 		studentLabel (blank: false, nullable:true,maxSize:50)
-		studentUrl (blank: true, nullable: true,matches:/^(\/|j|J|((http|https):\/\/))[\w\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+		// starts with /, javascript, http or https
+		studentUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
 			if(null!=val )
 			{
-				
+
 				if(val.contains("http://my.hrw.com") || val.contains("https://my.hrw.com")){
 
 					return 'hmof.CommerceObject.studentUrl.matches.invalid'
@@ -84,7 +85,7 @@ class CommerceObject implements Comparable{
 				return true
 			}
 		})
-		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])		
+		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])
 		objectReorderNumber (range: 0..16) // only legacy products can have order number 0
 		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
 		comments (maxSize:200, nullable:true, widget: 'textarea')
