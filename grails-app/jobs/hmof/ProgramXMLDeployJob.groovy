@@ -7,7 +7,7 @@ class ProgramXMLDeployJob {
 	def deploymentService
 	def programXmlService
 	static triggers = {
-		simple repeatInterval: 60 * 1000 // execute job once in 60 seconds		
+		simple startDelay: 60000, repeatInterval: 40 * 1000 // execute job once in 40 seconds		
 		
 	}
 

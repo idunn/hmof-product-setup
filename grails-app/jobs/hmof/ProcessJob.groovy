@@ -7,7 +7,7 @@ class ProcessJob {
 	def deploymentService
 
 	static triggers = {
-		simple repeatInterval: 30 * 1000 // execute job once in 30 seconds		
+		simple startDelay: 60000, repeatInterval: 30 * 1000 // execute job once in 30 seconds		
 		
 	}
 
