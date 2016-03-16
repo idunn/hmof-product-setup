@@ -20,6 +20,7 @@ class CommerceObjectController {
 	def springSecurityService
 	def deploymentService
 	def utilityService
+	def compareDomainInstanceService
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -29,18 +30,32 @@ class CommerceObjectController {
 	 * @return
 	 */
 	@Transactional
-	def updateParent(def currentInstance){
+	def updateParent(def currentInstance, boolean updateAllParents){
 
 		log.info "Executing action $actionName"
+		log.info "Updating All parents is: $updateAllParents"
 
 		def secureProgramInstances = SecureProgram.where{commerceObjects{id==currentInstance.id}}.list()
-
+		
 		def bundleInstances = []
 		// Needed for MySql database
 		if(!secureProgramInstances.isEmpty()){
 			bundleInstances = Bundle.where{secureProgram{id in secureProgramInstances.id}}.list()
 		}
 
+		if (updateAllParents){
+
+			secureProgramInstances.each{
+				it.properties = [lastUpdated: new Date(),userUpdatingSProgram: springSecurityService?.currentUser?.username]
+			}		
+
+			bundleInstances.each{
+				it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
+			}	
+
+		}
+		
+		// update program every-time
 		def programInstances = []
 		// Needed for MySql database
 		if(!bundleInstances.isEmpty()){
@@ -55,6 +70,8 @@ class CommerceObjectController {
 
 		// only update Bundles on a delete action - envers will detect that the SP has been modified
 		if (actionName == "delete"){
+			
+			log.info "A Commerce Object is being deleted... Notifying parent"
 
 			bundleInstances.each{
 				it.properties = [lastUpdated: new Date(),userUpdatingBundle: springSecurityService?.currentUser?.username]
@@ -384,8 +401,22 @@ class CommerceObjectController {
 		}
 		commerceObjectInstance.userUpdatingCO = springSecurityService?.currentUser?.username
 		commerceObjectInstance.save flush:true
+
 		// update the timeStamp of all its parents so that the change is reflected in Envers
-		updateParent(commerceObjectInstance)
+		//updateParent(commerceObjectInstance)
+		def updatedValues = compareDomainInstanceService.getDiffMap(commerceObjectInstance)
+		if( updatedValues.containsKey('objectName') || updatedValues.containsKey('isbnNumber') || updatedValues.containsKey('isPremium')){
+
+			log.info "Updating parent SecureProgram, Bundles and Programs"
+			boolean updateAll = true
+			updateParent( commerceObjectInstance, updateAll )
+		}
+
+		else{
+			log.info "Updating Programs Only"
+			boolean updateAllParents = false
+			updateParent( commerceObjectInstance, updateAllParents )
+		}
 
 		request.withFormat {
 			form {
@@ -408,7 +439,7 @@ class CommerceObjectController {
 		}
 
 		log.info "Updating the revisions of parent objects"
-		updateParent(commerceObjectInstance)
+		updateParent(commerceObjectInstance, false)
 
 		log.info "Removing Parent associations from the CO that is being deleted"
 		removeAssociations(commerceObjectInstance)
