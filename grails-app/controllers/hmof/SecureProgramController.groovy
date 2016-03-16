@@ -87,14 +87,14 @@ class SecureProgramController {
 			bundle.removeFromSecureProgram(currentInstance)
 		}
 		def parentProgramXmls = ProgramXML.where{secureProgram{id==currentInstance.id}}.list()
-		
-				log.info"Parent ProgramXmls in association" + parentProgramXmls
-		
-				parentProgramXmls.each{
-		
-					def program = ProgramXML.get(it.id)
-					program.removeFromSecureProgram(currentInstance)
-				}
+
+		log.info"Parent ProgramXmls in association" + parentProgramXmls
+
+		parentProgramXmls.each{
+
+			def program = ProgramXML.get(it.id)
+			program.removeFromSecureProgram(currentInstance)
+		}
 
 		def childCommerceObjects = []
 		childCommerceObjects += currentInstance.commerceObjects
@@ -343,8 +343,8 @@ class SecureProgramController {
 			respond secureProgramInstance.errors, view:'create'
 			return
 		}
-		
-		
+
+
 
 		if (!secureProgramInstance.save(flush: true)) {
 			render(view: "create", model: [secureProgramInstance: secureProgramInstance])
@@ -359,7 +359,7 @@ class SecureProgramController {
 		}
 		log.info "Successfully saved Secure Program :"+secureProgramInstance.productName
 	}
-	
+
 	@Secured(['ROLE_PM', 'ROLE_ADMIN'])
 	def edit(SecureProgram secureProgramInstance) {
 		respond secureProgramInstance
@@ -367,7 +367,7 @@ class SecureProgramController {
 
 	@Transactional
 	def update(SecureProgram secureProgramInstance) {
-		
+
 		if (secureProgramInstance == null) {
 			log.info "updating Secure Program Not Found"
 			notFound()
@@ -404,9 +404,6 @@ class SecureProgramController {
 
 		secureProgramInstance.save flush:true
 
-		// Update the timeStamp of all its parents so that the change is reflected in Envers
-
-		// TODO
 		def updatedValues = compareDomainInstanceService.getDiffMap(secureProgramInstance)
 		if( updatedValues.containsKey('commerceObjects') || updatedValues.containsKey('includeDashboardObject') || updatedValues.containsKey('registrationIsbn') ||
 		updatedValues.containsKey('includeEplannerObject') ||  updatedValues.containsKey('includeNotebookObject')){
@@ -451,7 +448,7 @@ class SecureProgramController {
 		// notify of delete
 		log.info "Updating the revisions of parent objects"
 		boolean updateAll = true
-		updateParent(secureProgramInstance, updateAll)		
+		updateParent(secureProgramInstance, updateAll)
 
 		log.info "Removing Parent/Child associations from the SP that is being deleted"
 		removeAssociations(secureProgramInstance)
