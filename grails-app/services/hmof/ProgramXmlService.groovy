@@ -7,8 +7,12 @@ import org.apache.log4j.PropertyConfigurator
 
 import grails.util.Holders
 import groovy.xml.StreamingMarkupBuilder
+import groovy.xml.streamingmarkupsupport.BaseMarkupBuilder.Document
 import hmof.programxml.ProgramXML
 import hmof.security.*
+import javax.xml.bind.Element
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 import org.apache.commons.io.FileUtils
 
 
@@ -117,7 +121,7 @@ class ProgramXmlService {
 						previousRevision=previousJob.revision
 
 						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
-						println updatedValues
+						
 						if( updatedValues.containsKey('title')){
 							updateMDSISBN=true
 						}
@@ -245,7 +249,7 @@ class ProgramXmlService {
 				def oldSecurePrograms=[]
 				def oldSecurePrograms1=[]
 				def oldSecurePrograms2=[]
-
+				def editSecurePrograms=[]
 
 
 				if(programXMLInstance.secureProgram){
@@ -266,7 +270,7 @@ class ProgramXmlService {
 
 				def newonlineIsbn=newSecurePrograms.onlineIsbn
 				oldSecurePrograms.removeAll(newonlineIsbn);
-				newonlineIsbn.removeAll(oldSecurePrograms1);
+			//	newonlineIsbn.removeAll(oldSecurePrograms1);
 
 
 				def secprogramIds= utilityService.getProgramXMLAudSecurePrograms(programXMLInstance.id)
@@ -282,24 +286,53 @@ class ProgramXmlService {
 
 				if(!root['@buid'].equals(programXMLInstance.buid))
 					root['@buid']=programXMLInstance.buid
-				newonlineIsbn.each{
-					String newISBN=it
-
-					def toadd = "<hsp_product><product_isbn lang='en_us'>"+newISBN+"</product_isbn></hsp_product>"
+					
+					
+					def parent;
+					if(newonlineIsbn){
+						editSecurePrograms =SecureProgram.where{onlineIsbn in (newonlineIsbn)}.list()
+					
+					
+					
+					newonlineIsbn.each{					
+											def misbn=it
+											
+													def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==misbn}
+											
+													if(nodeToDel)
+													{
+													parent = nodeToDel.parent()
+													parent.remove(nodeToDel)
+													}
+									}
+													
+											
+			
+	   
+				editSecurePrograms.each{
+				
+					def knewton="";
+					if(null!=it.knewtonProduct && it.knewtonProduct){
+						
+						knewton="<KnowledgeGraph><warm_up_time_limit>"+it.knowledgeGraphWarmUpTimeLimit+"</warm_up_time_limit><intervention_time_limit>"+it.knowledgeGraphEnrichmentTimeLimit+"</intervention_time_limit><enrichment_time_limit>"+it.knowledgeGraphEnrichmentCbiTimeLimit+"</enrichment_time_limit><environmentKGIds><certReviewKG>"+it.knowledgeGraphIdDev+"</certReviewKG><prodReviewKG>"+it.knowledgeGraphIdQA+"</prodReviewKG><prodKG>"+it.knowledgeGraphIdProd+"</prodKG></environmentKGIds></KnowledgeGraph>"					
+					}					
+										
+					def toadd = "<hsp_product><product_isbn lang='"+it.language+"'>"+it.onlineIsbn+"</product_isbn>"+knewton+"</hsp_product>"
 					def fragmentToAdd = new XmlParser().parseText( toadd )
 					root.children().add( 0, fragmentToAdd )
-
+					
 
 				}
 
-				def parent
+			}
 
 				oldSecurePrograms.each{
+					
 					String isbn= it
 					oldProgramInstanceIsbns.each{
 
 						if(isbn.equals(it)){
-
+							
 							def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}
 							parent = nodeToDel.parent()
 							parent.remove(nodeToDel)
@@ -342,13 +375,29 @@ class ProgramXmlService {
 								for(int i=0;i<programXMLInstance.secureProgram.size();i++)
 								{
 
-									hsp_product{product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)}
+									hsp_product{
+										
+										product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)  
+										if(null!=programXMLInstance.secureProgram[i].knewtonProduct && programXMLInstance.secureProgram[i].knewtonProduct)
+										{
+											KnowledgeGraph{
+											warm_up_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphWarmUpTimeLimit)
+											indtervention_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentTimeLimit)
+											enrichment_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentCbiTimeLimit)
+											environmentKGIds{
+												certReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdDev)
+												prodReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdQA)
+												prodKG(programXMLInstance.secureProgram[i].knowledgeGraphIdProd)
+											}
+											}
+										}
+									}
 
 								}
 
 							}
 				}
-
+			
 
 				items.add(programsXMLLocation+"/"+programXMLInstance.filename)
 				def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)

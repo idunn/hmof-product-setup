@@ -482,7 +482,7 @@
 				<div class="controls">				
 					
 					<g:checkBox name="knewtonProduct"  value="${secureProgramInstance?.knewtonProduct}" data-toggle="collapse" data-target="#demo" onchange="pageonload()" />
-					
+					<g:hiddenField name="oldknewtonProduct" value="${secureProgramInstance?.knewtonProduct}" />
 					<span class="help-inline">${hasErrors(bean: secureProgramInstance, field: 'knewtonProduct', 'error-field')}</span>
 				</div>
 			</div>
@@ -494,7 +494,7 @@
 				<label for="knowledgeGraphIdDev" class="control-label col-sw-1"><g:message code="secureProgram.knowledgeGraphIdDev.label" default="Knowledge Graph Id Dev" /></label>
 				<div  class="controls">
 					<g:textField class="form-control" name="knowledgeGraphIdDev" pattern="${secureProgramInstance.constraints.knowledgeGraphIdDev.matches}"  value="${secureProgramInstance?.knowledgeGraphIdDev}"  />
-					</div>
+				</div>
 			</div>
 
 			<div class="control-group fieldcontain ${hasErrors(bean: secureProgramInstance, field: 'knowledgeGraphIdQA', 'error-field')} ">

@@ -4,12 +4,11 @@ package hmof
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import hmof.deploy.*
-
 import hmof.security.*
-
 import grails.plugin.springsecurity.annotation.Secured
 
 import org.apache.log4j.Logger
+
 import hmof.programxml.*
 @Transactional(readOnly = true)
 class SecureProgramController {
@@ -419,9 +418,10 @@ class SecureProgramController {
 			updateParent( secureProgramInstance, updateBundle)
 		}
 
+		if( updatedValues.containsKey('onlineIsbn') || updatedValues.containsKey('language') || updatedValues.containsKey('knowledgeGraphIdDev') ||
+		updatedValues.containsKey('knowledgeGraphIdQA') ||  updatedValues.containsKey('knowledgeGraphIdProd')|| updatedValues.containsKey('knowledgeGraphWarmUpTimeLimit') ||
+		updatedValues.containsKey('knowledgeGraphEnrichmentTimeLimit') ||  updatedValues.containsKey('knowledgeGraphEnrichmentCbiTimeLimit')){
 
-		if(!params.oldonlineIsbn.equals(params.onlineIsbn) || !params.oldlanguage.equals(params.language))
-		{
 			log.info "Online ISBN has been modified!"
 			updateProgramXML(secureProgramInstance)
 		}
