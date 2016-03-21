@@ -50,7 +50,7 @@ class CommerceObject implements Comparable{
 
 		pathToCoverImage (blank: false, nullable: true, matches:/^\/[\w\/\.]+(png|jpg|gif$)|(\/dummy)/,maxSize:200)
 		teacherLabel (blank: false, nullable:true,maxSize:50)
-		teacherUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+		teacherUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;?&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
 			if(null!=val )
 			{
 
@@ -69,7 +69,7 @@ class CommerceObject implements Comparable{
 		})
 		studentLabel (blank: false, nullable:true,maxSize:50)
 		// starts with /, javascript, http or https
-		studentUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
+		studentUrl (blank: true, nullable: true,matches:/^(\/|javascript|((http|https):\/\/))[\w\s\/`~,.<>;?&#%^*!:"'\/\[\]\|{}()=_+-\.\-\.]+(?<!\/$)/,maxSize:600,validator: { val ->
 			if(null!=val )
 			{
 
