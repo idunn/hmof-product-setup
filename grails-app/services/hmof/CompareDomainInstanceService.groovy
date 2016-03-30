@@ -7,6 +7,7 @@ class CompareDomainInstanceService {
 
 
 	def deploymentService
+	def utilityService
 	/**
 	 * get a difference of the Current persisted object and the object being updated 
 	 * @return
@@ -58,7 +59,26 @@ class CompareDomainInstanceService {
 		return difMap
 	}
 
+	/**
+	 * Given a domain object and 2 revisions return a map of differences
+	 * @param domainInstance
+	 * @param currentRevision
+	 * @param previousRevision
+	 * @return
+	 */
+	def spEnversRevision(def programXMLInstance,def revisionNumber){
+		
+		int revisionNumber1 = (int) revisionNumber;
 
+		def currentRev = programXMLInstance.findAtRevision(revisionNumber1)
+		
+		def currentSecurePrograms  = currentRev.secureProgram
+
+
+		
+		log.info "The currentSecurePrograms are: $currentSecurePrograms "
+		return currentSecurePrograms 
+	}
 	/**
 	 * convert Domain object to Map
 	 * @param object

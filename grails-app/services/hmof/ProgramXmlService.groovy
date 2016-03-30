@@ -6,6 +6,7 @@ import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 
 import grails.util.Holders
+import groovy.sql.Sql
 import groovy.xml.StreamingMarkupBuilder
 import groovy.xml.streamingmarkupsupport.BaseMarkupBuilder.Document
 import hmof.programxml.ProgramXML
@@ -14,11 +15,13 @@ import javax.xml.bind.Element
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import org.apache.commons.io.FileUtils
-
+import java.sql.ResultSet
+import org.codehaus.groovy.grails.web.util.WebUtils
 
 class ProgramXmlService {
 
 	static transactional = false
+	def dataSource
 	def deploymentService
 	def commerceObjectService
 	def utilityService
@@ -115,19 +118,24 @@ class ProgramXmlService {
 
 					def previousJob = deploymentService.getPreviousProgramXMLJob( instanceNumber, jobNumber, envId )
 					def previousRevision
-				    boolean updateMDSISBN=false
+					boolean updateMDSISBN=false
 					if (previousJob)
 					{
 						previousRevision=previousJob.revision
 
 						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
-						
-						if( updatedValues.containsKey('title')){
+					
+						if( updatedValues.containsKey('title') ){
 							updateMDSISBN=true
 						}
-						
+
 
 					}
+					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber)
+					if(issecureProgramsUpdated)
+						updateMDSISBN=true
+
 					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance,updateMDSISBN)
 
 					if(commitJobs )
@@ -179,12 +187,16 @@ class ProgramXmlService {
 
 						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
 
-						if( updatedValues.containsKey('title') || updatedValues.containsKey('secureProgram') ){
+						if( updatedValues.containsKey('title')  ){
 							updateMDSISBN=true
 						}
 
 					}
-
+					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)			
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber)
+					
+					if(issecureProgramsUpdated)
+						updateMDSISBN=true
 					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN)
 
 					if(respJson.equals("Successful"))
@@ -240,9 +252,9 @@ class ProgramXmlService {
 			File f = new File(programsXMLLocation);
 			f.mkdir();
 			File f1 = new File(programsXMLLocation+programXMLInstance.filename);
-			subversionIntegrationService.doSvnUpdate(f1)
-			if(f1.exists()) {
 
+			if(f1.exists()) {
+				subversionIntegrationService.doSvnUpdate(f1)
 
 
 				def newSecurePrograms=[]
@@ -270,10 +282,10 @@ class ProgramXmlService {
 
 				def newonlineIsbn=newSecurePrograms.onlineIsbn
 				oldSecurePrograms.removeAll(newonlineIsbn);
-			//	newonlineIsbn.removeAll(oldSecurePrograms1);
+				//	newonlineIsbn.removeAll(oldSecurePrograms1);
 
 
-				def secprogramIds= utilityService.getProgramXMLAudSecurePrograms(programXMLInstance.id)
+				def secprogramIds= getProgramXMLAudSecurePrograms(programXMLInstance.id)
 
 				if(secprogramIds){
 					oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
@@ -286,53 +298,46 @@ class ProgramXmlService {
 
 				if(!root['@buid'].equals(programXMLInstance.buid))
 					root['@buid']=programXMLInstance.buid
-					
-					
-					def parent;
-					if(newonlineIsbn){
-						editSecurePrograms =SecureProgram.where{onlineIsbn in (newonlineIsbn)}.list()
-					
-					
-					
-					newonlineIsbn.each{					
-											def misbn=it
-											
-													def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==misbn}
-											
-													if(nodeToDel)
-													{
-													parent = nodeToDel.parent()
-													parent.remove(nodeToDel)
-													}
-									}
-													
-											
-			
-	   
-				editSecurePrograms.each{
-				
-					def knewton="";
-					if(null!=it.knewtonProduct && it.knewtonProduct){
-						
-						knewton="<KnowledgeGraph><warm_up_time_limit>"+it.knowledgeGraphWarmUpTimeLimit+"</warm_up_time_limit><intervention_time_limit>"+it.knowledgeGraphEnrichmentTimeLimit+"</intervention_time_limit><enrichment_time_limit>"+it.knowledgeGraphEnrichmentCbiTimeLimit+"</enrichment_time_limit><environmentKGIds><certReviewKG>"+it.knowledgeGraphIdDev+"</certReviewKG><prodReviewKG>"+it.knowledgeGraphIdQA+"</prodReviewKG><prodKG>"+it.knowledgeGraphIdProd+"</prodKG></environmentKGIds></KnowledgeGraph>"					
-					}					
-										
-					def toadd = "<hsp_product><product_isbn lang='"+it.language+"'>"+it.onlineIsbn+"</product_isbn>"+knewton+"</hsp_product>"
-					def fragmentToAdd = new XmlParser().parseText( toadd )
-					root.children().add( 0, fragmentToAdd )
-					
+
+
+				def parent;
+				if(newonlineIsbn){
+					editSecurePrograms =SecureProgram.where{onlineIsbn in (newonlineIsbn)}.list()
+
+					newonlineIsbn.each{
+						def misbn=it
+						def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==misbn}
+
+						if(nodeToDel)
+						{
+							parent = nodeToDel.parent()
+							parent.remove(nodeToDel)
+						}
+					}
+
+					editSecurePrograms.each{
+
+						def knewton="";
+						if(null!=it.knewtonProduct && it.knewtonProduct){
+
+							knewton="<KnowledgeGraph><warm_up_time_limit>"+it.knowledgeGraphWarmUpTimeLimit+"</warm_up_time_limit><intervention_time_limit>"+it.knowledgeGraphEnrichmentTimeLimit+"</intervention_time_limit><enrichment_time_limit>"+it.knowledgeGraphEnrichmentCbiTimeLimit+"</enrichment_time_limit><environmentKGIds><certReviewKG>"+it.knowledgeGraphIdDev+"</certReviewKG><prodReviewKG>"+it.knowledgeGraphIdQA+"</prodReviewKG><prodKG>"+it.knowledgeGraphIdProd+"</prodKG></environmentKGIds></KnowledgeGraph>"
+						}
+
+						def toadd = "<hsp_product><product_isbn lang='"+it.language+"'>"+it.onlineIsbn+"</product_isbn>"+knewton+"</hsp_product>"
+						def fragmentToAdd = new XmlParser().parseText( toadd )
+						root.children().add( 0, fragmentToAdd )
+
+					}
 
 				}
 
-			}
-
 				oldSecurePrograms.each{
-					
+
 					String isbn= it
 					oldProgramInstanceIsbns.each{
 
 						if(isbn.equals(it)){
-							
+
 							def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}
 							parent = nodeToDel.parent()
 							parent.remove(nodeToDel)
@@ -346,20 +351,15 @@ class ProgramXmlService {
 				nodePrinter.setPreserveWhitespace(true)
 				nodePrinter.print(root)
 
-				// def nodePrinter = new XmlNodePrinter(indentPrinter).print(root)
-
-
 				def nodePrinter1 =stringWriter.toString()
 
 				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
-				//println indentPrinter.toString()
+			
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
 
 
 			}
 			else{
-
-
 
 				def xml = {
 					mkp.xmlDeclaration()
@@ -376,19 +376,19 @@ class ProgramXmlService {
 								{
 
 									hsp_product{
-										
-										product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)  
+
+										product_isbn(lang:programXMLInstance.secureProgram[i].language,programXMLInstance.secureProgram[i].onlineIsbn)
 										if(null!=programXMLInstance.secureProgram[i].knewtonProduct && programXMLInstance.secureProgram[i].knewtonProduct)
 										{
 											KnowledgeGraph{
-											warm_up_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphWarmUpTimeLimit)
-											indtervention_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentTimeLimit)
-											enrichment_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentCbiTimeLimit)
-											environmentKGIds{
-												certReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdDev)
-												prodReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdQA)
-												prodKG(programXMLInstance.secureProgram[i].knowledgeGraphIdProd)
-											}
+												warm_up_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphWarmUpTimeLimit)
+												indtervention_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentTimeLimit)
+												enrichment_time_limit(programXMLInstance.secureProgram[i].knowledgeGraphEnrichmentCbiTimeLimit)
+												environmentKGIds{
+													certReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdDev)
+													prodReviewKG(programXMLInstance.secureProgram[i].knowledgeGraphIdQA)
+													prodKG(programXMLInstance.secureProgram[i].knowledgeGraphIdProd)
+												}
 											}
 										}
 									}
@@ -397,8 +397,6 @@ class ProgramXmlService {
 
 							}
 				}
-			
-
 				items.add(programsXMLLocation+"/"+programXMLInstance.filename)
 				def writer = new FileWriter(programsXMLLocation+"/"+programXMLInstance.filename)
 				writer << builder.bind(xml)
@@ -454,7 +452,7 @@ class ProgramXmlService {
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
 
-		println envId+" ----env id---"
+		
 		Logger log1 = Logger.getLogger("Thread" + programISBN+"-"+envId)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
@@ -486,7 +484,86 @@ class ProgramXmlService {
 		PropertyConfigurator.configure(props)
 		return log1
 	}
+	/**
+	 * Get the Environment associated with the User
+	 * @return
+	 */
+	def getProgramXMLAudSecurePrograms(def programXmlId){
+		def sql = new Sql(dataSource)
+		def row = null
+		try{
+			row = sql.rows( "select sp.secure_program_id  from programxml_secure_program_aud sp where sp.programxml_secure_program_id=?",[programXmlId])
 
 
+		}catch(Exception e){
+			log.error("exception in getProgramXMLSecurePrograms method is: "+e.getMessage())
+			log.error("exception in getProgramXMLSecurePrograms method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
 
+		row
+
+	}
+
+	/**
+	 *
+	 * @param instanceId
+	 * @return
+	 */
+	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber){
+		def sql = new Sql(dataSource)
+		def isDeletedSP
+		def maxJobNumber
+		def row
+		def currentProgramXmlRev
+		boolean updateMdsIsbn=false
+		StringBuffer sb=new StringBuffer()
+		spId.each{
+			sb.append("'"+it+"',")
+		}
+		sb.deleteCharAt(sb.length()-1)
+
+
+		try{
+			isDeletedSP = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
+		
+			if(isDeletedSP!=null)
+			{
+				currentProgramXmlRev = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id = "+instanceId+" and secure_program_id in ("+sb.toString()+") and rev="+revisionNumber)
+				if(currentProgramXmlRev!=null)
+				{
+					currentProgramXmlRev.each	{						
+						maxJobNumber= sql.rows("SELECT MAX(job_number) as jobnumber  FROM job where content_id ="+instanceId+" and content_type_id = 5 and revision>="+it.rev)
+						
+						if(maxJobNumber!=null)
+						{
+							maxJobNumber.each{
+
+								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id=1 and status!='Success'")
+								
+								if(row){
+									updateMdsIsbn=true
+								}
+                        }
+						}else
+						{
+							updateMdsIsbn=true
+						}
+					}
+
+				}}
+
+		}
+		catch(Exception e){
+			log.error("exception in getProgramXMLID method is: "+e.getMessage())
+			log.error("exception in getProgramXMLID method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+		
+		updateMdsIsbn
+	}
 }
