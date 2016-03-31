@@ -132,7 +132,7 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber)
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId)
 					if(issecureProgramsUpdated)
 						updateMDSISBN=true
 
@@ -193,7 +193,7 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)			
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber)
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId)
 					
 					if(issecureProgramsUpdated)
 						updateMDSISBN=true
@@ -512,7 +512,7 @@ class ProgramXmlService {
 	 * @param instanceId
 	 * @return
 	 */
-	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber){
+	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId){
 		def sql = new Sql(dataSource)
 		def isDeletedSP
 		def maxJobNumber
@@ -540,8 +540,10 @@ class ProgramXmlService {
 						if(maxJobNumber!=null)
 						{
 							maxJobNumber.each{
-
-								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id=1 and status!='Success'")
+                                if(envId==1)
+								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id="+envId+" and status!='Success'")
+								if(envId!=1)
+								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id="+envId+" and status!='Success'")
 								
 								if(row){
 									updateMdsIsbn=true
