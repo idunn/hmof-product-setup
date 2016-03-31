@@ -132,7 +132,7 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId)
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId,jobNumber)
 					if(issecureProgramsUpdated)
 						updateMDSISBN=true
 
@@ -193,7 +193,7 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)			
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId)
+					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId,jobNumber)
 					
 					if(issecureProgramsUpdated)
 						updateMDSISBN=true
@@ -512,51 +512,57 @@ class ProgramXmlService {
 	 * @param instanceId
 	 * @return
 	 */
-	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId){
+	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId,def jobNumber){
 		def sql = new Sql(dataSource)
 		def isDeletedSP
 		def maxJobNumber
 		def row
 		def currentProgramXmlRev
+		def currentPXPRev
 		boolean updateMdsIsbn=false
 		StringBuffer sb=new StringBuffer()
 		spId.each{
 			sb.append("'"+it+"',")
 		}
 		sb.deleteCharAt(sb.length()-1)
-
-
 		try{
 			isDeletedSP = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
 		
 			if(isDeletedSP!=null)
-			{
-				currentProgramXmlRev = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id = "+instanceId+" and secure_program_id in ("+sb.toString()+") and rev="+revisionNumber)
-				if(currentProgramXmlRev!=null)
+			{ 
+				spId.each{
+				currentProgramXmlRev = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id = "+instanceId+" and secure_program_id in ("+it.toString()+") and rev<="+revisionNumber+" and revtype!=2")
+                if(!currentProgramXmlRev.isEmpty())
 				{
-					currentProgramXmlRev.each	{						
-						maxJobNumber= sql.rows("SELECT MAX(job_number) as jobnumber  FROM job where content_id ="+instanceId+" and content_type_id = 5 and revision>="+it.rev)
+					currentProgramXmlRev.each	{
+				        maxJobNumber= sql.rows("SELECT * FROM job WHERE content_id ="+instanceId+" and content_type_id = 5 and revision="+it.rev)
 						
-						if(maxJobNumber!=null)
-						{
-							maxJobNumber.each{
-                                if(envId==1)
-								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id="+envId+" and status!='Success'")
-								if(envId!=1)
-								row= sql.rows("SELECT * FROM promotion where job_number ="+it.jobnumber+" and environments_id="+envId+" and status!='Success'")
+						if(!maxJobNumber.isEmpty())
+						{					
+							maxJobNumber.each{								
+										if(maxJobNumber.size()==1 && it.job_number==jobNumber )	
+										{
+											updateMdsIsbn=true
+										}
+                                if(envId==1 )								
+								row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")		
 								
-								if(row){
+								if(envId!=1)
+								row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")
+															
+								if(!row.isEmpty())									
 									updateMdsIsbn=true
-								}
-                        }
-						}else
-						{
-							updateMdsIsbn=true
-						}
+						   }
+							
+						}						
 					}
 
-				}}
-
+				}/*else{
+						updateMdsIsbn=true
+					 }*/
+				
+				}//spid
+			}
 		}
 		catch(Exception e){
 			log.error("exception in getProgramXMLID method is: "+e.getMessage())
