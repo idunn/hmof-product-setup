@@ -506,12 +506,111 @@ class ProgramXmlService {
 		row
 
 	}
+	
+	
+	
+	/**
+	 * get ISBNs that have been deleted from another Program XML and associated to this Program XML and return a list of ISBNs that need to be modified
+	 * TODO we dont need spId or jobNumber
+	 * @param instanceId
+	 * @param spId
+	 * @param revisionNumber
+	 * @param envId
+	 * @param jobNumber
+	 * @return
+	 */
+	def getSecureProgramXMLID(def instanceId, def spId, def revisionNumberBeingDeployed, def envId, def jobNumber){
+
+		println "##############################"
+		println "Instance ID: ${instanceId}"
+		println "SecureProgram IDs: ${spId}"
+		println "Revision Number:  ${revisionNumberBeingDeployed}"
+		println "EnvironmentID: ${envId}"
+		println "Job Number: ${jobNumber}"
+		println "##############################"
+
+
+		def sql = new Sql(dataSource)		
+		boolean updateMdsIsbn = false
+
+		// getting a comma separated list of SP IDs
+		StringBuffer sb=new StringBuffer()
+		spId.each{
+			sb.append("'"+it+"',")
+		}
+
+		sb.deleteCharAt(sb.length()-1)
+
+		def isbnListToModify = []
+
+
+		try{
+			// Have any of the SP instances been deleted from another Program XML
+			//Example: Select * from programxml_secure_program_aud where programxml_secure_program_id <> 24 and secure_program_id IN ('17', '198', '199') and revtype = 2
+			def listOfDeletedSecurePrograms = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
+			
+			println "List of deleted SP ${ listOfDeletedSecurePrograms }"
+			
+			// if list is not empty
+			if(! listOfDeletedSecurePrograms.isEmpty())
+			{
+				listOfDeletedSecurePrograms.each{
+
+					def revsionOfDeletedSecureProgram = it.rev
+					def secureprogramId = it.secure_program_id
+					def onlineIsbnToModify = SecureProgram.where{id==secureprogramId}.get()?.onlineIsbn
+
+					// get Job instances for each SP that has been deleted from another Program XML
+					def jobs = Job.where{contentTypeId==5 && contentId==instanceId}.list()
+					// do any jobs have a higher revision than SP ISBN under test and less than deployed revision as Job instance is created before this test TODO
+					def jobsMeetingRevisionCriteria =  jobs.revision.find{it > revsionOfDeletedSecureProgram && it < revisionNumberBeingDeployed }
+					
+					
+					if (jobsMeetingRevisionCriteria){						
+
+						println "Checking if job had a successful Promotion to the current environment"
+						def checkJobWasSuccessful = jobs.promotion.find{it.status[0] == "Success" && it.environmentsId[0] == envId}
+
+						if (checkJobWasSuccessful){
+							println "Job was previously successful so DO NOT Modify ISBN: ${onlineIsbnToModify}"
+						}else{
+							println "Job was not deployed successfully so modify ISBN: ${onlineIsbnToModify}"
+							isbnListToModify << onlineIsbnToModify
+						}
+
+					} else {
+						println "Revision Criteria was not met so modify ISBN: : ${onlineIsbnToModify}"
+						isbnListToModify << onlineIsbnToModify
+
+					}
+				}
+			}
+
+			// final list of ISBNs to modify removing any potential null values
+			isbnListToModify -= null
+			println "ISBNs to Modify" +  isbnListToModify
+
+
+		}
+		catch(Exception e){
+			log.error("exception in getProgramXMLID method is: "+e.getMessage())
+			log.error("exception in getProgramXMLID method is: "+e.getStackTrace())
+		}
+		finally{
+			sql.close();
+		}
+
+		updateMdsIsbn
+	}
+
+	
+	
 
 	/**
 	 *
 	 * @param instanceId
 	 * @return
-	 */
+	 *//*
 	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId,def jobNumber){
 		def sql = new Sql(dataSource)
 		def isDeletedSP
@@ -557,9 +656,9 @@ class ProgramXmlService {
 						}						
 					}
 
-				}/*else{
+				}else{
 						updateMdsIsbn=true
-					 }*/
+					 }
 				
 				}//spid
 			}
@@ -573,5 +672,5 @@ class ProgramXmlService {
 		}
 		
 		updateMdsIsbn
-	}
+	}*/
 }
