@@ -521,15 +521,6 @@ class ProgramXmlService {
 	 */
 	def getSecureProgramXMLID(def instanceId, def spId, def revisionNumberBeingDeployed, def envId, def jobNumber){
 
-		println "##############################"
-		println "Instance ID: ${instanceId}"
-		println "SecureProgram IDs: ${spId}"
-		println "Revision Number:  ${revisionNumberBeingDeployed}"
-		println "EnvironmentID: ${envId}"
-		println "Job Number: ${jobNumber}"
-		println "##############################"
-
-
 		def sql = new Sql(dataSource)
 		boolean updateMdsIsbn = false
 
