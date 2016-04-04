@@ -585,10 +585,6 @@ class ProgramXmlService {
 			isbnListToModify -= null
 			println "ISBNs to Modify" +  isbnListToModify
 
-			// TODO
-			//return
-
-
 		}
 		catch(Exception e){
 			log.error("exception in getProgramXMLID method is: "+e.getMessage())
