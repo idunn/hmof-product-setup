@@ -124,7 +124,7 @@ class ProgramXmlService {
 						previousRevision=previousJob.revision
 
 						def updatedValues = compareDomainInstanceService.compareEnversRevisions(programXMLInstance,revisionNumber,previousRevision)
-					
+
 						if( updatedValues.containsKey('title') ){
 							updateMDSISBN=true
 						}
@@ -192,9 +192,9 @@ class ProgramXmlService {
 						}
 
 					}
-					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)			
+					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
 					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId,jobNumber)
-					
+
 					if(issecureProgramsUpdated)
 						updateMDSISBN=true
 					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN)
@@ -354,7 +354,7 @@ class ProgramXmlService {
 				def nodePrinter1 =stringWriter.toString()
 
 				def prologAndXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ nodePrinter1
-			
+
 				FileUtils.writeStringToFile(f1, prologAndXml, "UTF-8")
 
 
@@ -452,7 +452,7 @@ class ProgramXmlService {
 	Logger initializeLogger(String programISBN,String cacheLocation, def envId,def contentType) {
 		final String workingDir = cacheLocation
 
-		
+
 		Logger log1 = Logger.getLogger("Thread" + programISBN+"-"+envId)
 		Properties props=new Properties()
 		props.setProperty("log4j.appender.file","org.apache.log4j.RollingFileAppender")
@@ -506,12 +506,12 @@ class ProgramXmlService {
 		row
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * get ISBNs that have been deleted from another Program XML and associated to this Program XML and return a list of ISBNs that need to be modified
-	 * TODO we dont need spId or jobNumber
+	 * TODO we dont need spId or jobNumber or revisionNumberBeingDeployed
 	 * @param instanceId
 	 * @param spId
 	 * @param revisionNumber
@@ -530,7 +530,7 @@ class ProgramXmlService {
 		println "##############################"
 
 
-		def sql = new Sql(dataSource)		
+		def sql = new Sql(dataSource)
 		boolean updateMdsIsbn = false
 
 		// getting a comma separated list of SP IDs
@@ -548,9 +548,9 @@ class ProgramXmlService {
 			// Have any of the SP instances been deleted from another Program XML
 			//Example: Select * from programxml_secure_program_aud where programxml_secure_program_id <> 24 and secure_program_id IN ('17', '198', '199') and revtype = 2
 			def listOfDeletedSecurePrograms = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
-			
+
 			println "List of deleted SP ${ listOfDeletedSecurePrograms }"
-			
+
 			// if list is not empty
 			if(! listOfDeletedSecurePrograms.isEmpty())
 			{
@@ -560,15 +560,19 @@ class ProgramXmlService {
 					def secureprogramId = it.secure_program_id
 					def onlineIsbnToModify = SecureProgram.where{id==secureprogramId}.get()?.onlineIsbn
 
-					// get Job instances for each SP that has been deleted from another Program XML
+					// get Job instances for the current Program XML being deployed or promoted
 					def jobs = Job.where{contentTypeId==5 && contentId==instanceId}.list()
-					// do any jobs have a higher revision than SP ISBN under test and less than deployed revision as Job instance is created before this test TODO
-					def jobsMeetingRevisionCriteria =  jobs.revision.find{it > revsionOfDeletedSecureProgram && it < revisionNumberBeingDeployed }
-					
-					
-					if (jobsMeetingRevisionCriteria){						
 
-						println "Checking if job had a successful Promotion to the current environment"
+					// get all jobs not including the current job which is in progress
+					def previousJobs = jobs.take(jobs.size() - 1)
+
+					// do any jobs have a higher or equal revision than SP ISBN under test
+					def jobsMeetingRevisionCriteria =  previousJobs.revision.find{it >= revsionOfDeletedSecureProgram }
+
+
+					if (jobsMeetingRevisionCriteria){
+
+						println "Checking if any jobs had a successful Promotion to the current environment"
 						def checkJobWasSuccessful = jobs.promotion.find{it.status[0] == "Success" && it.environmentsId[0] == envId}
 
 						if (checkJobWasSuccessful){
@@ -578,7 +582,7 @@ class ProgramXmlService {
 							isbnListToModify << onlineIsbnToModify
 						}
 
-					} else {
+					}else {
 						println "Revision Criteria was not met so modify ISBN: : ${onlineIsbnToModify}"
 						isbnListToModify << onlineIsbnToModify
 
@@ -589,6 +593,9 @@ class ProgramXmlService {
 			// final list of ISBNs to modify removing any potential null values
 			isbnListToModify -= null
 			println "ISBNs to Modify" +  isbnListToModify
+
+			// TODO
+			//return
 
 
 		}
@@ -603,74 +610,66 @@ class ProgramXmlService {
 		updateMdsIsbn
 	}
 
-	
-	
+
+
 
 	/**
 	 *
 	 * @param instanceId
 	 * @return
 	 *//*
-	def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId,def jobNumber){
-		def sql = new Sql(dataSource)
-		def isDeletedSP
-		def maxJobNumber
-		def row
-		def currentProgramXmlRev
-		def currentPXPRev
-		boolean updateMdsIsbn=false
-		StringBuffer sb=new StringBuffer()
-		spId.each{
-			sb.append("'"+it+"',")
-		}
-		sb.deleteCharAt(sb.length()-1)
-		try{
-			isDeletedSP = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
-		
-			if(isDeletedSP!=null)
-			{ 
-				spId.each{
-				currentProgramXmlRev = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id = "+instanceId+" and secure_program_id in ("+it.toString()+") and rev<="+revisionNumber+" and revtype!=2")
-                if(!currentProgramXmlRev.isEmpty())
-				{
-					currentProgramXmlRev.each	{
-				        maxJobNumber= sql.rows("SELECT * FROM job WHERE content_id ="+instanceId+" and content_type_id = 5 and revision="+it.rev)
-						
-						if(!maxJobNumber.isEmpty())
-						{					
-							maxJobNumber.each{								
-										if(maxJobNumber.size()==1 && it.job_number==jobNumber )	
-										{
-											updateMdsIsbn=true
-										}
-                                if(envId==1 )								
-								row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")		
-								
-								if(envId!=1)
-								row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")
-															
-								if(!row.isEmpty())									
-									updateMdsIsbn=true
-						   }
-							
-						}						
-					}
-
-				}else{
-						updateMdsIsbn=true
-					 }
-				
-				}//spid
-			}
-		}
-		catch(Exception e){
-			log.error("exception in getProgramXMLID method is: "+e.getMessage())
-			log.error("exception in getProgramXMLID method is: "+e.getStackTrace())
-		}
-		finally{
-			sql.close();
-		}
-		
-		updateMdsIsbn
-	}*/
+	 def getSecureProgramXMLID(def instanceId,def spId,def revisionNumber,def envId,def jobNumber){
+	 def sql = new Sql(dataSource)
+	 def isDeletedSP
+	 def maxJobNumber
+	 def row
+	 def currentProgramXmlRev
+	 def currentPXPRev
+	 boolean updateMdsIsbn=false
+	 StringBuffer sb=new StringBuffer()
+	 spId.each{
+	 sb.append("'"+it+"',")
+	 }
+	 sb.deleteCharAt(sb.length()-1)
+	 try{
+	 isDeletedSP = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id <> "+instanceId+" and secure_program_id in ("+sb.toString()+") and revtype =2")
+	 if(isDeletedSP!=null)
+	 { 
+	 spId.each{
+	 currentProgramXmlRev = sql.rows("Select * from programxml_secure_program_aud where programxml_secure_program_id = "+instanceId+" and secure_program_id in ("+it.toString()+") and rev<="+revisionNumber+" and revtype!=2")
+	 if(!currentProgramXmlRev.isEmpty())
+	 {
+	 currentProgramXmlRev.each	{
+	 maxJobNumber= sql.rows("SELECT * FROM job WHERE content_id ="+instanceId+" and content_type_id = 5 and revision="+it.rev)
+	 if(!maxJobNumber.isEmpty())
+	 {					
+	 maxJobNumber.each{								
+	 if(maxJobNumber.size()==1 && it.job_number==jobNumber )	
+	 {
+	 updateMdsIsbn=true
+	 }
+	 if(envId==1 )								
+	 row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")		
+	 if(envId!=1)
+	 row= sql.rows("SELECT * FROM promotion where job_number ="+it.job_number+" and environments_id="+envId+" and status='Failed'")
+	 if(!row.isEmpty())									
+	 updateMdsIsbn=true
+	 }
+	 }						
+	 }
+	 }else{
+	 updateMdsIsbn=true
+	 }
+	 }//spid
+	 }
+	 }
+	 catch(Exception e){
+	 log.error("exception in getProgramXMLID method is: "+e.getMessage())
+	 log.error("exception in getProgramXMLID method is: "+e.getStackTrace())
+	 }
+	 finally{
+	 sql.close();
+	 }
+	 updateMdsIsbn
+	 }*/
 }
