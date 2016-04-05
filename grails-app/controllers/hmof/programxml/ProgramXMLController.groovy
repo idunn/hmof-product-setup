@@ -321,7 +321,7 @@ class ProgramXMLController {
 
 
 		//Generate XML
-		def isXMLGenerated=programXmlService.generateProramXML(programXMLInstance)
+		def isXMLGenerated=programXmlService.generateProgramXML(programXMLInstance)
 
 		//end
 		if(isXMLGenerated){
