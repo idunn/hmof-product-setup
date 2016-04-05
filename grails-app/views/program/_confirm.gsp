@@ -1,5 +1,8 @@
 <%@ page import="hmof.Program"%>
-
+<script>function confirmbtn(){
+	deployConfirm.confirmTrue.setAttribute('disabled','disabled');
+	deployConfirm.submit();
+	}</script>
 <section id="create-deployment">
 	<g:hasErrors bean="${programInstance}">
 		<div class="alert alert-error">
@@ -24,7 +27,7 @@
    <g:if test="${envName && (!envName.contains('QA') && !envName.contains('Prod'))}">
 	
 	<sec:ifAnyGranted roles="ROLE_PM">
-		<g:form controller="program" action="deploy" class="form-horizontal">
+		<g:form controller="program" action="deploy" class="form-horizontal" name="deployConfirm">
    
 	
    
@@ -50,8 +53,8 @@
 					
 				<sec:ifAnyGranted roles="ROLE_PM">
 				<g:actionSubmit class="btn btn-primary" id="confirmTrue"
-					value="Deploy" onClick="return true;" />
-</sec:ifAnyGranted>
+					value="Deploy" onClick="confirmbtn();" />
+        </sec:ifAnyGranted>
 
 				</div>
 			</fieldset>
@@ -83,7 +86,7 @@
 					<input name="depEnvId" id="depEnvId" type="hidden" value="${envId}">
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					
-	<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="return true;"/>
+	<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="confirmbtn();"/>
 
 				</div>
 			</fieldset>
