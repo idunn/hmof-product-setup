@@ -82,7 +82,7 @@ class SubversionIntegrationService {
 	 * @param updateMDSISBN
 	 * @return
 	 */
-	Boolean commitSvnContent( def localFilePath, Logger log, ProgramXML programXMLInstance, boolean updateMDSISBN ) {
+	Boolean commitSvnContent( def localFilePath, Logger log, ProgramXML programXMLInstance, boolean updateMDSISBN,List modifiedMDSIsbns = []) {
 
 		def svnClient = createSvnOperationFactory()
 		String workingCopy = Holders.config.programXMLFolder
@@ -112,8 +112,8 @@ class SubversionIntegrationService {
 			commitSvnContent(localCache)
 			log.info "ProgramXML has been committed to the MDS Content Repository"
 
-			if(updateMDSISBN){ forceMdsIsbnUpdateAndCommit( programXMLInstance, log, svnClient )}
-
+			if(updateMDSISBN || !modifiedMDSIsbns.isEmpty()){ forceMdsIsbnUpdateAndCommit( programXMLInstance, log, svnClient,modifiedMDSIsbns)}
+            
 
 		}catch (Exception e)
 		{
@@ -229,7 +229,7 @@ class SubversionIntegrationService {
 	 * @return
 	 * @throws SVNException
 	 */	
-	def forceMdsIsbnUpdateAndCommit( ProgramXML programXMLInstance, Logger log, svnClient) throws SVNException {
+	def forceMdsIsbnUpdateAndCommit( ProgramXML programXMLInstance, Logger log, svnClient,List modifiedMDSIsbns = [] ) throws SVNException {
 
 		String workingCopy = Holders.config.programXMLISBNsFolder
 
@@ -248,7 +248,13 @@ class SubversionIntegrationService {
 
 
 			def mdsIsbnFile = []
-			def mdsISBN = secureProgramList.onlineIsbn.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
+			def mdsISBN
+			 //Check if deleted isbns added in the current ProgramXMl Instance
+			 if(modifiedMDSIsbns.isEmpty())				   	
+			 mdsISBN = secureProgramList.onlineIsbn.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
+			 else			 
+			 mdsISBN = modifiedMDSIsbns.each{ isbn -> mdsIsbnFile<< "mds_resources_${isbn}.xml" }
+			 
 			log.info "${mdsIsbnFile}"
 
 			log.info("Getting all XML files from Working Copy...")

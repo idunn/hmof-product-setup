@@ -132,12 +132,11 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId,jobNumber)
-					if(issecureProgramsUpdated)
-						updateMDSISBN=true
-
-					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance,updateMDSISBN)
-
+					def modifiedMDSIsbns =getModifiedMDSIsbns(programXMLInstance.id,secureProgramsValues.id,envId)
+					
+						
+					commitJobs =subversionIntegrationService.commitSvnContent(path,customerLog,programXMLInstance,updateMDSISBN,modifiedMDSIsbns)
+					
 					if(commitJobs )
 					{
 
@@ -193,11 +192,10 @@ class ProgramXmlService {
 
 					}
 					def secureProgramsValues = compareDomainInstanceService.spEnversRevision(programXMLInstance,revisionNumber)
-					def issecureProgramsUpdated =getSecureProgramXMLID(programXMLInstance.id,secureProgramsValues.id,revisionNumber,envId,jobNumber)
+					def modifiedMDSIsbns =getModifiedMDSIsbns(programXMLInstance.id,secureProgramsValues.id,envId)
 
-					if(issecureProgramsUpdated)
-						updateMDSISBN=true
-					def respJson=bambooIntegrationService.bambooTrigger(programXMLInstance.filename,jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN)
+					
+					def respJson=bambooIntegrationService.bambooTrigger(jiraId,deploymentBambooUrl,customerLog,promotionInstance,programXMLInstance,updateMDSISBN,modifiedMDSIsbns)
 
 					if(respJson.equals("Successful"))
 					{
@@ -235,11 +233,8 @@ class ProgramXmlService {
 		return commitJobs
 	}
 
-	def generateProramXML(ProgramXML programXMLInstance)
+	def generateProgramXML(ProgramXML programXMLInstance)
 	{
-
-
-
 		def builder = new groovy.xml.StreamingMarkupBuilder()
 		builder.encoding = 'UTF-8'
 		StringBuilder sb = new StringBuilder();
@@ -519,7 +514,7 @@ class ProgramXmlService {
 	 * @param jobNumber
 	 * @return
 	 */
-	def getSecureProgramXMLID(def instanceId, def spId, def revisionNumberBeingDeployed, def envId, def jobNumber){
+	def getModifiedMDSIsbns(def instanceId, def spId, def envId){
 
 		def sql = new Sql(dataSource)
 		boolean updateMdsIsbn = false
@@ -553,7 +548,7 @@ class ProgramXmlService {
 
 					// get Job instances for the current Program XML being deployed or promoted
 					def jobs = Job.where{contentTypeId==5 && contentId==instanceId}.list()
-
+					
 					// get all jobs not including the current job which is in progress
 					def previousJobs = jobs.take(jobs.size() - 1)
 
@@ -564,8 +559,9 @@ class ProgramXmlService {
 					if (jobsMeetingRevisionCriteria){
 
 						println "Checking if any jobs had a successful Promotion to the current environment"
+					
 						def checkJobWasSuccessful = jobs.promotion.find{it.status[0] == "Success" && it.environmentsId[0] == envId}
-
+						
 						if (checkJobWasSuccessful){
 							println "Job was previously successful so DO NOT Modify ISBN: ${onlineIsbnToModify}"
 						}else{
@@ -594,7 +590,7 @@ class ProgramXmlService {
 			sql.close();
 		}
 
-		updateMdsIsbn
+		isbnListToModify
 	}
 
 
