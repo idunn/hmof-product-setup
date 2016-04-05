@@ -25,7 +25,12 @@
 	<script src="${resource(dir:'js',file:'carouselslider.js')}"></script>
         <g:render template="/bundle/studentsliderjs"/>
         <g:render template="/bundle/teachersliderjs"/>
-        
+        <style> 
+p.textWrap {
+    width: 7em;    
+    word-wrap: break-word;
+}
+</style>
 </head>
 
 <body>
@@ -87,7 +92,7 @@
 				<g:sortableColumn property="title" title="${message(code: 'bundle.title.label', default: 'Title')}" class="widget-header2" style="color:#bbb"/>
 			
 				<g:sortableColumn property="duration" title="${message(code: 'bundle.duration.label', default: 'Duration')}"  class="widget-header2" style="color:#bbb"/>
-				<g:sortableColumn property="program" title="${message(code: 'bundle.program.label', default: 'Program')}" class="widget-header2" style="color:#bbb"/>
+				<g:sortableColumn property="program" title="${message(code: 'bundle.program.label', default: 'Program')}" class="widget-header2 test"  style="color:#bbb"/>
 				<th class="widget-header2" style="color:#bbb">Preview</th>
 												
 				
@@ -138,13 +143,13 @@
 				<td>${fieldValue(bean: bundleInstance, field: "title")}</td>
 			
 				<td>${fieldValue(bean: bundleInstance, field: "duration")}</td>
-				<td>${fieldValue(bean: bundleInstance, field: "program")}</td>
+				<td ><p class="textWrap">${fieldValue(bean: bundleInstance, field: "program")}</p></td>
 									
 				 <td  >
 				<g:if test="${jobdetails.isDashboardSecureProgram(bundleInstance.id)==true}">	
 			<ul style="margin: 0; padding: 13px;">
-<li><a href="#"  class="previewlink"  onclick="return teacherPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Teacher</a></li><li><a href="#"  class="previewlink"  onclick="return studentPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Student</a></li>
-</ul>
+              <li><a href="#"  class="previewlink"  onclick="return teacherPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Teacher</a></li><li><a href="#"  class="previewlink"  onclick="return studentPreview(${bundleInstance.id},'${bundleInstance.title}');"  >Student</a></li>
+            </ul>
 				</g:if>
 				</td>
 				<%-- Output one cell for each environment --%>
@@ -213,7 +218,7 @@
 	<g:hiddenField name="instanceDetail"/>
 	<g:hiddenField name="instanceToBePromoted"/>
 	<g:render template="/bundle/deploymentDialog"   />
-<g:render template="/_common/modals/scrollDialog"   />
+    <g:render template="/_common/modals/scrollDialog"   />
    
 			</div></div>
 </g:form>
