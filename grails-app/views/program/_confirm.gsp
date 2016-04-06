@@ -64,7 +64,7 @@
 		</g:if>
 		<g:if test="${envName && (envName.contains('QA') || envName.contains('Production'))}">
 		<sec:ifAnyGranted roles="ROLE_QA,ROLE_PROD">
-		<g:form controller="program" action="promote" class="form-horizontal">
+		<g:form controller="program" action="promote" class="form-horizontal" name="deployConfirm">
 		
 		
 			<fieldset class="form">

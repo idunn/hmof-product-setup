@@ -1,5 +1,8 @@
 <%@ page import="hmof.programxml.ProgramXML"%>
-
+<script>function confirmbtn(){
+	deployConfirm.confirmTrue.setAttribute('disabled','disabled');
+	deployConfirm.submit();
+	}</script>
 <section id="create-deployment">
 
 	<g:hasErrors bean="${programXMLInstance}">
@@ -25,7 +28,7 @@
    <g:if test="${envName && (!envName.contains('QA') && !envName.contains('Prod'))}">
 	
 	<sec:ifAnyGranted roles="ROLE_PM">
-		<g:form controller="programXML" action="deploy" class="form-horizontal">
+		<g:form controller="programXML" action="deploy" class="form-horizontal" name="deployConfirm">
    
 	
    
@@ -44,7 +47,7 @@
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					
 				<sec:ifAnyGranted roles="ROLE_PM">
-				<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Deploy"  />
+				<g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Deploy" onClick="confirmbtn();" />
 </sec:ifAnyGranted>
 
 				</div>
@@ -55,7 +58,7 @@
 		</g:if>
 		<g:if test="${envName && (envName.contains('QA') || envName.contains('Production'))}">
 		<sec:ifAnyGranted roles="ROLE_QA,ROLE_PROD">
-		<g:form controller="programXML" action="promote" class="form-horizontal">
+		<g:form controller="programXML" action="promote" class="form-horizontal" name="deployConfirm">
 		
 		
 			<fieldset class="form">
@@ -70,7 +73,7 @@
 					<input name="depEnvId" id="depEnvId" type="hidden" value="${envId}">
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					
-	                <g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" />
+	                <g:actionSubmit class="btn btn-primary" id="confirmTrue" value="Promote" onClick="confirmbtn();"/>
 
 				</div>
 			</fieldset>
