@@ -1,6 +1,6 @@
 package hmof
 
-import java.util.List;
+import java.util.List
 
 import grails.transaction.Transactional
 
@@ -33,20 +33,20 @@ class BambooIntegrationService {
 
 
 	/**
-	 * Connect to Bamboo's Rest API to trigger a new Job	 
-	 * @param idList
+	 * Connect to Bamboo's Rest API to trigger a new Job
 	 * @param jiraId
 	 * @param deploymentBambooUrl
 	 * @param log
 	 * @param promotionInstance
 	 * @param programXMLInstance
-	 * @return Status of Promotion
+	 * @param updateMDSISBN
+	 * @return
 	 */
-	def bambooTrigger (def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance, boolean updateMDSISBN,List modifiedMDSIsbns = []) {
+	def bambooTrigger (def jiraId, def deploymentBambooUrl, Logger log, def promotionInstance , ProgramXML programXMLInstance, boolean updateMDSISBN, List modifiedMDSIsbns = []) {
 
 		String comment = "Proccesed by the Product-Setup WebApp"
 		def newSecurePrograms=[]
-    
+
 		String strOnlineIsbns=""
 		if(updateMDSISBN && programXMLInstance.secureProgram){
 			newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
@@ -58,15 +58,15 @@ class BambooIntegrationService {
 		{
 			modifiedMDSIsbns.each{
 				println it
-				strOnlineIsbns=strOnlineIsbns+","+it				
+				strOnlineIsbns=strOnlineIsbns+","+it
 			}
 		}
-		
+
 		String endPoint = "${deploymentBambooUrl}?ExecuteAllStages=true&bamboo.variable.Comments=${jiraId}:${comment}&bamboo.variable.IdList=${programXMLInstance.filename}${strOnlineIsbns}&bamboo.variable.jiraIssue=${jiraId}"
 
 		log.info "Bamboo REST Url is: ${endPoint}"
 
-		/*MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>()
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>()
 
 		def resp = new RestBuilder().post(endPoint) {
 
@@ -123,7 +123,7 @@ class BambooIntegrationService {
 				return status
 			}
 		}
-*/
+
 		return "Successful"
 	}
 
