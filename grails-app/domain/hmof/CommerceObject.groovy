@@ -20,7 +20,7 @@ class CommerceObject implements Comparable{
 	String studentUrl
 	String category
 	String objectType
-	Integer objectReorderNumber = 1
+	String objectReorderNumber = "1"
 	String subject
 	String gradeLevel
 	Boolean tabNavTab
@@ -86,7 +86,7 @@ class CommerceObject implements Comparable{
 			}
 		})
 		objectType (inList: ['Other','DLO', 'eBook','myWriteSmart Activities', 'FYI', 'IWB', 'Notebook', 'Professional Development', 'Resources', 'Tab', 'ePlanner'])
-		objectReorderNumber (range: 0..16) // only legacy products can have order number 0
+		objectReorderNumber (inList: ["0","1","2","3","4",'5','6','7','8','9','10','11','12','13','14','15','16',"Hidden"]) // only legacy products can have order number 0
 		gradeLevel (inList: ['K','1','2','3','4','5','6' ,'7' , '8', '9', '10', '11', '12', '6-8', '9-12', '6-12' ] )
 		comments (maxSize:200, nullable:true, widget: 'textarea')
 

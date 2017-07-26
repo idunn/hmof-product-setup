@@ -134,7 +134,7 @@
 					default="Resource Order" /></label>
 					
 					<div  class="controls"> 
-					<g:select name="objectReorderNumber" from="${1..16}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" data-toggle="tooltip" data-placement="right" data-container="body" title="Determines the content display sequence on the Dashboard Resource Gadget" />
+					<g:select name="objectReorderNumber" from="${commerceObjectInstance.constraints.objectReorderNumber.inList}" class="form-control" value="${fieldValue(bean: commerceObjectInstance, field: 'objectReorderNumber')}" data-toggle="tooltip" data-placement="right" data-container="body" title="Determines the content display sequence on the Dashboard Resource Gadget.'Hidden' ordered resources are not displayed in HMOF Dashboard." />
 					
 				</div>
 			</div>
