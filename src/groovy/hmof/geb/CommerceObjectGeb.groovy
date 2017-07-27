@@ -106,8 +106,13 @@ class CommerceObjectWork extends Page {
 		studentUrl.value(content.studentUrl?: blank)
 
 		objectType.value(content.objectType)
-
-		objectReorder.value(content.objectReorderNumber)
+		log.info("objectReorderNumber: "+content.objectReorderNumber)
+		if(content.objectReorderNumber=="Hidden")
+		 objectReorder.value("100")
+		 else
+		 objectReorder.value(content.objectReorderNumber)
+		    
+		
 
 		subject.value(content.subject?:"None")
 
