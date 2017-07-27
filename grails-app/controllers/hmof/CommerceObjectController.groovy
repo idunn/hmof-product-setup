@@ -234,9 +234,7 @@ class CommerceObjectController {
 		log.info("userId: "+userId)
 		log.info("contentId: "+commerceObjectInstance.id)
 		log.info("contentTypeId: "+commerceObjectInstance.contentType.contentId)
-        if(commerceObjectInstance.objectReorderNumber=="Hidden"){
-        commerceObjectInstance.objectReorderNumber="100"
-        }		
+      
 		// Create a map of job data to persist
 		def job = [contentId: commerceObjectInstance.id, revision: deploymentService.getCurrentEnversRevision(commerceObjectInstance), contentTypeId: commerceObjectInstance.contentType.contentId, jobNumber: deploymentJobNumber, user: userId]
 
@@ -266,9 +264,7 @@ class CommerceObjectController {
 		def instanceToBePromoted = params.programId
 
 		def commerceObjectInstance = CommerceObject.get(instanceToBePromoted)
-		if(commerceObjectInstance.objectReorderNumber=="Hidden"){
-		commerceObjectInstance.objectReorderNumber="100"
-		}
+		
 		log.info("Promoting commerceObjectInstance : "+commerceObjectInstance.objectName)
 		def userId = User.where{id==springSecurityService?.currentUser?.id}.get()
 
