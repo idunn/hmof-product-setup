@@ -263,11 +263,9 @@ class ProgramXmlService {
 					newSecurePrograms =SecureProgram.where{id in (programXMLInstance.secureProgram.id)}.list()
 				}
 
-
 				XmlParser parser = new XmlParser()
 
 				def xmldata1 = parser.parse(new File(programsXMLLocation+programXMLInstance.filename))
-
 
 				def root = new XmlParser().parse( f1 )
 				xmldata1.hsp_product.each{
@@ -279,8 +277,7 @@ class ProgramXmlService {
 				oldSecurePrograms.removeAll(newonlineIsbn);
 				//	newonlineIsbn.removeAll(oldSecurePrograms1);
 
-
-				def secprogramIds= getProgramXMLAudSecurePrograms(programXMLInstance.id)
+      			        def secprogramIds= getProgramXMLAudSecurePrograms(programXMLInstance.id)
 
 				if(secprogramIds){
 					oldSecurePrograms2 =SecureProgram.where{id in (secprogramIds.secure_program_id)}.list()
@@ -297,19 +294,18 @@ class ProgramXmlService {
 
 				def parent;
 				if(newonlineIsbn){
-					editSecurePrograms =SecureProgram.where{onlineIsbn in (newonlineIsbn)}.list()
+					editSecurePrograms =SecureProgram.where{id in (newSecurePrograms.id)}.list()
 
 					newonlineIsbn.each{
-						def misbn=it
-						def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==misbn}
-
-						if(nodeToDel)
-						{
-							parent = nodeToDel.parent()
-							parent.remove(nodeToDel)
-						}
+						def misbn=it.toString()
+						root.hsp_product.each{
+						     if(it.product_isbn.text() == misbn){
+						     def parent1 = it.parent()
+						     parent1.remove(it)
+						     root.hsp_product.remove(it)
+						     }
+						 }				
 					}
-
 					editSecurePrograms.each{
 
 						def knewton="";
@@ -330,12 +326,18 @@ class ProgramXmlService {
 
 					String isbn= it
 					oldProgramInstanceIsbns.each{
-
-						if(isbn.equals(it)){
-
-							def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}
+                                              String pisbn=it
+						if(isbn.equals(pisbn)){
+						    root.hsp_product.each{
+	      					   if(it.product_isbn.text() == pisbn){
+							 def parent1 = it.parent()
+							 parent1.remove(it)
+							 root.hsp_product.remove(it)
+							 }
+						     }
+							/*def nodeToDel = root.hsp_product.find{ it.product_isbn.text()==isbn}
 							parent = nodeToDel.parent()
-							parent.remove(nodeToDel)
+							parent.remove(nodeToDel)*/
 						}
 					}
 
