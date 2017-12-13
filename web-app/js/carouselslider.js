@@ -27,12 +27,13 @@ if(currentIndex==1 && tot <=7) {
 	showRightArrow=false;  
     navdataleft+="<a class=\"left carousel-control\" href=\"#javascript:void(0);\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a>";
     navdataright+="<a class=\"right carousel-control\" href=\"#javascript:void(0);\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a>";
-	navdata=navdataleft+navdataright;
+	navdata="";
 	   $("#navigation").html(navdata); 
  } 
 
 else{
-for(var i = 0; i < tot; i ++) {
+	
+for(var i = 0; i <= tot; i ++) {
   
    if(( i >7 || i >14 || i >21) && currentIndex==1  ) {
 	   showRightArrow=false;  
