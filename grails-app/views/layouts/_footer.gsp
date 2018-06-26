@@ -57,7 +57,7 @@
 					</p></li>
                    <li><p>
 			    		<i class="glyphicon glyphicon-envelope"></i>
-						<a target="_top" style="color:#bbb" href="mailto:CustomDevelopment@hmhco.com">Contact</a>
+						<a target="_top" style="color:#bbb" href="mailto:ContentIntegrationServices@hmhco.com">Contact</a>
 					</p></li>
 				</ul>																					
 			</div>
